@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-search',
@@ -14,6 +15,9 @@ export class SearchComponent implements OnInit {
   private _foods = new BehaviorSubject([]);
   results = [];
   selectedFood: Food;
+  selectedMeal = '';
+  selectedAmount: Number;
+  meals = [];
 
   @Input()
   set foods(foods) {
@@ -27,9 +31,16 @@ export class SearchComponent implements OnInit {
   @Output()
   select = new EventEmitter();
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, private auth: AuthService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.meals = [];
+    const user = this.auth.getUserInfo();
+    user.meals.forEach(meal => {
+      this.meals.push(meal.name);
+    });
+    this.selectedMeal = this.meals[0];
+  }
 
   foodsByOthers() {
     this.includeFoodsAddedByOthers = !this.includeFoodsAddedByOthers;
@@ -38,24 +49,40 @@ export class SearchComponent implements OnInit {
 
   searchFoods() {
     this.results = [];
+    const secondaryResults = [];
     const st = this.searchTerm.toLowerCase();
     this.foods.forEach(f => {
       const fLc = f.name.toLowerCase();
       if (fLc === st) {
         this.results.push(f);
-      }
-      if (st === fLc.slice(0, st.length)) {
+      } else if (st === fLc.slice(0, st.length)) {
         this.results.push(f);
+      } else {
+        const containsWhitespaces = fLc.indexOf(' ') > 1;
+        if (containsWhitespaces) {
+          for (let i = 0; i < fLc.length; i++) {
+            if (
+              st.length > 1 &&
+              fLc[i] === ' ' &&
+              fLc.slice(i + 1, i + 1 + st.length) === st
+            ) {
+              secondaryResults.push(f);
+            }
+          }
+        }
       }
     });
+
+    if (secondaryResults.length > 0) {
+      this.results = this.results.concat(secondaryResults);
+    }
   }
 
-  displayFoodInfo() {}
-
-  selectFood(food, meal) {
+  selectFood(food) {
     const selection = {
       food: food,
-      meal: meal
+      amount: this.selectedAmount ? this.selectedAmount : 100,
+      meal: this.selectedMeal
     };
 
     this.select.emit(selection);
@@ -63,6 +90,17 @@ export class SearchComponent implements OnInit {
 
   openModal(content, food) {
     this.selectedFood = food;
-    this.modalService.open(content, { centered: true });
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.selectFood(food);
+        } else {
+          this.selectedFood = null;
+        }
+      },
+      dismissed => {
+        this.selectedFood = null;
+      }
+    );
   }
 }

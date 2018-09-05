@@ -7,4 +7,5 @@ export interface Food {
   kuitu?: Number;
   sokeri?: Number;
   username?: String;
+  amount?: Number;
 }

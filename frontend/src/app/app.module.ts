@@ -18,10 +18,9 @@ import { AdminComponent } from './components/admin/admin.component';
 import { ToolbarComponent } from './components/dashboard/toolbar/toolbar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MealsComponent } from './components/dashboard/meals/meals.component';
-import { AddedFoodsComponent } from './components/dashboard/meals/added-foods/added-foods.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { TargetsComponent } from './components/dashboard/meals/targets/targets.component';
-import { MealTableComponent } from './components/dashboard/meals/added-foods/meal-table/meal-table.component';
+import { MealTableComponent } from './components/dashboard/meals/meal-table/meal-table.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,6 @@ import { MealTableComponent } from './components/dashboard/meals/added-foods/mea
     ToolbarComponent,
     ProfileComponent,
     MealsComponent,
-    AddedFoodsComponent,
     FeedbackComponent,
     TargetsComponent,
     MealTableComponent

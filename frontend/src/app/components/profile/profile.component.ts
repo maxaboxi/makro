@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {}
 
   logout() {
+    localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.auth.isLoggedIn.next(false);
     this.router.navigate(['/login']);

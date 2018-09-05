@@ -10,8 +10,8 @@ export class MealsComponent implements OnInit {
   private _addedMeals = new BehaviorSubject([]);
 
   @Input()
-  set addedMeals(foods) {
-    this._addedMeals.next(foods);
+  set addedMeals(meal) {
+    this._addedMeals.next(meal);
   }
 
   get addedMeals() {

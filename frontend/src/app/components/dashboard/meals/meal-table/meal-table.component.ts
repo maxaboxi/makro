@@ -7,15 +7,15 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./meal-table.component.css']
 })
 export class MealTableComponent implements OnInit {
-  private _foods = new BehaviorSubject([]);
+  private _meal = new BehaviorSubject(null);
 
   @Input()
-  set foods(foods) {
-    this._foods.next(foods);
+  set meal(meal) {
+    this._meal.next(meal);
   }
 
-  get foods() {
-    return this._foods.getValue();
+  get meal() {
+    return this._meal.getValue();
   }
 
   constructor() {}

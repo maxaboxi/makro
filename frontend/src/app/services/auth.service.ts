@@ -33,14 +33,19 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.isLoggedIn.next(false);
   }
 
   setUserInfo(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
     this.user = user;
   }
 
   getUserInfo() {
+    if (!this.user) {
+      this.user = JSON.parse(localStorage.getItem('user'));
+    }
     return this.user;
   }
 

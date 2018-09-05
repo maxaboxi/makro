@@ -25,7 +25,7 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ selectedFood.name }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -35,7 +35,7 @@
         <div class="col">
           <span class="lead">Energia:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.energia }} kcal</span>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="col">
           <span class="lead">Proteiini:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.proteiini ? selectedFood.proteiini : 0 }}g</span>
         </div>
       </div>
@@ -51,7 +51,7 @@
         <div class="col">
           <span class="lead">Hiilihydraatti:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.hh ? selectedFood.hh : 0 }}g</span>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="col">
           <span class="lead">Rasva:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.rasva ? selectedFood.rasva : 0 }}g</span>
         </div>
       </div>
@@ -67,7 +67,7 @@
         <div class="col">
           <span class="lead">Kuitu:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.kuitu ? selectedFood.kuitu : 0 }}g</span>
         </div>
       </div>
@@ -75,22 +75,47 @@
         <div class="col">
           <span class="lead">Sokeri:</span>
         </div>
-        <div class="col">
+        <div class="col text-right">
           <span>{{ selectedFood.sokeri ? selectedFood.sokeri : 0 }}g</span>
         </div>
       </div>
     </div>
-    <div class="form-group mt-2">
-      <label for="amount">Määrä</label>
-      <input type="number" class="form-control" placeholder="100g">
+    <div class="text-center">
+      <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="10"> 10g
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="30"> 30g
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="50"> 50g
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="100"> 100g
+        </label>
+      </div>
     </div>
     <div class="form-group mt-2">
-      <select class="form-control">
-        <option value="">Aaaa</option>
+      <label for="amount">Määrä</label>
+      <input type="number" class="form-control" placeholder="100g" [(ngModel)]="selectedAmount">
+    </div>
+    <div class="form-group mt-2">
+      <select class="form-control" [(ngModel)]="selectedMeal">
+        <option *ngFor="let meal of meals" [ngValue]="meal">{{ meal }}</option>
       </select>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary" (click)="modal.close('save')">Lisää</button>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-light" (click)="modal.close('cancel')">Peruuta</button>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>
