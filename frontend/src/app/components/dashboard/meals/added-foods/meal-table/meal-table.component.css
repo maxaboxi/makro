@@ -1,0 +1,17 @@
+.t-head {
+  max-width: 200px;
+}
+
+.name {
+  overflow-y: scroll;
+  max-height: 30px;
+  word-break: break-all;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.bg-lb {
+  background: #f7faff;
+}

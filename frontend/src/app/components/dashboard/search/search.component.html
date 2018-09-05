@@ -1,0 +1,96 @@
+<div class="container-fluid">
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input" (change)="foodsByOthers()">
+    <label class="form-check-label">Sisällytä hakuun muiden lisäämät ruoat</label>
+  </div>
+  <div class="form-group">
+    <input type="text" name="food" class="form-control" placeholder="Hae ruokia" (keyup)="searchFoods()" [(ngModel)]="searchTerm">
+  </div>
+  <ng-container *ngIf="searchTerm?.length > 0">
+    <ul>
+      <li *ngFor="let food of results; let i = index;" (click)="openModal(content, food)">
+        <div class="row">
+          <div class="col">
+            {{ food.name }}
+          </div>
+          <div class="col text-right">
+            <span class="mr-2">{{ food.energia.toFixed(0) }}kcal</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ selectedFood.name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <span class="lead">Energia:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.energia }} kcal</span>
+        </div>
+      </div>
+      <div class="row bg-light">
+        <div class="col">
+          <span class="lead">Proteiini:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.proteiini ? selectedFood.proteiini : 0 }}g</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <span class="lead">Hiilihydraatti:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.hh ? selectedFood.hh : 0 }}g</span>
+        </div>
+      </div>
+      <div class="row bg-light">
+        <div class="col">
+          <span class="lead">Rasva:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.rasva ? selectedFood.rasva : 0 }}g</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <span class="lead">Kuitu:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.kuitu ? selectedFood.kuitu : 0 }}g</span>
+        </div>
+      </div>
+      <div class="row bg-light">
+        <div class="col">
+          <span class="lead">Sokeri:</span>
+        </div>
+        <div class="col">
+          <span>{{ selectedFood.sokeri ? selectedFood.sokeri : 0 }}g</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group mt-2">
+      <label for="amount">Määrä</label>
+      <input type="number" class="form-control" placeholder="100g">
+    </div>
+    <div class="form-group mt-2">
+      <select class="form-control">
+        <option value="">Aaaa</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>

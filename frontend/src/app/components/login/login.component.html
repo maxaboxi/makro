@@ -1,0 +1,26 @@
+<div class="container mt-5">
+  <h3>Kirjaudu sisään</h3>
+  <br>
+  <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
+    <div class="form-group">
+      <label class="lead" for="username">Käyttäjätunnus</label>
+      <input type="text" name="username" class="form-control" placeholder="Käyttäjätunnus" minlength="2" [(ngModel)]="user.username"
+        #userUsername="ngModel" [ngClass]="{'is-invalid':userUsername.errors && userUsername.touched}" required>
+      <div [hidden]="!userUsername.errors?.required" class="invalid-feedback">
+        Käyttäjätunnus vaaditaan
+      </div>
+      <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback">
+        Käyttäjätunnuksen pitää olla vähintään kaksi merkkiä pitkä
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="lead" for="password">Salasana</label>
+      <input type="password" name="password" class="form-control" placeholder="Salasana" [(ngModel)]="user.password" #userPassword="ngModel"
+        [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}" required>
+      <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">
+        Salasana vaaditaan
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Kirjaudu</button>
+  </form>
+</div>

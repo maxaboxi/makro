@@ -1,0 +1,17 @@
+nav {
+  border-bottom: 2px solid rgba(194, 194, 194, 0.3);
+  -webkit-background-clip: padding-box; /* for Safari */
+  background-clip: padding-box;
+}
+
+.fas,
+.fab {
+  color: #ff3b3f !important;
+}
+a {
+  color: #333 !important;
+}
+
+li:hover {
+  cursor: pointer;
+}
