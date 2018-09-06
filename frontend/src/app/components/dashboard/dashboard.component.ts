@@ -20,22 +20,4 @@ export class DashboardComponent implements OnInit {
     const user = this.auth.getUserInfo();
     this.meals = user.meals;
   }
-
-  addToMeals(e) {
-    const food: Food = {
-      name: e.food.name,
-      energia: e.food.energia * (e.amount / 100),
-      proteiini: e.food.proteiini * (e.amount / 100),
-      hh: e.food.hh * (e.amount / 100),
-      rasva: e.food.rasva * (e.amount / 100),
-      kuitu: e.food.kuitu * (e.amount / 100),
-      sokeri: e.food.sokeri * (e.amount / 100),
-      amount: e.amount
-    };
-    this.meals.forEach(m => {
-      if (m.name === e.meal) {
-        m.foods.push(food);
-      }
-    });
-  }
 }

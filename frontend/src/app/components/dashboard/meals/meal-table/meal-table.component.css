@@ -1,5 +1,21 @@
+table {
+  table-layout: fixed !important;
+}
+
+th {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 30px;
+}
+
+td {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 30px;
+}
+
 .t-head {
-  max-width: 200px;
+  min-width: 200px;
 }
 
 .name {
@@ -13,5 +29,11 @@
 }
 
 .bg-lb {
-  background: #f7faff;
+  background: #edf4ff;
+}
+
+@media screen and (max-width: 720px) {
+  .t-head {
+    min-width: 0px;
+  }
 }

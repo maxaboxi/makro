@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
+import { AddedFoodsService } from '../../../services/added-foods.service';
 
 @Component({
   selector: 'app-search',
@@ -28,10 +29,11 @@ export class SearchComponent implements OnInit {
     return this._foods.getValue();
   }
 
-  @Output()
-  select = new EventEmitter();
-
-  constructor(private modalService: NgbModal, private auth: AuthService) {}
+  constructor(
+    private modalService: NgbModal,
+    private auth: AuthService,
+    private addedFoodsService: AddedFoodsService
+  ) {}
 
   ngOnInit() {
     this.meals = [];
@@ -85,7 +87,7 @@ export class SearchComponent implements OnInit {
       meal: this.selectedMeal
     };
 
-    this.select.emit(selection);
+    this.addedFoodsService.addFoodToMeals(selection);
   }
 
   openModal(content, food) {

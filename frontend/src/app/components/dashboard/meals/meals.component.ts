@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Meal } from '../../../models/Meal';
+import { AddedFoodsService } from '../../../services/added-foods.service';
 
 @Component({
   selector: 'app-meals',
@@ -7,18 +8,11 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./meals.component.css']
 })
 export class MealsComponent implements OnInit {
-  private _addedMeals = new BehaviorSubject([]);
+  private addedMeals: Meal[];
 
-  @Input()
-  set addedMeals(meal) {
-    this._addedMeals.next(meal);
+  constructor(private addedFoodsService: AddedFoodsService) {}
+
+  ngOnInit() {
+    this.addedFoodsService._meals.subscribe(meals => (this.addedMeals = meals));
   }
-
-  get addedMeals() {
-    return this._addedMeals.getValue();
-  }
-
-  constructor() {}
-
-  ngOnInit() {}
 }

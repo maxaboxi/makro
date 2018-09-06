@@ -3,6 +3,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/User';
+import { AddedFoodsService } from '../../services/added-foods.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private flashMessage: FlashMessagesService,
     private auth: AuthService,
+    private addedFoods: AddedFoodsService,
     private router: Router
   ) {}
 
@@ -51,6 +53,7 @@ export class LoginComponent implements OnInit {
         });
         localStorage.setItem('token', success['token']);
         this.auth.setUserInfo(success['user']);
+        this.addedFoods.setMealsFromLocalStorage();
         this.auth.isLoggedIn.next(true);
         this.router.navigate(['/']);
       },
