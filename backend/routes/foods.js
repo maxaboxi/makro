@@ -44,6 +44,10 @@ router.get('/getallfoods', (req, res) => {
       res.json({ success: false, msg: 'Unable to fetch foods' });
     } else {
       res.status(200);
+      // Fix in DB
+      foods.forEach(food => {
+        food.energia /= 4.1868;
+      });
       res.json(foods);
     }
   });

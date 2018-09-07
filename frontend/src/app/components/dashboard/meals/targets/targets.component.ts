@@ -9,17 +9,17 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
 export class TargetsComponent implements OnInit {
   private targets;
   private totals;
+  private caloriesLeft: Number;
+  private caloriesLeftLabel;
 
   constructor(private addedFoodsService: AddedFoodsService) {}
 
   ngOnInit() {
     this.addedFoodsService._targets.subscribe(targets => {
       this.targets = targets;
-      console.log(this.targets);
     });
     this.addedFoodsService._totals.subscribe(totals => {
       this.totals = totals;
-      console.log(this.totals);
     });
   }
 }
