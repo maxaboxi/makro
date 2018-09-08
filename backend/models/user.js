@@ -43,7 +43,7 @@ const UserSchema = mongoose.Schema({
   dailyExpenditure: {
     type: Number,
     required: false,
-    default: 0
+    default: 2000
   },
   userAddedExpenditure: {
     type: Number,

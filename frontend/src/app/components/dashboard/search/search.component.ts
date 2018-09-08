@@ -48,9 +48,14 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.meals = [];
     const user = this.auth.getUserInfo();
-    user.meals.forEach(meal => {
-      this.meals.push(meal.name);
-    });
+    if (user) {
+      user.meals.forEach(meal => {
+        this.meals.push(meal.name);
+      });
+    } else {
+      // TODO set meals with default values
+    }
+
     this.selectedMeal = this.meals[0];
   }
 
@@ -63,27 +68,51 @@ export class SearchComponent implements OnInit {
     this.results = [];
     const secondaryResults = [];
     const st = this.searchTerm.toLowerCase();
-    this.foods.forEach(f => {
-      const fLc = f.name.toLowerCase();
-      if (fLc === st) {
-        this.results.push(f);
-      } else if (st === fLc.slice(0, st.length)) {
-        this.results.push(f);
-      } else {
-        const containsWhitespaces = fLc.indexOf(' ') > 1;
-        if (containsWhitespaces) {
-          for (let i = 0; i < fLc.length; i++) {
-            if (
-              st.length > 1 &&
-              fLc[i] === ' ' &&
-              fLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
-              secondaryResults.push(f);
+    if (this.includeFoodsAddedByOthers) {
+      this.allFoods.forEach(f => {
+        const fLc = f.name.toLowerCase();
+        if (fLc === st) {
+          this.results.push(f);
+        } else if (st === fLc.slice(0, st.length)) {
+          this.results.push(f);
+        } else {
+          const containsWhitespaces = fLc.indexOf(' ') > 1;
+          if (containsWhitespaces) {
+            for (let i = 0; i < fLc.length; i++) {
+              if (
+                st.length > 1 &&
+                fLc[i] === ' ' &&
+                fLc.slice(i + 1, i + 1 + st.length) === st
+              ) {
+                secondaryResults.push(f);
+              }
             }
           }
         }
-      }
-    });
+      });
+    } else {
+      this.foods.forEach(f => {
+        const fLc = f.name.toLowerCase();
+        if (fLc === st) {
+          this.results.push(f);
+        } else if (st === fLc.slice(0, st.length)) {
+          this.results.push(f);
+        } else {
+          const containsWhitespaces = fLc.indexOf(' ') > 1;
+          if (containsWhitespaces) {
+            for (let i = 0; i < fLc.length; i++) {
+              if (
+                st.length > 1 &&
+                fLc[i] === ' ' &&
+                fLc.slice(i + 1, i + 1 + st.length) === st
+              ) {
+                secondaryResults.push(f);
+              }
+            }
+          }
+        }
+      });
+    }
 
     if (secondaryResults.length > 0) {
       this.results = this.results.concat(secondaryResults);

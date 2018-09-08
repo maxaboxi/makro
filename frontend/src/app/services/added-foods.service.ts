@@ -3,6 +3,7 @@ import { Meal } from '../models/Meal';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../models/Food';
 import { User } from '../models/User';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,22 +17,54 @@ export class AddedFoodsService {
     fat: 0
   });
   _targets = new BehaviorSubject<any>(null);
+  private proteinTarget;
+  private fatTarget;
+  private carbTarget;
 
-  constructor() {}
+  constructor(private auth: AuthService) {}
 
   setMealsFromLocalStorage() {
-    const user: User = JSON.parse(localStorage.getItem('user'));
+    const user = this.auth.getUserInfo();
     this._meals.next(user.meals);
-    this.setTargets(user);
+    this.setTargets();
   }
 
-  setTargets(user: User) {
+  setTargets() {
+    const user = this.auth.getUserInfo();
+    if (user.weight) {
+      this.proteinTarget = user.weight * 2;
+      this.fatTarget = user.weight;
+      if (!user.userAddedExpenditure) {
+        this.carbTarget =
+          (user.dailyExpenditure -
+            this.proteinTarget * 4 -
+            this.fatTarget * 9) /
+          4;
+      } else {
+        this.carbTarget =
+          (user.userAddedExpenditure -
+            this.proteinTarget * 4 -
+            this.fatTarget * 4) /
+          4;
+      }
+    } else if (!user.weight && user.userAddedExpenditure) {
+      this.proteinTarget = (user.userAddedExpenditure * 0.3) / 4;
+      this.carbTarget = (user.userAddedExpenditure * 0.4) / 4;
+      this.fatTarget = (user.userAddedExpenditure * 0.3) / 9;
+    } else if (!user || (!user.weight && !user.userAddedExpenditure)) {
+      this.proteinTarget = (user.dailyExpenditure * 0.3) / 4;
+      this.carbTarget = (user.dailyExpenditure * 0.4) / 4;
+      this.fatTarget = (user.dailyExpenditure * 0.3) / 9;
+    }
     const targets = {
       dailyExpenditure: user.dailyExpenditure,
       userAddedExpenditure: user.userAddedExpenditure,
       userAddedCarbTarget: user.userAddedCarbTarget,
       userAddedFatTarget: user.userAddedFatTarget,
-      userAddedProteinTarget: user.userAddedProteinTarget
+      userAddedProteinTarget: user.userAddedProteinTarget,
+      proteinTarget: this.proteinTarget,
+      carbTarget: this.carbTarget,
+      fatTarget: this.fatTarget
     };
     this._targets.next(targets);
   }
