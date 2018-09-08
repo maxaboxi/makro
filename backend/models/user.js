@@ -81,16 +81,16 @@ const UserSchema = mongoose.Schema({
 
 const User = (module.exports = mongoose.model('User', UserSchema));
 
-module.exports.getUserById = function(userId, callback) {
+module.exports.getUserById = (userId, callback) => {
   User.findById(userId, callback);
 };
 
-module.exports.getUserByUserName = function(username, callback) {
+module.exports.getUserByUserName = (username, callback) => {
   const query = { username: username };
   User.findOne(query, callback);
 };
 
-module.exports.addUser = function(newUser, callback) {
+module.exports.addUser = (newUser, callback) => {
   bcrypt.genSalt(12, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
@@ -100,14 +100,14 @@ module.exports.addUser = function(newUser, callback) {
   });
 };
 
-module.exports.comparePassword = function(candidatePassword, hash, callback) {
+module.exports.comparePassword = (candidatePassword, hash, callback) => {
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if (err) throw err;
     callback(null, isMatch);
   });
 };
 
-module.exports.updateUserInformation = function(userObject, userId, callback) {
+module.exports.updateUserInformation = (userObject, userId, callback) => {
   const query = { _id: userId };
   User.findOneAndUpdate(query, userObject, { new: true }, callback);
 };

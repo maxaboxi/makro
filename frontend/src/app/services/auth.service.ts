@@ -49,6 +49,15 @@ export class AuthService {
     return this.user;
   }
 
+  updateUserInfo(user: User) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/updateuserinformation`;
+
+    return this.http.post(url, user, { headers: headers });
+  }
+
   validateToken() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

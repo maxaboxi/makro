@@ -22,7 +22,8 @@ const logger = winston.createLogger({
 router.post('/register', (req, res) => {
   let newUser = new User({
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    email: req.body.email
   });
 
   User.addUser(newUser, (err, user) => {
@@ -80,13 +81,13 @@ router.post('/login', (req, res) => {
             expiresIn: 86400 // 24 hours
           }
         );
-
         res.status(200);
         res.json({
           success: true,
           token: token,
           user: {
             username: user.username,
+            email: user.email,
             age: user.age,
             height: user.height,
             weight: user.weight,
@@ -105,6 +106,56 @@ router.post('/login', (req, res) => {
         res.json({ success: false, msg: 'Wrong username or password.' });
       }
     });
+  });
+});
+
+router.post('/updateuserinformation', (req, res) => {
+  const token = jwt.decode(req.headers['authorization']);
+  const userId = token.id;
+  const userInfo = {
+    username: req.body.username,
+    email: req.body.email,
+    age: req.body.age,
+    height: req.body.height,
+    weight: req.body.weight,
+    activity: req.body.activity,
+    sex: req.body.sex,
+    dailyExpenditure: req.body.dailyExpenditure,
+    userAddedExpenditure: req.body.userAddedExpenditure,
+    userAddedProteinTarget: req.body.userAddedProteinTarget,
+    userAddedCarbTarget: req.body.userAddedCarbTarget,
+    userAddedFatTarget: req.body.userAddedFatTarget
+  };
+  User.updateUserInformation(userInfo, userId, (err, user) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json({
+        success: true,
+        user: {
+          username: user.username,
+          email: user.email,
+          age: user.age,
+          height: user.height,
+          weight: user.weight,
+          activity: user.activity,
+          sex: user.sex,
+          dailyExpenditure: user.dailyExpenditure,
+          userAddedExpenditure: user.userAddedExpenditure,
+          userAddedProteinTarget: user.userAddedProteinTarget,
+          userAddedCarbTarget: user.userAddedCarbTarget,
+          userAddedFatTarget: user.userAddedFatTarget,
+          meals: user.meals
+        }
+      });
+    }
   });
 });
 

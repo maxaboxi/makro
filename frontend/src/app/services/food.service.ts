@@ -21,7 +21,6 @@ export class FoodService {
   }
 
   getFoods(user) {
-    console.log(user);
     const url = `${this.baseUrl}/getfoods/${user}`;
 
     const headers = new HttpHeaders({

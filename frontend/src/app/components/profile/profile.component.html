@@ -1,3 +1,125 @@
-<div class="container">
-  <button class="btn btn-danger" (click)="deleteAccount()">Poista käyttäjätili</button>
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <span class="lead">Omat tiedot</span>
+            <button class="btn btn-sm btn-outline-warning ml-auto" (click)="openModal(userInfo)"><i class="far fa-edit"></i>
+              Muokkaa tietoja</button>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><i class="fas fa-signature"></i> Käyttäjätunnus: {{ user.username }}</li>
+          <li *ngIf="user.email" class="list-group-item"><i class="fas fa-at"></i> Sähköpostiosoite: {{ user.email }}</li>
+          <li class="list-group-item">
+            <i class="fas fa-fire"></i>
+            Kulutus: {{ user.userAddedExpenditure ? user.userAddedExpenditure : user.dailyExpenditure }} kcal/päivä
+            <i class="fas fa-info float-right" (click)="toggleInfo()"></i>
+          </li>
+          <li class="list-group-item"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
+          <li class="list-group-item"><i class="fas fa-arrows-alt-v"></i> Pituus: {{ user.height }} cm</li>
+          <li class="list-group-item"><i class="fas fa-heartbeat"></i> Ikä: {{ user.age }} vuotta</li>
+          <li class="list-group-item"><i class="fas fa-child"></i> Sukupuoli: {{ user.sex }}</li>
+          <li *ngIf="showInfo" class="list-group-item">
+            <p>Kaava, mitä käytetään kulutuksen laskemiseen on <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation"
+                target="_blank">Harris-Benedictin yhtälö</a>:</p>
+            <p>Miehet: 88,4 + (13,4 x kehon massa kiloina) + (4,8 x pituus sentteinä) – (5,7 x ikä
+              vuosissa).</p>
+            <p>Naiset: 447,6 + (9,25 x kehon massa kiloina) + (3,1 x pituus sentteinä) – (4,3 x ikä
+              vuosissa)</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <span class="lead">Aterioiden nimet</span>
+            <button class="btn btn-sm btn-outline-warning ml-auto"><i class="far fa-edit"></i> Muokkaa aterioita</button>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let meal of user.meals" class="list-group-item"><i class="fas fa-signature"></i> {{ meal.name }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
+
+<button class="btn btn-danger" (click)="deleteAccount()"><i class="fas fa-user-minus mr-1"></i> Poista käyttäjätili</button>
+
+<ng-template #userInfo let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa käyttäjätietoja</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
+          <div class="col-sm-8">
+            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi"
+              [(ngModel)]="user.email">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userHeight">Pituus</label>
+          <div class="col-sm-8">
+            <input type="number" name="userHeight" class="form-control" placeholder="cm" [(ngModel)]="user.height">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userWeight">Paino</label>
+          <div class="col-sm-8">
+            <input type="number" name="userWeight" class="form-control" placeholder="kg" [(ngModel)]="user.weight">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userAge">Ikä</label>
+          <div class="col-sm-8">
+            <input type="number" name="userAge" class="form-control" placeholder="vuotta" [(ngModel)]="user.age">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userSex">Sukupuoli</label>
+          <div class="col-sm-8">
+            <select name="userSex" class="form-control" [(ngModel)]="user.sex">
+              <option value="null"></option>
+              <option value="mies">Mies</option>
+              <option value="nainen">Nainen</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userActivity">Liikunta</label>
+          <div class="col-sm-8">
+            <select name="userActivity" class="form-control" [(ngModel)]="user.activity">
+              <option value="1.2">0-0,5 kertaa viikossa</option>
+              <option value="1.375">1-3 kertaa viikossa</option>
+              <option value="1.55">3-5 kertaa viikossa</option>
+              <option value="1.75">6-7 kertaa viikossa</option>
+              <option value="1.9">Raskas treeni kahdesti päivässä</option>
+            </select>
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!editUserInformationForm.form.valid">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
