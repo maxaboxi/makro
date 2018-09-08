@@ -1,5 +1,5 @@
 <div *ngIf="totals && targets" class="container-fluid">
-  <div class="row">
+  <div class="row" *ngIf="targets.userAddedExpenditure || targets.userAddedExpenditure">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-fire"></i>
       Kulutus: {{ targets.userAddedExpenditure ? targets.userAddedExpenditure : targets.dailyExpenditure }} kcal
@@ -10,22 +10,23 @@
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cut"></i>
-      Jäljellä: {{ targets.userAddedExpenditure ? (targets.userAddedExpenditure - totals.energy).toFixed(0) : (targets.dailyExpenditure
+      Jäljellä: {{ targets.userAddedExpenditure ? (targets.userAddedExpenditure - totals.energy).toFixed(0) :
+      (targets.dailyExpenditure
       - totals.energy).toFixed(0) }} kcal
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="targets.userAddedProteinTarget || targets.userAddedCarbTarget || targets.userAddedFatTarget">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-dove"></i>
-      Proteiini: {{ totals.protein.toFixed(0) }}g
+      Proteiini: {{ targets.userAddedProteinTarget }}g / {{ totals.protein.toFixed(0) }}g
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cookie"></i>
-      HH: {{ totals.carb.toFixed(0) }}g
+      HH: {{ targets.userAddedCarbTarget }}g / {{ totals.carb.toFixed(0) }}g
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-burn"></i>
-      Rasva: {{ totals.fat.toFixed(0) }}g
+      Rasva: {{ targets.userAddedFatTarget }}g / {{ totals.fat.toFixed(0) }}g
     </div>
   </div>
 </div>

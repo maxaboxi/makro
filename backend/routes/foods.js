@@ -53,7 +53,29 @@ router.get('/getallfoods', (req, res) => {
   });
 });
 
-router.post('/savefood', (req, res, next) => {
+router.get('/getfoods/:user', (req, res) => {
+  const user = req.params.user;
+  Food.getUserFoods(user, (err, foods) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Unable to fetch foods' });
+    } else {
+      res.status(200);
+      // Fix in DB
+      foods.forEach(food => {
+        food.energia /= 4.1868;
+      });
+      res.json(foods);
+    }
+  });
+});
+
+router.post('/addnewfood', (req, res) => {
   const newFood = new Food({
     name: req.body.name,
     energia: req.body.energia,
@@ -62,6 +84,7 @@ router.post('/savefood', (req, res, next) => {
     proteiini: req.body.proteiini,
     kuitu: req.body.kuitu,
     sokeri: req.body.sokeri,
+    packageSize: req.body.packageSize,
     username: req.body.username
   });
 

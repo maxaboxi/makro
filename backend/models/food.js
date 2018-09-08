@@ -29,6 +29,10 @@ const FoodSchema = mongoose.Schema({
     type: Number,
     required: true
   },
+  packageSize: {
+    type: Number,
+    required: true
+  },
   username: {
     type: String,
     required: true
@@ -37,15 +41,19 @@ const FoodSchema = mongoose.Schema({
 
 const Food = (module.exports = mongoose.model('Food', FoodSchema));
 
-module.exports.getFoods = function(callback) {
+module.exports.getFoods = callback => {
   Food.find(callback);
 };
 
-module.exports.addFood = function(newFood, callback) {
+module.exports.getUserFoods = (user, callback) => {
+  Food.find({ $or: [{ username: user }, { username: 'admin' }] }, callback);
+};
+
+module.exports.addFood = (newFood, callback) => {
   newFood.save(callback);
 };
 
-module.exports.removeFood = function(foodId, callback) {
+module.exports.removeFood = (foodId, callback) => {
   let query = { _id: foodId };
   Food.remove(query, callback);
 };

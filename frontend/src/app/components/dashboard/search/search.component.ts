@@ -14,6 +14,7 @@ export class SearchComponent implements OnInit {
   includeFoodsAddedByOthers = false;
   searchTerm = '';
   private _foods = new BehaviorSubject([]);
+  private _allFoods = new BehaviorSubject([]);
   results = [];
   selectedFood: Food;
   selectedMeal = '';
@@ -27,6 +28,15 @@ export class SearchComponent implements OnInit {
 
   get foods() {
     return this._foods.getValue();
+  }
+
+  @Input()
+  set allFoods(foods) {
+    this._allFoods.next(foods);
+  }
+
+  get allFoods() {
+    return this._allFoods.getValue();
   }
 
   constructor(

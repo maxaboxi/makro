@@ -10,7 +10,7 @@ export class FoodService {
 
   constructor(private http: HttpClient) {}
 
-  getFoods() {
+  getAllFoods() {
     const url = `${this.baseUrl}/getallfoods`;
 
     const headers = new HttpHeaders({
@@ -18,5 +18,26 @@ export class FoodService {
     });
 
     return this.http.get<Food[]>(url, { headers: headers });
+  }
+
+  getFoods(user) {
+    console.log(user);
+    const url = `${this.baseUrl}/getfoods/${user}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Food[]>(url, { headers: headers });
+  }
+
+  saveNewFood(food: Food) {
+    const url = `${this.baseUrl}/addnewfood`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, food, { headers: headers });
   }
 }
