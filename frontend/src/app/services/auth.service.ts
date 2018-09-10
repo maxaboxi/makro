@@ -33,12 +33,13 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('meals');
     this.setDefaultUserInfo();
     this.isLoggedIn.next(false);
   }
 
   setUserInfo(user: User) {
+    localStorage.setItem('meals', JSON.stringify(user.meals));
     this.user.next(user);
   }
 
@@ -64,7 +65,9 @@ export class AuthService {
       { name: 'Illallinen', foods: [] },
       { name: 'Iltapala', foods: [] }
     ];
-    localStorage.setItem('meals', JSON.stringify(meals));
+    if (!localStorage.getItem('meals')) {
+      localStorage.setItem('meals', JSON.stringify(meals));
+    }
   }
 
   fetchUserInfo() {

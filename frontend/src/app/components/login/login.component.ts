@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
           cssClass: 'alert-success',
           timeout: 2000
         });
+        localStorage.removeItem('meals');
         localStorage.setItem('token', success['token']);
         this.auth.setUserInfo(success['user']);
         this.addedFoods.setMealsFromLocalStorage();
