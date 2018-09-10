@@ -24,9 +24,18 @@ export class AddedFoodsService {
   constructor(private auth: AuthService) {}
 
   setMealsFromLocalStorage() {
-    const user = this.auth.getUserInfo();
-    this._meals.next(user.meals);
+    this._meals.next(JSON.parse(localStorage.getItem('meals')));
     this.setTargets();
+    this.resetTotals();
+  }
+
+  resetTotals() {
+    this._totals.next({
+      energy: 0,
+      protein: 0,
+      carb: 0,
+      fat: 0
+    });
   }
 
   setTargets() {
@@ -103,6 +112,7 @@ export class AddedFoodsService {
           m.foods.push(food);
         }
       });
+      localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
     }
   }
 }

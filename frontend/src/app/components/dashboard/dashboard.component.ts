@@ -28,9 +28,8 @@ export class DashboardComponent implements OnInit {
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
       this.user = this.auth.getUserInfo();
-      console.log(this.user);
       this.addedFoodService.setTargets();
-      this.meals = this.user.meals;
+      this.meals = JSON.parse(localStorage.getItem('meals'));
       this.fetchFoods();
     });
   }

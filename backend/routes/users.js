@@ -109,6 +109,42 @@ router.post('/login', (req, res) => {
   });
 });
 
+router.get('/getuserinfo', (req, res) => {
+  const token = jwt.decode(req.headers['authorization']);
+  const userId = token.id;
+  User.getUserById(userId, (err, user) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json({
+        success: true,
+        user: {
+          username: user.username,
+          email: user.email,
+          age: user.age,
+          height: user.height,
+          weight: user.weight,
+          activity: user.activity,
+          sex: user.sex,
+          dailyExpenditure: user.dailyExpenditure,
+          userAddedExpenditure: user.userAddedExpenditure,
+          userAddedProteinTarget: user.userAddedProteinTarget,
+          userAddedCarbTarget: user.userAddedCarbTarget,
+          userAddedFatTarget: user.userAddedFatTarget,
+          meals: user.meals
+        }
+      });
+    }
+  });
+});
+
 router.post('/updateuserinformation', (req, res) => {
   const token = jwt.decode(req.headers['authorization']);
   const userId = token.id;

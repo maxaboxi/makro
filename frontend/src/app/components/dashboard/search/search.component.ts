@@ -21,7 +21,6 @@ export class SearchComponent implements OnInit {
   selectedMeal = '';
   selectedAmount: Number;
   meals = [];
-  user: User;
   isLoggedIn = false;
 
   @Input()
@@ -49,18 +48,16 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.meals = [];
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
       if (!this.isLoggedIn) {
         this.includeFoodsAddedByOthers = true;
       }
-      this.auth.user.subscribe(user => {
-        this.user = user;
-        user.meals.forEach(meal => {
-          this.meals.push(meal.name);
-          this.selectedMeal = this.meals[0];
-        });
+      const meals = JSON.parse(localStorage.getItem('meals'));
+      this.meals = [];
+      meals.forEach(meal => {
+        this.meals.push(meal.name);
+        this.selectedMeal = this.meals[0];
       });
     });
   }

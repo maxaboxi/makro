@@ -39,7 +39,6 @@ export class AuthService {
   }
 
   setUserInfo(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
     this.user.next(user);
   }
 
@@ -55,29 +54,48 @@ export class AuthService {
       userAddedExpenditure: 0,
       userAddedProteinTarget: 0,
       userAddedCarbTarget: 0,
-      userAddedFatTarget: 0,
-      meals: [
-        { name: 'Aamiainen', foods: [] },
-        { name: 'Lounas', foods: [] },
-        { name: 'Välipala 1', foods: [] },
-        { name: 'Sali', foods: [] },
-        { name: 'Illallinen', foods: [] },
-        { name: 'Iltapala', foods: [] }
-      ]
+      userAddedFatTarget: 0
     });
+    const meals = [
+      { name: 'Aamiainen', foods: [] },
+      { name: 'Lounas', foods: [] },
+      { name: 'Välipala 1', foods: [] },
+      { name: 'Sali', foods: [] },
+      { name: 'Illallinen', foods: [] },
+      { name: 'Iltapala', foods: [] }
+    ];
+    localStorage.setItem('meals', JSON.stringify(meals));
+  }
+
+  fetchUserInfo() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getuserinfo`;
+
+    return this.http.get(url, { headers: headers });
   }
 
   getUserInfo() {
     if (!this.user.getValue()) {
-      if (localStorage.getItem('user')) {
-        this.user.next(JSON.parse(localStorage.getItem('user')));
-      } else {
-        this.setDefaultUserInfo();
-      }
+      this.setDefaultUserInfo();
       if (localStorage.getItem('token') && !this.isLoggedIn.getValue()) {
         this.validateToken().subscribe(res => {
           if (res['success']) {
-            this.isLoggedIn.next(true);
+            this.fetchUserInfo().subscribe(result => {
+              if (result['success']) {
+                this.user.next(result['user']);
+                localStorage.setItem(
+                  'meals',
+                  JSON.stringify(result['user'].meals)
+                );
+                this.isLoggedIn.next(true);
+              } else {
+                this.setDefaultUserInfo();
+              }
+            });
+          } else {
+            localStorage.removeItem('token');
           }
         });
       }
