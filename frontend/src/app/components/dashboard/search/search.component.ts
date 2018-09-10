@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
 import { AddedFoodsService } from '../../../services/added-foods.service';
+import { User } from '../../../models/User';
 
 @Component({
   selector: 'app-search',
@@ -20,6 +21,8 @@ export class SearchComponent implements OnInit {
   selectedMeal = '';
   selectedAmount: Number;
   meals = [];
+  user: User;
+  isLoggedIn = false;
 
   @Input()
   set foods(foods) {
@@ -47,16 +50,19 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.meals = [];
-    const user = this.auth.getUserInfo();
-    if (user) {
-      user.meals.forEach(meal => {
-        this.meals.push(meal.name);
+    this.auth.isLoggedIn.subscribe(res => {
+      this.isLoggedIn = res;
+      if (!this.isLoggedIn) {
+        this.includeFoodsAddedByOthers = true;
+      }
+      this.auth.user.subscribe(user => {
+        this.user = user;
+        user.meals.forEach(meal => {
+          this.meals.push(meal.name);
+          this.selectedMeal = this.meals[0];
+        });
       });
-    } else {
-      // TODO set meals with default values
-    }
-
-    this.selectedMeal = this.meals[0];
+    });
   }
 
   foodsByOthers() {

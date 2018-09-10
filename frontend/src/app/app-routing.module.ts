@@ -10,7 +10,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: '', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

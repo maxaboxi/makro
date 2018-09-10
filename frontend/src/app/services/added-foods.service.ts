@@ -51,7 +51,7 @@ export class AddedFoodsService {
       this.proteinTarget = (user.userAddedExpenditure * 0.3) / 4;
       this.carbTarget = (user.userAddedExpenditure * 0.4) / 4;
       this.fatTarget = (user.userAddedExpenditure * 0.3) / 9;
-    } else if (!user || (!user.weight && !user.userAddedExpenditure)) {
+    } else if (!user.weight && !user.userAddedExpenditure) {
       this.proteinTarget = (user.dailyExpenditure * 0.3) / 4;
       this.carbTarget = (user.dailyExpenditure * 0.4) / 4;
       this.fatTarget = (user.dailyExpenditure * 0.3) / 9;

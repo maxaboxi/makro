@@ -14,11 +14,11 @@
       <th class="t-head bg-light lead" scope="row">
         <div class="name">{{ meal.name }}</div>
       </th>
-      <th scope="col" class="table-success">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-primary">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-danger">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-warning">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
-      <th scope="col">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-success align-middle">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-primary align-middle">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-danger align-middle">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-warning align-middle">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
+      <th scope="col" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
     </tr>
   </thead>
   <tbody>
@@ -26,11 +26,11 @@
       <th class="t-head" scope="row">
         <div class="name">{{ food.name }}</div>
       </th>
-      <td class="table-success">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
-      <td class="table-primary">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
-      <td class="table-danger">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
-      <td class="table-warning">{{ food.energia.toFixed(1) }} kcal</td>
-      <td>{{ food.amount.toFixed(0) }} g</td>
+      <td class="table-success align-middle">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
+      <td class="table-primary align-middle">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
+      <td class="table-danger align-middle">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
+      <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
+      <td class="align-middle">{{ food.amount.toFixed(0) }} g</td>
     </tr>
   </tbody>
 </table>

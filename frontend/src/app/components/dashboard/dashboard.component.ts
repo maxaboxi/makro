@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   allFoods: Food[];
   meals: Meal[];
   user: User;
+  isLoggedIn = false;
 
   constructor(
     private foodService: FoodService,
@@ -24,14 +25,18 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user = this.auth.getUserInfo();
-    this.addedFoodService.setTargets();
-    this.meals = this.user.meals;
-    this.fetchFoods();
+    this.auth.isLoggedIn.subscribe(res => {
+      this.isLoggedIn = res;
+      this.user = this.auth.getUserInfo();
+      console.log(this.user);
+      this.addedFoodService.setTargets();
+      this.meals = this.user.meals;
+      this.fetchFoods();
+    });
   }
 
   fetchFoods() {
-    if (this.user) {
+    if (this.isLoggedIn) {
       this.foodService
         .getFoods(this.user.username)
         .subscribe(foods => (this.foods = foods));

@@ -1,10 +1,10 @@
-<div *ngIf="user" class="container-fluid mt-1">
+<div *ngIf="isLoggedIn" class="container-fluid mt-1">
   <app-toolbar class="ml-3" (changed)="fetchFoods()"></app-toolbar>
 </div>
 <div class="container-fluid mt-4">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
-      <app-search [foods]="foods"></app-search>
+      <app-search [foods]="foods" [allFoods]="allFoods"></app-search>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
       <app-meals></app-meals>

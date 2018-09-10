@@ -17,20 +17,27 @@ const logger = winston.createLogger({
     })
   ]
 });
-
-router.use((req, res, next) => {
-  let token;
-  if (req.headers['authorization']) {
-    token = jwt.decode(req.headers['authorization']);
-    if (token) {
+function checkAuthorization() {
+  return (req, res, next) => {
+    if (req.path === '/getallfoods' && req.method === 'GET') {
       next();
+    } else {
+      let token;
+      if (req.headers['authorization']) {
+        token = jwt.decode(req.headers['authorization']);
+        if (token) {
+          next();
+        }
+      } else {
+        res.status(401);
+        res.json({ success: false, msg: 'Unauthorized' });
+        return;
+      }
     }
-  } else {
-    res.status(401);
-    res.json({ success: false, msg: 'Unauthorized' });
-    return;
-  }
-});
+  };
+}
+
+router.use(checkAuthorization());
 
 router.get('/getallfoods', (req, res) => {
   Food.getFoods((err, foods) => {

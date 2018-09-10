@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="form-check">
+  <div *ngIf="isLoggedIn" class="form-check">
     <input type="checkbox" class="form-check-input" (change)="foodsByOthers()">
     <label class="form-check-label">Sisällytä hakuun muiden lisäämät ruoat</label>
   </div>

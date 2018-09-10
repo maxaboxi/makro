@@ -5,13 +5,13 @@ table {
 th {
   word-break: break-all;
   overflow-y: scroll;
-  max-height: 30px;
+  max-height: 50px;
 }
 
 td {
   word-break: break-all;
   overflow-y: scroll;
-  max-height: 30px;
+  max-height: 50px;
 }
 
 .t-head {
@@ -20,7 +20,7 @@ td {
 
 .name {
   overflow-y: scroll;
-  max-height: 30px;
+  max-height: 50px;
   word-break: break-all;
 }
 
