@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
 import { AddedFoodsService } from '../../../services/added-foods.service';
-import { User } from '../../../models/User';
 
 @Component({
   selector: 'app-search',

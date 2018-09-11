@@ -1,56 +1,80 @@
 <div class="container mt-2">
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <span class="lead">Omat tiedot</span>
-            <button class="btn btn-sm btn-outline-warning ml-auto" (click)="openModal(userInfo)"><i class="far fa-edit"></i>
-              Muokkaa tietoja</button>
-          </div>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><i class="fas fa-signature"></i> Käyttäjätunnus: {{ user.username }}</li>
-          <li *ngIf="user.email" class="list-group-item"><i class="fas fa-at"></i> Sähköpostiosoite: {{ user.email }}</li>
-          <li class="list-group-item">
-            <i class="fas fa-fire"></i>
-            Kulutus: {{ user.userAddedExpenditure ? (user.userAddedExpenditure).toFixed(0) :
-            (user.dailyExpenditure).toFixed(0) }} kcal/päivä
-            <i class="fas fa-info float-right" (click)="toggleInfo()"></i>
-          </li>
-          <li class="list-group-item"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
-          <li class="list-group-item"><i class="fas fa-arrows-alt-v"></i> Pituus: {{ user.height }} cm</li>
-          <li class="list-group-item"><i class="fas fa-heartbeat"></i> Ikä: {{ user.age }} vuotta</li>
-          <li class="list-group-item"><i class="fas fa-child"></i> Sukupuoli: {{ user.sex }}</li>
-          <li *ngIf="showInfo" class="list-group-item">
-            <p>Kaava, mitä käytetään kulutuksen laskemiseen on <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation"
-                target="_blank">Harris-Benedictin yhtälö</a>:</p>
-            <p>Miehet: 88,4 + (13,4 x kehon massa kiloina) + (4,8 x pituus sentteinä) – (5,7 x ikä
-              vuosissa).</p>
-            <p>Naiset: 447,6 + (9,25 x kehon massa kiloina) + (3,1 x pituus sentteinä) – (4,3 x ikä
-              vuosissa)</p>
-          </li>
-        </ul>
-      </div>
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"><i class="far fa-edit"></i>
+        Muokkaa tietoja</button>
+      <h1 class="display-4">Omat tiedot</h1>
+      <ul>
+
+        <li class="list lead"><i class="far fa-user"></i> Käyttäjätunnus: {{ user.username }}</li>
+        <li *ngIf="user.email" class="list lead"><i class="fas fa-at"></i> Email: {{ user.email }}</li>
+        <li class="list lead">
+          <i class="fas fa-fire"></i>
+          Kulutus: {{ user.userAddedExpenditure ? (user.userAddedExpenditure).toFixed(0) :
+          (user.dailyExpenditure).toFixed(0) }} kcal/päivä
+          <i class="fas fa-info float-right" (click)="toggleInfo()"></i>
+        </li>
+        <li class="list lead"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
+        <li class="list lead"><i class="fas fa-arrows-alt-v"></i> Pituus: {{ user.height }} cm</li>
+        <li class="list lead"><i class="fas fa-heartbeat"></i> Ikä: {{ user.age }} vuotta</li>
+        <li class="list lead"><i class="fas fa-child"></i> Sukupuoli: {{ user.sex }}</li>
+        <li class="list lead">
+          <span class="day-list-name" (click)="toggleDelete()">
+            <i class="fas fa-trash-alt"></i>
+            Poista tili
+          </span>
+        </li>
+        <li *ngIf="showInfo" class="lead mt-3 info-box">
+          <p>Kaava, mitä käytetään kulutuksen laskemiseen on <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation"
+              target="_blank">Harris-Benedictin yhtälö</a>:</p>
+          <p>Miehet: 88,4 + (13,4 x kehon massa kiloina) + (4,8 x pituus sentteinä) – (5,7 x ikä
+            vuosissa).</p>
+          <p>Naiset: 447,6 + (9,25 x kehon massa kiloina) + (3,1 x pituus sentteinä) – (4,3 x ikä
+            vuosissa)</p>
+        </li>
+      </ul>
+      <button *ngIf="showDeleteAccount" class="btn btn-danger btn-block" (click)="deleteAccount()">
+        <i class="fas fa-user-minus mr-1"></i>
+        Poista käyttäjätili</button>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <span class="lead">Aterioiden nimet</span>
-            <button class="btn btn-sm btn-outline-warning ml-auto" (click)="openModal(mealName)"><i class="far fa-edit"></i>
-              Muokkaa aterioita</button>
-          </div>
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"><i class="far fa-edit"></i>
+        Muokkaa nimiä</button>
+      <h1 class="display-4">Aterioiden nimet</h1>
+      <ul>
+        <li *ngFor="let meal of user.meals; let i = index" class="list lead">
+          {{ meal.name }}
+          <i class="far fa-minus-square float-right" (click)="deleteMeal(i)"></i>
+        </li>
+      </ul>
+      <div class="row mt-1">
+        <div class="col">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">Lisää ateria</button>
         </div>
-        <ul class="list-group list-group-flush">
-          <li *ngFor="let meal of user.meals" class="list-group-item"><i class="fas fa-signature"></i> {{ meal.name }}</li>
-        </ul>
+        <div class="col" *ngIf="changed">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">Tallenna muutokset</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<button class="btn btn-danger" (click)="deleteAccount()"><i class="fas fa-user-minus mr-1"></i> Poista käyttäjätili</button>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <h1 class="display-4">Tallennetut päivät</h1>
+      <ul>
+        <li class="day-list lead" *ngFor="let day of savedDays; let i = index;">
+          <span class="day-list-name" (click)="loadDay(i)">{{ day }}</span>
+          <i class="far fa-minus-square float-right" (click)="deleteDay(i)"></i>
+        </li>
+      </ul>
+      <div class="col" *ngIf="daysDeleted">
+        <button type="button" class="btn btn-outline-success btn-block" (click)="saveDays()">Tallenna muutokset</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <ng-template #userInfo let-modal>
   <div class="modal-header">
@@ -151,7 +175,7 @@
               </span>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
+              <button type="submit" class="btn btn-success btn-block">
                 Tallenna
               </button>
             </div>

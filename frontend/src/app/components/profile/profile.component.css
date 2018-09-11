@@ -1,3 +1,44 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.list:hover {
+  padding: 20px 15px;
+  font-size: 25px;
+}
+
+.day-list {
+  word-break: break-all;
+  font-size: 25px;
+}
+
+.day-list:hover {
+  font-size: 35px;
+}
+
+.day-list-name:hover {
+  cursor: pointer;
+}
+
+.list-group-item:hover {
+  background: #f9f9f9;
+}
+
 .fa-info:hover {
   cursor: pointer;
+}
+
+.fa-minus-square:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+.info-box {
+  border: solid #ffc107 2px;
+  padding: 5px;
+}
+
+.fa-trash-alt {
+  color: #ff3b3f;
 }

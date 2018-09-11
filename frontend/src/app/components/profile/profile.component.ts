@@ -13,6 +13,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ProfileComponent implements OnInit {
   user: User;
   showInfo = false;
+  changed = false;
+  daysDeleted = false;
+  showDeleteAccount = false;
+  savedDays = [
+    'Joku',
+    'Toinen',
+    'Aina vaa',
+    'asdsadasdasdasdasdasdasdas',
+    'asdsadasdasdasdasdasdasdasasdsadasdasdasdasdasdasdas'
+  ];
 
   constructor(
     private auth: AuthService,
@@ -23,7 +33,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
-      this.user = user;
+      this.user = JSON.parse(JSON.stringify(user));
       this.calculateBaseExpenditure();
     });
   }
@@ -62,49 +72,86 @@ export class ProfileComponent implements OnInit {
       name: 'Ateria ' + (this.user.meals.length + 1),
       foods: []
     });
+    this.changed = true;
+  }
+
+  deleteMeal(index) {
+    this.user.meals.splice(index, 1);
+    this.changed = true;
+  }
+
+  updateInfo() {
+    this.user.meals.forEach((m, i) => {
+      if (m.name.length === 0) {
+        m.name = 'Ateria ' + (i + 1);
+      }
+    });
+    const userInfo: User = {
+      username: this.user.username,
+      email: this.user.email,
+      age: this.user.age,
+      height: this.user.height,
+      weight: this.user.weight,
+      activity: this.user.activity,
+      sex: this.user.sex,
+      dailyExpenditure: this.user.dailyExpenditure,
+      userAddedExpenditure: this.user.userAddedExpenditure,
+      userAddedProteinTarget: this.user.userAddedProteinTarget,
+      userAddedCarbTarget: this.user.userAddedCarbTarget,
+      userAddedFatTarget: this.user.userAddedFatTarget,
+      meals: this.user.meals
+    };
+    this.auth.updateUserInfo(userInfo).subscribe(
+      res => {
+        if (res) {
+          this.changed = false;
+          this.auth.setUserInfo(res['user']);
+          this.user = this.auth.getUserInfo();
+          this.calculateBaseExpenditure();
+          this.flashMessage.show('Tiedot päivitetty', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  loadDay(index) {
+    console.log(index);
+  }
+
+  deleteDay(index) {
+    this.daysDeleted = true;
+    console.log(index);
+  }
+
+  saveDays() {
+    this.flashMessage.show('Muutokset tallennettu.', {
+      cssClass: 'alert-success',
+      timeout: 2000
+    });
+    this.daysDeleted = false;
   }
 
   openModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          const userInfo: User = {
-            username: this.user.username,
-            email: this.user.email,
-            age: this.user.age,
-            height: this.user.height,
-            weight: this.user.weight,
-            activity: this.user.activity,
-            sex: this.user.sex,
-            dailyExpenditure: this.user.dailyExpenditure,
-            userAddedExpenditure: this.user.userAddedExpenditure,
-            userAddedProteinTarget: this.user.userAddedProteinTarget,
-            userAddedCarbTarget: this.user.userAddedCarbTarget,
-            userAddedFatTarget: this.user.userAddedFatTarget,
-            meals: this.user.meals
-          };
-          this.auth.updateUserInfo(userInfo).subscribe(
-            res => {
-              if (res) {
-                this.auth.setUserInfo(res['user']);
-                this.user = this.auth.getUserInfo();
-                this.calculateBaseExpenditure();
-                this.flashMessage.show('Tiedot päivitetty', {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
+          this.updateInfo();
+        } else {
+          this.user = this.auth.getUserInfo();
         }
       },
-      dismissed => {}
+      dismissed => {
+        this.user = this.auth.getUserInfo();
+      }
     );
   }
 
@@ -113,6 +160,10 @@ export class ProfileComponent implements OnInit {
     localStorage.removeItem('token');
     this.auth.isLoggedIn.next(false);
     this.router.navigate(['/login']);
+  }
+
+  toggleDelete() {
+    this.showDeleteAccount = !this.showDeleteAccount;
   }
 
   deleteAccount() {
@@ -136,6 +187,8 @@ export class ProfileComponent implements OnInit {
           });
         }
       );
+    } else {
+      this.showDeleteAccount = false;
     }
   }
 }
