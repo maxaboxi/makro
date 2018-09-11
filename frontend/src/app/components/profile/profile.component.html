@@ -14,7 +14,8 @@
           <li *ngIf="user.email" class="list-group-item"><i class="fas fa-at"></i> Sähköpostiosoite: {{ user.email }}</li>
           <li class="list-group-item">
             <i class="fas fa-fire"></i>
-            Kulutus: {{ user.userAddedExpenditure ? user.userAddedExpenditure : user.dailyExpenditure }} kcal/päivä
+            Kulutus: {{ user.userAddedExpenditure ? (user.userAddedExpenditure).toFixed(0) :
+            (user.dailyExpenditure).toFixed(0) }} kcal/päivä
             <i class="fas fa-info float-right" (click)="toggleInfo()"></i>
           </li>
           <li class="list-group-item"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
@@ -37,7 +38,8 @@
         <div class="card-header">
           <div class="row">
             <span class="lead">Aterioiden nimet</span>
-            <button class="btn btn-sm btn-outline-warning ml-auto"><i class="far fa-edit"></i> Muokkaa aterioita</button>
+            <button class="btn btn-sm btn-outline-warning ml-auto" (click)="openModal(mealName)"><i class="far fa-edit"></i>
+              Muokkaa aterioita</button>
           </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -113,7 +115,43 @@
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!editUserInformationForm.form.valid">
+              <button type="submit" class="btn btn-primary btn-block">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #mealName let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa aterioita</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #editMealsForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group" *ngFor="let meal of user.meals">
+          <input type="text" name="{{meal.name}}" class="form-control" [(ngModel)]="meal.name" [value]="meal.name"
+            required [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <span class="btn btn-primary btn-block" (click)="addNewMeal()">
+                Lisää ateria
+              </span>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block">
                 Tallenna
               </button>
             </div>

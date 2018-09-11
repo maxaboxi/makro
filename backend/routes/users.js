@@ -160,7 +160,8 @@ router.post('/updateuserinformation', (req, res) => {
     userAddedExpenditure: req.body.userAddedExpenditure,
     userAddedProteinTarget: req.body.userAddedProteinTarget,
     userAddedCarbTarget: req.body.userAddedCarbTarget,
-    userAddedFatTarget: req.body.userAddedFatTarget
+    userAddedFatTarget: req.body.userAddedFatTarget,
+    meals: req.body.meals
   };
   User.updateUserInformation(userInfo, userId, (err, user) => {
     if (err) {

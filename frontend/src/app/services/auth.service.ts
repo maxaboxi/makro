@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AuthService {
   isLoggedIn = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(user: User) {
     const headers = new HttpHeaders({
@@ -82,7 +83,7 @@ export class AuthService {
   getUserInfo() {
     if (!this.user.getValue()) {
       this.setDefaultUserInfo();
-      if (localStorage.getItem('token') && !this.isLoggedIn.getValue()) {
+      if (localStorage.getItem('token')) {
         this.validateToken().subscribe(res => {
           if (res['success']) {
             this.fetchUserInfo().subscribe(result => {
@@ -93,12 +94,11 @@ export class AuthService {
                   JSON.stringify(result['user'].meals)
                 );
                 this.isLoggedIn.next(true);
-              } else {
-                this.setDefaultUserInfo();
               }
             });
           } else {
             localStorage.removeItem('token');
+            this.router.navigate(['/login']);
           }
         });
       }

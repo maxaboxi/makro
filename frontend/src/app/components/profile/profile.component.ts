@@ -14,9 +14,6 @@ export class ProfileComponent implements OnInit {
   user: User;
   showInfo = false;
 
-  @ViewChild('editUserInformationForm')
-  form: any;
-
   constructor(
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
@@ -25,8 +22,10 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user = this.auth.getUserInfo();
-    this.calculateBaseExpenditure();
+    this.auth.user.subscribe(user => {
+      this.user = user;
+      this.calculateBaseExpenditure();
+    });
   }
 
   calculateBaseExpenditure() {
@@ -58,6 +57,13 @@ export class ProfileComponent implements OnInit {
     this.showInfo = !this.showInfo;
   }
 
+  addNewMeal() {
+    this.user.meals.push({
+      name: 'Ateria ' + (this.user.meals.length + 1),
+      foods: []
+    });
+  }
+
   openModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
@@ -74,7 +80,8 @@ export class ProfileComponent implements OnInit {
             userAddedExpenditure: this.user.userAddedExpenditure,
             userAddedProteinTarget: this.user.userAddedProteinTarget,
             userAddedCarbTarget: this.user.userAddedCarbTarget,
-            userAddedFatTarget: this.user.userAddedFatTarget
+            userAddedFatTarget: this.user.userAddedFatTarget,
+            meals: this.user.meals
           };
           this.auth.updateUserInfo(userInfo).subscribe(
             res => {

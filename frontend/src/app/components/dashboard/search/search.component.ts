@@ -50,9 +50,6 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
-      if (!this.isLoggedIn) {
-        this.includeFoodsAddedByOthers = true;
-      }
       const meals = JSON.parse(localStorage.getItem('meals'));
       this.meals = [];
       meals.forEach(meal => {
@@ -68,6 +65,9 @@ export class SearchComponent implements OnInit {
   }
 
   searchFoods() {
+    if (!this.isLoggedIn) {
+      this.includeFoodsAddedByOthers = true;
+    }
     this.results = [];
     const secondaryResults = [];
     const st = this.searchTerm.toLowerCase();
