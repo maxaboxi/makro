@@ -1,9 +1,32 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Day } from '../models/Day';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayService {
+  private baseUrl = 'http://localhost:1337/api/v1';
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
+
+  getAllSavedDays(user) {
+    const url = `${this.baseUrl}/getalldays/${user}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Day[]>(url, { headers: headers });
+  }
+
+  saveNewDay(day: Day) {
+    const url = `${this.baseUrl}/addnewday`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, day, { headers: headers });
+  }
 }

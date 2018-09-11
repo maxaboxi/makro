@@ -59,13 +59,13 @@
   </div>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5" *ngIf="savedDays.length > 0">
   <div class="row justify-content-center">
     <div class="col-6">
       <h1 class="display-4">Tallennetut päivät</h1>
       <ul>
         <li class="day-list lead" *ngFor="let day of savedDays; let i = index;">
-          <span class="day-list-name" (click)="loadDay(i)">{{ day }}</span>
+          <span class="day-list-name" (click)="loadDay(i)">{{ day.name }}</span>
           <i class="far fa-minus-square float-right" (click)="deleteDay(i)"></i>
         </li>
       </ul>

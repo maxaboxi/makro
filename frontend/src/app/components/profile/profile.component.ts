@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../models/User';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Day } from '../../models/Day';
+import { DayService } from '../../services/day.service';
 
 @Component({
   selector: 'app-profile',
@@ -16,25 +18,23 @@ export class ProfileComponent implements OnInit {
   changed = false;
   daysDeleted = false;
   showDeleteAccount = false;
-  savedDays = [
-    'Joku',
-    'Toinen',
-    'Aina vaa',
-    'asdsadasdasdasdasdasdasdas',
-    'asdsadasdasdasdasdasdasdasasdsadasdasdasdasdasdasdas'
-  ];
+  savedDays: Day[] = [];
 
   constructor(
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private dayService: DayService
   ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = JSON.parse(JSON.stringify(user));
       this.calculateBaseExpenditure();
+      this.dayService
+        .getAllSavedDays(this.user.username)
+        .subscribe(days => (this.savedDays = days));
     });
   }
 

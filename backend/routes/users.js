@@ -19,6 +19,31 @@ const logger = winston.createLogger({
   ]
 });
 
+function checkAuthorization() {
+  return (req, res, next) => {
+    if (
+      (req.path === '/login' && req.method === 'POST') ||
+      (req.path === '/register' && req.method === 'POST')
+    ) {
+      next();
+    } else {
+      let token;
+      if (req.headers['authorization']) {
+        token = jwt.decode(req.headers['authorization']);
+        if (token) {
+          next();
+        }
+      } else {
+        res.status(401);
+        res.json({ success: false, msg: 'Unauthorized' });
+        return;
+      }
+    }
+  };
+}
+
+router.use(checkAuthorization());
+
 router.post('/register', (req, res) => {
   let newUser = new User({
     username: req.body.username,
