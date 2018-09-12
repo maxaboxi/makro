@@ -1,7 +1,7 @@
-<span (click)="openModal(content)"><i class="fas fa-plus-circle"></i> Lisää ruoka</span>
-<span class="ml-4"><i class="fas fa-save"></i> Tallenna päivä</span>
+<span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> Lisää ruoka</span>
+<span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> Tallenna päivä</span>
 
-<ng-template #content let-modal>
+<ng-template #addFood let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Lisää uusi ruoka</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
@@ -94,6 +94,44 @@
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!addFoodForm.form.valid">
                 Tallenna ruoka
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dayName let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Tallenna päivä</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #saveDayForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="nameOfDay">Nimi</label>
+          <input type="text" name="nameOfDay" class="form-control" #nameOfDay="ngModel" [(ngModel)]="day.name"
+            [ngClass]="{'is-invalid':nameOfDay.errors && nameOfDay.touched}" minlength="3" required>
+          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback">
+            Nimi on vaadittu tieto
+          </div>
+          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback">
+            Nimen pitää olla vähintään kolme merkkiä pitkä
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block" [disabled]="!saveDayForm.form.valid">
+                Tallenna
               </button>
             </div>
           </div>

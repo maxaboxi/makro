@@ -11,6 +11,8 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/User';
 import { FoodService } from '../../../services/food.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { DayService } from '../../../services/day.service';
+import { Day } from '../../../models/Day';
 
 @Component({
   selector: 'app-toolbar',
@@ -19,6 +21,12 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class ToolbarComponent implements OnInit {
   user: User;
+  day: Day = {
+    username: '',
+    name: '',
+    meals: null
+  };
+  dayName = '';
   food: Food = {
     name: '',
     energia: null,
@@ -41,6 +49,7 @@ export class ToolbarComponent implements OnInit {
     private modalService: NgbModal,
     private auth: AuthService,
     private foodService: FoodService,
+    private dayService: DayService,
     private flashMessage: FlashMessagesService
   ) {}
 
@@ -48,7 +57,7 @@ export class ToolbarComponent implements OnInit {
     this.user = this.auth.getUserInfo();
   }
 
-  openModal(content) {
+  openAddFoodModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
@@ -87,6 +96,57 @@ export class ToolbarComponent implements OnInit {
       },
       dismissed => {
         this.resetForm();
+      }
+    );
+  }
+
+  openSaveDayModal(content) {
+    const meals = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded === 0) {
+      this.flashMessage.show(
+        'Vähintään yksi ruoka on lisättävä aterialle, jotta päivän voi tallentaa.',
+        {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        }
+      );
+      return;
+    }
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const newDay: Day = {
+            name: this.day.name,
+            meals: JSON.parse(localStorage.getItem('meals')),
+            username: this.user.username
+          };
+          this.dayService.saveNewDay(newDay).subscribe(
+            success => {
+              if (success) {
+                this.flashMessage.show('Päivä tallennettu.', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.day.name = '';
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.day.name = '';
+        }
+      },
+      dismissed => {
+        this.day.name = '';
       }
     );
   }

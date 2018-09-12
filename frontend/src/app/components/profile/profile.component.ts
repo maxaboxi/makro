@@ -29,8 +29,8 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user.subscribe(user => {
-      this.user = JSON.parse(JSON.stringify(user));
+    this.auth.fetchUserInfo().subscribe(res => {
+      this.user = JSON.parse(JSON.stringify(res['user']));
       this.calculateBaseExpenditure();
       this.dayService
         .getAllSavedDays(this.user.username)
