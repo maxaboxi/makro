@@ -33,6 +33,11 @@ const FoodSchema = mongoose.Schema({
     type: Number,
     required: true
   },
+  editing: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   username: {
     type: String,
     required: true

@@ -32,6 +32,10 @@ td {
   background: #edf4ff;
 }
 
+.food-amount:hover {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 720px) {
   .t-head {
     min-width: 0px;

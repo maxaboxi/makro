@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let food of meal.foods" class="text-center">
+    <tr *ngFor="let food of meal.foods; let i = index" class="text-center">
       <th class="t-head" scope="row">
         <div class="name">{{ food.name }}</div>
       </th>
@@ -30,7 +30,13 @@
       <td class="table-primary align-middle">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
       <td class="table-danger align-middle">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
-      <td class="align-middle">{{ food.amount.toFixed(0) }} g</td>
+      <td class="align-middle food-amount" (click)="food.editing = true" *ngIf="!food.editing">
+        {{ food.amount.toFixed(0) }} g</td>
+      <td class="align-middle" *ngIf="food.editing">
+        <div class="form-group">
+          <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)">
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>

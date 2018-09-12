@@ -38,6 +38,20 @@ export class AddedFoodsService {
     });
   }
 
+  setTotals() {
+    this.resetTotals();
+    const t = this._totals.getValue();
+    const meals = this.getMeals();
+    meals.forEach(m => {
+      m.foods.forEach(f => {
+        t.energy += f.energia;
+        t.protein += f.proteiini;
+        t.carb += f.hh;
+        t.fat += f.rasva;
+      });
+    });
+  }
+
   setTargets() {
     const user = this.auth.getUserInfo();
     if (user.weight) {
@@ -92,6 +106,7 @@ export class AddedFoodsService {
     }
     if (e.food) {
       const food: Food = {
+        _id: e.food._id,
         name: e.food.name,
         energia: e.food.energia * (e.amount / 100),
         proteiini: e.food.proteiini * (e.amount / 100),
@@ -113,6 +128,19 @@ export class AddedFoodsService {
         }
       });
       localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
+    }
+  }
+
+  updateMealsInLocalStorage(meal) {
+    const meals = this.getMeals();
+    for (let m of meals) {
+      if (m.name === meal.name) {
+        m.foods = meal.foods;
+        localStorage.setItem('meals', JSON.stringify(meals));
+        this._meals.next(meals);
+        this.setTotals();
+        break;
+      }
     }
   }
 }
