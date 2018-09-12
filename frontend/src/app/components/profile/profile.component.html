@@ -59,7 +59,7 @@
   </div>
 </div>
 
-<div class="container mt-5" *ngIf="savedDays.length > 0">
+<div class="container mt-5" *ngIf="savedDays.length > 0 || deletedDays.length > 0">
   <div class="row justify-content-center">
     <div class="col-6">
       <h1 class="display-4">Tallennetut päivät</h1>
@@ -70,7 +70,7 @@
         </li>
       </ul>
       <div class="col" *ngIf="daysDeleted">
-        <button type="button" class="btn btn-outline-success btn-block" (click)="saveDays()">Tallenna muutokset</button>
+        <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>
       </div>
     </div>
   </div>

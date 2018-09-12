@@ -17,19 +17,16 @@ const DaySchema = mongoose.Schema({
 
 const Day = (module.exports = mongoose.model('Day', DaySchema));
 
-// Save new dayobject to database
 module.exports.saveDay = (dayObject, callback) => {
   dayObject.save(callback);
 };
 
-// Find days based on username
 module.exports.getDays = (username, callback) => {
-  let query = { username: username };
+  const query = { username: username };
   Day.find(query, callback);
 };
 
-// Delete day
-module.exports.removeDay = (dayName, callback) => {
-  let query = { name: dayName };
+module.exports.removeDays = (deletedDays, callback) => {
+  const query = { _id: { $in: deletedDays } };
   Day.remove(query, callback);
 };

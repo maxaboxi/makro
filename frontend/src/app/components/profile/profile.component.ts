@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
   daysDeleted = false;
   showDeleteAccount = false;
   savedDays: Day[] = [];
+  deletedDays = [];
 
   constructor(
     private auth: AuthService,
@@ -128,16 +129,35 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteDay(index) {
+    this.deletedDays.push(this.savedDays[index]._id);
+    this.savedDays.splice(index, 1);
     this.daysDeleted = true;
-    console.log(index);
   }
 
-  saveDays() {
-    this.flashMessage.show('Muutokset tallennettu.', {
-      cssClass: 'alert-success',
-      timeout: 2000
-    });
-    this.daysDeleted = false;
+  deleteDaysFromDb() {
+    this.dayService.removeDays(this.deletedDays).subscribe(
+      res => {
+        console.log(res);
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.dayService
+            .getAllSavedDays(this.user.username)
+            .subscribe(days => {
+              this.savedDays = days;
+              this.daysDeleted = false;
+            });
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   openModal(content) {

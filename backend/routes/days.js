@@ -73,9 +73,9 @@ router.get('/getalldays/:username', (req, res) => {
   });
 });
 
-router.delete('/removeday', (req, res) => {
-  let dayName = req.query.name;
-  Day.removeDay(dayName, (err, day) => {
+router.delete('/removedays', (req, res) => {
+  const deletedDays = req.body;
+  Day.removeDays(deletedDays, (err, days) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -83,7 +83,7 @@ router.delete('/removeday', (req, res) => {
         errorMsg: err
       });
       res.status(500);
-      res.json({ success: false, msg: 'Päivän poisto epäonnistui.' });
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
       res.status(200);
       res.json({ success: true, msg: 'Päivä poistettu.' });

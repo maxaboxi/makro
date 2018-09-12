@@ -29,4 +29,19 @@ export class DayService {
 
     return this.http.post(url, day, { headers: headers });
   }
+
+  removeDays(days) {
+    const url = `${this.baseUrl}/removedays`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
+  }
 }

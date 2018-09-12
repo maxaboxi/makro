@@ -108,7 +108,7 @@ export class ToolbarComponent implements OnInit {
     });
     if (foodsAdded === 0) {
       this.flashMessage.show(
-        'Vähintään yksi ruoka on lisättävä aterialle, jotta päivän voi tallentaa.',
+        'Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa.',
         {
           cssClass: 'alert-danger',
           timeout: 2000
