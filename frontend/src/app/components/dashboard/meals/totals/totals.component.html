@@ -1,0 +1,28 @@
+<table class="table table-sm table-responsive-xs mt-2">
+  <thead>
+    <tr class="text-center">
+      <th class="t-head bg-lb lead" scope="row">
+        <div class="name">Yhteensä</div>
+      </th>
+      <th scope="col" class="table-success">P</th>
+      <th scope="col" class="table-primary">HH</th>
+      <th scope="col" class="table-danger">R</th>
+      <th scope="col" class="table-secondary">S</th>
+      <th scope="col" class="fiber">K</th>
+      <th scope="col" class="table-warning">Kcal</th>
+      <th scope="col">Määrä</th>
+    </tr>
+    <tr class="text-center">
+      <th class="t-head bg-light lead" scope="row">
+        <div class="name" (click)="clearSelectedFoods()"><i class="far fa-trash-alt"></i></div>
+      </th>
+      <th scope="col" class="table-success align-middle">{{ totals.protein.toFixed(0) }} g</th>
+      <th scope="col" class="table-primary align-middle">{{ totals.carb.toFixed(0) }} g</th>
+      <th scope="col" class="table-danger align-middle">{{ totals.fat.toFixed(0) }} g</th>
+      <th scope="col" class="table-secondary align-middle">{{ totals.sugar.toFixed(0) }} g</th>
+      <th scope="col" class="fiber align-middle">{{ totals.fiber.toFixed(0) }} g</th>
+      <th scope="col" class="table-warning align-middle">{{ totals.energy.toFixed(0) }}</th>
+      <th scope="col" class="align-middle">{{ totals.amount.toFixed(0) }} g</th>
+    </tr>
+  </thead>
+</table>

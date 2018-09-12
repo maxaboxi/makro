@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Meal } from '../models/Meal';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../models/Food';
-import { User } from '../models/User';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -14,7 +13,10 @@ export class AddedFoodsService {
     energy: 0,
     protein: 0,
     carb: 0,
-    fat: 0
+    fat: 0,
+    fiber: 0,
+    sugar: 0,
+    amount: 0
   });
   _targets = new BehaviorSubject<any>(null);
   private proteinTarget;
@@ -29,12 +31,25 @@ export class AddedFoodsService {
     this.resetTotals();
   }
 
+  resetMeals() {
+    const meals = this.getMeals();
+    meals.forEach(m => {
+      m.foods = [];
+    });
+    this._meals.next(meals);
+    this.resetTotals();
+    localStorage.setItem('meals', JSON.stringify(meals));
+  }
+
   resetTotals() {
     this._totals.next({
       energy: 0,
       protein: 0,
       carb: 0,
-      fat: 0
+      fat: 0,
+      fiber: 0,
+      sugar: 0,
+      amount: 0
     });
   }
 
@@ -48,6 +63,9 @@ export class AddedFoodsService {
         t.protein += f.proteiini;
         t.carb += f.hh;
         t.fat += f.rasva;
+        t.fiber += f.kuitu;
+        t.sugar += f.sokeri;
+        t.amount += f.amount;
       });
     });
   }
@@ -121,6 +139,9 @@ export class AddedFoodsService {
       t.protein += food.proteiini;
       t.carb += food.hh;
       t.fat += food.rasva;
+      t.fiber += food.kuitu;
+      t.sugar += food.sokeri;
+      t.amount += food.amount;
       this._totals.next(t);
       this._meals.getValue().forEach(m => {
         if (m.name === e.meal) {
