@@ -2,36 +2,36 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-fire"></i>
-      Kulutus: {{ targets.userAddedExpenditure ? targets.userAddedExpenditure.toFixed(0) :
-      targets.dailyExpenditure.toFixed(0) }} kcal
+      Kulutus: <b>{{ targets.userAddedExpenditure ? targets.userAddedExpenditure.toFixed(0) :
+        targets.dailyExpenditure.toFixed(0) }} kcal</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cookie-bite"></i>
-      Syöty: {{ totals.energy.toFixed(0) }} kcal
+      Syöty: <b>{{ totals.energy.toFixed(0) }} kcal</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cut"></i>
-      Jäljellä: {{ targets.userAddedExpenditure ? (targets.userAddedExpenditure - totals.energy).toFixed(0) :
-      (targets.dailyExpenditure
-      - totals.energy).toFixed(0) }} kcal
+      Jäljellä: <b>{{ targets.userAddedExpenditure ? (targets.userAddedExpenditure - totals.energy).toFixed(0) :
+        (targets.dailyExpenditure
+        - totals.energy).toFixed(0) }} kcal</b>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-dove"></i>
-      Proteiini: {{ totals.protein.toFixed(0) }}g / {{ targets.userAddedProteinTarget ?
-      targets.userAddedProteinTarget.toFixed(0) :
-      targets.proteinTarget.toFixed(0) }}g
+      Proteiini: <b>{{ totals.protein.toFixed(0) }}g / {{ targets.userAddedProteinTarget ?
+        targets.userAddedProteinTarget.toFixed(0) :
+        targets.proteinTarget.toFixed(0) }}g</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cookie"></i>
-      HH: {{ totals.carb.toFixed(0) }}g / {{ targets.userAddedCarbTarget ? targets.userAddedCarbTarget.toFixed(0) :
-      targets.carbTarget.toFixed(0) }}g
+      HH: <b>{{ totals.carb.toFixed(0) }}g / {{ targets.userAddedCarbTarget ? targets.userAddedCarbTarget.toFixed(0) :
+        targets.carbTarget.toFixed(0) }}g</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-burn"></i>
-      Rasva: {{ totals.fat.toFixed(0) }}g / {{ targets.userAddedFatTarget ? targets.userAddedFatTarget.toFixed(0) :
-      targets.fatTarget.toFixed(0) }}g
+      Rasva: <b>{{ totals.fat.toFixed(0) }}g / {{ targets.userAddedFatTarget ? targets.userAddedFatTarget.toFixed(0) :
+        targets.fatTarget.toFixed(0) }}g</b>
     </div>
   </div>
 </div>
