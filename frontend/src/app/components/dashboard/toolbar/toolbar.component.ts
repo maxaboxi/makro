@@ -14,6 +14,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { DayService } from '../../../services/day.service';
 import { Day } from '../../../models/Day';
 import { BehaviorSubject } from 'rxjs';
+import { AddedFoodsService } from '../../../services/added-foods.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -21,6 +22,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
+  private showTargets;
   private _user = new BehaviorSubject<User>(null);
   day: Day = {
     username: '',
@@ -60,10 +62,15 @@ export class ToolbarComponent implements OnInit {
     private modalService: NgbModal,
     private foodService: FoodService,
     private dayService: DayService,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private addedFoodsService: AddedFoodsService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.addedFoodsService._showTargets.subscribe(
+      show => (this.showTargets = show)
+    );
+  }
 
   openAddFoodModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
@@ -164,5 +171,9 @@ export class ToolbarComponent implements OnInit {
     Object.keys(this.food).forEach(param => {
       this.food[param] = null;
     });
+  }
+
+  toggleTargets() {
+    this.addedFoodsService.setShowTargets();
   }
 }

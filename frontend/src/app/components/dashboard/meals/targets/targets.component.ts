@@ -11,6 +11,7 @@ export class TargetsComponent implements OnInit {
   private totals;
   private caloriesLeft: Number;
   private caloriesLeftLabel;
+  private showTargets;
 
   constructor(private addedFoodsService: AddedFoodsService) {}
 
@@ -21,5 +22,8 @@ export class TargetsComponent implements OnInit {
     this.addedFoodsService._totals.subscribe(totals => {
       this.totals = totals;
     });
+    this.addedFoodsService._showTargets.subscribe(
+      show => (this.showTargets = show)
+    );
   }
 }

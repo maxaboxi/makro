@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class AddedFoodsService {
+  _showTargets = new BehaviorSubject<boolean>(true);
   _meals = new BehaviorSubject<Meal[]>([]);
   _totals = new BehaviorSubject<any>({
     energy: 0,
@@ -24,6 +25,10 @@ export class AddedFoodsService {
   private carbTarget;
 
   constructor(private auth: AuthService) {}
+
+  setShowTargets() {
+    this._showTargets.next(!this._showTargets.getValue());
+  }
 
   setMealsFromLocalStorage() {
     this._meals.next(JSON.parse(localStorage.getItem('meals')));

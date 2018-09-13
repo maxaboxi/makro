@@ -108,4 +108,9 @@ export class MealTableComponent implements OnInit, DoCheck {
       }
     });
   }
+
+  removeFood(index) {
+    this.meal.foods.splice(index, 1);
+    this.addedFoodsService.updateMealsInLocalStorage(this.meal);
+  }
 }

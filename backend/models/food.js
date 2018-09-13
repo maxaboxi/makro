@@ -23,11 +23,13 @@ const FoodSchema = mongoose.Schema({
   },
   kuitu: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   sokeri: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   packageSize: {
     type: Number,

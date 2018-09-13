@@ -30,8 +30,10 @@
       <td class="table-primary align-middle">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
       <td class="table-danger align-middle">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
-      <td class="align-middle food-amount" (click)="food.editing = true" *ngIf="!food.editing">
-        {{ food.amount.toFixed(0) }} g</td>
+      <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
+        <span class="food-amount" (click)="food.editing = true">{{ food.amount.toFixed(0) }} g</span>
+        <i class="fas fa-eraser ml-3" (click)="removeFood(i)"></i>
+      </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
           <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)">
