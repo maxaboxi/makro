@@ -6,6 +6,7 @@ import { User } from '../../models/User';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Day } from '../../models/Day';
 import { DayService } from '../../services/day.service';
+import { AddedFoodsService } from '../../services/added-foods.service';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +27,8 @@ export class ProfileComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal,
-    private dayService: DayService
+    private dayService: DayService,
+    private addedFoodsService: AddedFoodsService
   ) {}
 
   ngOnInit() {
@@ -125,7 +127,9 @@ export class ProfileComponent implements OnInit {
   }
 
   loadDay(index) {
-    console.log(index);
+    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
+    this.addedFoodsService.setMealsFromLocalStorage();
+    this.router.navigate(['/']);
   }
 
   deleteDay(index) {

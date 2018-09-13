@@ -28,7 +28,7 @@ export class AddedFoodsService {
   setMealsFromLocalStorage() {
     this._meals.next(JSON.parse(localStorage.getItem('meals')));
     this.setTargets();
-    this.resetTotals();
+    this.setTotals();
   }
 
   resetMeals() {
@@ -57,17 +57,19 @@ export class AddedFoodsService {
     this.resetTotals();
     const t = this._totals.getValue();
     const meals = this.getMeals();
-    meals.forEach(m => {
-      m.foods.forEach(f => {
-        t.energy += f.energia;
-        t.protein += f.proteiini;
-        t.carb += f.hh;
-        t.fat += f.rasva;
-        t.fiber += f.kuitu;
-        t.sugar += f.sokeri;
-        t.amount += f.amount;
+    if (meals) {
+      meals.forEach(m => {
+        m.foods.forEach(f => {
+          t.energy += f.energia;
+          t.protein += f.proteiini;
+          t.carb += f.hh;
+          t.fat += f.rasva;
+          t.fiber += f.kuitu;
+          t.sugar += f.sokeri;
+          t.amount += f.amount;
+        });
       });
-    });
+    }
   }
 
   setTargets() {

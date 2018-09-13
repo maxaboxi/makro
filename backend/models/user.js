@@ -69,12 +69,12 @@ const UserSchema = mongoose.Schema({
     type: Array,
     required: false,
     default: [
-      { name: 'Aamiainen', foods: [] },
+      { name: 'Aamupala', foods: [] },
       { name: 'Lounas', foods: [] },
       { name: 'Välipala 1', foods: [] },
       { name: 'Sali', foods: [] },
       { name: 'Välipala 2', foods: [] },
-      { name: 'Illallinen', foods: [] }
+      { name: 'Iltapala', foods: [] }
     ]
   }
 });

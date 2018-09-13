@@ -3,6 +3,7 @@ import { User } from '../models/User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { Meal } from '../models/Meal';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,25 @@ export class AuthService {
   }
 
   setUserInfo(user: User) {
-    localStorage.setItem('meals', JSON.stringify(user.meals));
+    let differentNames = false;
+    const mealsFromLocalStorage: Meal[] = JSON.parse(
+      localStorage.getItem('meals')
+    );
+    if (
+      !mealsFromLocalStorage ||
+      mealsFromLocalStorage.length !== user.meals.length
+    ) {
+      localStorage.setItem('meals', JSON.stringify(user.meals));
+    } else if (mealsFromLocalStorage) {
+      mealsFromLocalStorage.forEach((m, i) => {
+        if (m.name !== user.meals[i].name) {
+          differentNames = true;
+        }
+      });
+      if (differentNames) {
+        localStorage.setItem('meals', JSON.stringify(user.meals));
+      }
+    }
     this.user.next(user);
   }
 
@@ -58,12 +77,16 @@ export class AuthService {
       userAddedCarbTarget: 0,
       userAddedFatTarget: 0
     });
+    this.setMeals();
+  }
+
+  setMeals() {
     const meals = [
-      { name: 'Aamiainen', foods: [] },
+      { name: 'Aamupala', foods: [] },
       { name: 'Lounas', foods: [] },
       { name: 'Välipala 1', foods: [] },
       { name: 'Sali', foods: [] },
-      { name: 'Illallinen', foods: [] },
+      { name: 'Välipala 2', foods: [] },
       { name: 'Iltapala', foods: [] }
     ];
     if (!localStorage.getItem('meals')) {
@@ -89,10 +112,6 @@ export class AuthService {
             this.fetchUserInfo().subscribe(result => {
               if (result['success']) {
                 this.user.next(result['user']);
-                localStorage.setItem(
-                  'meals',
-                  JSON.stringify(result['user'].meals)
-                );
                 this.isLoggedIn.next(true);
               }
             });
