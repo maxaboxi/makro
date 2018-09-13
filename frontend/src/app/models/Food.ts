@@ -9,6 +9,7 @@ export interface Food {
   sokeri?: number;
   username?: String;
   amount?: number;
+  servingSize?: number;
   packageSize?: number;
   editing?: boolean;
 }

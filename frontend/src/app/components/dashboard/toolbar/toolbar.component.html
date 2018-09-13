@@ -80,9 +80,16 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodPackage">Pakkauskoko</label>
+          <label class="lead col-sm-4 col-form-label" for="foodServingSize">Annoskoko</label>
           <div class="col-sm-8">
-            <input type="number" name="foodPackage" class="form-control" placeholder="grammaa" [(ngModel)]="food.packageSize"
+            <input type="number" name="foodServingSize" class="form-control" placeholder="grammaa" [(ngModel)]="food.servingSize"
+              #servingSize="ngModel">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodPackageSize">Pakkauskoko</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodPackageSize" class="form-control" placeholder="grammaa" [(ngModel)]="food.packageSize"
               #packageSize="ngModel">
           </div>
         </div>

@@ -10,5 +10,12 @@ li:hover {
   background: #ff3b3f;
   color: white;
   padding: 2px;
+}
+
+.food-name:hover {
+  cursor: pointer;
+}
+
+.fa-trash-alt:hover {
   cursor: pointer;
 }

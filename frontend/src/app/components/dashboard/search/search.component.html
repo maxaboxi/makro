@@ -8,13 +8,16 @@
   </div>
   <ng-container *ngIf="searchTerm?.length > 0">
     <ul>
-      <li *ngFor="let food of results; let i = index;" (click)="openModal(content, food)">
+      <li *ngFor="let food of results; let i = index;">
         <div class="row">
-          <div class="col">
+          <div class="col food-name" (click)="openModal(selectedFoodModal, food)">
             {{ food.name }}
           </div>
           <div class="col text-right">
-            <span class="mr-2">{{ food.energia.toFixed(0) }}kcal</span>
+            <span class="mr-2">
+              {{ food.energia.toFixed(0) }}kcal
+              <i *ngIf="food.username === user.username" class="far fa-trash-alt ml-2" (click)="openModal(deleteFoodModal, food)"></i>
+            </span>
           </div>
         </div>
       </li>
@@ -22,7 +25,7 @@
   </ng-container>
 </div>
 
-<ng-template #content let-modal>
+<ng-template #selectedFoodModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ selectedFood.name }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
@@ -36,7 +39,7 @@
           <span class="lead">Energia:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.energia }} kcal</span>
+          <span>{{ (selectedFood.energia).toFixed(0) }} kcal</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -44,7 +47,7 @@
           <span class="lead">Proteiini:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.proteiini ? selectedFood.proteiini : 0 }}g</span>
+          <span>{{ selectedFood.proteiini ? (selectedFood.proteiini).toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row">
@@ -52,7 +55,7 @@
           <span class="lead">Hiilihydraatti:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.hh ? selectedFood.hh : 0 }}g</span>
+          <span>{{ selectedFood.hh ? (selectedFood.hh).toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -60,7 +63,7 @@
           <span class="lead">Rasva:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.rasva ? selectedFood.rasva : 0 }}g</span>
+          <span>{{ selectedFood.rasva ? (selectedFood.rasva).toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row">
@@ -68,7 +71,7 @@
           <span class="lead">Kuitu:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.kuitu ? selectedFood.kuitu : 0 }}g</span>
+          <span>{{ selectedFood.kuitu ? (selectedFood.kuitu).toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -76,7 +79,7 @@
           <span class="lead">Sokeri:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.sokeri ? selectedFood.sokeri : 0 }}g</span>
+          <span>{{ selectedFood.sokeri ? (selectedFood.sokeri).toFixed(0) : 0 }}g</span>
         </div>
       </div>
     </div>
@@ -93,6 +96,12 @@
         </label>
         <label class="btn-primary" ngbButtonLabel>
           <input type="radio" ngbButton [value]="100"> 100g
+        </label>
+        <label *ngIf="selectedFood.servingSize" class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="selectedFood.servingSize"> {{ selectedFood.servingSize }}g
+        </label>
+        <label *ngIf="selectedFood.packageSize" class="btn-primary" ngbButtonLabel>
+          <input type="radio" ngbButton [value]="selectedFood.packageSize"> {{ selectedFood.packageSize }}g
         </label>
       </div>
     </div>
@@ -111,6 +120,27 @@
       <div class="row">
         <div class="col text-center">
           <button type="button" class="btn btn-primary" (click)="modal.close('save')">Lisää</button>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-light" (click)="modal.close('cancel')">Peruuta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteFoodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Haluatko varmasti poistaa ruoan: {{ selectedFood.name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Poista</button>
         </div>
         <div class="col text-center">
           <button type="button" class="btn btn-light" (click)="modal.close('cancel')">Peruuta</button>

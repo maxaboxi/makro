@@ -91,6 +91,7 @@ router.post('/addnewfood', (req, res) => {
     proteiini: req.body.proteiini,
     kuitu: req.body.kuitu,
     sokeri: req.body.sokeri,
+    servingSize: req.body.servingSize,
     packageSize: req.body.packageSize,
     username: req.body.username
   });

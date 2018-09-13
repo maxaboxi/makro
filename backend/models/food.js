@@ -31,7 +31,13 @@ const FoodSchema = mongoose.Schema({
   },
   packageSize: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
+  },
+  servingSize: {
+    type: Number,
+    required: true,
+    default: 0
   },
   editing: {
     type: Boolean,

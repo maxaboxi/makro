@@ -1,9 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
 import { AddedFoodsService } from '../../../services/added-foods.service';
+import { User } from '../../../models/User';
+import { FoodService } from '../../../services/food.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +24,7 @@ export class SearchComponent implements OnInit {
   selectedAmount: Number;
   meals = [];
   isLoggedIn = false;
+  private _user = new BehaviorSubject<User>(null);
 
   @Input()
   set foods(foods) {
@@ -40,10 +44,24 @@ export class SearchComponent implements OnInit {
     return this._allFoods.getValue();
   }
 
+  @Input()
+  set user(user) {
+    this._user.next(user);
+  }
+
+  get user() {
+    return this._user.getValue();
+  }
+
+  @Output()
+  changed = new EventEmitter<any>();
+
   constructor(
     private modalService: NgbModal,
     private auth: AuthService,
-    private addedFoodsService: AddedFoodsService
+    private foodService: FoodService,
+    private addedFoodsService: AddedFoodsService,
+    private flashMessage: FlashMessagesService
   ) {}
 
   ngOnInit() {
@@ -137,9 +155,29 @@ export class SearchComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.selectFood(food);
-        } else {
-          this.selectedFood = null;
         }
+        if (result === 'delete') {
+          this.foodService.removeFood(this.selectedFood._id).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show('Ruoka poistettu', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.changed.emit();
+                this.searchTerm = '';
+                this.results = [];
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        }
+        this.selectedFood = null;
       },
       dismissed => {
         this.selectedFood = null;

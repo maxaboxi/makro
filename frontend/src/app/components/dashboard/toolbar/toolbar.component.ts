@@ -3,16 +3,17 @@ import {
   OnInit,
   ViewChild,
   Output,
-  EventEmitter
+  EventEmitter,
+  Input
 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
-import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/User';
 import { FoodService } from '../../../services/food.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DayService } from '../../../services/day.service';
 import { Day } from '../../../models/Day';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,7 +21,7 @@ import { Day } from '../../../models/Day';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  user: User;
+  private _user = new BehaviorSubject<User>(null);
   day: Day = {
     username: '',
     name: '',
@@ -35,9 +36,19 @@ export class ToolbarComponent implements OnInit {
     rasva: null,
     kuitu: null,
     sokeri: null,
+    servingSize: null,
     packageSize: null,
     username: ''
   };
+
+  @Input()
+  set user(user) {
+    this._user.next(user);
+  }
+
+  get user() {
+    return this._user.getValue();
+  }
 
   @ViewChild('addFoodForm')
   form: any;
@@ -47,15 +58,12 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private auth: AuthService,
     private foodService: FoodService,
     private dayService: DayService,
     private flashMessage: FlashMessagesService
   ) {}
 
-  ngOnInit() {
-    this.user = this.auth.getUserInfo();
-  }
+  ngOnInit() {}
 
   openAddFoodModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
@@ -70,6 +78,7 @@ export class ToolbarComponent implements OnInit {
             kuitu: this.food.kuitu ? this.food.kuitu : 0,
             sokeri: this.food.sokeri ? this.food.sokeri : 0,
             packageSize: this.food.packageSize ? this.food.packageSize : 0,
+            servingSize: this.food.servingSize ? this.food.servingSize : 0,
             username: this.user.username
           };
           this.foodService.saveNewFood(addedFood).subscribe(
