@@ -36,7 +36,8 @@
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
-          <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)">
+          <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)"
+            (blur)="updateAmount(food, i)" #amountInput> {{ amountInput.focus() }}
         </div>
       </td>
     </tr>

@@ -87,6 +87,10 @@ export class MealTableComponent implements OnInit, DoCheck {
   }
 
   updateAmount(selectedFood, index) {
+    if (!this.newFoodAmount) {
+      this.meal.foods[index].editing = false;
+      return;
+    }
     const food = this.returnOriginalFoodValues(selectedFood._id);
     this.meal.foods[index].amount = this.newFoodAmount;
     this.newFoodAmount /= 100;
@@ -99,6 +103,7 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.meal.foods[index].editing = false;
     this.calculateTotals();
     this.addedFoodsService.updateMealsInLocalStorage(this.meal);
+    this.newFoodAmount = null;
   }
 
   returnOriginalFoodValues(id) {
