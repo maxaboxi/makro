@@ -31,8 +31,9 @@
       <td class="table-danger align-middle">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
-        <span class="food-amount" (click)="food.editing = true">{{ food.amount.toFixed(0) }} g</span>
-        <i class="fas fa-eraser ml-3" (click)="removeFood(i)"></i>
+        <span class="food-amount" (click)="food.editing = true" title="Muokkaa ruoan määrää">{{ food.amount.toFixed(0)
+          }} g</span>
+        <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="Poista ruoka ateriasta"></i>
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">

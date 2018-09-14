@@ -12,7 +12,7 @@
           <i class="fas fa-fire"></i>
           Kulutus: {{ user.userAddedExpenditure ? (user.userAddedExpenditure).toFixed(0) :
           (user.dailyExpenditure).toFixed(0) }} kcal/päivä
-          <i class="fas fa-info float-right" (click)="toggleInfo()"></i>
+          <i *ngIf="!user.userAddedExpenditure" class="fas fa-info float-right" (click)="toggleInfo()" title="Mistä luku tulee"></i>
         </li>
         <li class="list lead"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
         <li class="list lead"><i class="fas fa-arrows-alt-v"></i> Pituus: {{ user.height }} cm</li>
@@ -44,7 +44,7 @@
       <ul>
         <li *ngFor="let meal of user.meals; let i = index" class="list lead">
           {{ meal.name }}
-          <i class="far fa-minus-square float-right" (click)="deleteMeal(i)"></i>
+          <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="Poista ateria"></i>
         </li>
       </ul>
       <div class="row mt-1">
@@ -54,6 +54,7 @@
         <div class="col" *ngIf="changed">
           <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">Tallenna muutokset</button>
         </div>
+        <p *ngIf="changed" class="lead">Muutokset tallennetaan vasta, kun nappia on painettu.</p>
       </div>
     </div>
   </div>
@@ -66,11 +67,12 @@
       <ul>
         <li class="day-list lead" *ngFor="let day of savedDays; let i = index;">
           <span class="day-list-name" (click)="loadDay(i)">{{ day.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i)"></i>
+          <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
         </li>
       </ul>
       <div class="col" *ngIf="daysDeleted">
         <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>
+        <p class="lead">Päivä(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
       </div>
     </div>
   </div>
