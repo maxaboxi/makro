@@ -97,11 +97,23 @@ export class SearchComponent implements OnInit {
           this.results.push(f);
         } else {
           const containsWhitespaces = fLc.indexOf(' ') > 1;
-          if (containsWhitespaces) {
+          const containsBrackets = fLc.indexOf('(') > 1;
+          if (containsWhitespaces && !containsBrackets) {
             for (let i = 0; i < fLc.length; i++) {
               if (
                 st.length > 1 &&
                 fLc[i] === ' ' &&
+                fLc.slice(i + 1, i + 1 + st.length) === st
+              ) {
+                secondaryResults.push(f);
+              }
+            }
+          }
+          if (containsWhitespaces && containsBrackets) {
+            for (let i = 0; i < fLc.length; i++) {
+              if (
+                st.length > 1 &&
+                fLc[i] === '(' &&
                 fLc.slice(i + 1, i + 1 + st.length) === st
               ) {
                 secondaryResults.push(f);
@@ -119,11 +131,23 @@ export class SearchComponent implements OnInit {
           this.results.push(f);
         } else {
           const containsWhitespaces = fLc.indexOf(' ') > 1;
-          if (containsWhitespaces) {
+          const containsBrackets = fLc.indexOf('(') > 1;
+          if (containsWhitespaces && !containsBrackets) {
             for (let i = 0; i < fLc.length; i++) {
               if (
                 st.length > 1 &&
                 fLc[i] === ' ' &&
+                fLc.slice(i + 1, i + 1 + st.length) === st
+              ) {
+                secondaryResults.push(f);
+              }
+            }
+          }
+          if (containsWhitespaces && containsBrackets) {
+            for (let i = 0; i < fLc.length; i++) {
+              if (
+                st.length > 1 &&
+                fLc[i] === '(' &&
                 fLc.slice(i + 1, i + 1 + st.length) === st
               ) {
                 secondaryResults.push(f);
