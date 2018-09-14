@@ -82,6 +82,28 @@ router.get('/getfoods/:user', (req, res) => {
   });
 });
 
+router.get('/getfoodsbyuser/:user', (req, res) => {
+  const user = req.params.user;
+  Food.foodsByUser(user, (err, foods) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Unable to fetch foods' });
+    } else {
+      res.status(200);
+      // Fix in DB
+      foods.forEach(food => {
+        food.energia /= 4.1868;
+      });
+      res.json(foods);
+    }
+  });
+});
+
 router.post('/addnewfood', (req, res) => {
   const newFood = new Food({
     name: req.body.name,

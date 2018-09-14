@@ -62,6 +62,10 @@ module.exports.getUserFoods = (user, callback) => {
   Food.find({ $or: [{ username: user }, { username: 'admin' }] }, callback);
 };
 
+module.exports.foodsByUser = (user, callback) => {
+  Food.find({ username: user }, callback);
+};
+
 module.exports.addFood = (newFood, callback) => {
   newFood.save(callback);
 };

@@ -7,6 +7,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Day } from '../../models/Day';
 import { DayService } from '../../services/day.service';
 import { AddedFoodsService } from '../../services/added-foods.service';
+import { FoodService } from '../../services/food.service';
+import { Food } from '../../models/Food';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +23,10 @@ export class ProfileComponent implements OnInit {
   showDeleteAccount = false;
   savedDays: Day[] = [];
   deletedDays = [];
+  selectedFood: Food;
+  userAddedFoods: Food[] = [];
+  deletedFoods = [];
+  foodsDeleted = false;
 
   constructor(
     private auth: AuthService,
@@ -28,16 +34,20 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private dayService: DayService,
-    private addedFoodsService: AddedFoodsService
+    private addedFoodsService: AddedFoodsService,
+    private foodService: FoodService
   ) {}
 
   ngOnInit() {
     this.auth.fetchUserInfo().subscribe(res => {
       this.user = JSON.parse(JSON.stringify(res['user']));
       this.calculateBaseExpenditure();
-      this.dayService
-        .getAllSavedDays(this.user.username)
-        .subscribe(days => (this.savedDays = days));
+      this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+        this.savedDays = days;
+        this.foodService
+          .getUserAddedFoods(this.user.username)
+          .subscribe(foods => (this.userAddedFoods = foods));
+      });
     });
   }
 
@@ -164,11 +174,45 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  selectFood(index) {
+    console.log(index);
+  }
+
+  deleteFood(index) {
+    this.deletedFoods.push(this.userAddedFoods[index]._id);
+    this.userAddedFoods.splice(index, 1);
+    this.foodsDeleted = true;
+  }
+
+  deleteFoodsFromDb() {
+    this.flashMessage.show('Muutokset tallennettu.', {
+      cssClass: 'alert-success',
+      timeout: 2000
+    });
+  }
+
   openModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           this.updateInfo();
+        } else if (result === 'delete') {
+          this.foodService.removeFood(this.selectedFood._id).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show('Ruoka poistettu', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
         } else {
           this.user = this.auth.getUserInfo();
         }

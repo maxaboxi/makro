@@ -180,27 +180,6 @@ export class SearchComponent implements OnInit {
         if (result === 'save') {
           this.selectFood(food);
         }
-        if (result === 'delete') {
-          this.foodService.removeFood(this.selectedFood._id).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show('Ruoka poistettu', {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.changed.emit();
-                this.searchTerm = '';
-                this.results = [];
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
-        }
         this.selectedFood = null;
       },
       dismissed => {
