@@ -50,13 +50,18 @@ export class FoodService {
     return this.http.post(url, food, { headers: headers });
   }
 
-  removeFood(foodId: String) {
-    const url = `${this.baseUrl}/removefood/${foodId}`;
+  removeFoods(foods) {
+    const url = `${this.baseUrl}/removefoods`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.delete(url, { headers: headers });
+    const options = {
+      headers: headers,
+      body: foods
+    };
+
+    return this.http.delete(url, options);
   }
 }

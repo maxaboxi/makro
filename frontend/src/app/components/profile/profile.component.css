@@ -8,13 +8,27 @@ ul {
   font-size: 25px;
 }
 
-.day-list {
+.big-list {
   word-break: break-all;
   font-size: 25px;
 }
 
-.day-list:hover {
+.big-list:hover {
   font-size: 35px;
+}
+
+.small-list {
+  word-break: break-all;
+  font-size: 22px;
+}
+
+.small-list:hover {
+  font-size: 30px;
+}
+
+.small-column {
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 .day-list-name:hover {
@@ -41,4 +55,8 @@ ul {
 
 .fa-trash-alt {
   color: #ff3b3f;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

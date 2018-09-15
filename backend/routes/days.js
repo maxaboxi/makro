@@ -86,7 +86,7 @@ router.delete('/removedays', (req, res) => {
       res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
       res.status(200);
-      res.json({ success: true, msg: 'Päivä poistettu.' });
+      res.json({ success: true, msg: 'Päivä(t) poistettu.' });
     }
   });
 });

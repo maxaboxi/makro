@@ -70,7 +70,7 @@ module.exports.addFood = (newFood, callback) => {
   newFood.save(callback);
 };
 
-module.exports.removeFood = (foodId, callback) => {
-  let query = { _id: foodId };
+module.exports.removeFoods = (deletedFoods, callback) => {
+  const query = { _id: { $in: deletedFoods } };
   Food.remove(query, callback);
 };

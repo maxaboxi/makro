@@ -60,14 +60,27 @@
   </div>
 </div>
 
-<div class="container mt-5" *ngIf="savedDays.length > 0 || deletedDays.length > 0">
+<hr *ngIf="savedDays.length > 0 || savedDaysFirst.length > 0 || savedDaysSecond.length > 0">
+
+<div class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6">
-      <h1 class="display-4">Tallennetut päivät</h1>
+      <h1 class="display-4" *ngIf="savedDays.length > 0 || savedDaysFirst.length > 0 || savedDaysSecond.length > 0 || foodsDeleted.length > 0">Tallennetut
+        päivät</h1>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="savedDays.length > 0">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
-        <li class="day-list lead" *ngFor="let day of savedDays; let i = index;">
-          <span class="day-list-name" (click)="loadDay(i)">{{ day.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
+        <li class="big-list lead" *ngFor="let day of savedDays; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="loadDay(i, 'savedDays')">
+              {{ day.name }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square text-right" (click)="deleteDay(i, 'savedDays')" title="Poista päivä"></i>
+            </div>
+          </div>
         </li>
       </ul>
       <div class="col" *ngIf="daysDeleted">
@@ -76,16 +89,51 @@
       </div>
     </div>
   </div>
+  <div class="row" *ngIf="savedDaysFirst.length > 0 || savedDaysSecond.length > 0 || foodsDeleted.length > 0 && savedDays.length === 0">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
+      <ul>
+        <li class="small-list lead" *ngFor="let day of savedDaysFirst; let i = index;">
+          <span class="day-list-name" (click)="loadDay(i, 'savedDaysFirst')">{{ day.name }}</span>
+          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'savedDaysFirst')" title="Poista päivä"></i>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
+      <ul>
+        <li class="small-list lead" *ngFor="let day of savedDaysSecond; let i = index;">
+          <span class="day-list-name" (click)="loadDay(i, 'savedDaysSecond')">{{ day.name }}</span>
+          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'savedDaysSecond')" title="Poista päivä"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col" *ngIf="daysDeleted">
+    <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>
+    <p class="lead">Päivä(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+  </div>
 </div>
 
-<div class="container mt-5" *ngIf="userAddedFoods.length > 0 || foodsDeleted.length > 0">
+<hr *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0">
+
+<div class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6">
-      <h1 class="display-4">Lisäämäni ruoat</h1>
+      <h1 class="display-4" *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted.length > 0">Lisäämäni
+        ruoat</h1>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="userAddedFoods.length > 0">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
-        <li class="day-list lead" *ngFor="let food of userAddedFoods; let i = index;">
-          <span class="day-list-name" (click)="selectFood(i)">{{ food.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteFood(i)" title="Poista ruoka"></i>
+        <li class="big-list lead" *ngFor="let food of userAddedFoods; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="selectFood(i, 'userAddedFoods')">
+              {{ food.name }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square text-right" (click)="deleteFood(i, 'userAddedFoods')" title="Poista ruoka"></i>
+            </div>
+          </div>
         </li>
       </ul>
       <div class="col" *ngIf="foodsDeleted">
@@ -93,6 +141,44 @@
           muutokset</button>
         <p class="lead">Ruoka/ruoat poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
       </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted.length > 0 && userAddedFoods.length === 0">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
+      <ul>
+        <li class="small-list lead" *ngFor="let food of userAddedFoodsFirst; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="selectFood(i, 'userAddedFoodsFirst')">
+              {{ food.name }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteFood(i, 'userAddedFoodsFirst')" title="Poista ruoka"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
+      <ul>
+        <li class="small-list lead" *ngFor="let food of userAddedFoodsSecond; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="selectFood(i, 'userAddedFoodsSecond')">
+              {{ food.name }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteFood(i, 'userAddedFoodsSecond')" title="Poista ruoka"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row" *ngIf="foodsDeleted">
+    <div class="col-6">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna
+        muutokset</button>
+      <p class="lead">Ruoka/ruoat poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
     </div>
   </div>
 </div>

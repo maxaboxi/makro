@@ -134,9 +134,9 @@ router.post('/addnewfood', (req, res) => {
   });
 });
 
-router.delete('/removefood/:id', (req, res, next) => {
-  const foodId = req.params.id;
-  Food.removeFood(foodId, (err, food) => {
+router.delete('/removefoods/', (req, res) => {
+  const deletedFoods = req.body;
+  Food.removeFoods(deletedFoods, (err, foods) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -144,10 +144,10 @@ router.delete('/removefood/:id', (req, res, next) => {
         errorMsg: err
       });
       res.status(500);
-      res.json({ success: false, msg: 'Ruoan poisto epäonnistui.' });
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
       res.status(200);
-      res.json({ success: true, msg: 'Ruoka poistettu.' });
+      res.json({ success: true, msg: 'Ruoka/ruoat poistettu.' });
     }
   });
 });

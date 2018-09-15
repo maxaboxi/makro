@@ -22,9 +22,13 @@ export class ProfileComponent implements OnInit {
   daysDeleted = false;
   showDeleteAccount = false;
   savedDays: Day[] = [];
+  savedDaysFirst: Day[] = [];
+  savedDaysSecond: Day[] = [];
   deletedDays = [];
   selectedFood: Food;
   userAddedFoods: Food[] = [];
+  userAddedFoodsFirst: Food[] = [];
+  userAddedFoodsSecond: Food[] = [];
   deletedFoods = [];
   foodsDeleted = false;
 
@@ -43,12 +47,30 @@ export class ProfileComponent implements OnInit {
       this.user = JSON.parse(JSON.stringify(res['user']));
       this.calculateBaseExpenditure();
       this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
-        this.savedDays = days;
+        this.sortSavedDays(days);
         this.foodService
           .getUserAddedFoods(this.user.username)
-          .subscribe(foods => (this.userAddedFoods = foods));
+          .subscribe(foods => this.sortUserAddedFoods(foods));
       });
     });
+  }
+
+  sortSavedDays(days) {
+    if (days.length <= 10) {
+      this.savedDays = days;
+    } else {
+      this.savedDaysFirst = days.slice(0, Math.floor(days.length / 2));
+      this.savedDaysSecond = days.slice(Math.floor(days.length / 2) + 1);
+    }
+  }
+
+  sortUserAddedFoods(foods) {
+    if (foods.length <= 10) {
+      this.userAddedFoods = foods;
+    } else {
+      this.userAddedFoodsFirst = foods.slice(0, Math.floor(foods.length / 2));
+      this.userAddedFoodsSecond = foods.slice(Math.floor(foods.length / 2) + 1);
+    }
   }
 
   calculateBaseExpenditure() {
@@ -136,15 +158,48 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  loadDay(index) {
-    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
+  loadDay(index, array) {
+    if (array === 'savedDays') {
+      localStorage.setItem(
+        'meals',
+        JSON.stringify(this.savedDays[index].meals)
+      );
+    }
+
+    if (array === 'savedDaysFirst') {
+      localStorage.setItem(
+        'meals',
+        JSON.stringify(this.savedDaysFirst[index].meals)
+      );
+    }
+
+    if (array === 'savedDaysSecond') {
+      localStorage.setItem(
+        'meals',
+        JSON.stringify(this.savedDaysSecond[index].meals)
+      );
+    }
+
     this.addedFoodsService.setMealsFromLocalStorage();
     this.router.navigate(['/']);
   }
 
-  deleteDay(index) {
-    this.deletedDays.push(this.savedDays[index]._id);
-    this.savedDays.splice(index, 1);
+  deleteDay(index, array) {
+    if (array === 'savedDays') {
+      this.deletedDays.push(this.savedDays[index]._id);
+      this.savedDays.splice(index, 1);
+    }
+
+    if (array === 'savedDaysFirst') {
+      this.deletedDays.push(this.savedDaysFirst[index]._id);
+      this.savedDaysFirst.splice(index, 1);
+    }
+
+    if (array === 'savedDaysSecond') {
+      this.deletedDays.push(this.savedDaysSecond[index]._id);
+      this.savedDaysSecond.splice(index, 1);
+    }
+
     this.daysDeleted = true;
   }
 
@@ -174,21 +229,51 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  selectFood(index) {
+  selectFood(index, array) {
     console.log(index);
   }
 
-  deleteFood(index) {
-    this.deletedFoods.push(this.userAddedFoods[index]._id);
-    this.userAddedFoods.splice(index, 1);
+  deleteFood(index, array) {
+    if (array === 'userAddedFoods') {
+      this.deletedFoods.push(this.userAddedFoods[index]._id);
+      this.userAddedFoods.splice(index, 1);
+    }
+
+    if (array === 'userAddedFoodsFirst') {
+      this.deletedFoods.push(this.userAddedFoodsFirst[index]._id);
+      this.userAddedFoodsFirst.splice(index, 1);
+    }
+
+    if (array === 'userAddedFoodsSecond') {
+      this.deletedFoods.push(this.userAddedFoodsSecond[index]._id);
+      this.userAddedFoodsSecond.splice(index, 1);
+    }
+
     this.foodsDeleted = true;
   }
 
   deleteFoodsFromDb() {
-    this.flashMessage.show('Muutokset tallennettu.', {
-      cssClass: 'alert-success',
-      timeout: 2000
-    });
+    this.foodService.removeFoods(this.deletedFoods).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+        }
+        this.deletedFoods = [];
+        this.foodsDeleted = false;
+        this.foodService
+          .getUserAddedFoods(this.user.username)
+          .subscribe(foods => (this.userAddedFoods = foods));
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   openModal(content) {
@@ -196,23 +281,6 @@ export class ProfileComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.updateInfo();
-        } else if (result === 'delete') {
-          this.foodService.removeFood(this.selectedFood._id).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show('Ruoka poistettu', {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
         } else {
           this.user = this.auth.getUserInfo();
         }
