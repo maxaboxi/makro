@@ -20,7 +20,7 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoods(user) {
+  getFoodsByUserAndAdmin(user) {
     const url = `${this.baseUrl}/getfoods/${user}`;
 
     const headers = new HttpHeaders({
@@ -30,7 +30,7 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getUserAddedFoods(user) {
+  getFoodsAddedByUser(user) {
     const url = `${this.baseUrl}/getfoodsbyuser/${user}`;
 
     const headers = new HttpHeaders({
@@ -42,6 +42,16 @@ export class FoodService {
 
   saveNewFood(food: Food) {
     const url = `${this.baseUrl}/addnewfood`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, food, { headers: headers });
+  }
+
+  editFood(food: Food) {
+    const url = `${this.baseUrl}/editfood`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

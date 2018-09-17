@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
 
-const DaySchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true
+const DaySchema = mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    meals: {
+      type: Array,
+      required: true
+    }
   },
-  name: {
-    type: String,
-    required: true
-  },
-  meals: {
-    type: Array,
-    required: true
-  }
-});
+  { timestamps: true }
+);
 
 const Day = (module.exports = mongoose.model('Day', DaySchema));
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AddedFoodsService } from '../../../../services/added-foods.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-totals',
@@ -9,7 +10,10 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
 export class TotalsComponent implements OnInit {
   private totals;
 
-  constructor(private addedFoodsService: AddedFoodsService) {}
+  constructor(
+    private addedFoodsService: AddedFoodsService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit() {
     this.addedFoodsService._totals.subscribe(totals => {
@@ -19,5 +23,16 @@ export class TotalsComponent implements OnInit {
 
   clearSelectedFoods() {
     this.addedFoodsService.resetMeals();
+  }
+
+  openModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.clearSelectedFoods();
+        }
+      },
+      dismissed => {}
+    );
   }
 }

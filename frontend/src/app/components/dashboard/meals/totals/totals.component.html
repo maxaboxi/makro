@@ -14,7 +14,7 @@
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
-        <div class="name" (click)="clearSelectedFoods()"><i class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
+        <div class="name" (click)="openModal(clearFoods)"><i class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
       </th>
       <th scope="col" class="table-success align-middle">{{ totals.protein.toFixed(0) }} g</th>
       <th scope="col" class="table-primary align-middle">{{ totals.carb.toFixed(0) }} g</th>
@@ -26,3 +26,26 @@
     </tr>
   </thead>
 </table>
+
+<ng-template #clearFoods let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Haluatko varmasti poistaa kaikki valitut ruoat?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-success btn-block" (click)="modal.close('save')">
+            Poista
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

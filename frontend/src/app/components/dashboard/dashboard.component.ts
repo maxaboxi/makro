@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
   fetchFoods() {
     if (this.isLoggedIn) {
       this.foodService
-        .getFoods(this.user.username)
+        .getFoodsByUserAndAdmin(this.user.username)
         .subscribe(foods => (this.foods = foods));
     }
     this.foodService.getAllFoods().subscribe(foods => (this.allFoods = foods));

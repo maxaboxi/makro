@@ -17,6 +17,7 @@ const logger = winston.createLogger({
     })
   ]
 });
+
 function checkAuthorization() {
   return (req, res, next) => {
     if (req.path === '/getallfoods' && req.method === 'GET') {
@@ -51,10 +52,6 @@ router.get('/getallfoods', (req, res) => {
       res.json({ success: false, msg: 'Unable to fetch foods' });
     } else {
       res.status(200);
-      // Fix in DB
-      foods.forEach(food => {
-        food.energia /= 4.1868;
-      });
       res.json(foods);
     }
   });
@@ -73,10 +70,6 @@ router.get('/getfoods/:user', (req, res) => {
       res.json({ success: false, msg: 'Unable to fetch foods' });
     } else {
       res.status(200);
-      // Fix in DB
-      foods.forEach(food => {
-        food.energia /= 4.1868;
-      });
       res.json(foods);
     }
   });
@@ -95,10 +88,6 @@ router.get('/getfoodsbyuser/:user', (req, res) => {
       res.json({ success: false, msg: 'Unable to fetch foods' });
     } else {
       res.status(200);
-      // Fix in DB
-      foods.forEach(food => {
-        food.energia /= 4.1868;
-      });
       res.json(foods);
     }
   });
@@ -130,6 +119,36 @@ router.post('/addnewfood', (req, res) => {
     } else {
       res.status(200);
       res.json({ success: true, msg: 'Ruoan lisäys onnistui.' });
+    }
+  });
+});
+
+router.post('/editfood', (req, res) => {
+  const updatedFood = new Food({
+    _id: req.body._id,
+    name: req.body.name,
+    energia: req.body.energia,
+    hh: req.body.hh,
+    rasva: req.body.rasva,
+    proteiini: req.body.proteiini,
+    kuitu: req.body.kuitu,
+    sokeri: req.body.sokeri,
+    servingSize: req.body.servingSize,
+    packageSize: req.body.packageSize
+  });
+
+  Food.editFood(updatedFood, (err, food) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Ruoan muokkaus epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Ruoan muokkaus onnistui.' });
     }
   });
 });

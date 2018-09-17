@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -24,11 +24,13 @@ export class ProfileComponent implements OnInit {
   savedDays: Day[] = [];
   savedDaysFirst: Day[] = [];
   savedDaysSecond: Day[] = [];
+  daysSplit = false;
   deletedDays = [];
   selectedFood: Food;
   userAddedFoods: Food[] = [];
   userAddedFoodsFirst: Food[] = [];
   userAddedFoodsSecond: Food[] = [];
+  foodsSplit = false;
   deletedFoods = [];
   foodsDeleted = false;
 
@@ -49,7 +51,7 @@ export class ProfileComponent implements OnInit {
       this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
         this.sortSavedDays(days);
         this.foodService
-          .getUserAddedFoods(this.user.username)
+          .getFoodsAddedByUser(this.user.username)
           .subscribe(foods => this.sortUserAddedFoods(foods));
       });
     });
@@ -57,17 +59,22 @@ export class ProfileComponent implements OnInit {
 
   sortSavedDays(days) {
     if (days.length <= 10) {
+      this.daysSplit = false;
       this.savedDays = days;
     } else {
+      this.daysSplit = true;
       this.savedDaysFirst = days.slice(0, Math.floor(days.length / 2));
       this.savedDaysSecond = days.slice(Math.floor(days.length / 2) + 1);
     }
   }
 
   sortUserAddedFoods(foods) {
+    console.log(foods);
     if (foods.length <= 10) {
+      this.foodsSplit = false;
       this.userAddedFoods = foods;
     } else {
+      this.foodsSplit = true;
       this.userAddedFoodsFirst = foods.slice(0, Math.floor(foods.length / 2));
       this.userAddedFoodsSecond = foods.slice(Math.floor(foods.length / 2) + 1);
     }
@@ -215,8 +222,7 @@ export class ProfileComponent implements OnInit {
           this.dayService
             .getAllSavedDays(this.user.username)
             .subscribe(days => {
-              this.savedDays = days;
-              this.daysDeleted = false;
+              this.sortSavedDays(days);
             });
         }
       },
@@ -230,7 +236,17 @@ export class ProfileComponent implements OnInit {
   }
 
   selectFood(index, array) {
-    console.log(index);
+    if (array === 'userAddedFoods') {
+      this.selectedFood = this.userAddedFoods[index];
+    }
+
+    if (array === 'userAddedFoodsFirst') {
+      this.selectedFood = this.userAddedFoodsFirst[index];
+    }
+
+    if (array === 'userAddedFoodsSecond') {
+      this.selectedFood = this.userAddedFoodsSecond[index];
+    }
   }
 
   deleteFood(index, array) {
@@ -264,8 +280,10 @@ export class ProfileComponent implements OnInit {
         this.deletedFoods = [];
         this.foodsDeleted = false;
         this.foodService
-          .getUserAddedFoods(this.user.username)
-          .subscribe(foods => (this.userAddedFoods = foods));
+          .getFoodsAddedByUser(this.user.username)
+          .subscribe(foods => {
+            this.sortUserAddedFoods(foods);
+          });
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {
@@ -283,10 +301,48 @@ export class ProfileComponent implements OnInit {
           this.updateInfo();
         } else {
           this.user = this.auth.getUserInfo();
+          this.changed = false;
         }
       },
       dismissed => {
         this.user = this.auth.getUserInfo();
+        this.changed = false;
+      }
+    );
+  }
+
+  openFoodModal(content, food) {
+    this.selectedFood = food;
+    console.log(this.selectedFood);
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.foodService.editFood(this.selectedFood).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show('Muutokset tallennettu', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.foodService
+                  .getFoodsAddedByUser(this.user.username)
+                  .subscribe(foods => {
+                    this.sortUserAddedFoods(foods);
+                  });
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        }
+        this.selectedFood = null;
+      },
+      dismissed => {
+        this.selectedFood = null;
       }
     );
   }
