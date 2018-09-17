@@ -30,6 +30,16 @@ export class DayService {
     return this.http.post(url, day, { headers: headers });
   }
 
+  saveEditedDay(day) {
+    const url = `${this.baseUrl}/saveday`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, day, { headers: headers });
+  }
+
   removeDays(days) {
     const url = `${this.baseUrl}/removedays`;
 

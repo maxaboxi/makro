@@ -24,6 +24,11 @@ module.exports.saveDay = (dayObject, callback) => {
   dayObject.save(callback);
 };
 
+module.exports.saveEditedDay = (day, callback) => {
+  const query = { _id: day._id };
+  Day.findByIdAndUpdate(query, day, { new: true }, callback);
+};
+
 module.exports.getDays = (username, callback) => {
   const query = { username: username };
   Day.find(query, callback);

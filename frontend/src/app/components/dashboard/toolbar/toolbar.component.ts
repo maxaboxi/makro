@@ -137,7 +137,7 @@ export class ToolbarComponent implements OnInit {
         if (result === 'save') {
           const newDay: Day = {
             name: this.day.name,
-            meals: JSON.parse(localStorage.getItem('meals')),
+            meals: meals,
             username: this.user.username
           };
           this.dayService.saveNewDay(newDay).subscribe(

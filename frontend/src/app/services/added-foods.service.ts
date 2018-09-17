@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 })
 export class AddedFoodsService {
   _showTargets = new BehaviorSubject<boolean>(true);
+  _mealsEdited = new BehaviorSubject<boolean>(false);
+  _openedSavedMeal = new BehaviorSubject<boolean>(false);
   _meals = new BehaviorSubject<Meal[]>([]);
   _totals = new BehaviorSubject<any>({
     energy: 0,
@@ -126,6 +128,9 @@ export class AddedFoodsService {
   }
 
   addFoodToMeals(e) {
+    if (this._openedSavedMeal.getValue()) {
+      this._mealsEdited.next(true);
+    }
     if (this._meals.getValue().length === 0) {
       this.setMealsFromLocalStorage();
     }
@@ -160,6 +165,7 @@ export class AddedFoodsService {
   }
 
   updateMealsInLocalStorage(meal) {
+    this._mealsEdited.next(true);
     const meals = this.getMeals();
     for (let m of meals) {
       if (m.name === meal.name) {

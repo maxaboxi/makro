@@ -30,6 +30,8 @@ export class TotalsComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.clearSelectedFoods();
+          this.addedFoodsService._openedSavedMeal.next(false);
+          this.addedFoodsService._mealsEdited.next(false);
         }
       },
       dismissed => {}

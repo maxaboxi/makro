@@ -33,13 +33,35 @@ router.use((req, res, next) => {
 });
 
 router.post('/addnewday', (req, res) => {
-  let dayObject = new Day({
+  const dayObject = new Day({
     username: req.body.username,
     name: req.body.name,
     meals: req.body.meals
   });
 
   Day.saveDay(dayObject, (err, day) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Tietojen tallennus epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Tietojen tallennus onnistui.' });
+    }
+  });
+});
+
+router.post('/saveday', (req, res) => {
+  const dayObject = new Day({
+    _id: req.body._id,
+    meals: req.body.meals
+  });
+
+  Day.saveEditedDay(dayObject, (err, day) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),

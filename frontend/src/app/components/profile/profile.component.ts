@@ -170,12 +170,20 @@ export class ProfileComponent implements OnInit {
         'meals',
         JSON.stringify(this.savedDays[index].meals)
       );
+      localStorage.setItem(
+        'loadedDay',
+        JSON.stringify(this.savedDays[index]._id)
+      );
     }
 
     if (array === 'savedDaysFirst') {
       localStorage.setItem(
         'meals',
         JSON.stringify(this.savedDaysFirst[index].meals)
+      );
+      localStorage.setItem(
+        'loadedDay',
+        JSON.stringify(this.savedDaysFirst[index]._id)
       );
     }
 
@@ -184,8 +192,13 @@ export class ProfileComponent implements OnInit {
         'meals',
         JSON.stringify(this.savedDaysSecond[index].meals)
       );
+      localStorage.setItem(
+        'loadedDay',
+        JSON.stringify(this.savedDaysSecond[index]._id)
+      );
     }
 
+    this.addedFoodsService._openedSavedMeal.next(true);
     this.addedFoodsService.setMealsFromLocalStorage();
     this.router.navigate(['/']);
   }
