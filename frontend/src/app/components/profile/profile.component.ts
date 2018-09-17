@@ -69,7 +69,6 @@ export class ProfileComponent implements OnInit {
   }
 
   sortUserAddedFoods(foods) {
-    console.log(foods);
     if (foods.length <= 10) {
       this.foodsSplit = false;
       this.userAddedFoods = foods;
@@ -213,7 +212,6 @@ export class ProfileComponent implements OnInit {
   deleteDaysFromDb() {
     this.dayService.removeDays(this.deletedDays).subscribe(
       res => {
-        console.log(res);
         if (res['success']) {
           this.flashMessage.show('Muutokset tallennettu.', {
             cssClass: 'alert-success',
@@ -313,7 +311,6 @@ export class ProfileComponent implements OnInit {
 
   openFoodModal(content, food) {
     this.selectedFood = food;
-    console.log(this.selectedFood);
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
