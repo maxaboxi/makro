@@ -34,6 +34,9 @@ export class DashboardComponent implements OnInit {
       this.addedFoodService.setMealsFromLocalStorage();
       this.meals = JSON.parse(localStorage.getItem('meals'));
       this.fetchFoods();
+      if (this.isLoggedIn) {
+        this.auth.checkAdmin();
+      }
     });
   }
 

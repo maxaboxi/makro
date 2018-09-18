@@ -12,6 +12,7 @@ export class NavbarComponent implements OnInit {
   showDialog = false;
   isNavbarCollapsed = true;
   isLoggedIn: Boolean;
+  isAdmin: Boolean;
 
   constructor(
     private auth: AuthService,
@@ -22,6 +23,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
+      this.auth.isAdmin.subscribe(res => (this.isAdmin = res));
     });
   }
 

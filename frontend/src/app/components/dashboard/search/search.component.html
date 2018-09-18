@@ -7,7 +7,7 @@
     <input type="text" name="food" class="form-control" placeholder="Hae ruokia" (keyup)="searchFoods()" [(ngModel)]="searchTerm">
   </div>
   <ng-container *ngIf="searchTerm?.length > 0">
-    <ul>
+    <ul class="search-results">
       <li *ngFor="let food of results; let i = index;" class="food-name" (click)="openModal(selectedFoodModal, food)"
         [ngClass]="{ 'food-name-color': food.username === user.username }">
         <div class="row">

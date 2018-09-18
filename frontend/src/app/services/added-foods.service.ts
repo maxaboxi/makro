@@ -116,7 +116,6 @@ export class AddedFoodsService {
       carbTarget: this.carbTarget,
       fatTarget: this.fatTarget
     };
-    console.log(targets);
     this._targets.next(targets);
   }
 

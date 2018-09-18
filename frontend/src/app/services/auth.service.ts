@@ -11,6 +11,7 @@ import { Meal } from '../models/Meal';
 export class AuthService {
   private baseUrl = 'http://localhost:1337/auth';
   isLoggedIn = new BehaviorSubject(false);
+  isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -39,6 +40,7 @@ export class AuthService {
     localStorage.removeItem('loadedDay');
     this.setDefaultUserInfo();
     this.isLoggedIn.next(false);
+    this.isAdmin.next(false);
   }
 
   setUserInfo(user: User) {
@@ -133,6 +135,26 @@ export class AuthService {
     const url = `${this.baseUrl}/updateuserinformation`;
 
     return this.http.post(url, user, { headers: headers });
+  }
+
+  checkAdmin() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/checkadmin`;
+
+    this.http
+      .post<boolean>(url, { headers: headers })
+      .subscribe(success => this.isAdmin.next(success));
+  }
+
+  getAllUsers() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = 'http://localhost:1337/admin/getallusers';
+
+    return this.http.get<User[]>(url, { headers: headers });
   }
 
   validateToken() {

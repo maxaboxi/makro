@@ -252,6 +252,30 @@ router.post('/validatetoken', (req, res) => {
       res.json({ success: true });
     }
   });
+
+  router.post('/checkadmin', (req, res) => {
+    const token = jwt.decode(req.headers['authorization']);
+    const userId = token.id;
+    User.getUserById(userId, (err, user) => {
+      if (err) {
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+        res.status(500);
+        res.json(false);
+      } else {
+        if (user.role === 'admin') {
+          res.status(200);
+          res.json(true);
+        } else {
+          res.status(200);
+          res.json(false);
+        }
+      }
+    });
+  });
 });
 
 module.exports = router;

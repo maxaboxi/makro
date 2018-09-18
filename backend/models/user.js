@@ -86,6 +86,11 @@ const UserSchema = mongoose.Schema(
       required: false,
       default: null
     },
+    role: {
+      type: String,
+      required: false,
+      default: 'user'
+    },
     meals: {
       type: Array,
       required: false,
