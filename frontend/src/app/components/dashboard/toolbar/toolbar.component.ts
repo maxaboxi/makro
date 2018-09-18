@@ -15,6 +15,7 @@ import { DayService } from '../../../services/day.service';
 import { Day } from '../../../models/Day';
 import { BehaviorSubject } from 'rxjs';
 import { AddedFoodsService } from '../../../services/added-foods.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -63,7 +64,8 @@ export class ToolbarComponent implements OnInit {
     private foodService: FoodService,
     private dayService: DayService,
     private flashMessage: FlashMessagesService,
-    private addedFoodsService: AddedFoodsService
+    private addedFoodsService: AddedFoodsService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -163,6 +165,57 @@ export class ToolbarComponent implements OnInit {
       },
       dismissed => {
         this.day.name = '';
+      }
+    );
+  }
+
+  openTargetModal(content) {
+    const originalExpenditure = this.user.userAddedExpenditure;
+    const originalProteinTarget = this.user.userAddedProteinTarget;
+    const originalCarbTarget = this.user.userAddedCarbTarget;
+    const originalFatTarget = this.user.userAddedFatTarget;
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.updateUserInfo();
+        } else if (result === 'reset') {
+          this.user.userAddedExpenditure = 0;
+          this.user.userAddedProteinTarget = 0;
+          this.user.userAddedCarbTarget = 0;
+          this.user.userAddedFatTarget = 0;
+          this.updateUserInfo();
+        } else {
+          this.user.userAddedExpenditure = originalExpenditure;
+          this.user.userAddedProteinTarget = originalProteinTarget;
+          this.user.userAddedCarbTarget = originalCarbTarget;
+          this.user.userAddedFatTarget = originalFatTarget;
+        }
+      },
+      dismissed => {
+        this.user.userAddedExpenditure = originalExpenditure;
+        this.user.userAddedProteinTarget = originalProteinTarget;
+        this.user.userAddedCarbTarget = originalCarbTarget;
+        this.user.userAddedFatTarget = originalFatTarget;
+      }
+    );
+  }
+
+  updateUserInfo() {
+    this.auth.updateUserInfo(this.user).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Tiedot tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.addedFoodsService.setTargets();
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
       }
     );
   }

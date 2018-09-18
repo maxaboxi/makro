@@ -1,8 +1,16 @@
-<span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> Lisää ruoka</span>
-<span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> Tallenna päivä</span>
-<span *ngIf="!showTargets" (click)="toggleTargets()" class="float-right"><i class="fas fa-bars"></i> Näytä tavoitearvot</span>
-<span *ngIf="showTargets" (click)="toggleTargets()" class="float-right"><i class="fas fa-minus"></i> Piilota
-  tavoitearvot</span>
+<div class="row">
+  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> Lisää ruoka</span>
+  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> Tallenna päivä</span>
+  <div class="ml-auto">
+    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"><i class="far fa-edit"></i> Muokkaa
+      tavoitearvoja</span>
+    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> Näytä tavoitearvot</span>
+    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> Piilota
+      tavoitearvot</span>
+  </div>
+</div>
+
+
 
 <ng-template #addFood let-modal>
   <div class="modal-header">
@@ -141,6 +149,53 @@
             </div>
             <div class="col">
               <button type="submit" class="btn btn-success btn-block" [disabled]="!saveDayForm.form.valid">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #targetModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa tavoitearvoja</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #targetForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="expenditure">Kulutus</label>
+          <input type="number" name="expenditure" class="form-control" [(ngModel)]="user.userAddedExpenditure">
+        </div>
+        <div class="form-group">
+          <label for="proteinTarget">Proteiinit</label>
+          <input type="number" name="proteinTarget" class="form-control" [(ngModel)]="user.userAddedProteinTarget">
+        </div>
+        <div class="form-group">
+          <label for="carbTarget">Hiilihydraatit</label>
+          <input type="number" name="carbTarget" class="form-control" [(ngModel)]="user.userAddedCarbTarget">
+        </div>
+        <div class="form-group">
+          <label for="fatTarget">Rasvat</label>
+          <input type="number" name="fatTarget" class="form-control" [(ngModel)]="user.userAddedFatTarget">
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-primary btn-block" (click)="modal.close('reset')">Palauta
+                oletusarvot</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block">
                 Tallenna
               </button>
             </div>
