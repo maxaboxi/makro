@@ -197,7 +197,7 @@ export class ProfileComponent implements OnInit {
         JSON.stringify(this.savedDaysSecond[index]._id)
       );
     }
-
+    this.addedFoodsService._mealsEdited.next(false);
     this.addedFoodsService._openedSavedMeal.next(true);
     this.addedFoodsService.setMealsFromLocalStorage();
     this.router.navigate(['/']);

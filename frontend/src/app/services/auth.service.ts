@@ -36,6 +36,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('meals');
+    localStorage.removeItem('loadedDay');
     this.setDefaultUserInfo();
     this.isLoggedIn.next(false);
   }

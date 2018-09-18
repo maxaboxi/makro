@@ -20,7 +20,7 @@ td {
 
 .name {
   overflow-y: scroll;
-  max-height: 50px;
+  max-height: 30px;
   word-break: break-all;
 }
 

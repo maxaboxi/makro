@@ -45,7 +45,7 @@ function checkAuthorization() {
 router.use(checkAuthorization());
 
 router.post('/register', (req, res) => {
-  let newUser = new User({
+  const newUser = new User({
     username: req.body.username,
     password: req.body.password,
     email: req.body.email
@@ -99,6 +99,7 @@ router.post('/login', (req, res) => {
         });
       }
       if (isMatch) {
+        User.updateLastLogin(username);
         const token = jwt.sign(
           { user: user.username, id: user._id },
           config['jwt'].secret,

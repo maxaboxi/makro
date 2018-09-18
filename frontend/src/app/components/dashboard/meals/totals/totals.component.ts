@@ -32,6 +32,7 @@ export class TotalsComponent implements OnInit {
           this.clearSelectedFoods();
           this.addedFoodsService._openedSavedMeal.next(false);
           this.addedFoodsService._mealsEdited.next(false);
+          localStorage.removeItem('loadedDay');
         }
       },
       dismissed => {}

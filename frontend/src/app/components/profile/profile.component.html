@@ -113,7 +113,7 @@
 
 <hr *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0">
 
-<div class="container mt-3">
+<div class="container mt-3 mb-5">
   <div class="row justify-content-center">
     <div class="col-6">
       <h1 class="display-4" *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted.length > 0">Lisäämäni
@@ -385,7 +385,7 @@
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
-                Tallenna ruoka
+                Tallenna muutokset
               </button>
             </div>
           </div>

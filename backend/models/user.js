@@ -1,5 +1,20 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const winston = require('winston');
+const path = require('path');
+
+const tsFormat = () =>
+  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+
+const logger = winston.createLogger({
+  level: 'error',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({
+      filename: path.join(__dirname, '../logs', 'user.error.log')
+    })
+  ]
+});
 
 const UserSchema = mongoose.Schema(
   {
@@ -66,6 +81,11 @@ const UserSchema = mongoose.Schema(
       required: false,
       default: 0
     },
+    lastLogin: {
+      type: Date,
+      required: false,
+      default: null
+    },
     meals: {
       type: Array,
       required: false,
@@ -96,7 +116,13 @@ module.exports.getUserByUserName = (username, callback) => {
 module.exports.addUser = (newUser, callback) => {
   bcrypt.genSalt(12, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err;
+      if (err) {
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+      }
       newUser.password = hash;
       newUser.save(callback);
     });
@@ -105,7 +131,13 @@ module.exports.addUser = (newUser, callback) => {
 
 module.exports.comparePassword = (candidatePassword, hash, callback) => {
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-    if (err) throw err;
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+    }
     callback(null, isMatch);
   });
 };
@@ -118,4 +150,9 @@ module.exports.updateUserInformation = (userObject, userId, callback) => {
 module.exports.deleteAccount = (userId, callback) => {
   const query = { _id: userId };
   User.deleteOne(query, callback);
+};
+
+module.exports.updateLastLogin = username => {
+  const query = { username: username };
+  User.findOneAndUpdate(query, { lastLogin: Date.now() }).exec();
 };

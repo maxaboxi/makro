@@ -24,6 +24,7 @@ export class SearchComponent implements OnInit {
   selectedAmount: Number;
   meals = [];
   isLoggedIn = false;
+  defaultValues = [10, 30, 50, 100];
   private _user = new BehaviorSubject<User>(null);
 
   @Input()

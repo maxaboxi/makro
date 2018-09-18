@@ -25,6 +25,9 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (localStorage.getItem('loadedDay')) {
+      this.addedFoodService._openedSavedMeal.next(true);
+    }
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
       this.user = this.auth.getUserInfo();

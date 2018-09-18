@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <div class="text-center">
+    <div class="row justify-content-center">
       <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
         <label [ngClass]="{'btn-primary' : selectedAmount !== 10, 'success': selectedAmount === 10}" ngbButtonLabel>
           <input type="radio" ngbButton [value]="10"> 10g
@@ -97,11 +97,15 @@
         <label [ngClass]="{'btn-primary' : selectedAmount !== 100, 'success': selectedAmount === 100}" ngbButtonLabel>
           <input type="radio" ngbButton [value]="100"> 100g
         </label>
-        <label *ngIf="selectedFood.servingSize" [ngClass]="{'btn-primary' : selectedAmount !== selectedFood.servingSize, 'success': selectedAmount === selectedFood.servingSize}"
+      </div>
+    </div>
+    <div *ngIf="selectedFood.servingSize || selectedFood.packageSize" class="row justify-content-center">
+      <div class="btn-group btn-group-toggle mt-1 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
+        <label *ngIf="selectedFood.servingSize && defaultValues.indexOf(selectedFood.servingSize) === -1" [ngClass]="{'btn-primary' : selectedAmount !== selectedFood.servingSize, 'success': selectedAmount === selectedFood.servingSize}"
           ngbButtonLabel>
           <input type="radio" ngbButton [value]="selectedFood.servingSize"> {{ selectedFood.servingSize }}g
         </label>
-        <label *ngIf="selectedFood.packageSize" [ngClass]="{'btn-primary' : selectedAmount !== selectedFood.packageSize, 'success': selectedAmount === selectedFood.packageSize}"
+        <label *ngIf="selectedFood.packageSize && defaultValues.indexOf(selectedFood.packageSize) === -1" [ngClass]="{'btn-primary' : selectedAmount !== selectedFood.packageSize, 'success': selectedAmount === selectedFood.packageSize}"
           ngbButtonLabel>
           <input type="radio" ngbButton [value]="selectedFood.packageSize"> {{ selectedFood.packageSize }}g
         </label>
