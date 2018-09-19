@@ -16,6 +16,7 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
   styleUrls: ['./meal-table.component.css']
 })
 export class MealTableComponent implements OnInit, DoCheck {
+  private _componentIndex = new BehaviorSubject(null);
   private _meal = new BehaviorSubject<Meal>(null);
   private _foods = new BehaviorSubject<Food[]>([]);
   private energyTotal = 0;
@@ -42,6 +43,15 @@ export class MealTableComponent implements OnInit, DoCheck {
 
   get foods() {
     return this._foods.getValue();
+  }
+
+  @Input()
+  set componentIndex(i) {
+    this._componentIndex.next(i);
+  }
+
+  get componentIndex() {
+    return this._componentIndex.getValue();
   }
 
   constructor(
@@ -91,7 +101,13 @@ export class MealTableComponent implements OnInit, DoCheck {
       this.meal.foods[index].editing = false;
       return;
     }
-    const food = this.returnOriginalFoodValues(selectedFood._id);
+    let food;
+    if (selectedFood._id) {
+      food = this.returnOriginalFoodValues(selectedFood._id, null);
+    } else {
+      food = this.returnOriginalFoodValues(null, selectedFood.name);
+    }
+
     this.meal.foods[index].amount = this.newFoodAmount;
     this.newFoodAmount /= 100;
     this.meal.foods[index].energia = food[0].energia * this.newFoodAmount;
@@ -106,16 +122,43 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.newFoodAmount = null;
   }
 
-  returnOriginalFoodValues(id) {
-    return this.foods.filter(f => {
-      if (f._id === id) {
-        return f;
-      }
-    });
+  returnOriginalFoodValues(id, name) {
+    if (id) {
+      return this.foods.filter(f => {
+        if (f._id === id) {
+          return f;
+        }
+      });
+    } else {
+      return this.foods.filter(f => {
+        if (f.name === name) {
+          return f;
+        }
+      });
+    }
   }
 
   removeFood(index) {
     this.meal.foods.splice(index, 1);
     this.addedFoodsService.updateMealsInLocalStorage(this.meal);
+  }
+
+  drag(ev, food, index) {
+    ev.dataTransfer.setData('food', JSON.stringify(food));
+    ev.dataTransfer.setData('index', this.componentIndex);
+  }
+
+  drop(ev) {
+    const food = JSON.parse(ev.dataTransfer.getData('food'));
+    const mealName = this.meal.name;
+    this.addedFoodsService.moveFoodToNewMeal(
+      food,
+      mealName,
+      ev.dataTransfer.getData('index')
+    );
+  }
+
+  allowDrop(ev) {
+    ev.preventDefault();
   }
 }

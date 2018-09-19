@@ -164,6 +164,34 @@ export class AddedFoodsService {
     }
   }
 
+  moveFoodToNewMeal(food, mealName, componentIndex) {
+    if (this._openedSavedMeal.getValue()) {
+      this._mealsEdited.next(true);
+    }
+    if (this._meals.getValue().length === 0) {
+      this.setMealsFromLocalStorage();
+    }
+    if (food) {
+      this._meals.getValue().forEach(m => {
+        if (m.name === mealName) {
+          m.foods.push(food);
+        }
+      });
+      this.removeFoodFromMeal(food._id, componentIndex);
+    }
+  }
+
+  removeFoodFromMeal(foodId, componentIndex) {
+    const meals = this.getMeals();
+    meals[componentIndex].foods.forEach((f, i) => {
+      if (f._id === foodId) {
+        meals[componentIndex].foods.splice(i, 1);
+      }
+    });
+    this._meals.next(meals);
+    localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
+  }
+
   updateMealsInLocalStorage(meal) {
     this._mealsEdited.next(true);
     const meals = this.getMeals();

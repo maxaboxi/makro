@@ -54,13 +54,4 @@ export class DayService {
 
     return this.http.delete(url, options);
   }
-
-  getAllDays() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = 'http://localhost:1337/admin/getalldays';
-
-    return this.http.get<Day[]>(url, { headers: headers });
-  }
 }

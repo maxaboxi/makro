@@ -32,6 +32,10 @@ td {
   background: #edf4ff;
 }
 
+.drag:hover {
+  cursor: pointer;
+}
+
 .food-amount:hover {
   cursor: pointer;
 }

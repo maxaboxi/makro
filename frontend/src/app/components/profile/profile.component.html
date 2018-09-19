@@ -19,6 +19,12 @@
         <li class="list lead"><i class="fas fa-heartbeat"></i> Ikä: {{ user.age }} vuotta</li>
         <li class="list lead"><i class="fas fa-child"></i> Sukupuoli: {{ user.sex }}</li>
         <li class="list lead">
+          <span class="day-list-name" (click)="openChangePasswordModal(changePasswordModal)">
+            <i class="fas fa-key"></i>
+            Vaihda salasana
+          </span>
+        </li>
+        <li class="list lead">
           <span class="day-list-name" (click)="toggleDelete()">
             <i class="fas fa-trash-alt"></i>
             Poista tili
@@ -386,6 +392,55 @@
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
                 Tallenna muutokset
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #changePasswordModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Vaihda salasana</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="userPassword">Salasana</label>
+          <input type="password" name="password" #userPassword="ngModel" class="form-control" [(ngModel)]="newUserPassword"
+            minlength="10" required [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}">
+          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">
+            Vaadittu kenttä
+          </div>
+          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback">
+            Salasanan täytyy olla vähintään 10 merkkiä pitkä
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="userPasswordAgain">Salasana uudestaan</label>
+          <input type="password" name="passwordAgain" #userPasswordAgain="ngModel" class="form-control" [(ngModel)]="newUserPasswordAgain"
+            minlength="10" required [ngClass]="{'is-invalid':userPasswordAgain.errors && userPasswordAgain.touched}">
+          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback">
+            Vaadittu kenttä
+          </div>
+          <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback">
+            Salasanan täytyy olla vähintään 10 merkkiä pitkä
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block" [disabled]="!changePasswordForm.form.valid">
+                Vaihda salasana
               </button>
             </div>
           </div>

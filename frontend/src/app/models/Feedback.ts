@@ -1,4 +1,5 @@
 export interface Feedback {
+  _id?: String;
   feedback: String;
   answer?: String;
   username?: String;

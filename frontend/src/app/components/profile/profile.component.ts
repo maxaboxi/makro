@@ -33,6 +33,8 @@ export class ProfileComponent implements OnInit {
   foodsSplit = false;
   deletedFoods = [];
   foodsDeleted = false;
+  private newUserPassword;
+  private newUserPasswordAgain;
 
   constructor(
     private auth: AuthService,
@@ -353,6 +355,52 @@ export class ProfileComponent implements OnInit {
       },
       dismissed => {
         this.selectedFood = null;
+      }
+    );
+  }
+
+  openChangePasswordModal(content) {
+    console.log(this.user._id);
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          if (this.newUserPassword !== this.newUserPasswordAgain) {
+            this.flashMessage.show(
+              'Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.',
+              {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              }
+            );
+          } else {
+            const user = {
+              _id: this.user._id,
+              password: this.newUserPassword
+            };
+            this.auth.changePassword(user).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show('Salasana vaihdettu', {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            );
+          }
+        }
+        this.newUserPassword = null;
+        this.newUserPasswordAgain = null;
+      },
+      dismissed => {
+        this.newUserPassword = null;
+        this.newUserPasswordAgain = null;
       }
     );
   }

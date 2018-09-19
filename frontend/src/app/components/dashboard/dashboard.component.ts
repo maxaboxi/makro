@@ -34,9 +34,6 @@ export class DashboardComponent implements OnInit {
       this.addedFoodService.setMealsFromLocalStorage();
       this.meals = JSON.parse(localStorage.getItem('meals'));
       this.fetchFoods();
-      if (this.isLoggedIn) {
-        this.auth.checkAdmin();
-      }
     });
   }
 
@@ -44,7 +41,10 @@ export class DashboardComponent implements OnInit {
     if (this.isLoggedIn) {
       this.foodService
         .getFoodsByUserAndAdmin(this.user.username)
-        .subscribe(foods => (this.foods = foods));
+        .subscribe(foods => {
+          this.foods = foods;
+          this.auth.checkAdmin();
+        });
     }
     this.foodService.getAllFoods().subscribe(foods => (this.allFoods = foods));
   }

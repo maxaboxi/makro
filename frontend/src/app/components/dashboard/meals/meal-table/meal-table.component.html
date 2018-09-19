@@ -1,4 +1,4 @@
-<table *ngIf="meal?.foods.length > 0" class="table table-sm table-responsive-xs">
+<table *ngIf="meal?.foods.length > 0" class="table table-sm table-responsive-xs" (drop)="drop($event)" (dragover)="allowDrop($event)">
   <thead>
     <tr class="text-center">
       <th class="t-head bg-lb lead" scope="row">
@@ -23,7 +23,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let food of meal.foods; let i = index" class="text-center">
-      <th class="t-head" scope="row">
+      <th class="t-head drag" scope="row" draggable="true" (dragstart)="drag($event, food, i)">
         <div class="name">{{ food.name }}</div>
       </th>
       <td class="table-success align-middle">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>

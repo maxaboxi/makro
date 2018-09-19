@@ -5,6 +5,7 @@ const User = require('../models/user');
 const config = require('../config/config.json');
 const winston = require('winston');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
 const tsFormat = () =>
   new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
@@ -152,6 +153,7 @@ router.get('/getuserinfo', (req, res) => {
       res.json({
         success: true,
         user: {
+          _id: user._id,
           username: user.username,
           email: user.email,
           age: user.age,
@@ -219,6 +221,40 @@ router.post('/updateuserinformation', (req, res) => {
         }
       });
     }
+  });
+});
+
+router.post('/updatepassword', (req, res) => {
+  const userId = req.body._id;
+  const user = {
+    password: req.body.password
+  };
+
+  bcrypt.genSalt(12, (err, salt) => {
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) {
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+      }
+      user.password = hash;
+      User.updateUserInformation(user, userId, (error, callback) => {
+        if (err) {
+          logger.log({
+            timestamp: tsFormat(),
+            level: 'error',
+            errorMsg: err
+          });
+          res.status(500);
+          res.json({ success: false, msg: 'Something went wrong.' });
+        } else {
+          res.status(200);
+          res.json({ success: true, msg: 'Salasana vaihdettu.' });
+        }
+      });
+    });
   });
 });
 

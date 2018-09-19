@@ -137,24 +137,27 @@ export class AuthService {
     return this.http.post(url, user, { headers: headers });
   }
 
+  changePassword(user) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/updatepassword`;
+
+    return this.http.post(url, user, { headers: headers });
+  }
+
   checkAdmin() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/checkadmin`;
 
-    this.http
-      .post<boolean>(url, { headers: headers })
-      .subscribe(success => this.isAdmin.next(success));
-  }
-
-  getAllUsers() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = 'http://localhost:1337/admin/getallusers';
-
-    return this.http.get<User[]>(url, { headers: headers });
+    this.http.post<boolean>(url, { headers: headers }).subscribe(
+      success => this.isAdmin.next(success),
+      (error: Error) => {
+        console.log(error);
+      }
+    );
   }
 
   validateToken() {

@@ -61,7 +61,7 @@ export class MealsComponent implements OnInit {
 
     const d = JSON.parse(localStorage.getItem('loadedDay'));
     const editedDay = {
-      _id: d.id,
+      _id: d,
       meals: meals
     };
     this.dayService.saveEditedDay(editedDay).subscribe(

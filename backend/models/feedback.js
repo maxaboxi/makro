@@ -41,3 +41,13 @@ module.exports.getFeedbacks = callback => {
     .sort({ createdAt: -1 })
     .exec(callback);
 };
+
+module.exports.removeFeedbacks = (deletedFeedbacks, callback) => {
+  const query = { _id: { $in: deletedFeedbacks } };
+  Feedback.remove(query, callback);
+};
+
+module.exports.saveAnswer = (feedback, callback) => {
+  const query = { _id: feedback._id };
+  Feedback.findByIdAndUpdate(query, feedback, { new: true }, callback);
+};

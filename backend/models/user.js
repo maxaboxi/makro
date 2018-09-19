@@ -161,3 +161,12 @@ module.exports.updateLastLogin = username => {
   const query = { username: username };
   User.findOneAndUpdate(query, { lastLogin: Date.now() }).exec();
 };
+
+module.exports.getAllUsers = callback => {
+  User.find(callback).select('-password');
+};
+
+module.exports.removeUsers = (deletedUsers, callback) => {
+  const query = { _id: { $in: deletedUsers } };
+  User.remove(query, callback);
+};

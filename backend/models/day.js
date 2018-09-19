@@ -34,6 +34,10 @@ module.exports.getDays = (username, callback) => {
   Day.find(query, callback);
 };
 
+module.exports.getAllDays = callback => {
+  Day.find(callback);
+};
+
 module.exports.removeDays = (deletedDays, callback) => {
   const query = { _id: { $in: deletedDays } };
   Day.remove(query, callback);

@@ -1,3 +1,419 @@
-<p>
-  admin works!
-</p>
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <h2 class="h2 text-muted">Käyttäjät</h2>
+      <div class="row mb-2" *ngIf="usersDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteUsersFromDb()">Tallenna
+            muutokset</button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let user of users; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name" (click)="openUserModal(userModal, user)">
+              {{ user.username}}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteUser(i)" title="Poista käyttäjä"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <h2 class="h2 text-muted">Päivät</h2>
+      <div class="row mb-2" *ngIf="daysDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna
+            muutokset</button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let day of days; let i = index" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name" (click)="openDayModal(dayModal, day)">
+              {{ day.username }} - {{ day.name}}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <h2 class="h2 text-muted">Palautteet</h2>
+      <div class="row mb-2" *ngIf="feedbacksDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFeedbacksFromDb()">Tallenna
+            muutokset</button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let feedback of feedbacks; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name" (click)="openFeedbackModal(feedbackModal, feedback)">
+              {{ feedback.username}} - {{ feedback.createdAt | date:'dd.MM.yyy' }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteFeedback(i)" title="Poista palaute"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
+      <h2 class="h2 text-muted">Ruoat</h2>
+      <div class="row mb-2" *ngIf="foodsDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna
+            muutokset</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="text" name="food" class="form-control" placeholder="Hae ruokia" (keyup)="searchFoods()"
+          [(ngModel)]="searchTerm">
+      </div>
+      <ng-container *ngIf="searchTerm?.length > 0">
+        <ul class="search-results" class="big-list lead">
+          <li *ngFor="let food of results; let i = index;" class="food-name">
+            <div class="row">
+              <div class="col-10 list-name" (click)="openFoodModal(foodModal, food)">
+                {{ food.username }} - {{ food.name}}
+              </div>
+              <div class="col-2">
+                <i class="far fa-minus-square float-right" (click)="deleteFood(i)" title="Poista ruoka"></i>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-container *ngIf="searchTerm.length === 0">
+        <ul>
+          <li *ngFor="let food of foods; let i = index;" class="big-list lead">
+            <div class="row">
+              <div class="col-10 list-name" (click)="openFoodModal(foodModal, food)">
+                {{ food.username }} - {{ food.name}}
+              </div>
+              <div class="col-2">
+                <i class="far fa-minus-square float-right" (click)="deleteFood(i)" title="Poista ruoka"></i>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #foodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa ruoan tietoja</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #editFoodForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodUsername">Lisääjä</label>
+          <div class="col-sm-8">
+            <input type="text" name="foodUsername" class="form-control" [(ngModel)]="selectedFood.username"
+              #foodUsername="ngModel" [ngClass]="{'is-invalid':foodUsername.errors && foodUsername.touched}" required>
+            <div [hidden]="!foodUsername.errors?.required" class="invalid-feedback">
+              Lisääjä on vaadittu tieto
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodName">Nimi</label>
+          <div class="col-sm-8">
+            <input type="text" name="foodName" class="form-control" placeholder="Ruoan nimi" minlength="2" [(ngModel)]="selectedFood.name"
+              #foodName="ngModel" [ngClass]="{'is-invalid':foodName.errors && foodName.touched}" required>
+            <div [hidden]="!foodName.errors?.required" class="invalid-feedback">
+              Ruoan nimi vaaditaan
+            </div>
+            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback">
+              Ruoan nimen täytyy olla vähintään kaksi merkkiä pitkä
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodEnergy">Energia</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodEnergy" class="form-control" placeholder="Kcal / 100 g" [(ngModel)]="selectedFood.energia"
+              #foodEnergy="ngModel" [ngClass]="{'is-invalid':foodEnergy.errors && foodEnergy.touched}" required>
+            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback">
+              Kalorimäärä on vaadittu tieto
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodFat">Rasva</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodFat" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.rasva"
+              #foodFat="ngModel" [ngClass]="{'is-invalid':foodFat.errors && foodFat.touched}" required>
+            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">
+              Rasvan määrä on vaadittu tieto
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodCarbs">Hiilihydraatit</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodCarbs" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.hh"
+              #foodCarbs="ngModel" [ngClass]="{'is-invalid':foodCarbs.errors && foodCarbs.touched}" required>
+            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback">
+              Hiilihydraattien määrä on vaadittu tieto
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodProtein">Proteiinit</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodProtein" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.proteiini"
+              #foodProtein="ngModel" [ngClass]="{'is-invalid':foodProtein.errors && foodProtein.touched}" required>
+            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback">
+              Proteiinin määrä on vaadittu tieto
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodFiber">Ravintokuidut</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodFiber" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.kuitu"
+              #foodFiber="ngModel">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodSugar">Sokerit</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodSugar" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.sokeri"
+              #foodSugar="ngModel">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodServingSize">Annoskoko</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodServingSize" class="form-control" placeholder="grammaa" [(ngModel)]="selectedFood.servingSize"
+              #servingSize="ngModel">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodPackageSize">Pakkauskoko</label>
+          <div class="col-sm-8">
+            <input type="number" name="foodPackageSize" class="form-control" placeholder="grammaa" [(ngModel)]="selectedFood.packageSize"
+              #packageSize="ngModel">
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
+                Tallenna muutokset
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #feedbackModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Lisää vastaus</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <p>{{ selectedFeedback.feedback }}</p>
+      <p>{{ selectedFeedback.username }} - {{ selectedFeedback.createdAt | date:'dd.MM.yyy' }}</p>
+      <form #feedbackForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="feedbackAnswer">Vastaus</label>
+          <input type="text" name="feedbackAnswer" class="form-control" #feedbackAnswer="ngModel" [(ngModel)]="selectedFeedback.answer"
+            [ngClass]="{'is-invalid':feedbackAnswer.errors && feedbackAnswer.touched}" minlength="10" required>
+          <div [hidden]="!feedbackAnswer.errors?.required" class="invalid-feedback">
+            Vaadittu kenttä
+          </div>
+          <div [hidden]="!feedbackAnswer.errors?.minlength" class="invalid-feedback">
+            Vastauksen täytyy olla vähintään 10 merkkiä pitkä
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block" [disabled]="!feedbackForm.form.valid">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #userModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa käyttäjätietoja</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
+          <div class="col-sm-8">
+            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi"
+              [(ngModel)]="selectedUser.email">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userHeight">Pituus</label>
+          <div class="col-sm-8">
+            <input type="number" name="userHeight" class="form-control" placeholder="cm" [(ngModel)]="selectedUser.height">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userWeight">Paino</label>
+          <div class="col-sm-8">
+            <input type="number" name="userWeight" class="form-control" placeholder="kg" [(ngModel)]="selectedUser.weight">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userAge">Ikä</label>
+          <div class="col-sm-8">
+            <input type="number" name="userAge" class="form-control" placeholder="vuotta" [(ngModel)]="selectedUser.age">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userSex">Sukupuoli</label>
+          <div class="col-sm-8">
+            <select name="userSex" class="form-control" [(ngModel)]="selectedUser.sex">
+              <option value="null"></option>
+              <option value="mies">Mies</option>
+              <option value="nainen">Nainen</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userActivity">Liikunta</label>
+          <div class="col-sm-8">
+            <select name="userActivity" class="form-control" [(ngModel)]="selectedUser.activity">
+              <option value="1.2">0-0,5 kertaa viikossa</option>
+              <option value="1.375">1-3 kertaa viikossa</option>
+              <option value="1.55">3-5 kertaa viikossa</option>
+              <option value="1.75">6-7 kertaa viikossa</option>
+              <option value="1.9">Raskas treeni kahdesti päivässä</option>
+            </select>
+          </div>
+        </div>
+        <label for="targets">Tavoitearvot</label>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userExpenditure">Kulutus</label>
+          <div class="col-sm-8">
+            <input type="number" name="userExpenditure" class="form-control" [(ngModel)]="selectedUser.userAddedExpenditure">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userProteinTarget">Proteiini</label>
+          <div class="col-sm-8">
+            <input type="number" name="userProteinTarget" class="form-control" [(ngModel)]="selectedUser.userAddedProteinTarget">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userCarbTarget">Hiilihydraatti</label>
+          <div class="col-sm-8">
+            <input type="number" name="userCarbTarget" class="form-control" [(ngModel)]="selectedUser.userAddedCarbTarget">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userFatTarget">Rasva</label>
+          <div class="col-sm-8">
+            <input type="number" name="userFatTarget" class="form-control" [(ngModel)]="selectedUser.userAddedFatTarget">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userPassword">Salasana</label>
+          <div class="col-sm-8">
+            <input type="password" name="userPassword" class="form-control" [(ngModel)]="newUserPassword">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="userPasswordAgain">Salasana uudestaan</label>
+          <div class="col-sm-8">
+            <input type="password" name="userPassword" class="form-control" [(ngModel)]="newUserPasswordAgain">
+          </div>
+        </div>
+        <label for="meals">Ateriat:</label>
+        <div class="form-group" *ngFor="let meal of selectedUser.meals">
+          <input type="text" name="{{meal.name}}" class="form-control" [(ngModel)]="meal.name" [value]="meal.name"
+            required [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dayModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ selectedDay.name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <h5 class="h5 text-muted" *ngIf="selectedDay.username">Tekijä: {{ selectedDay.username }}</h5>
+      <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt">Luotu: {{ selectedDay.createdAt | date:'dd.MM.yyy' }}</h5>
+      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">Päivitetty: {{ selectedDay.updatedAt | date:'dd.MM.yyy'
+        }}</h5>
+      <hr *ngIf="selectedDay.username || selectedDay.createdAt || selectedDay.updatedAt">
+      <ng-container *ngFor="let meal of selectedDay.meals">
+        <p class="text-muted">{{ meal.name }}</p>
+        <ul>
+          <li *ngFor="let food of meal.foods">{{ food.name }} - ({{food.amount}}g)</li>
+        </ul>
+      </ng-container>
+      <hr>
+    </div>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-primary btn-block" (click)="modal.close('cancel')">Sulje</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
