@@ -165,6 +165,7 @@ export class AddedFoodsService {
   }
 
   moveFoodToNewMeal(food, mealName, componentIndex) {
+    console.log('a');
     if (this._openedSavedMeal.getValue()) {
       this._mealsEdited.next(true);
     }

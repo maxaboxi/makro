@@ -15,12 +15,24 @@
     </div>
     <div class="form-group">
       <label class="lead" for="password">Salasana</label>
-      <input type="password" name="password" class="form-control" placeholder="Salasana" [(ngModel)]="user.password" #userPassword="ngModel"
-        [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}" required>
+      <input type="password" name="password" class="form-control" placeholder="Salasana" [(ngModel)]="user.password"
+        #userPassword="ngModel" [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}" required>
       <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">
         Salasana vaaditaan
       </div>
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Kirjaudu</button>
   </form>
+  <div class="row justify-content-center mt-5" *ngIf="showPasswordReset">
+    <div class="col">
+      <div class="form-group">
+        <p class="lead text-muted">Uusi salasana lähetetään käyttäjätunnukselle tallennettuun sähköpostiosoitteeseen,
+          jos
+          sellainen on käyttäjätunnukseen liitetty.</p>
+        <button (click)="resetPassword()" [disabled]="!user.username || user.username?.length < 2" class="btn btn-block btn-primary mt-3">Lähetä
+          uusi salasana</button>
+      </div>
+
+    </div>
+  </div>
 </div>

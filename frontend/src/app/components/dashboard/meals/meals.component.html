@@ -1,5 +1,6 @@
 <app-targets></app-targets>
 <app-totals></app-totals>
-<button class="btn btn-block btn-outline-success mb-3" *ngIf="openedSavedMeal && mealsEdited" (click)="saveEditedDay()">Tallenna
+<button class="btn btn-block btn-outline-success mb-3" *ngIf="openedSavedMeal && mealsEdited" (click)="saveEditedDay()"
+  title="Tallenna muokattu päivä">Tallenna
   muutokset</button>
 <app-meal-table *ngFor="let meal of addedMeals; let i = index" [meal]="meal" [foods]="foods" [componentIndex]="i"></app-meal-table>

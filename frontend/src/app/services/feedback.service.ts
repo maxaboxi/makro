@@ -6,7 +6,7 @@ import { Feedback } from '../models/Feedback';
   providedIn: 'root'
 })
 export class FeedbackService {
-  private baseUrl = 'http://localhost:1337/api/v1';
+  private baseUrl = 'https://api.makro.diet:1337/api/v1';
 
   constructor(private http: HttpClient) {}
 

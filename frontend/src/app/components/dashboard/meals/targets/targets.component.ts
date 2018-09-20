@@ -7,11 +7,11 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
   styleUrls: ['./targets.component.css']
 })
 export class TargetsComponent implements OnInit {
-  private targets;
-  private totals;
-  private caloriesLeft: Number;
-  private caloriesLeftLabel;
-  private showTargets;
+  targets;
+  totals;
+  caloriesLeft: Number;
+  caloriesLeftLabel;
+  showTargets;
 
   constructor(private addedFoodsService: AddedFoodsService) {}
 

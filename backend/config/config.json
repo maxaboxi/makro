@@ -3,6 +3,10 @@
     "secret": "developmentsecretkeyftw"
   },
   "database": {
-    "url": "mongodb://localhost:27017/makro"
+    "url": "mongodb://dbadmin:dbadminpw@makro-mongo:27020/makro"
+  },
+  "email": {
+    "user": "userinfo",
+    "pass": "Push this to version control and you are dead."
   }
 }

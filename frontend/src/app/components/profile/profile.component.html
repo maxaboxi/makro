@@ -71,8 +71,10 @@
 <div class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6">
-      <h1 class="display-4" *ngIf="savedDays.length > 0 || savedDaysFirst.length > 0 || savedDaysSecond.length > 0 || foodsDeleted.length > 0">Tallennetut
+      <h1 class="display-4" *ngIf="savedDays.length > 0 || savedDaysFirst.length > 0 || savedDaysSecond.length > 0 || foodsDeleted">Tallennetut
         päivät</h1>
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openDayModal(dayName)"><i class="far fa-edit"></i>
+        Muokkaa nimiä</button>
     </div>
   </div>
   <div class="row justify-content-center" *ngIf="!daysSplit">
@@ -122,7 +124,7 @@
 <div class="container mt-3 mb-5">
   <div class="row justify-content-center">
     <div class="col-6">
-      <h1 class="display-4" *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted.length > 0">Lisäämäni
+      <h1 class="display-4" *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted">Lisäämäni
         ruoat</h1>
     </div>
   </div>
@@ -279,6 +281,37 @@
               <span class="btn btn-primary btn-block" (click)="addNewMeal()">
                 Lisää ateria
               </span>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block">
+                Tallenna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dayName let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Muokkaa päivien nimiä</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #editDaysForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group" *ngFor="let day of savedDays">
+          <input type="text" name="{{day.name}}" class="form-control" [(ngModel)]="day.name" [value]="day.name"
+            required [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-success btn-block">

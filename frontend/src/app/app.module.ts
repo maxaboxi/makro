@@ -22,6 +22,7 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
 import { TargetsComponent } from './components/dashboard/meals/targets/targets.component';
 import { MealTableComponent } from './components/dashboard/meals/meal-table/meal-table.component';
 import { TotalsComponent } from './components/dashboard/meals/totals/totals.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TotalsComponent } from './components/dashboard/meals/totals/totals.comp
     FeedbackComponent,
     TargetsComponent,
     MealTableComponent,
-    TotalsComponent
+    TotalsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

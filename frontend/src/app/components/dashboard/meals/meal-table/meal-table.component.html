@@ -4,31 +4,36 @@
       <th class="t-head bg-lb lead" scope="row">
         <div class="name">Ateria</div>
       </th>
-      <th scope="col" class="table-success">P</th>
-      <th scope="col" class="table-primary">HH</th>
-      <th scope="col" class="table-danger">R</th>
+      <th scope="col" class="table-success d-none d-sm-table-cell">P</th>
+      <th scope="col" class="table-primary d-none d-sm-table-cell">HH</th>
+      <th scope="col" class="table-danger d-none d-sm-table-cell">R</th>
       <th scope="col" class="table-warning">Kcal</th>
-      <th scope="col">Määrä</th>
+      <th scope="col" title="Määrä"><i class="fas fa-weight"></i></th>
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
         <div class="name">{{ meal.name }}</div>
       </th>
-      <th scope="col" class="table-success align-middle">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-primary align-middle">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-danger align-middle">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ?
+        proteinTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-primary align-middle d-none d-sm-table-cell">{{ carbTotal ? carbTotal.toFixed(0) : 0
+        }} g</th>
+      <th scope="col" class="table-danger align-middle d-none d-sm-table-cell">{{ fatTotal ? fatTotal.toFixed(0) : 0 }}
+        g</th>
       <th scope="col" class="table-warning align-middle">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
       <th scope="col" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let food of meal.foods; let i = index" class="text-center">
-      <th class="t-head drag" scope="row" draggable="true" (dragstart)="drag($event, food, i)">
+      <th class="t-head drag" scope="row" draggable="true" (dragstart)="drag($event, food)" title="Siirrä toiseen ateriaan raahaamalla"
+        [attr.id]="i" (mouseenter)="setTarget(i)">
         <div class="name">{{ food.name }}</div>
       </th>
-      <td class="table-success align-middle">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
-      <td class="table-primary align-middle">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
-      <td class="table-danger align-middle">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
+      <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0
+        }} g</td>
+      <td class="table-primary align-middle d-none d-sm-table-cell">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
+      <td class="table-danger align-middle d-none d-sm-table-cell">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
         <span class="food-amount" (click)="food.editing = true" title="Muokkaa ruoan määrää">{{ food.amount.toFixed(0)

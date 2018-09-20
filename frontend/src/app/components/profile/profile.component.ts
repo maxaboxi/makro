@@ -33,8 +33,8 @@ export class ProfileComponent implements OnInit {
   foodsSplit = false;
   deletedFoods = [];
   foodsDeleted = false;
-  private newUserPassword;
-  private newUserPasswordAgain;
+  newUserPassword;
+  newUserPasswordAgain;
 
   constructor(
     private auth: AuthService,
@@ -320,6 +320,48 @@ export class ProfileComponent implements OnInit {
       dismissed => {
         this.user = this.auth.getUserInfo();
         this.changed = false;
+      }
+    );
+  }
+
+  openDayModal(content) {
+    const originalDays = JSON.parse(JSON.stringify(this.savedDays));
+    const changedDays = [];
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.savedDays.forEach((d, i) => {
+            if (d.name !== originalDays[i].name) {
+              changedDays.push(d);
+            }
+          });
+          this.dayService.updateDayNames(changedDays).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show('Muutokset tallennettu', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.dayService
+                  .getAllSavedDays(this.user.username)
+                  .subscribe(days => {
+                    this.sortSavedDays(days);
+                  });
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.savedDays = JSON.parse(JSON.stringify(originalDays));
+        }
+      },
+      dismissed => {
+        this.savedDays = JSON.parse(JSON.stringify(originalDays));
       }
     );
   }

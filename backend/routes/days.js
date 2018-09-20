@@ -95,6 +95,26 @@ router.get('/getalldays/:username', (req, res) => {
   });
 });
 
+router.post('/updatedaynames', (req, res) => {
+  const days = req.body;
+  for (let i = 0; i < days.length; i++) {
+    Day.saveEditedDay(days[i], (err, callback) => {
+      if (err) {
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+        res.status(500);
+        res.json({ success: false, msg: 'Päivitys epäonnistui.' });
+        return;
+      }
+    });
+  }
+  res.status(200);
+  res.json({ success: true, msg: 'Muutokset tallennettu' });
+});
+
 router.delete('/removedays', (req, res) => {
   const deletedDays = req.body;
   Day.removeDays(deletedDays, (err, days) => {

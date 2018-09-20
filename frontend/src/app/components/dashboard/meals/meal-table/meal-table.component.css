@@ -15,7 +15,7 @@ td {
 }
 
 .t-head {
-  min-width: 200px;
+  width: 300px;
 }
 
 .name {
@@ -34,6 +34,7 @@ td {
 
 .drag:hover {
   cursor: pointer;
+  background: #edf4ff;
 }
 
 .food-amount:hover {
@@ -47,6 +48,24 @@ td {
 
 @media screen and (max-width: 720px) {
   .t-head {
-    min-width: 0px;
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .t-head {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .t-head {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .t-head {
+    width: 100px;
   }
 }

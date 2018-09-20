@@ -10,6 +10,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { AboutComponent } from './components/about/about.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'feedback', component: FeedbackComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
 ];
 

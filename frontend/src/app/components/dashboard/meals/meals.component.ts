@@ -14,10 +14,10 @@ import { User } from '../../../models/User';
   styleUrls: ['./meals.component.css']
 })
 export class MealsComponent implements OnInit {
-  private addedMeals: Meal[];
-  private _foods = new BehaviorSubject<Food[]>([]);
-  private openedSavedMeal = false;
-  private mealsEdited = false;
+  addedMeals: Meal[];
+  _foods = new BehaviorSubject<Food[]>([]);
+  openedSavedMeal = false;
+  mealsEdited = false;
 
   @Input()
   set foods(foods) {

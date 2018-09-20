@@ -5,6 +5,7 @@ const users = require('./routes/users');
 const foods = require('./routes/foods');
 const days = require('./routes/days');
 const feedbacks = require('./routes/feedbacks');
+const sharedDays = require('./routes/sharedDays');
 const admin = require('./routes/admin');
 const config = require('./config/config.json');
 const options = {
@@ -28,7 +29,7 @@ const port = 1337;
 server.use(cors());
 server.use(express.json());
 server.use('/auth', users);
-server.use('/api/v1', foods, days, feedbacks);
+server.use('/api/v1', foods, days, feedbacks, sharedDays);
 server.use('/admin', admin);
 
 server.listen(port, () => {

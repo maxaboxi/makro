@@ -17,27 +17,27 @@ import { AdminService } from '../../services/admin.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  private user: User;
-  private users: User[];
-  private days: Day[];
-  private foods: Food[];
-  private feedbacks: Feedback[];
-  private searchTerm = '';
-  private results = [];
-  private selectedFood: Food;
-  private selectedFeedback: Feedback;
-  private selectedUser: User;
-  private selectedDay: Day;
-  private deletedFoods = [];
-  private foodsDeleted = false;
-  private deletedDays = [];
-  private daysDeleted = false;
-  private deletedUsers = [];
-  private usersDeleted = false;
-  private deletedFeedbacks = [];
-  private feedbacksDeleted = false;
-  private newUserPassword;
-  private newUserPasswordAgain;
+  user: User;
+  users: User[];
+  days: Day[];
+  foods: Food[];
+  feedbacks: Feedback[];
+  searchTerm = '';
+  results = [];
+  selectedFood: Food;
+  selectedFeedback: Feedback;
+  selectedUser: User;
+  selectedDay: Day;
+  deletedFoods = [];
+  foodsDeleted = false;
+  deletedDays = [];
+  daysDeleted = false;
+  deletedUsers = [];
+  usersDeleted = false;
+  deletedFeedbacks = [];
+  feedbacksDeleted = false;
+  newUserPassword;
+  newUserPasswordAgain;
 
   constructor(
     private auth: AuthService,

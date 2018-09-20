@@ -5,6 +5,8 @@ import { Meal } from '../../models/Meal';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/User';
 import { AddedFoodsService } from '../../services/added-foods.service';
+import { ActivatedRoute } from '@angular/router';
+import { DayService } from '../../services/day.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,12 +19,21 @@ export class DashboardComponent implements OnInit {
   meals: Meal[];
   user: User;
   isLoggedIn = false;
+  queryParams = {};
 
   constructor(
     private foodService: FoodService,
+    private dayService: DayService,
     private auth: AuthService,
-    private addedFoodService: AddedFoodsService
-  ) {}
+    private addedFoodService: AddedFoodsService,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe(qp => {
+      Object.keys(qp).forEach(param => {
+        this.queryParams[param] = qp[param];
+      });
+    });
+  }
 
   ngOnInit() {
     if (localStorage.getItem('loadedDay')) {
@@ -31,10 +42,21 @@ export class DashboardComponent implements OnInit {
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
       this.user = this.auth.getUserInfo();
-      this.addedFoodService.setMealsFromLocalStorage();
-      this.meals = JSON.parse(localStorage.getItem('meals'));
-      this.fetchFoods();
+      if (Object.keys(this.queryParams).length > 0) {
+        this.dayService.getSharedDay(this.queryParams['id']).subscribe(res => {
+          localStorage.setItem('meals', JSON.stringify(res['meals']));
+          this.setFoods();
+        });
+      } else {
+        this.setFoods();
+      }
     });
+  }
+
+  setFoods() {
+    this.addedFoodService.setMealsFromLocalStorage();
+    this.meals = JSON.parse(localStorage.getItem('meals'));
+    this.fetchFoods();
   }
 
   fetchFoods() {

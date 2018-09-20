@@ -8,11 +8,12 @@
   </button>
   <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
     <ul class="navbar-nav mr-auto">
-      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/profile"><i class="fas fa-tachometer-alt"></i>
+      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/profile"><i class="far fa-user-circle"></i>
           Profiili</a></li>
       <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/feedback"><i class="fab fa-readme"></i>
           Palautteet</a></li>
-      <li *ngIf="isAdmin"><a class="nav-link" routerLink="/admin"><i class="fab fa-readme"></i>
+      <li><a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> Tietoa</a></li>
+      <li *ngIf="isAdmin"><a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i>
           Hallintapaneeli</a></li>
     </ul>
     <ul class="navbar-nav ml-auto">

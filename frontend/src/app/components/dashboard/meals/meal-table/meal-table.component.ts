@@ -26,6 +26,7 @@ export class MealTableComponent implements OnInit, DoCheck {
   private amountTotal = 0;
   private iterableDiffer;
   private newFoodAmount = null;
+  private dropTargetIndex = null;
 
   @Input()
   set meal(meal) {
@@ -143,19 +144,31 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.addedFoodsService.updateMealsInLocalStorage(this.meal);
   }
 
-  drag(ev, food, index) {
+  setTarget(index) {
+    this.dropTargetIndex = index;
+  }
+
+  drag(ev, food) {
     ev.dataTransfer.setData('food', JSON.stringify(food));
     ev.dataTransfer.setData('index', this.componentIndex);
+    ev.dataTransfer.setData('start', ev.target.id);
   }
 
   drop(ev) {
     const food = JSON.parse(ev.dataTransfer.getData('food'));
     const mealName = this.meal.name;
-    this.addedFoodsService.moveFoodToNewMeal(
-      food,
-      mealName,
-      ev.dataTransfer.getData('index')
-    );
+    const index = ev.dataTransfer.getData('index');
+    const start = ev.dataTransfer.getData('start');
+    if (parseInt(index) === parseInt(this.componentIndex)) {
+      setTimeout(() => {
+        this.meal.foods.splice(start, 1);
+        this.meal.foods.splice(this.dropTargetIndex, 0, food);
+        this.addedFoodsService.updateMealsInLocalStorage(this.meal);
+      }, 10);
+      return;
+    } else {
+      this.addedFoodsService.moveFoodToNewMeal(food, mealName, index);
+    }
   }
 
   allowDrop(ev) {

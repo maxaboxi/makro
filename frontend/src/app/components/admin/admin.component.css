@@ -10,12 +10,9 @@ ul {
   word-break: break-all;
 }
 
-.big-list:hover {
-  font-size: 25px;
-}
-
 .list-name:hover {
   cursor: pointer;
+  font-size: 21px;
 }
 
 .food-name:hover {

@@ -23,8 +23,8 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  private showTargets;
-  private _user = new BehaviorSubject<User>(null);
+  showTargets;
+  _user = new BehaviorSubject<User>(null);
   day: Day = {
     username: '',
     name: '',
@@ -43,6 +43,7 @@ export class ToolbarComponent implements OnInit {
     packageSize: null,
     username: ''
   };
+  shareLink = '';
 
   @Input()
   set user(user) {
@@ -228,5 +229,32 @@ export class ToolbarComponent implements OnInit {
 
   toggleTargets() {
     this.addedFoodsService.setShowTargets();
+  }
+
+  generateLink(content) {
+    const meals = this.addedFoodsService.getMeals();
+    this.dayService.saveDayForSharing(meals).subscribe(
+      res => {
+        if (res['id']) {
+          this.shareLink = `https://api.makro.diet:4200/?id=${res['id']}`;
+          this.openLinkModal(content);
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(
+          'Jotain meni pieleen. Yritä myöhemmin uudestaan',
+          {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          }
+        );
+      }
+    );
+  }
+
+  openLinkModal(content) {
+    this.modalService
+      .open(content, { centered: true })
+      .result.then(result => {}, dismissed => {});
   }
 }

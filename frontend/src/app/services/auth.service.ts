@@ -9,7 +9,7 @@ import { Meal } from '../models/Meal';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:1337/auth';
+  private baseUrl = 'https://api.makro.diet:1337/auth';
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
@@ -142,6 +142,18 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/updatepassword`;
+
+    return this.http.post(url, user, { headers: headers });
+  }
+
+  resetPassword(username) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/resetpassword`;
+    const user = {
+      username: username
+    };
 
     return this.http.post(url, user, { headers: headers });
   }

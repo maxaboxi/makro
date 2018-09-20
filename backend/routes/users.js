@@ -6,6 +6,7 @@ const config = require('../config/config.json');
 const winston = require('winston');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 
 const tsFormat = () =>
   new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
@@ -20,11 +21,26 @@ const logger = winston.createLogger({
   ]
 });
 
+const emailLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({
+      filename: path.join(__dirname, '../logs', 'emails.error.log'),
+      level: 'error'
+    }),
+    new winston.transports.File({
+      filename: path.join(__dirname, '../logs', 'emails.info.log')
+    })
+  ]
+});
+
 function checkAuthorization() {
   return (req, res, next) => {
     if (
       (req.path === '/login' && req.method === 'POST') ||
-      (req.path === '/register' && req.method === 'POST')
+      (req.path === '/register' && req.method === 'POST') ||
+      (req.path === '/resetpassword' && req.method === 'POST')
     ) {
       next();
     } else {
@@ -41,6 +57,40 @@ function checkAuthorization() {
       }
     }
   };
+}
+
+function sendNewPassword(password, receiver) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: config.email.user,
+      pass: config.email.pass
+    }
+  });
+  const mailOptions = {
+    from: config.email.user,
+    to: receiver,
+    subject: 'Uusi salasanasi',
+    html: `<p>Uusi salasanasi on: ${password}</p><p>Terveisin</p><p>Makro Support</p>`
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      emailLogger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      return false;
+    } else {
+      emailLogger.log({
+        timestamp: tsFormat(),
+        level: 'info',
+        infoMsg: info
+      });
+      return true;
+    }
+  });
 }
 
 router.use(checkAuthorization());
@@ -62,10 +112,10 @@ router.post('/register', (req, res) => {
       res.status(500);
       res.json({
         success: false,
-        msg: 'Username is taken.'
+        msg: 'Käyttäjätunnus on jo käytössä.'
       });
     } else {
-      res.json({ success: true, msg: 'You are now registered.' });
+      res.json({ success: true, msg: 'Rekisteröityminen onnistui.' });
     }
   });
 });
@@ -87,7 +137,10 @@ router.post('/login', (req, res) => {
     }
     if (!user) {
       res.status(400);
-      res.json({ success: false, msg: 'Wrong username or password.' });
+      res.json({
+        success: false,
+        msg: 'Väärä käyttäjätunnus ja/tai salasana.'
+      });
       return;
     }
 
@@ -130,7 +183,10 @@ router.post('/login', (req, res) => {
         });
       } else {
         res.status(400);
-        res.json({ success: false, msg: 'Wrong username or password.' });
+        res.json({
+          success: false,
+          msg: 'Väärä käyttäjätunnus ja/tai salasana.'
+        });
       }
     });
   });
@@ -255,6 +311,76 @@ router.post('/updatepassword', (req, res) => {
         }
       });
     });
+  });
+});
+
+router.post('/resetpassword', (req, res) => {
+  const username = req.body.username;
+  User.getUserByUserName(username, (err, user) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      if (!user) {
+        res.status(200);
+        res.json({
+          success: false,
+          msg: 'Käyttäjätunnukseen ei ole liitetty sähköpostia.'
+        });
+        return;
+      }
+      const password =
+        Math.random()
+          .toString(36)
+          .substring(2, 15) +
+        Math.random()
+          .toString(36)
+          .substring(2, 15);
+      bcrypt.genSalt(12, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) {
+            logger.log({
+              timestamp: tsFormat(),
+              level: 'error',
+              errorMsg: err
+            });
+          }
+          user.password = hash;
+          User.updateUserInformation(user, user._id, (error, callback) => {
+            if (error) {
+              logger.log({
+                timestamp: tsFormat(),
+                level: 'error',
+                errorMsg: err
+              });
+              res.status(500);
+              res.json({ success: false, msg: 'Something went wrong.' });
+            } else {
+              const emailSent = sendNewPassword(password, user.email);
+              if (emailSent) {
+                res.status(200);
+                res.json({
+                  success: true,
+                  msg:
+                    'Salasana vaihdettu ja uusi salasana lähetetty sähköpostilla.'
+                });
+              } else {
+                res.status(500);
+                res.json({
+                  success: false,
+                  msg: 'Sähköpostin lähetys epäonnistui.'
+                });
+              }
+            }
+          });
+        });
+      });
+    }
   });
 });
 

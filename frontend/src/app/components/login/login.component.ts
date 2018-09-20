@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
     username: '',
     password: ''
   };
+  username;
+  showPasswordReset = false;
 
   @ViewChild('loginForm')
   form: any;
@@ -63,6 +65,34 @@ export class LoginComponent implements OnInit {
           cssClass: 'alert-danger',
           timeout: 2000
         });
+        this.showPasswordReset = true;
+      }
+    );
+  }
+
+  resetPassword() {
+    this.auth.resetPassword(this.user.username).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(res['msg'], {
+            cssClass: 'alert-success',
+            timeout: 3000
+          });
+          this.showPasswordReset = false;
+        } else {
+          this.flashMessage.show(res['msg'], {
+            cssClass: 'alert-danger',
+            timeout: 3000
+          });
+        }
+        this.username = null;
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+        this.showPasswordReset = true;
       }
     );
   }

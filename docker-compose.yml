@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  backend:
+    container_name: wow-node
+    restart: always
+    build: ./backend/
+    ports:
+      - '1337:1337'
+    links:
+      - db
+    networks:
+      - back
+      - reverse-proxy
+    environment:
+      - VIRTUAL_PORT=1337
+      - VIRTUAL_HOST=api.makro.diet
+      - LETSENCRYPT_HOST=api.makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - WAIT_HOSTS=makro-mongo:27020
+  db:
+    container_name: makro-mongo
+    image: mongo
+    command: mongod --port 27020
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=adminpw
+      - MONGO_INITDB_DATABASE=admin
+    ports:
+      - '27020:27020'
+    networks:
+      - back
+  frontend:
+    container_name: makro-angular
+    restart: always
+    image: makro-angular:latest
+    build: ./frontend
+    ports:
+      - '83:83'
+    networks:
+      - reverse-proxy
+      - back
+    environment:
+      - VIRTUAL_PORT=88
+      - VIRTUAL_HOST=makro.diet
+      - LETSENCRYPT_HOST=makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
+  back:
+    driver: bridge

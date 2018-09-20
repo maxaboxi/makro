@@ -1,26 +1,27 @@
 <table class="table table-sm table-responsive-xs mt-2">
   <thead>
     <tr class="text-center">
-      <th class="t-head bg-lb lead" scope="row">
-        <div class="name">Yhteensä</div>
+      <th class="t-head bg-lb lead" scope="row" title="Yhteensä">
+        <div class="name"><i class="fas fa-equals"></i></div>
       </th>
-      <th scope="col" class="table-success">P</th>
-      <th scope="col" class="table-primary">HH</th>
-      <th scope="col" class="table-danger">R</th>
-      <th scope="col" class="table-secondary">S</th>
-      <th scope="col" class="fiber">K</th>
+      <th scope="col" class="table-success" title="Proteiini">P</th>
+      <th scope="col" class="table-primary" title="Hiilihydraatti">HH</th>
+      <th scope="col" class="table-danger" title="Rasva">R</th>
+      <th scope="col" class="table-secondary d-none d-sm-table-cell" title="Sokeri">S</th>
+      <th scope="col" class="fiber d-none d-sm-table-cell" title="Kuitu">K</th>
       <th scope="col" class="table-warning">Kcal</th>
-      <th scope="col">Määrä</th>
+      <th scope="col" title="Määrä"><i class="fas fa-weight"></i></th>
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
         <div class="name" (click)="openModal(clearFoods)"><i class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
       </th>
-      <th scope="col" class="table-success align-middle">{{ totals.protein.toFixed(0) }} g</th>
-      <th scope="col" class="table-primary align-middle">{{ totals.carb.toFixed(0) }} g</th>
-      <th scope="col" class="table-danger align-middle">{{ totals.fat.toFixed(0) }} g</th>
-      <th scope="col" class="table-secondary align-middle">{{ totals.sugar.toFixed(0) }} g</th>
-      <th scope="col" class="fiber align-middle">{{ totals.fiber.toFixed(0) }} g</th>
+      <th scope="col" class="table-success align-middle" title="Proteiini">{{ totals.protein.toFixed(0) }} g</th>
+      <th scope="col" class="table-primary align-middle" title="Hiilihydraatti">{{ totals.carb.toFixed(0) }} g</th>
+      <th scope="col" class="table-danger align-middle" title="Rasva">{{ totals.fat.toFixed(0) }} g</th>
+      <th scope="col" class="table-secondary align-middle d-none d-sm-table-cell" title="Sokeri">{{
+        totals.sugar.toFixed(0) }} g</th>
+      <th scope="col" class="fiber align-middle d-none d-sm-table-cell" title="Kuitu">{{ totals.fiber.toFixed(0) }} g</th>
       <th scope="col" class="table-warning align-middle">{{ totals.energy.toFixed(0) }}</th>
       <th scope="col" class="align-middle">{{ totals.amount.toFixed(0) }} g</th>
     </tr>

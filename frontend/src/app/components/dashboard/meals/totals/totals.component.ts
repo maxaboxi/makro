@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./totals.component.css']
 })
 export class TotalsComponent implements OnInit {
-  private totals;
+  totals;
 
   constructor(
     private addedFoodsService: AddedFoodsService,
