@@ -6,7 +6,7 @@ import { Food } from '../models/Food';
   providedIn: 'root'
 })
 export class FoodService {
-  private baseUrl = 'https://api.makro.diet:1337/api/v1';
+  private baseUrl = 'https://api.makro.diet/api/v1';
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,7 @@ import { User } from '../models/User';
   providedIn: 'root'
 })
 export class AdminService {
-  private baseUrl = 'https://api.makro.diet:1337/admin';
+  private baseUrl = 'https://api.makro.diet/admin';
 
   constructor(private http: HttpClient) {}
 

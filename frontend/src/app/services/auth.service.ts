@@ -9,7 +9,7 @@ import { Meal } from '../models/Meal';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'https://api.makro.diet:1337/auth';
+  private baseUrl = 'https://api.makro.diet/auth';
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);

@@ -236,7 +236,7 @@ export class ToolbarComponent implements OnInit {
     this.dayService.saveDayForSharing(meals).subscribe(
       res => {
         if (res['id']) {
-          this.shareLink = `https://api.makro.diet:4200/?id=${res['id']}`;
+          this.shareLink = `https://makro.diet/?id=${res['id']}`;
           this.openLinkModal(content);
         }
       },
