@@ -81,14 +81,12 @@ function sendNewPassword(password, receiver) {
         level: 'error',
         errorMsg: err
       });
-      return false;
     } else {
       emailLogger.log({
         timestamp: tsFormat(),
         level: 'info',
         infoMsg: info
       });
-      return true;
     }
   });
 }
@@ -361,21 +359,13 @@ router.post('/resetpassword', (req, res) => {
               res.status(500);
               res.json({ success: false, msg: 'Something went wrong.' });
             } else {
-              const emailSent = sendNewPassword(password, user.email);
-              if (emailSent) {
-                res.status(200);
-                res.json({
-                  success: true,
-                  msg:
-                    'Salasana vaihdettu ja uusi salasana lähetetty sähköpostilla.'
-                });
-              } else {
-                res.status(500);
-                res.json({
-                  success: false,
-                  msg: 'Sähköpostin lähetys epäonnistui.'
-                });
-              }
+              sendNewPassword(password, user.email);
+              res.status(200);
+              res.json({
+                success: true,
+                msg:
+                  'Salasana vaihdettu ja uusi salasana lähetetty sähköpostilla.'
+              });
             }
           });
         });

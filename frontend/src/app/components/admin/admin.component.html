@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row justify-content-between">
     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
-      <h2 class="h2 text-muted">Käyttäjät</h2>
+      <h2 class="h2 text-muted">Käyttäjät ({{ users?.length }})</h2>
       <div class="row mb-2" *ngIf="usersDeleted">
         <div class="col-12">
           <button type="button" class="btn btn-outline-success btn-block" (click)="deleteUsersFromDb()">Tallenna
@@ -22,7 +22,7 @@
       </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
-      <h2 class="h2 text-muted">Päivät</h2>
+      <h2 class="h2 text-muted">Päivät ({{ days?.length }})</h2>
       <div class="row mb-2" *ngIf="daysDeleted">
         <div class="col-12">
           <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna
@@ -48,7 +48,7 @@
 <div class="container">
   <div class="row justify-content-between">
     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
-      <h2 class="h2 text-muted">Palautteet</h2>
+      <h2 class="h2 text-muted">Palautteet ({{ feedbacks?.length }})</h2>
       <div class="row mb-2" *ngIf="feedbacksDeleted">
         <div class="col-12">
           <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFeedbacksFromDb()">Tallenna
@@ -69,7 +69,7 @@
       </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mt-3">
-      <h2 class="h2 text-muted">Ruoat</h2>
+      <h2 class="h2 text-muted">Ruoat ({{ foods?.length }})</h2>
       <div class="row mb-2" *ngIf="foodsDeleted">
         <div class="col-12">
           <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna
