@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Food } from '../models/Food';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FoodService {
-  private baseUrl = 'https://api.makro.diet/api/v1';
+  private baseUrl = `${environment.baseUrl}/api/v1`;
 
   constructor(private http: HttpClient) {}
 

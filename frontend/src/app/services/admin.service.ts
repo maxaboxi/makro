@@ -3,12 +3,13 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Day } from '../models/Day';
 import { Feedback } from '../models/Feedback';
 import { User } from '../models/User';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private baseUrl = 'https://api.makro.diet/admin';
+  private baseUrl = `${environment.baseUrl}/admin`;
 
   constructor(private http: HttpClient) {}
 

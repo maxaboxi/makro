@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Day } from '../models/Day';
 import { Meal } from '../models/Meal';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayService {
-  private baseUrl = 'https://api.makro.diet/api/v1';
+  private baseUrl = `${environment.baseUrl}/api/v1`;
 
   constructor(private http: HttpClient) {}
 

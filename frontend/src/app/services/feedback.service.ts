@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Feedback } from '../models/Feedback';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedbackService {
-  private baseUrl = 'https://api.makro.diet/api/v1';
+  private baseUrl = `${environment.baseUrl}/api/v1`;
 
   constructor(private http: HttpClient) {}
 

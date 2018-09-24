@@ -4,12 +4,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Meal } from '../models/Meal';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'https://api.makro.diet/auth';
+  private baseUrl = `${environment.baseUrl}/auth`;
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
