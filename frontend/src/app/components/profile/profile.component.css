@@ -57,6 +57,11 @@ ul {
   color: #ff3b3f;
 }
 
+.fa-eraser:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

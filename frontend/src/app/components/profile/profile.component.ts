@@ -9,6 +9,8 @@ import { DayService } from '../../services/day.service';
 import { AddedFoodsService } from '../../services/added-foods.service';
 import { FoodService } from '../../services/food.service';
 import { Food } from '../../models/Food';
+import { Meal } from '../../models/Meal';
+import { SharedMealsService } from '../../services/shared-meals.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +19,7 @@ import { Food } from '../../models/Food';
 })
 export class ProfileComponent implements OnInit {
   user: User;
+  allFoods: Food[];
   showInfo = false;
   changed = false;
   daysDeleted = false;
@@ -33,6 +36,14 @@ export class ProfileComponent implements OnInit {
   foodsSplit = false;
   deletedFoods = [];
   foodsDeleted = false;
+  sharedMeals: Meal[] = [];
+  sharedMealsFirst: Meal[] = [];
+  sharedMealsSecond: Meal[] = [];
+  sharedMealsSplit = false;
+  deletedSharedMeals = [];
+  sharedMealsDeleted = false;
+  selectedSharedMeal: Meal;
+  selectedSharedMealOrigFoods: Food[];
   newUserPassword;
   newUserPasswordAgain;
 
@@ -43,7 +54,8 @@ export class ProfileComponent implements OnInit {
     private modalService: NgbModal,
     private dayService: DayService,
     private addedFoodsService: AddedFoodsService,
-    private foodService: FoodService
+    private foodService: FoodService,
+    private sharedMealsService: SharedMealsService
   ) {}
 
   ngOnInit() {
@@ -52,9 +64,19 @@ export class ProfileComponent implements OnInit {
       this.calculateBaseExpenditure();
       this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
         this.sortSavedDays(days);
-        this.foodService
-          .getFoodsAddedByUser(this.user.username)
-          .subscribe(foods => this.sortUserAddedFoods(foods));
+        this.sharedMealsService
+          .getMealsByUser(this.user.username)
+          .subscribe(meals => {
+            this.sortSharedMeals(meals);
+            this.foodService
+              .getFoodsAddedByUser(this.user.username)
+              .subscribe(foods => {
+                this.sortUserAddedFoods(foods);
+                this.foodService
+                  .getAllFoods()
+                  .subscribe(foods => (this.allFoods = foods));
+              });
+          });
       });
     });
   }
@@ -92,6 +114,24 @@ export class ProfileComponent implements OnInit {
         );
       }
       this.userAddedFoodsSecond = foods;
+    }
+  }
+
+  sortSharedMeals(meals) {
+    if (meals.length <= 10) {
+      this.sharedMealsSplit = false;
+      this.sharedMeals = meals;
+    } else {
+      this.sharedMealsSplit = true;
+      if (meals.length % 2 === 0) {
+        this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
+      } else {
+        this.sharedMealsFirst = meals.splice(
+          0,
+          Math.floor(meals.length / 2) + 1
+        );
+      }
+      this.sharedMealsSecond = meals;
     }
   }
 
@@ -263,6 +303,50 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  deleteSharedMeal(index, array) {
+    if (array === 'sharedMeals') {
+      this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+      this.sharedMeals.splice(index, 1);
+    }
+
+    if (array === 'sharedMealsFirst') {
+      this.deletedSharedMeals.push(this.sharedMealsFirst[index]._id);
+      this.sharedMealsFirst.splice(index, 1);
+    }
+
+    if (array === 'sharedMealsSecond') {
+      this.deletedSharedMeals.push(this.sharedMealsSecond[index]._id);
+      this.sharedMealsSecond.splice(index, 1);
+    }
+
+    this.sharedMealsDeleted = true;
+  }
+
+  deleteSharedMealsFromDb() {
+    this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.sharedMealsService
+            .getMealsByUser(this.user.username)
+            .subscribe(days => {
+              this.sortSharedMeals(days);
+            });
+          this.sharedMealsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
   selectFood(index, array) {
     if (array === 'userAddedFoods') {
       this.selectedFood = this.userAddedFoods[index];
@@ -381,6 +465,76 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  openEditSharedMealModal(content, meal) {
+    this.selectedSharedMeal = meal;
+    if (!this.selectedSharedMealOrigFoods) {
+      this.selectedSharedMealOrigFoods = JSON.parse(
+        JSON.stringify(this.selectedSharedMeal.foods)
+      );
+    }
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.selectedSharedMeal.foods.forEach((f, i) => {
+            if (!f.amount || f.amount === 0) {
+              this.selectedSharedMeal.foods.splice(i, 1);
+            }
+            if (f.amount !== 100) {
+              const a = f.amount / 100;
+              const origFood = this.returnOriginalFoodValues(f._id, f.name);
+              f.energia = origFood[0].energia * a;
+              f.proteiini = origFood[0].proteiini * a;
+              f.hh = origFood[0].hh * a;
+              f.rasva = origFood[0].rasva * a;
+              f.kuitu = origFood[0].kuitu * a;
+              f.sokeri = origFood[0].sokeri * a;
+            }
+          });
+          this.sharedMealsService
+            .saveEditedMeal(this.selectedSharedMeal)
+            .subscribe(res => {
+              if (res['success']) {
+                this.sharedMealsService
+                  .getMealsByUser(this.user.username)
+                  .subscribe(meals => {
+                    this.sortSharedMeals(meals);
+                    this.selectedSharedMealOrigFoods = undefined;
+                    this.selectedSharedMeal = undefined;
+                  });
+              }
+            });
+        } else {
+          this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+          this.selectedSharedMealOrigFoods = undefined;
+        }
+      },
+      dismissed => {
+        this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+        this.selectedSharedMealOrigFoods = undefined;
+      }
+    );
+  }
+
+  removeFoodFromSharedMeal(i) {
+    this.selectedSharedMeal.foods.splice(i, 1);
+  }
+
+  returnOriginalFoodValues(id, name) {
+    if (id) {
+      return this.allFoods.filter(f => {
+        if (f._id === id) {
+          return f;
+        }
+      });
+    } else {
+      return this.allFoods.filter(f => {
+        if (f.name === name) {
+          return f;
+        }
+      });
+    }
+  }
+
   openFoodModal(content, food) {
     this.selectedFood = food;
     this.modalService.open(content, { centered: true }).result.then(
@@ -417,7 +571,6 @@ export class ProfileComponent implements OnInit {
   }
 
   openChangePasswordModal(content) {
-    console.log(this.user._id);
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {

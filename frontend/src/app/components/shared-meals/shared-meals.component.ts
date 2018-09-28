@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedMealsService } from '../../services/shared-meals.service';
 import { Meal } from '../../models/Meal';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddedFoodsService } from '../../services/added-foods.service';
 import { User } from '../../models/User';
 import { AuthService } from '../../services/auth.service';
 
@@ -14,14 +12,11 @@ import { AuthService } from '../../services/auth.service';
 export class SharedMealsComponent implements OnInit {
   sharedMealsFirst: Meal[];
   sharedMealsSecond: Meal[];
-  selectedMeal = '';
   user: User;
 
   constructor(
     private auth: AuthService,
-    private sharedMealService: SharedMealsService,
-    private modalService: NgbModal,
-    private addedFoodsService: AddedFoodsService
+    private sharedMealService: SharedMealsService
   ) {}
 
   ngOnInit() {
@@ -38,20 +33,4 @@ export class SharedMealsComponent implements OnInit {
       this.sharedMealsSecond = meals;
     });
   }
-
-  openAddMealModal(content) {
-    this.modalService.open(content, { centered: true }).result.then(
-      result => {
-        if (result === 'save') {
-        } else {
-          this.selectedMeal = '';
-        }
-      },
-      dismissed => {
-        this.selectedMeal = '';
-      }
-    );
-  }
-
-  addMeal(meal) {}
 }

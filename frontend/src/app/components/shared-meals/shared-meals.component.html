@@ -1,106 +1,22 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-center">
-      <h1 class="display-4">Valmiit ateriat</h1>
+      <h1 class="display-4">Valmiit ateriakokonaisuudet</h1>
     </div>
   </div>
-  <div class="row">
+  <div class="row justify-content-center" *ngIf="sharedMealsFirst?.length === 0">
+    <h3 class="h3 text-muted mt-3">Ei jaettuja ateriakokonaisuuksia.</h3>
+  </div>
+  <div *ngIf="sharedMealsFirst" class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-3">
       <ng-container *ngFor="let meal of sharedMealsFirst">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title text-muted">
-              Nimi: {{ meal.name }}
-              <i class="fas fa-plus float-right" (click)="openAddMealModal(addMealModal)"></i>
-            </h5>
-            <p *ngIf="meal.info" class="card-text text-muted">{{ meal.info }}</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-light lead">
-              <div class="row">
-                <div class="col-6">Ruoat</div>
-                <div class="col-3">Määrä</div>
-                <div class="col-3">Energia</div>
-              </div>
-            </li>
-            <li *ngFor="let food of meal.foods" class="list-group-item">
-              <div class="row">
-                <div class="col-6">{{ food.name }}</div>
-                <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
-                <div class="col-3">{{ food.energia.toFixed(0) }}kcal</div>
-              </div>
-            </li>
-          </ul>
-          <div class="card-footer">
-            <p class="text-muted">Tekijä: {{ meal.username }} @ {{ meal.updatedAt | date:'dd.MM.yyyy' }}</p>
-          </div>
-        </div>
-        <hr>
+        <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal>
       </ng-container>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-3">
       <ng-container *ngFor="let meal of sharedMealsSecond">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title text-muted">
-              Nimi: {{ meal.name }}
-              <i class="fas fa-plus float-right" (click)="openAddMealModal(addMealModal)"></i>
-            </h5>
-            <p *ngIf="meal.info" class="card-text text-muted">{{ meal.info }}</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-light lead">
-              <div class="row">
-                <div class="col-6">Ruoat</div>
-                <div class="col-3">Määrä</div>
-                <div class="col-3">Energia</div>
-              </div>
-            </li>
-            <li *ngFor="let food of meal.foods" class="list-group-item">
-              <div class="row">
-                <div class="col-6">{{ food.name }}</div>
-                <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
-                <div class="col-3">{{ food.energia.toFixed(0) }}kcal</div>
-              </div>
-            </li>
-          </ul>
-          <div class="card-footer">
-            <p class="text-muted">Tekijä: {{ meal.username }} @ {{ meal.updatedAt | date:'dd.MM.yyyy' }}</p>
-          </div>
-        </div>
-        <hr>
+        <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal>
       </ng-container>
     </div>
   </div>
 </div>
-
-<ng-template #addMealModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Valitse ateria</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="container">
-      <div class="form-group mt-2">
-        <select class="form-control" [(ngModel)]="selectedMeal">
-          <option *ngFor="let meal of user.meals" [ngValue]="meal.name">{{ meal.name }}</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <div class="container">
-      <div class="row">
-        <div class="col text-center">
-          <button type="button" class="btn btn-primary" (click)="modal.close('save')" [disabled]="!selectedMeal">Lisää</button>
-        </div>
-        <div class="
-            col text-center">
-          <button type="button" class="btn btn-light" (click)="modal.close('cancel')">Peruuta</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>

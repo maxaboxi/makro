@@ -165,12 +165,9 @@ export class AuthService {
     });
     const url = `${this.baseUrl}/checkadmin`;
 
-    this.http.post<boolean>(url, { headers: headers }).subscribe(
-      success => this.isAdmin.next(success),
-      (error: Error) => {
-        console.log(error);
-      }
-    );
+    this.http
+      .post<boolean>(url, { headers: headers })
+      .subscribe(success => this.isAdmin.next(success), (error: Error) => {});
   }
 
   validateToken() {

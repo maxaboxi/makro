@@ -128,7 +128,7 @@ router.delete('/removesharedmeals', (req, res) => {
       res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
       res.status(200);
-      res.json({ success: true, msg: 'Päivä(t) poistettu.' });
+      res.json({ success: true, msg: 'Ateria(t) poistettu.' });
     }
   });
 });

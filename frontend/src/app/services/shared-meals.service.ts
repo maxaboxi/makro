@@ -41,7 +41,7 @@ export class SharedMealsService {
   }
 
   saveEditedMeal(meal) {
-    const url = `${this.baseUrl}/savesharedmeal`;
+    const url = `${this.baseUrl}/saveeditedsharedmeal`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

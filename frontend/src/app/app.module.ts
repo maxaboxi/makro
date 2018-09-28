@@ -24,6 +24,7 @@ import { MealTableComponent } from './components/dashboard/meals/meal-table/meal
 import { TotalsComponent } from './components/dashboard/meals/totals/totals.component';
 import { AboutComponent } from './components/about/about.component';
 import { SharedMealsComponent } from './components/shared-meals/shared-meals.component';
+import { SharedMealComponent } from './components/shared-meals/shared-meal/shared-meal.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SharedMealsComponent } from './components/shared-meals/shared-meals.com
     MealTableComponent,
     TotalsComponent,
     AboutComponent,
-    SharedMealsComponent
+    SharedMealsComponent,
+    SharedMealComponent
   ],
   imports: [
     BrowserModule,
