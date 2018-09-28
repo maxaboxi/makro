@@ -45,6 +45,15 @@ td {
   cursor: pointer;
   color: #ff3b3f;
 }
+.fa-share {
+  font-size: 15px;
+}
+
+.fa-share:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+  font-size: 17px;
+}
 
 @media screen and (max-width: 720px) {
   .t-head {

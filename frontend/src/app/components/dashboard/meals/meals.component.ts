@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Food } from '../../../models/Food';
 import { DayService } from '../../../services/day.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { Day } from '../../../models/Day';
 import { User } from '../../../models/User';
 
 @Component({
@@ -16,6 +15,7 @@ import { User } from '../../../models/User';
 export class MealsComponent implements OnInit {
   addedMeals: Meal[];
   _foods = new BehaviorSubject<Food[]>([]);
+  _user = new BehaviorSubject<User>(null);
   openedSavedMeal = false;
   mealsEdited = false;
 
@@ -26,6 +26,15 @@ export class MealsComponent implements OnInit {
 
   get foods() {
     return this._foods.getValue();
+  }
+
+  @Input()
+  set user(user) {
+    this._user.next(user);
+  }
+
+  get user() {
+    return this._user.getValue();
   }
 
   constructor(

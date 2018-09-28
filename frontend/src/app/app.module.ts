@@ -23,6 +23,7 @@ import { TargetsComponent } from './components/dashboard/meals/targets/targets.c
 import { MealTableComponent } from './components/dashboard/meals/meal-table/meal-table.component';
 import { TotalsComponent } from './components/dashboard/meals/totals/totals.component';
 import { AboutComponent } from './components/about/about.component';
+import { SharedMealsComponent } from './components/shared-meals/shared-meals.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AboutComponent } from './components/about/about.component';
     TargetsComponent,
     MealTableComponent,
     TotalsComponent,
-    AboutComponent
+    AboutComponent,
+    SharedMealsComponent
   ],
   imports: [
     BrowserModule,

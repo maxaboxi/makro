@@ -9,6 +9,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Food } from '../../../../models/Food';
 import { Meal } from '../../../../models/Meal';
 import { AddedFoodsService } from '../../../../services/added-foods.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { User } from '../../../../models/User';
+import { SharedMealsService } from '../../../../services/shared-meals.service';
 
 @Component({
   selector: 'app-meal-table',
@@ -19,6 +23,7 @@ export class MealTableComponent implements OnInit, DoCheck {
   private _componentIndex = new BehaviorSubject(null);
   private _meal = new BehaviorSubject<Meal>(null);
   private _foods = new BehaviorSubject<Food[]>([]);
+  _user = new BehaviorSubject<User>(null);
   private energyTotal = 0;
   private proteinTotal = 0;
   private carbTotal = 0;
@@ -27,6 +32,12 @@ export class MealTableComponent implements OnInit, DoCheck {
   private iterableDiffer;
   private newFoodAmount = null;
   private dropTargetIndex = null;
+  sharedMeal: Meal = {
+    username: '',
+    name: '',
+    info: '',
+    foods: []
+  };
 
   @Input()
   set meal(meal) {
@@ -55,9 +66,21 @@ export class MealTableComponent implements OnInit, DoCheck {
     return this._componentIndex.getValue();
   }
 
+  @Input()
+  set user(user) {
+    this._user.next(user);
+  }
+
+  get user() {
+    return this._user.getValue();
+  }
+
   constructor(
     private _iterableDiffers: IterableDiffers,
-    private addedFoodsService: AddedFoodsService
+    private addedFoodsService: AddedFoodsService,
+    private modalService: NgbModal,
+    private flashMessage: FlashMessagesService,
+    private sharedMealsService: SharedMealsService
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
   }
@@ -173,5 +196,45 @@ export class MealTableComponent implements OnInit, DoCheck {
 
   allowDrop(ev) {
     ev.preventDefault();
+  }
+
+  openShareMealModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const meal: Meal = {
+            name: this.sharedMeal.name,
+            foods: this.meal.foods,
+            info: this.sharedMeal.info,
+            username: this.user.username
+          };
+          this.sharedMealsService.shareNewMeal(meal).subscribe(
+            success => {
+              if (success) {
+                this.flashMessage.show('Ateria jaettu muille onnistuneesti.', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.sharedMeal.name = '';
+                this.sharedMeal.info = '';
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.sharedMeal.name = '';
+          this.sharedMeal.info = '';
+        }
+      },
+      dismissed => {
+        this.sharedMeal.name = '';
+        this.sharedMeal.info = '';
+      }
+    );
   }
 }

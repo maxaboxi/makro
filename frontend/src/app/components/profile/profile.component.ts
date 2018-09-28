@@ -65,8 +65,12 @@ export class ProfileComponent implements OnInit {
       this.savedDays = days;
     } else {
       this.daysSplit = true;
-      this.savedDaysFirst = days.slice(0, Math.floor(days.length / 2));
-      this.savedDaysSecond = days.slice(Math.floor(days.length / 2) + 1);
+      if (days.length % 2 === 0) {
+        this.savedDaysFirst = days.splice(0, Math.floor(days.length / 2));
+      } else {
+        this.savedDaysFirst = days.splice(0, Math.floor(days.length / 2) + 1);
+      }
+      this.savedDaysSecond = days;
     }
   }
 
@@ -76,8 +80,18 @@ export class ProfileComponent implements OnInit {
       this.userAddedFoods = foods;
     } else {
       this.foodsSplit = true;
-      this.userAddedFoodsFirst = foods.slice(0, Math.floor(foods.length / 2));
-      this.userAddedFoodsSecond = foods.slice(Math.floor(foods.length / 2) + 1);
+      if (foods.length % 2 === 0) {
+        this.userAddedFoodsFirst = foods.splice(
+          0,
+          Math.floor(foods.length / 2)
+        );
+      } else {
+        this.userAddedFoodsFirst = foods.splice(
+          0,
+          Math.floor(foods.length / 2) + 1
+        );
+      }
+      this.userAddedFoodsSecond = foods;
     }
   }
 
@@ -237,6 +251,7 @@ export class ProfileComponent implements OnInit {
             .subscribe(days => {
               this.sortSavedDays(days);
             });
+          this.daysDeleted = false;
         }
       },
       (error: Error) => {

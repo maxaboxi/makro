@@ -2,7 +2,11 @@
   <thead>
     <tr class="text-center">
       <th class="t-head bg-lb lead" scope="row">
-        <div class="name">Ateria</div>
+        <div class="name">
+          <i *ngIf="user && user.username" (click)="openShareMealModal(shareMealModal)" class="fas fa-share float-left mt-2"
+            title="Jaa ateria muiden käytettäväksi"></i>
+          Ateria
+        </div>
       </th>
       <th scope="col" class="table-success d-none d-sm-table-cell">P</th>
       <th scope="col" class="table-primary d-none d-sm-table-cell">HH</th>
@@ -49,3 +53,45 @@
     </tr>
   </tbody>
 </table>
+
+<ng-template #shareMealModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Jaa ateria muille</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #shareMealForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="nameOfMeal">Nimi</label>
+          <input type="text" name="nameOfMeal" class="form-control" #nameOfMeal="ngModel" [(ngModel)]="sharedMeal.name"
+            [ngClass]="{'is-invalid':nameOfMeal.errors && nameOfMeal.touched}" minlength="3" required>
+          <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback">
+            Nimi on vaadittu tieto
+          </div>
+          <div [hidden]="!nameOfMeal.errors?.minlength" class="invalid-feedback">
+            Nimen pitää olla vähintään kolme merkkiä pitkä
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Lisätietoja</label>
+          <input type="text" name="description" class="form-control" [(ngModel)]="sharedMeal.info">
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!shareMealForm.form.valid">
+                Jaa
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
