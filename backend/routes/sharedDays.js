@@ -42,7 +42,8 @@ router.use(checkAuthorization());
 
 router.post('/shareday', (req, res) => {
   const day = new SharedDay({
-    meals: req.body
+    meals: req.body.meals,
+    user: req.body.user
   });
 
   SharedDay.saveSharedDay(day, (err, savedDay) => {
@@ -75,6 +76,42 @@ router.get('/getsharedday/:id', (req, res) => {
     } else {
       res.status(200);
       res.json(day);
+    }
+  });
+});
+
+router.get('/getdayssharedbyuser/:id', (req, res) => {
+  const id = req.params.id;
+  SharedDay.getDaysSharedByUser(id, (err, days) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(days);
+    }
+  });
+});
+
+router.delete('/removeshareddays', (req, res) => {
+  const deletedDays = req.body;
+  SharedDay.removeSharedDays(deletedDays, (err, days) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Päivä(t) poistettu.' });
     }
   });
 });

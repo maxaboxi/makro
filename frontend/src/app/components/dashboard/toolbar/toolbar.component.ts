@@ -232,8 +232,11 @@ export class ToolbarComponent implements OnInit {
   }
 
   generateLink(content) {
-    const meals = this.addedFoodsService.getMeals();
-    this.dayService.saveDayForSharing(meals).subscribe(
+    const data = {
+      user: this.user._id,
+      meals: this.addedFoodsService.getMeals()
+    };
+    this.dayService.saveDayForSharing(data).subscribe(
       res => {
         if (res['id']) {
           this.shareLink = `https://makro.diet/?id=${res['id']}`;

@@ -67,7 +67,7 @@ export class DayService {
     return this.http.post(url, days, { headers: headers });
   }
 
-  saveDayForSharing(meals: Meal[]) {
+  saveDayForSharing(meals) {
     const url = `${this.baseUrl}/shareday`;
 
     const headers = new HttpHeaders({
@@ -85,5 +85,30 @@ export class DayService {
     });
 
     return this.http.get<Meal[]>(url, { headers: headers });
+  }
+
+  getSharedDaysByUser(id) {
+    const url = `${this.baseUrl}/getdayssharedbyuser/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(url, { headers: headers });
+  }
+
+  removeSharedDays(days) {
+    const url = `${this.baseUrl}/removeshareddays`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
   }
 }

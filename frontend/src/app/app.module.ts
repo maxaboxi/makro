@@ -25,6 +25,10 @@ import { TotalsComponent } from './components/dashboard/meals/totals/totals.comp
 import { AboutComponent } from './components/about/about.component';
 import { SharedMealsComponent } from './components/shared-meals/shared-meals.component';
 import { SharedMealComponent } from './components/shared-meals/shared-meal/shared-meal.component';
+import { SavedDaysComponent } from './components/profile/saved-days/saved-days.component';
+import { AddedFoodsComponent } from './components/profile/added-foods/added-foods.component';
+import { UserSharedMealsComponent } from './components/profile/user-shared-meals/user-shared-meals.component';
+import { SharedDaysComponent } from './components/profile/shared-days/shared-days.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,11 @@ import { SharedMealComponent } from './components/shared-meals/shared-meal/share
     TotalsComponent,
     AboutComponent,
     SharedMealsComponent,
-    SharedMealComponent
+    SharedMealComponent,
+    SavedDaysComponent,
+    AddedFoodsComponent,
+    UserSharedMealsComponent,
+    SharedDaysComponent
   ],
   imports: [
     BrowserModule,
