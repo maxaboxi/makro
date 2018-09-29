@@ -37,3 +37,7 @@ module.exports.removeSharedDays = (deletedDays, callback) => {
   const query = { _id: { $in: deletedDays } };
   SharedDay.remove(query, callback);
 };
+
+module.exports.getAllSharedDays = callback => {
+  SharedDay.find(callback);
+};

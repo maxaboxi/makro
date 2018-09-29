@@ -10,6 +10,8 @@ import { Day } from '../../models/Day';
 import { Food } from '../../models/Food';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminService } from '../../services/admin.service';
+import { SharedMealsService } from '../../services/shared-meals.service';
+import { Meal } from '../../models/Meal';
 
 @Component({
   selector: 'app-admin',
@@ -22,12 +24,14 @@ export class AdminComponent implements OnInit {
   days: Day[];
   foods: Food[];
   feedbacks: Feedback[];
+  sharedMeals: Meal[];
   searchTerm = '';
   results = [];
   selectedFood: Food;
   selectedFeedback: Feedback;
   selectedUser: User;
   selectedDay: Day;
+  selectedSharedMeal: Meal;
   deletedFoods = [];
   foodsDeleted = false;
   deletedDays = [];
@@ -38,6 +42,11 @@ export class AdminComponent implements OnInit {
   feedbacksDeleted = false;
   newUserPassword;
   newUserPasswordAgain;
+  deletedSharedMeals = [];
+  sharedMealsDeleted = false;
+  sharedDays = [];
+  deletedSharedDays = [];
+  sharedDaysDeleted = false;
 
   constructor(
     private auth: AuthService,
@@ -46,7 +55,8 @@ export class AdminComponent implements OnInit {
     private dayService: DayService,
     private feedbackService: FeedbackService,
     private adminService: AdminService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private sharedMealsService: SharedMealsService
   ) {}
 
   ngOnInit() {
@@ -57,6 +67,12 @@ export class AdminComponent implements OnInit {
       .subscribe(feedbacks => (this.feedbacks = feedbacks));
     this.adminService.getAllUsers().subscribe(users => (this.users = users));
     this.adminService.getAllDays().subscribe(days => (this.days = days));
+    this.sharedMealsService
+      .getAllMeals()
+      .subscribe(meals => (this.sharedMeals = meals));
+    this.adminService.getAllSharedDays().subscribe(days => {
+      this.sharedDays = JSON.parse(JSON.stringify(days));
+    });
   }
 
   searchFoods() {
@@ -356,6 +372,66 @@ export class AdminComponent implements OnInit {
           this.feedbackService
             .getAllFeedbacks()
             .subscribe(feedbacks => (this.feedbacks = feedbacks));
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteSharedMeal(index) {
+    this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+    this.sharedMeals.splice(index, 1);
+
+    this.sharedMealsDeleted = true;
+  }
+
+  deleteSharedMealsFromDb() {
+    this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.sharedMealsService
+            .getAllMeals()
+            .subscribe(meals => (this.sharedMeals = meals));
+          this.sharedMealsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteSharedDay(index) {
+    this.deletedSharedDays.push(this.sharedDays[index]._id);
+    this.sharedDays.splice(index, 1);
+
+    this.sharedDaysDeleted = true;
+  }
+
+  deleteSharedDaysFromDb() {
+    this.dayService.removeSharedDays(this.deletedDays).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.adminService.getAllSharedDays().subscribe(days => {
+            this.sharedDays = JSON.parse(JSON.stringify(days));
+          });
+          this.sharedDaysDeleted = false;
         }
       },
       (error: Error) => {

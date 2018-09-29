@@ -16,6 +16,9 @@ export class SharedMealComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   amountTotal = 0;
   kcalTotal = 0;
+  proteinTotal = 0;
+  carbTotal = 0;
+  fatTotal = 0;
   selectedMeal: Meal;
   addToMeal = '';
 
@@ -47,6 +50,9 @@ export class SharedMealComponent implements OnInit {
     this.meal.foods.forEach(f => {
       this.amountTotal += f.amount;
       this.kcalTotal += f.energia;
+      this.proteinTotal += f.proteiini;
+      this.carbTotal += f.hh;
+      this.fatTotal += f.rasva;
     });
   }
 

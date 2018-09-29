@@ -96,8 +96,8 @@ export class UserSharedMealsComponent implements OnInit {
           });
           this.sharedMealsService
             .getMealsByUser(this.user.username)
-            .subscribe(days => {
-              this.sortSharedMeals(days);
+            .subscribe(meals => {
+              this.sortSharedMeals(meals);
             });
           this.sharedMealsDeleted = false;
         }

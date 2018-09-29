@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const Day = require('../models/day');
+const SharedDay = require('../models/sharedDay');
 const Feedback = require('../models/feedback');
 const winston = require('winston');
 const path = require('path');
@@ -52,6 +53,23 @@ router.use((req, res, next) => {
 
 router.get('/getalldays', (req, res) => {
   Day.getAllDays((err, days) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(days);
+    }
+  });
+});
+
+router.get('/getallshareddays', (req, res) => {
+  SharedDay.getAllSharedDays((err, days) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
