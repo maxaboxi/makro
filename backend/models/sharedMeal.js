@@ -42,7 +42,10 @@ module.exports.getMealsByUser = (username, callback) => {
 };
 
 module.exports.getAllMeals = callback => {
-  sharedMeal.find(callback);
+  sharedMeal
+    .find()
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };
 
 module.exports.removeMeals = (deletedMeals, callback) => {

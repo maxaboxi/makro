@@ -14,7 +14,7 @@
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
-        <div class="name" (click)="openModal(clearFoods)"><i class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
+        <div class="name"><i (click)="openModal(clearFoods)" class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
       </th>
       <th scope="col" class="table-success align-middle" title="Proteiini">{{ totals.protein.toFixed(0) }} g</th>
       <th scope="col" class="table-primary align-middle" title="Hiilihydraatti">{{ totals.carb.toFixed(0) }} g</th>

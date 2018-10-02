@@ -29,6 +29,8 @@ import { SavedDaysComponent } from './components/profile/saved-days/saved-days.c
 import { AddedFoodsComponent } from './components/profile/added-foods/added-foods.component';
 import { UserSharedMealsComponent } from './components/profile/user-shared-meals/user-shared-meals.component';
 import { SharedDaysComponent } from './components/profile/shared-days/shared-days.component';
+import { QaComponent } from './components/qa/qa.component';
+import { QuestionComponent } from './components/qa/question/question.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { SharedDaysComponent } from './components/profile/shared-days/shared-day
     SavedDaysComponent,
     AddedFoodsComponent,
     UserSharedMealsComponent,
-    SharedDaysComponent
+    SharedDaysComponent,
+    QaComponent,
+    QuestionComponent
   ],
   imports: [
     BrowserModule,

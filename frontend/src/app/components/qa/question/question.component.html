@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title text-muted">
+      {{ question.question }}
+      <p class="text-muted">
+        Kysyjä: {{ question.username }} @ {{ question.createdAt | date:'dd.MM.yyyy' }}
+        <span *ngIf="question.updatedAt !== question.createdAt"> (Muokattu: {{ question.updatedAt | date:'dd.MM.yyyy'
+          }})</span>
+      </p>
+    </h5>
+    <p *ngIf="question.info" class="card-text text-muted">{{ question.info }}</p>
+  </div>
+  <div class="card-footer">
+
+  </div>
+</div>
