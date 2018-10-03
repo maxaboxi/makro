@@ -55,6 +55,11 @@ td {
   font-size: 17px;
 }
 
+.tag:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
 @media screen and (max-width: 720px) {
   .t-head {
     width: 150px;

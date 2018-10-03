@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
+import { Comment } from '../models/Comment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,20 @@ export class QaService {
     });
 
     return this.http.get<Question[]>(url, { headers: headers });
+  }
+
+  getTopResponseToQuestion(questionId) {
+    const url = `${this.baseUrl}/gettopresponsetoquestion`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Answer>(
+      url,
+      { questionId: questionId },
+      { headers: headers }
+    );
   }
 
   getAllResponsesToQuestion(questionId) {
@@ -44,6 +59,26 @@ export class QaService {
     });
 
     return this.http.post(url, question, { headers: headers });
+  }
+
+  postNewComment(comment: Comment) {
+    const url = `${this.baseUrl}/postnewquestion`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, comment, { headers: headers });
+  }
+
+  votePost(vote) {
+    const url = `${this.baseUrl}/votepost`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, vote, { headers: headers });
   }
 
   addAnswerToQuestion(answer: Answer) {

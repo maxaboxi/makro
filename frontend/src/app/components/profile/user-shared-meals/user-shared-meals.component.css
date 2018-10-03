@@ -40,6 +40,11 @@ ul {
   cursor: pointer;
 }
 
+.tag:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

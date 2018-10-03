@@ -99,11 +99,22 @@ export class SharedMealsComponent implements OnInit {
           }
         }
 
+        if (!added && st.length > 1) {
+          for (let tag of m.tags) {
+            const tagLc = tag.toLowerCase();
+            if (tagLc === st) {
+              tertiaryResults.push(m);
+              added = true;
+              break;
+            }
+          }
+        }
+
         if (
           (!added && mLc.indexOf(st) !== -1) ||
           (!added && mdLc.indexOf(st) !== -1)
         ) {
-          tertiaryResults.push(m);
+          quaternaryResults.push(m);
           added = true;
         }
 

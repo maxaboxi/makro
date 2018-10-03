@@ -6,6 +6,7 @@ export interface Meal {
   name: String;
   info?: String;
   foods: Food[];
+  tags?: String[];
   createdAt?: Date;
   updatedAt?: Date;
 }

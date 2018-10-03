@@ -16,4 +16,5 @@ export interface User {
   userAddedCarbTarget?: number;
   userAddedFatTarget?: number;
   meals?: Meal[];
+  lastLogin?: Date;
 }

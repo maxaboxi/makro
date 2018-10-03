@@ -79,6 +79,19 @@
           </div>
           <div class="col-sm-2"><i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="Poista ruoka ateriasta"></i></div>
         </div>
+        <div class="form-group">
+          <label for="hashtags">Tagit (erota pilkulla)</label>
+          <p class="text-muted" *ngIf="selectedSharedMeal.tags.length > 0">
+            <ng-container *ngFor="let tag of selectedSharedMeal.tags; let i = index;">
+              <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
+            </ng-container>
+          </p>
+          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag"
+            [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}" minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
+            Tagin pitää olla vähintään kolme merkkiä pitkä
+          </div>
+        </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">

@@ -3,7 +3,6 @@ export interface Answer {
   questionId: String;
   username: String;
   answer: String;
-  comments?: String[];
   votes?: Number;
   updatedAt?: Date;
   createdAt?: Date;

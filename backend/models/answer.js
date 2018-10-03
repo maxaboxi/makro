@@ -10,10 +10,6 @@ const AnswerSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    comments: {
-      type: Array,
-      required: false
-    },
     questionId: {
       type: String,
       required: true
@@ -39,4 +35,18 @@ module.exports.getAllAnswers = (questionId, callback) => {
 
 module.exports.saveAnswer = (a, callback) => {
   a.save(callback);
+};
+
+module.exports.getTopAnswer = (questionId, callback) => {
+  const query = { questionId: questionId };
+  answer
+    .find(query)
+    .sort({ votes: -1 })
+    .limit(1)
+    .exec(callback);
+};
+
+module.exports.editAnswer = (a, callback) => {
+  const query = { _id: a._id };
+  answer.findByIdAndUpdate(query, a, callback);
 };

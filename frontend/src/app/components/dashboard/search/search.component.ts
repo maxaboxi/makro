@@ -83,14 +83,20 @@ export class SearchComponent implements OnInit {
   }
 
   searchFoods() {
-    if (!this.isLoggedIn) {
-      this.includeFoodsAddedByOthers = true;
-    }
-    this.results = [];
-    const secondaryResults = [];
-    const st = this.searchTerm.toLowerCase();
-    if (this.includeFoodsAddedByOthers) {
-      this.allFoods.forEach(f => {
+    if (this.searchTerm.length >= 2) {
+      let searchArray;
+      if (!this.isLoggedIn) {
+        searchArray = this.allFoods;
+      } else if (this.isLoggedIn && this.includeFoodsAddedByOthers) {
+        searchArray = this.allFoods;
+      } else {
+        searchArray = this.foods;
+      }
+      this.results = [];
+      const secondaryResults = [];
+      const tertiaryResults = [];
+      const st = this.searchTerm.toLowerCase();
+      searchArray.forEach(f => {
         const fLc = f.name.toLowerCase();
         if (fLc === st) {
           this.results.push(f);
@@ -99,6 +105,7 @@ export class SearchComponent implements OnInit {
         } else {
           const containsWhitespaces = fLc.indexOf(' ') > 1;
           const containsBrackets = fLc.indexOf('(') > 1;
+          let added = false;
           if (containsWhitespaces && !containsBrackets) {
             for (let i = 0; i < fLc.length; i++) {
               if (
@@ -107,6 +114,7 @@ export class SearchComponent implements OnInit {
                 fLc.slice(i + 1, i + 1 + st.length) === st
               ) {
                 secondaryResults.push(f);
+                added = true;
               }
             }
           }
@@ -118,49 +126,26 @@ export class SearchComponent implements OnInit {
                 fLc.slice(i + 1, i + 1 + st.length) === st
               ) {
                 secondaryResults.push(f);
+                added = true;
               }
             }
           }
-        }
-      });
-    } else {
-      this.foods.forEach(f => {
-        const fLc = f.name.toLowerCase();
-        if (fLc === st) {
-          this.results.push(f);
-        } else if (st === fLc.slice(0, st.length)) {
-          this.results.push(f);
-        } else {
-          const containsWhitespaces = fLc.indexOf(' ') > 1;
-          const containsBrackets = fLc.indexOf('(') > 1;
-          if (containsWhitespaces && !containsBrackets) {
-            for (let i = 0; i < fLc.length; i++) {
-              if (
-                st.length > 1 &&
-                fLc[i] === ' ' &&
-                fLc.slice(i + 1, i + 1 + st.length) === st
-              ) {
-                secondaryResults.push(f);
-              }
-            }
-          }
-          if (containsWhitespaces && containsBrackets) {
-            for (let i = 0; i < fLc.length; i++) {
-              if (
-                st.length > 1 &&
-                fLc[i] === '(' &&
-                fLc.slice(i + 1, i + 1 + st.length) === st
-              ) {
-                secondaryResults.push(f);
-              }
-            }
-          }
-        }
-      });
-    }
 
-    if (secondaryResults.length > 0) {
-      this.results = this.results.concat(secondaryResults);
+          if (!added && fLc.indexOf(st) !== -1) {
+            tertiaryResults.push(f);
+          }
+        }
+      });
+
+      if (secondaryResults.length > 0) {
+        this.results = this.results.concat(secondaryResults);
+      }
+
+      if (tertiaryResults.length > 0) {
+        this.results = this.results.concat(tertiaryResults);
+      }
+    } else {
+      this.results = [];
     }
   }
 

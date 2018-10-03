@@ -36,7 +36,6 @@ router.post('/addanswertoquestion', (req, res) => {
   const answer = new Answer({
     username: req.body.username,
     answer: req.body.answer,
-    comments: req.body.comments,
     questionId: req.body.questionId
   });
 
@@ -56,8 +55,9 @@ router.post('/addanswertoquestion', (req, res) => {
   });
 });
 
-router.get('/getallresponsestoquestion', (req, res) => {
-  Answer.getAllAnswers((err, answers) => {
+router.post('/getallresponsestoquestion', (req, res) => {
+  const questionId = req.body.questionId;
+  Answer.getAllAnswers(questionId, (err, answers) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -69,6 +69,47 @@ router.get('/getallresponsestoquestion', (req, res) => {
     } else {
       res.status(200);
       res.json(answers);
+    }
+  });
+});
+
+router.post('/gettopresponsetoquestion', (req, res) => {
+  const questionId = req.body.questionId;
+  Answer.getTopAnswer(questionId, (err, answer) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(answer);
+    }
+  });
+});
+
+router.post('/editanswer', (req, res) => {
+  const answer = new Answer({
+    _id: req.body._id,
+    username: req.body.username,
+    answer: req.body.answer,
+    questionId: req.body.questionId
+  });
+  Answer.editAnswer(answer, (err, cb) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Muutokset tallennettu.' });
     }
   });
 });

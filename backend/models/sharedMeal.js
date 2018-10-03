@@ -17,6 +17,10 @@ const SharedMealSchema = mongoose.Schema(
     foods: {
       type: Array,
       required: true
+    },
+    tags: {
+      type: Array,
+      required: true
     }
   },
   { timestamps: true }

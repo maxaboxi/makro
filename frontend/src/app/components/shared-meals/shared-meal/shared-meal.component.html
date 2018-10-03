@@ -37,6 +37,9 @@
   </ul>
   <div class="card-footer">
     <p class="text-muted">Tekijä: {{ meal.username }} @ {{ meal.updatedAt | date:'dd.MM.yyyy' }}</p>
+    <p class="text-muted">
+      <ng-container *ngFor="let tag of meal.tags">#{{ tag }} </ng-container>
+    </p>
   </div>
 </div>
 <hr>

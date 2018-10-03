@@ -36,8 +36,10 @@ export class MealTableComponent implements OnInit, DoCheck {
     username: '',
     name: '',
     info: '',
-    foods: []
+    foods: [],
+    tags: []
   };
+  sharedMealTag = '';
 
   @Input()
   set meal(meal) {
@@ -206,7 +208,8 @@ export class MealTableComponent implements OnInit, DoCheck {
             name: this.sharedMeal.name,
             foods: this.meal.foods,
             info: this.sharedMeal.info,
-            username: this.user.username
+            username: this.user.username,
+            tags: this.sharedMeal.tags
           };
           this.sharedMealsService.shareNewMeal(meal).subscribe(
             success => {
@@ -217,6 +220,7 @@ export class MealTableComponent implements OnInit, DoCheck {
                 });
                 this.sharedMeal.name = '';
                 this.sharedMeal.info = '';
+                this.sharedMeal.tags = [];
               }
             },
             (error: Error) => {
@@ -229,12 +233,27 @@ export class MealTableComponent implements OnInit, DoCheck {
         } else {
           this.sharedMeal.name = '';
           this.sharedMeal.info = '';
+          this.sharedMeal.tags = [];
         }
       },
       dismissed => {
         this.sharedMeal.name = '';
         this.sharedMeal.info = '';
+        this.sharedMeal.tags = [];
       }
     );
+  }
+
+  addTagToSharedMealTags(char) {
+    if (this.sharedMealTag.length >= 3 && char === ',') {
+      this.sharedMeal.tags.push(
+        this.sharedMealTag.slice(0, this.sharedMealTag.length - 1)
+      );
+      this.sharedMealTag = '';
+    }
+  }
+
+  removeTagFromSharedMealTags(index) {
+    this.sharedMeal.tags.splice(index, 1);
   }
 }

@@ -12,7 +12,8 @@
         <li *ngFor="let user of users; let i = index;" class="big-list lead">
           <div class="row">
             <div class="col-10 list-name" (click)="openUserModal(userModal, user)">
-              {{ user.username}}
+              {{ user.username}} <span class="text-muted" *ngIf="user.lastLogin">- {{ user.lastLogin
+                | date:('dd.MM.yyyy klo HH:mm:ss') }}</span>
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteUser(i)" title="Poista käyttäjä"></i>
@@ -59,7 +60,7 @@
         <li *ngFor="let feedback of feedbacks; let i = index;" class="big-list lead">
           <div class="row">
             <div class="col-10 list-name" (click)="openFeedbackModal(feedbackModal, feedback)">
-              {{ feedback.username}} - {{ feedback.createdAt | date:'dd.MM.yyy' }}
+              {{ feedback.username}} - {{ feedback.createdAt | date:'dd.MM.yyyy' }}
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteFeedback(i)" title="Poista palaute"></i>
@@ -126,7 +127,7 @@
         <li *ngFor="let meal of sharedMeals; let i = index;" class="big-list lead">
           <div class="row">
             <div class="col-10 list-name">
-              {{ meal.username}} - {{ meal.createdAt | date:'dd.MM.yyy' }} - {{ meal.name }}
+              {{ meal.username}} - {{ meal.createdAt | date:'dd.MM.yyyy' }} - {{ meal.name }}
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="Poista ateria"></i>
@@ -148,7 +149,7 @@
           <div class="row">
             <div class="col-10 list-name">
               <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a> - {{
-              day.createdAt | date:'dd.MM.yyy' }}
+              day.createdAt | date:'dd.MM.yyyy' }}
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteSharedDay(i)" title="Poista linkki"></i>
@@ -288,7 +289,7 @@
   <div class="modal-body">
     <div class="container">
       <p>{{ selectedFeedback.feedback }}</p>
-      <p>{{ selectedFeedback.username }} - {{ selectedFeedback.createdAt | date:'dd.MM.yyy' }}</p>
+      <p>{{ selectedFeedback.username }} - {{ selectedFeedback.createdAt | date:'dd.MM.yyyy' }}</p>
       <form #feedbackForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="feedbackAnswer">Vastaus</label>
@@ -327,6 +328,12 @@
   </div>
   <div class="modal-body">
     <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <p class="lead">{{ selectedUser.username }} <span *ngIf="selectedUser.lastLogin">- {{ selectedUser.lastLogin
+              | date:('dd.MM.yyyy klo HH:mm:ss') }}</span></p>
+        </div>
+      </div>
       <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
@@ -444,8 +451,8 @@
   <div class="modal-body">
     <div class="container">
       <h5 class="h5 text-muted" *ngIf="selectedDay.username">Tekijä: {{ selectedDay.username }}</h5>
-      <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt">Luotu: {{ selectedDay.createdAt | date:'dd.MM.yyy' }}</h5>
-      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">Päivitetty: {{ selectedDay.updatedAt | date:'dd.MM.yyy'
+      <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt">Luotu: {{ selectedDay.createdAt | date:'dd.MM.yyyy' }}</h5>
+      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">Päivitetty: {{ selectedDay.updatedAt | date:'dd.MM.yyyy'
         }}</h5>
       <hr *ngIf="selectedDay.username || selectedDay.createdAt || selectedDay.updatedAt">
       <ng-container *ngFor="let meal of selectedDay.meals">

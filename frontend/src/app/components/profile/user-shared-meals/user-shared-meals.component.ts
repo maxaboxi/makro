@@ -24,6 +24,8 @@ export class UserSharedMealsComponent implements OnInit {
   sharedMealsDeleted = false;
   selectedSharedMeal: Meal;
   selectedSharedMealOrigFoods: Food[];
+  sharedMealTag = '';
+  selectedSharedMealOrigTags = undefined;
 
   constructor(
     private auth: AuthService,
@@ -118,6 +120,12 @@ export class UserSharedMealsComponent implements OnInit {
         JSON.stringify(this.selectedSharedMeal.foods)
       );
     }
+
+    if (!this.selectedSharedMealOrigTags) {
+      this.selectedSharedMealOrigTags = JSON.parse(
+        JSON.stringify(this.selectedSharedMeal.tags)
+      );
+    }
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
@@ -146,17 +154,29 @@ export class UserSharedMealsComponent implements OnInit {
                     this.sortSharedMeals(meals);
                     this.selectedSharedMealOrigFoods = undefined;
                     this.selectedSharedMeal = undefined;
+                    this.sharedMealTag = '';
+                    this.selectedSharedMealOrigTags = undefined;
+                    this.flashMessage.show('Muutokset tallennettu.', {
+                      cssClass: 'alert-success',
+                      timeout: 2000
+                    });
                   });
               }
             });
         } else {
           this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+          this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
           this.selectedSharedMealOrigFoods = undefined;
+          this.selectedSharedMealOrigTags = undefined;
+          this.sharedMealTag = '';
         }
       },
       dismissed => {
         this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+        this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
         this.selectedSharedMealOrigFoods = undefined;
+        this.selectedSharedMealOrigTags = undefined;
+        this.sharedMealTag = '';
       }
     );
   }
@@ -179,5 +199,18 @@ export class UserSharedMealsComponent implements OnInit {
         }
       });
     }
+  }
+
+  addTagToSharedMealTags(char) {
+    if (this.sharedMealTag.length >= 3 && char === ',') {
+      this.selectedSharedMeal.tags.push(
+        this.sharedMealTag.slice(0, this.sharedMealTag.length - 1)
+      );
+      this.sharedMealTag = '';
+    }
+  }
+
+  removeTagFromSharedMealTags(index) {
+    this.selectedSharedMeal.tags.splice(index, 1);
   }
 }
