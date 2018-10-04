@@ -13,6 +13,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AboutComponent } from './components/about/about.component';
 import { SharedMealsComponent } from './components/shared-meals/shared-meals.component';
 import { QaComponent } from './components/qa/qa.component';
+import { QuestionComponent } from './components/qa/question/question.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -26,8 +27,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'qa', component: QaComponent, canActivate: [AuthGuard] },
+  { path: 'question', component: QuestionComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  { path: '**', component: DashboardComponent }
 ];
 
 @NgModule({

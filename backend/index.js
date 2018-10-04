@@ -9,6 +9,8 @@ const sharedDays = require('./routes/sharedDays');
 const sharedMeals = require('./routes/sharedMeals');
 const questions = require('./routes/questions');
 const answers = require('./routes/answers');
+const comments = require('./routes/comments');
+const votes = require('./routes/votes');
 const admin = require('./routes/admin');
 const config = require('./config/config.json');
 const options = {
@@ -41,7 +43,9 @@ server.use(
   sharedDays,
   sharedMeals,
   questions,
-  answers
+  answers,
+  comments,
+  votes
 );
 
 server.listen(port, () => {

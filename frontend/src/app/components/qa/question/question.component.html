@@ -1,20 +1,19 @@
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title text-muted">
-      {{ question.question }}
-    </h5>
-    <ng-container *ngIf="answer">
-      <hr>
-      <h5 class="card-title text-muted">Vastaus</h5>
-      <p class="lead">{{ answer.username }}</p>
-      <p class="text-muted answer-text">Vastattu: {{ answer.createdAt | date:('dd.MM.yyyy klo HH:mm') }}</p>
-      <p class="lead">{{ answer.answer }}</p>
-      <p class="float-left">
-        <i class="far fa-thumbs-up" (click)="vote('+')"></i><i class="ml-3 far fa-thumbs-down" (click)="vote('-')"></i>
-      </p>
-      <span class="answer-button float-right text-muted" (click)="openCommentModal(commentModal)">Kommentoi</span>
-    </ng-container>
-    <span *ngIf="!answer" class="answer-button float-right text-muted" (click)="openAnswerModal(answerModal)">Vastaa</span>
+<div class="container mt-3 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ng-container *ngIf="question">
+        <h5 class="card-title text-muted">
+          {{ question.question }}
+        </h5>
+        <p class="text-muted lead" *ngIf="question.info"> {{ question.info }}</p>
+        <p class="answer-button text-right text-muted" (click)="openAnswerModal(answerModal)">Vastaa</p>
+      </ng-container>
+      <ng-container *ngIf="answers && answers.length > 0">
+        <ng-container *ngFor="let answer of answers">
+          <app-question-answer [user]="user" [answer]="answer"></app-question-answer>
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>
 
@@ -46,44 +45,6 @@
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!answerForm.form.valid">
-                Lisää
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #commentModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Lisää kommentti</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="container">
-      <form #commentForm="ngForm" (ngSubmit)="modal.close('save')">
-        <div class="form-group">
-          <label for="question">Kommenttisi</label>
-          <textarea type="text" name="comment" class="form-control" #c="ngModel" [(ngModel)]="commentText" [ngClass]="{'is-invalid':c.errors && c.touched}"
-            minlength="5" required></textarea>
-          <div [hidden]="!c.errors?.required" class="invalid-feedback">
-            Vaadittu kenttä
-          </div>
-          <div [hidden]="!c.errors?.minlength" class="invalid-feedback">
-            Kommentin täytyy olla vähintään 5 merkkiä pitkä
-          </div>
-        </div>
-        <div class="container text-center">
-          <div class="row">
-            <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
-            </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!commentForm.form.valid">
                 Lisää
               </button>
             </div>

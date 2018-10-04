@@ -13,7 +13,7 @@ const logger = winston.createLogger({
   format: winston.format.json(),
   transports: [
     new winston.transports.File({
-      filename: path.join(__dirname, '../logs', 'answers.error.log')
+      filename: path.join(__dirname, '../logs', 'comments.error.log')
     })
   ]
 });
@@ -53,8 +53,10 @@ router.get('/getallcomments/:id', (req, res) => {
 router.post('/addcomment', (req, res) => {
   const comment = new Comment({
     username: req.body.username,
+    userId: req.body.userId,
     comment: req.body.comment,
-    postId: req.body.postId
+    postId: req.body.postId,
+    replyTo: req.body.replyTo
   });
 
   Comment.addNewComment(comment, (err, cb) => {
@@ -72,3 +74,5 @@ router.post('/addcomment', (req, res) => {
     }
   });
 });
+
+module.exports = router;

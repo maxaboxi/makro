@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { User } from '../../../models/User';
-import { FoodService } from '../../../services/food.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-search',
@@ -54,15 +52,10 @@ export class SearchComponent implements OnInit {
     return this._user.getValue();
   }
 
-  @Output()
-  changed = new EventEmitter<any>();
-
   constructor(
     private modalService: NgbModal,
     private auth: AuthService,
-    private foodService: FoodService,
-    private addedFoodsService: AddedFoodsService,
-    private flashMessage: FlashMessagesService
+    private addedFoodsService: AddedFoodsService
   ) {}
 
   ngOnInit() {

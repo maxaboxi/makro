@@ -31,6 +31,10 @@ module.exports.getAllQuestions = callback => {
     .exec(callback);
 };
 
+module.exports.getQuestionWithId = (id, callback) => {
+  question.findById({ _id: id }, callback);
+};
+
 module.exports.saveQuestion = (q, callback) => {
   q.save(callback);
 };

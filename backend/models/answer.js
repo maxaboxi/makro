@@ -13,11 +13,6 @@ const AnswerSchema = mongoose.Schema(
     questionId: {
       type: String,
       required: true
-    },
-    votes: {
-      type: Number,
-      required: false,
-      default: 0
     }
   },
   { timestamps: true }
@@ -29,7 +24,7 @@ module.exports.getAllAnswers = (questionId, callback) => {
   const query = { questionId: questionId };
   answer
     .find()
-    .sort({ createdAt: -1 })
+    .sort({ votes: -1 })
     .exec(query, callback);
 };
 

@@ -73,4 +73,22 @@ router.get('/getallquestions', (req, res) => {
   });
 });
 
+router.get('/getquestion/:id', (req, res) => {
+  const id = req.params.id;
+  Question.getQuestionWithId(id, (err, question) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(question);
+    }
+  });
+});
+
 module.exports = router;

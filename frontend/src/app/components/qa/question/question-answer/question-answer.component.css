@@ -1,0 +1,18 @@
+.answer-button:hover {
+  color: #ff3b3f !important;
+  cursor: pointer;
+}
+
+.answer-text {
+  font-size: 14px;
+}
+
+.far:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}
+
+.comment-button:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}

@@ -1,12 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '../../../models/User';
-import { Question } from '../../../models/Question';
+import { Component, OnInit } from '@angular/core';
 import { QaService } from '../../../services/qa.service';
-import { Answer } from '../../../models/Answer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { User } from '../../../models/User';
+import { AuthService } from '../../../services/auth.service';
+import { Question } from '../../../models/Question';
+import { Answer } from '../../../models/Answer';
 import { Comment } from '../../../models/Comment';
+import { Vote } from '../../../models/Vote';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-question',
@@ -14,44 +16,41 @@ import { Comment } from '../../../models/Comment';
   styleUrls: ['./question.component.css']
 })
 export class QuestionComponent implements OnInit {
-  private _user = new BehaviorSubject<User>(null);
-  private _question = new BehaviorSubject<Question>(null);
-  answers: Answer[];
-  answer: Answer;
+  user: User;
   answerText = '';
   commentText = '';
-  voted = false;
-
-  @Input()
-  set user(user) {
-    this._user.next(user);
-  }
-
-  get user() {
-    return this._user.getValue();
-  }
-
-  @Input()
-  set question(q) {
-    this._question.next(q);
-  }
-
-  get question() {
-    return this._question.getValue();
-  }
+  question: Question;
+  answer: Answer;
+  answers: Answer[];
+  queryParams = {};
 
   constructor(
+    private auth: AuthService,
     private qaService: QaService,
     private modalService: NgbModal,
-    private flashMessage: FlashMessagesService
-  ) {}
+    private flashMessage: FlashMessagesService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.route.queryParams.subscribe(qp => {
+      Object.keys(qp).forEach(param => {
+        this.queryParams[param] = qp[param];
+      });
+    });
+  }
 
   ngOnInit() {
-    this.qaService
-      .getTopResponseToQuestion(this.question._id)
-      .subscribe(answer => {
-        this.answer = answer[0];
+    this.auth.user.subscribe(user => (this.user = user));
+    if (Object.keys(this.queryParams).length > 0) {
+      this.qaService.getQuestionWithId(this.queryParams['id']).subscribe(q => {
+        this.question = q;
       });
+      this.qaService
+        .getAllResponsesToQuestion(this.queryParams['id'])
+        .subscribe(a => (this.answers = a));
+    } else {
+      this.router.navigate(['/qa']);
+    }
   }
 
   openAnswerModal(content) {
@@ -67,8 +66,8 @@ export class QuestionComponent implements OnInit {
             res => {
               if (res['success']) {
                 this.qaService
-                  .getTopResponseToQuestion(this.question._id)
-                  .subscribe(answer => (this.answer = answer));
+                  .getAllResponsesToQuestion(this.question._id)
+                  .subscribe(answers => (this.answers = answers));
                 this.flashMessage.show('Vastaus lisätty', {
                   cssClass: 'alert-success',
                   timeout: 2000
@@ -92,65 +91,5 @@ export class QuestionComponent implements OnInit {
         this.answerText = '';
       }
     );
-  }
-
-  openCommentModal(content) {
-    this.modalService.open(content, { centered: true }).result.then(
-      result => {
-        if (result === 'save') {
-          const comment: Comment = {
-            postId: this.answer._id,
-            username: this.user.username,
-            comment: this.commentText
-          };
-          this.qaService.postNewComment(comment).subscribe(
-            res => {
-              if (res['success']) {
-                this.qaService
-                  .getTopResponseToQuestion(this.question._id)
-                  .subscribe(answer => (this.answer = answer[0]));
-                this.flashMessage.show('Kommentti lisätty', {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.commentText = '';
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
-        } else {
-          this.commentText = '';
-        }
-      },
-      dismissed => {
-        this.commentText = '';
-      }
-    );
-  }
-
-  vote(c) {
-    let vote = {
-      userId: this.user._id,
-      postId: this.answer._id,
-      vote: 0
-    };
-    if (c === '+') {
-      vote.vote = 1;
-      this.qaService.votePost(vote).subscribe(res => {
-        console.log(res);
-      });
-    }
-
-    if (c === '-') {
-      vote.vote = -1;
-      this.qaService.votePost(vote).subscribe(res => {
-        console.log(res);
-      });
-    }
   }
 }

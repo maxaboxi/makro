@@ -6,6 +6,10 @@ const CommentSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    userId: {
+      type: String,
+      required: true
+    },
     comment: {
       type: String,
       required: true
@@ -13,19 +17,22 @@ const CommentSchema = mongoose.Schema(
     postId: {
       type: String,
       required: true
+    },
+    replyTo: {
+      type: String,
+      required: false
     }
   },
   { timestamps: true }
 );
 
-const comment = (module.exports = mongoose.model('comment', CommentSchema));
+const Comment = (module.exports = mongoose.model('comment', CommentSchema));
 
 module.exports.getAllCommentsWithId = (id, callback) => {
   const query = { postId: id };
-  comment
-    .find()
-    .sort({ createdAt: -1 })
-    .exec(query, callback);
+  Comment.find(query)
+    .sort({ votes: -1 })
+    .exec(callback);
 };
 
 module.exports.addNewComment = (c, callback) => {

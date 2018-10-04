@@ -1,0 +1,66 @@
+<hr>
+<h5 class="text-muted">Vastaus</h5>
+<p class="lead">{{ answer.username }}</p>
+<p class="text-muted answer-text">Vastattu: {{ answer.createdAt | date:('dd.MM.yyyy klo HH:mm') }}</p>
+<p class="lead">{{ answer.answer }}</p>
+<div class="d-flex">
+  <i *ngIf="!userVote || userVote === -1" class="far fa-thumbs-up" (click)="vote('+')"></i>
+  <i *ngIf="userVote && userVote === 1" class="fas fa-thumbs-up" style="color:#ff3b3f" (click)="vote('-', 'replace')"></i>
+  <i *ngIf="!userVote || userVote === 1" class="ml-3 far fa-thumbs-down" (click)="vote('-')"></i>
+  <i *ngIf="userVote && userVote === -1" class="ml-3 fas fa-thumbs-down" (click)="vote('-', 'replace')" style="color:#ff3b3f"></i>
+  <span class="ml-3 text-muted">{{ pointsTotal }} pistettä</span>
+  <span class="answer-button ml-auto text-muted" (click)="openCommentModal(commentModal, answer)">Kommentoi</span>
+</div>
+<p (click)="showOnlyFirstComment = false" class="text-muted comment-button" *ngIf="showOnlyFirstComment && answer.comments?.length > 1">Näytä
+  lisää
+  kommentteja</p>
+<p (click)="showOnlyFirstComment = true" class="text-muted comment-button" *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">Piilota</p>
+<div class="bg-light ml-5">
+  <app-answer-comment *ngIf="showOnlyFirstComment && answer.comments?.length > 0" [comment]="answer.comments[0]" [user]="user"
+    (commented)="fetchComments($event)"></app-answer-comment>
+
+  <div *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">
+    <ng-container *ngFor="let comment of answer.comments">
+      <app-answer-comment [comment]="comment" [user]="user" (commented)="fetchComments($event)"></app-answer-comment>
+    </ng-container>
+  </div>
+</div>
+
+
+<ng-template #commentModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Lisää kommentti</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #commentForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="question">Kommenttisi</label>
+          <textarea type="text" name="comment" class="form-control" #c="ngModel" [(ngModel)]="commentText" [ngClass]="{'is-invalid':c.errors && c.touched}"
+            minlength="5" required></textarea>
+          <div [hidden]="!c.errors?.required" class="invalid-feedback">
+            Vaadittu kenttä
+          </div>
+          <div [hidden]="!c.errors?.minlength" class="invalid-feedback">
+            Kommentin täytyy olla vähintään 5 merkkiä pitkä
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!commentForm.form.valid">
+                Lisää
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

@@ -4,6 +4,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
 import { Comment } from '../models/Comment';
+import { Vote } from '../models/Vote';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,26 @@ export class QaService {
     });
 
     return this.http.get<Question[]>(url, { headers: headers });
+  }
+
+  getQuestionWithId(id) {
+    const url = `${this.baseUrl}/getquestion/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Question>(url, { headers: headers });
+  }
+
+  getCommentsToAnswerWithId(id) {
+    const url = `${this.baseUrl}/getallcomments/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Comment[]>(url, { headers: headers });
   }
 
   getTopResponseToQuestion(questionId) {
@@ -62,7 +83,7 @@ export class QaService {
   }
 
   postNewComment(comment: Comment) {
-    const url = `${this.baseUrl}/postnewquestion`;
+    const url = `${this.baseUrl}/addcomment`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -71,7 +92,7 @@ export class QaService {
     return this.http.post(url, comment, { headers: headers });
   }
 
-  votePost(vote) {
+  votePost(vote: Vote) {
     const url = `${this.baseUrl}/votepost`;
 
     const headers = new HttpHeaders({
@@ -79,6 +100,26 @@ export class QaService {
     });
 
     return this.http.post(url, vote, { headers: headers });
+  }
+
+  replacePreviousVote(vote: Vote) {
+    const url = `${this.baseUrl}/replacepreviousvote`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, vote, { headers: headers });
+  }
+
+  getVotesWithId(id) {
+    const url = `${this.baseUrl}/getallvoteswithpostid/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Vote[]>(url, { headers: headers });
   }
 
   addAnswerToQuestion(answer: Answer) {

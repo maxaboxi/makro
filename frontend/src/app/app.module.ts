@@ -30,7 +30,10 @@ import { AddedFoodsComponent } from './components/profile/added-foods/added-food
 import { UserSharedMealsComponent } from './components/profile/user-shared-meals/user-shared-meals.component';
 import { SharedDaysComponent } from './components/profile/shared-days/shared-days.component';
 import { QaComponent } from './components/qa/qa.component';
+import { QuestionCardComponent } from './components/qa/question-card/question-card.component';
 import { QuestionComponent } from './components/qa/question/question.component';
+import { QuestionAnswerComponent } from './components/qa/question/question-answer/question-answer.component';
+import { AnswerCommentComponent } from './components/qa/question/question-answer/answer-comment/answer-comment.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,10 @@ import { QuestionComponent } from './components/qa/question/question.component';
     UserSharedMealsComponent,
     SharedDaysComponent,
     QaComponent,
-    QuestionComponent
+    QuestionCardComponent,
+    QuestionComponent,
+    QuestionAnswerComponent,
+    AnswerCommentComponent
   ],
   imports: [
     BrowserModule,
