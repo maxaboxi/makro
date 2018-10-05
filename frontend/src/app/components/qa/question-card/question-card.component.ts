@@ -4,7 +4,6 @@ import { User } from '../../../models/User';
 import { Question } from '../../../models/Question';
 import { QaService } from '../../../services/qa.service';
 import { Answer } from '../../../models/Answer';
-import { Vote } from '../../../models/Vote';
 import { Router } from '@angular/router';
 
 @Component({
@@ -48,27 +47,5 @@ export class QuestionCardComponent implements OnInit {
 
   openQuestion(qId) {
     this.router.navigate(['/question'], { queryParams: { id: qId } });
-  }
-
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.answer._id,
-      vote: 0
-    };
-    if (c === '+') {
-      vote.vote = 1;
-      this.qaService.votePost(vote).subscribe(res => {
-        console.log(res);
-      });
-    }
-
-    if (c === '-') {
-      vote.vote = -1;
-      this.qaService.votePost(vote).subscribe(res => {
-        console.log(res);
-      });
-    }
   }
 }

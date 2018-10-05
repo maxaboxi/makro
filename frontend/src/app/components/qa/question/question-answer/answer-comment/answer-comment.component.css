@@ -15,3 +15,17 @@
 .padding {
   padding: 1rem;
 }
+
+.mobile {
+  visibility: hidden;
+}
+
+@media screen and (max-width: 360px) {
+  .hidden {
+    visibility: hidden;
+  }
+
+  .mobile {
+    visibility: visible;
+  }
+}

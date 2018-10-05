@@ -1,5 +1,5 @@
 .answer-button:hover {
-  color: #ff3b3f;
+  color: #ff3b3f !important;
   cursor: pointer;
 }
 

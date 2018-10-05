@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Vote = require('../models/vote');
+const Answer = require('../models/answer');
+const Comment = require('../models/comment');
+const Question = require('../models/question');
 const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -32,9 +35,10 @@ router.use((req, res, next) => {
   }
 });
 
-router.get('/getallvoteswithpostid/:id', (req, res) => {
-  const postId = req.params.id;
-  Vote.getAllVotesWithPostId(postId, (err, comments) => {
+router.post('/getuservotewithpostid', (req, res) => {
+  const userId = req.body.userId;
+  const postId = req.body.postId;
+  Vote.getUserVoteWithPostId(userId, postId, (err, vote) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -45,7 +49,7 @@ router.get('/getallvoteswithpostid/:id', (req, res) => {
       res.json({ success: false, msg: 'Something went wrong.' });
     } else {
       res.status(200);
-      res.json(comments);
+      res.json(vote);
     }
   });
 });
@@ -76,7 +80,7 @@ router.post('/votepost', (req, res) => {
     postId: req.body.postId
   });
 
-  Vote.addNewVote(vote, (err, cb) => {
+  Vote.addNewVote(vote, (err, vote) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -86,6 +90,8 @@ router.post('/votepost', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Äänestys epäonnistui' });
     } else {
+      Answer.incrementPointTotal(vote.postId, vote.vote);
+      Comment.incrementPointTotal(vote.postId, vote.vote);
       res.status(200);
       res.json({ success: true, msg: 'Ääni rekisteröity' });
     }
@@ -93,14 +99,13 @@ router.post('/votepost', (req, res) => {
 });
 
 router.post('/replacepreviousvote', (req, res) => {
-  const vote = new Vote({
+  const vote = {
     userId: req.body.userId,
     username: req.body.username,
     vote: req.body.vote,
     postId: req.body.postId
-  });
-
-  Vote.replaceVote(vote, (err, cb) => {
+  };
+  Vote.replaceVote(vote, (err, vote) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -110,6 +115,8 @@ router.post('/replacepreviousvote', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Äänestys epäonnistui' });
     } else {
+      Answer.incrementPointTotal(vote.postId, vote.vote);
+      Comment.incrementPointTotal(vote.postId, vote.vote);
       res.status(200);
       res.json({ success: true, msg: 'Ääni rekisteröity' });
     }

@@ -112,14 +112,19 @@ export class QaService {
     return this.http.post(url, vote, { headers: headers });
   }
 
-  getVotesWithId(id) {
-    const url = `${this.baseUrl}/getallvoteswithpostid/${id}`;
+  getUserVoteWithId(userId, postId) {
+    const url = `${this.baseUrl}/getuservotewithpostid`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Vote[]>(url, { headers: headers });
+    const data = {
+      userId: userId,
+      postId: postId
+    };
+
+    return this.http.post<Vote>(url, data, { headers: headers });
   }
 
   addAnswerToQuestion(answer: Answer) {

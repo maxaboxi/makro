@@ -5,4 +5,5 @@ export interface Comment {
   comment: String;
   postId: String;
   replyTo?: String;
+  pointsTotal?: Number;
 }

@@ -17,6 +17,11 @@ const QuestionSchema = mongoose.Schema(
     tags: {
       type: Array,
       required: true
+    },
+    pointsTotal: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   { timestamps: true }
@@ -37,4 +42,9 @@ module.exports.getQuestionWithId = (id, callback) => {
 
 module.exports.saveQuestion = (q, callback) => {
   q.save(callback);
+};
+
+module.exports.incrementPointTotal = (id, value) => {
+  const query = { _id: id };
+  Question.findByIdAndUpdate(query, { $inc: { pointsTotal: value } }).exec();
 };

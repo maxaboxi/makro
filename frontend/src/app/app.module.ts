@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { TinymceModule } from 'angular2-tinymce';
 
 import { AuthInterceptor } from './auth.interceptor';
 
@@ -70,7 +71,81 @@ import { AnswerCommentComponent } from './components/qa/question/question-answer
     HttpClientModule,
     AppRoutingModule,
     NgbModule.forRoot(),
-    FlashMessagesModule.forRoot()
+    FlashMessagesModule.forRoot(),
+    TinymceModule.withConfig({
+      auto_focus: true,
+      branding: false,
+      menubar: false,
+      plugins: ['emoticons'],
+      style_formats: [
+        {
+          title: 'Headers',
+          items: [
+            { title: 'Heading 1', block: 'h1' },
+            { title: 'Heading 2', block: 'h2' },
+            { title: 'Heading 3', block: 'h3' },
+            { title: 'Heading 4', block: 'h4' },
+            { title: 'Heading 5', block: 'h5' },
+            { title: 'Heading 6', block: 'h6' }
+          ]
+        },
+
+        {
+          title: 'Inline',
+          items: [
+            { title: 'Bold', inline: 'b', icon: 'bold' },
+            { title: 'Italic', inline: 'i', icon: 'italic' },
+            { title: 'Superscript', inline: 'sup', icon: 'superscript' },
+            { title: 'Subscript', inline: 'sub', icon: 'subscript' },
+            { title: 'Code', inline: 'code', icon: 'code' }
+          ]
+        },
+
+        {
+          title: 'Blocks',
+          items: [
+            { title: 'Paragraph', block: 'p' },
+            { title: 'Blockquote', block: 'blockquote' },
+            { title: 'Div', block: 'div' },
+            { title: 'Pre', block: 'pre' }
+          ]
+        },
+
+        {
+          title: 'Alignment',
+          items: [
+            {
+              title: 'Left',
+              block: 'div',
+              styles: { textAlign: 'left' },
+              icon: 'alignleft'
+            },
+            {
+              title: 'Center',
+              block: 'div',
+              styles: { textAlign: 'center' },
+              icon: 'aligncenter'
+            },
+            {
+              title: 'Right',
+              block: 'div',
+              styles: { textAlign: 'right' },
+              icon: 'alignright'
+            },
+            {
+              title: 'Justify',
+              block: 'div',
+              styles: { textAlign: 'justify' },
+              icon: 'alignjustify'
+            }
+          ]
+        }
+      ],
+      toolbar: [
+        'undo redo | styleselect | alignleft aligncenter alignright alignjustify outdent indent',
+        'bold italic blockquote | emoticons'
+      ]
+    })
   ],
   providers: [
     {

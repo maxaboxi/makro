@@ -17,7 +17,7 @@ export class AnswerCommentComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   commentText = '';
   commentVotes: Vote[];
-  pointsTotal = 0;
+  pointsTotal;
   userVote;
 
   @Input()
@@ -48,19 +48,18 @@ export class AnswerCommentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.fetchVotes();
-  }
-
-  fetchVotes() {
-    this.qaService.getVotesWithId(this.comment._id).subscribe(votes => {
-      this.commentVotes = votes;
-      this.commentVotes.forEach(v => {
-        this.pointsTotal += v.vote;
-        if (v.userId === this.user._id) {
-          this.userVote = v.vote;
+    this.pointsTotal = this.comment.pointsTotal;
+    this.qaService
+      .getUserVoteWithId(this.user._id, this.comment._id)
+      .subscribe(vote => {
+        if (vote[0]) {
+          if (vote[0].vote > 0) {
+            this.userVote = 'up';
+          } else {
+            this.userVote = 'down';
+          }
         }
       });
-    });
   }
 
   openCommentModal(content) {
@@ -98,41 +97,51 @@ export class AnswerCommentComponent implements OnInit {
     );
   }
 
-  vote(c, replace) {
+  vote(c) {
     let vote: Vote = {
       userId: this.user._id,
       username: this.user.username,
       postId: this.comment._id,
       vote: 0
     };
-    if (!replace) {
+    if (!this.userVote) {
       if (c === '+') {
         vote.vote = 1;
+        this.userVote = 'up';
         this.qaService.votePost(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
 
       if (c === '-') {
         vote.vote = -1;
+        this.userVote = 'down';
         this.qaService.votePost(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
     } else {
-      this.pointsTotal = 0;
       if (c === '+') {
-        vote.vote = 1;
+        vote.vote = 2;
+        this.userVote = 'up';
         this.qaService.replacePreviousVote(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
 
       if (c === '-') {
-        this.pointsTotal = 0;
-        vote.vote = -1;
+        vote.vote = -2;
+        this.userVote = 'down';
         this.qaService.replacePreviousVote(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
     }

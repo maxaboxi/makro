@@ -16,10 +16,11 @@ import { Vote } from '../../../../models/Vote';
 export class QuestionAnswerComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _answer = new BehaviorSubject<Answer>(null);
+  private _showComment = new BehaviorSubject<boolean>(true);
   commentText = '';
   showOnlyFirstComment = true;
   answerVotes: Vote[];
-  pointsTotal = 0;
+  pointsTotal;
   userVote;
 
   @Input()
@@ -39,6 +40,16 @@ export class QuestionAnswerComponent implements OnInit {
   get answer() {
     return this._answer.getValue();
   }
+
+  @Input()
+  set showComment(b) {
+    this._showComment.next(b);
+  }
+
+  get showComment() {
+    return this._showComment.getValue();
+  }
+
   constructor(
     private qaService: QaService,
     private modalService: NgbModal,
@@ -47,10 +58,21 @@ export class QuestionAnswerComponent implements OnInit {
 
   ngOnInit() {
     if (this.answer) {
+      this.pointsTotal = this.answer.pointsTotal;
       this.qaService
         .getCommentsToAnswerWithId(this.answer._id)
         .subscribe(comments => (this.answer.comments = comments));
-      this.fetchVotes();
+      this.qaService
+        .getUserVoteWithId(this.user._id, this.answer._id)
+        .subscribe(vote => {
+          if (vote[0]) {
+            if (vote[0].vote > 0) {
+              this.userVote = 'up';
+            } else {
+              this.userVote = 'down';
+            }
+          }
+        });
     }
   }
 
@@ -95,41 +117,51 @@ export class QuestionAnswerComponent implements OnInit {
     );
   }
 
-  vote(c, replace) {
+  vote(c) {
     let vote: Vote = {
       userId: this.user._id,
       username: this.user.username,
       postId: this.answer._id,
       vote: 0
     };
-    if (!replace) {
+    if (!this.userVote) {
       if (c === '+') {
         vote.vote = 1;
+        this.userVote = 'up';
         this.qaService.votePost(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
 
       if (c === '-') {
         vote.vote = -1;
+        this.userVote = 'down';
         this.qaService.votePost(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
     } else {
-      this.pointsTotal = 0;
       if (c === '+') {
-        vote.vote = 1;
+        vote.vote = 2;
+        this.userVote = 'up';
         this.qaService.replacePreviousVote(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
 
       if (c === '-') {
-        this.pointsTotal = 0;
-        vote.vote = -1;
+        vote.vote = -2;
+        this.userVote = 'down';
         this.qaService.replacePreviousVote(vote).subscribe(res => {
-          this.fetchVotes();
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
         });
       }
     }
@@ -141,17 +173,5 @@ export class QuestionAnswerComponent implements OnInit {
       .subscribe(comments => {
         this.answer.comments = comments;
       });
-  }
-
-  fetchVotes() {
-    this.qaService.getVotesWithId(this.answer._id).subscribe(votes => {
-      this.answerVotes = votes;
-      this.answerVotes.forEach(v => {
-        this.pointsTotal += v.vote;
-        if (v.userId === this.user._id) {
-          this.userVote = v.vote;
-        }
-      });
-    });
   }
 }

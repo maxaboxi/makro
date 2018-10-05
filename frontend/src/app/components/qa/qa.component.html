@@ -1,12 +1,16 @@
-<div class="container">
+<div class="container mb-5">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <h1 class="display-4 text-center">Kysy ja muut vastaavat</h1>
       <button class="btn btn-block btn-outline-success mt-3" (click)="openModal(questionModal)" title="Lisää kysymys"><i
           class="fas fa-plus"></i></button>
     </div>
   </div>
   <div class="row justify-content-center">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-3">
+    <div *ngIf="questions && questions.length === 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-3">
+      <h1 class="display-4 text-center">Ei kysymyksiä</h1>
+    </div>
+    <div *ngIf="questions && questions.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-3">
       <app-question-card *ngFor="let q of questions" [user]="user" [question]="q"></app-question-card>
     </div>
   </div>
@@ -14,7 +18,7 @@
 
 <ng-template #questionModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Lisää palaute</h4>
+    <h4 class="modal-title">Lisää kysymys</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -35,7 +39,7 @@
         </div>
         <div class="form-group">
           <label for="description">Lisätietoja</label>
-          <textarea type="textarea" name="description" class="form-control" [(ngModel)]="question.info" rows="3"></textarea>
+          <app-tinymce [(ngModel)]="question.info" name="description"></app-tinymce>
         </div>
         <div class="form-group">
           <label for="hashtags">Tagit (erota pilkulla)</label>

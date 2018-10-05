@@ -34,11 +34,16 @@ module.exports.getAllVotesWithUserId = (id, callback) => {
   Vote.find(query, callback);
 };
 
+module.exports.getUserVoteWithPostId = (userId, postId, callback) => {
+  const query = { userId: userId, postId: postId };
+  Vote.find(query, callback);
+};
+
 module.exports.addNewVote = (v, callback) => {
   v.save(callback);
 };
 
 module.exports.replaceVote = (v, callback) => {
   const query = { postId: v.postId, userId: v.userId };
-  Vote.findOneAndUpdate(query, v, callback);
+  Vote.findOneAndUpdate(query, v, { new: true }, callback);
 };
