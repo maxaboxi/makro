@@ -28,19 +28,22 @@
       <i class="fas fa-dove"></i>
       Proteiini: <b>{{ totals.protein.toFixed(0) }}g / {{ targets?.userAddedProteinTarget ?
         targets?.userAddedProteinTarget.toFixed(0) :
-        targets?.proteinTarget.toFixed(0) }}g ({{ (((totals.protein * 4) / totals.energy) * 100).toFixed(1)}}%)</b>
+        targets?.proteinTarget.toFixed(0) }}g ({{ totals.protein ? (((totals.protein * 4) / totals.energy) *
+        100).toFixed(1) : 0}}%)</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-cookie"></i>
       HH: <b>{{ totals.carb.toFixed(0) }}g / {{ targets?.userAddedCarbTarget ? targets?.userAddedCarbTarget.toFixed(0)
         :
-        targets?.carbTarget.toFixed(0) }}g ({{ (((totals.carb * 4) / totals.energy) * 100).toFixed(1)}}%)</b>
+        targets?.carbTarget.toFixed(0) }}g ({{ totals.carb ? (((totals.carb * 4) / totals.energy) * 100).toFixed(1) :
+        0}}%)</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
       <i class="fas fa-burn"></i>
       Rasva: <b>{{ totals.fat.toFixed(0) }}g / {{ targets?.userAddedFatTarget ? targets?.userAddedFatTarget.toFixed(0)
         :
-        targets?.fatTarget.toFixed(0) }}g ({{ (((totals.fat * 9) / totals.energy) * 100).toFixed(1)}}%)</b>
+        targets?.fatTarget.toFixed(0) }}g ({{ totals.fat ? (((totals.fat * 9) / totals.energy) * 100).toFixed(1) :
+        0}}%)</b>
     </div>
   </div>
 </div>
