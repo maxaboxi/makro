@@ -4,6 +4,9 @@ export interface Comment {
   userId: String;
   comment: String;
   postId: String;
+  questionId: String;
   replyTo?: String;
   pointsTotal?: Number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

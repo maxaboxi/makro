@@ -15,9 +15,6 @@ export class AddedFoodsComponent implements OnInit {
   user: User;
   selectedFood: Food;
   userAddedFoods: Food[] = [];
-  userAddedFoodsFirst: Food[] = [];
-  userAddedFoodsSecond: Food[] = [];
-  foodsSplit = false;
   deletedFoods = [];
   foodsDeleted = false;
 
@@ -35,63 +32,19 @@ export class AddedFoodsComponent implements OnInit {
         this.foodService
           .getFoodsAddedByUser(this.user.username)
           .subscribe(foods => {
-            this.sortUserAddedFoods(foods);
+            this.userAddedFoods = foods;
           });
       }
     });
   }
 
-  sortUserAddedFoods(foods) {
-    if (foods.length <= 10) {
-      this.foodsSplit = false;
-      this.userAddedFoods = foods;
-    } else {
-      this.foodsSplit = true;
-      if (foods.length % 2 === 0) {
-        this.userAddedFoodsFirst = foods.splice(
-          0,
-          Math.floor(foods.length / 2)
-        );
-      } else {
-        this.userAddedFoodsFirst = foods.splice(
-          0,
-          Math.floor(foods.length / 2) + 1
-        );
-      }
-      this.userAddedFoodsSecond = foods;
-    }
+  selectFood(index) {
+    this.selectedFood = this.userAddedFoods[index];
   }
 
-  selectFood(index, array) {
-    if (array === 'userAddedFoods') {
-      this.selectedFood = this.userAddedFoods[index];
-    }
-
-    if (array === 'userAddedFoodsFirst') {
-      this.selectedFood = this.userAddedFoodsFirst[index];
-    }
-
-    if (array === 'userAddedFoodsSecond') {
-      this.selectedFood = this.userAddedFoodsSecond[index];
-    }
-  }
-
-  deleteFood(index, array) {
-    if (array === 'userAddedFoods') {
-      this.deletedFoods.push(this.userAddedFoods[index]._id);
-      this.userAddedFoods.splice(index, 1);
-    }
-
-    if (array === 'userAddedFoodsFirst') {
-      this.deletedFoods.push(this.userAddedFoodsFirst[index]._id);
-      this.userAddedFoodsFirst.splice(index, 1);
-    }
-
-    if (array === 'userAddedFoodsSecond') {
-      this.deletedFoods.push(this.userAddedFoodsSecond[index]._id);
-      this.userAddedFoodsSecond.splice(index, 1);
-    }
-
+  deleteFood(index) {
+    this.deletedFoods.push(this.userAddedFoods[index]._id);
+    this.userAddedFoods.splice(index, 1);
     this.foodsDeleted = true;
   }
 
@@ -109,7 +62,7 @@ export class AddedFoodsComponent implements OnInit {
         this.foodService
           .getFoodsAddedByUser(this.user.username)
           .subscribe(foods => {
-            this.sortUserAddedFoods(foods);
+            this.userAddedFoods = foods;
           });
       },
       (error: Error) => {
@@ -136,7 +89,7 @@ export class AddedFoodsComponent implements OnInit {
                 this.foodService
                   .getFoodsAddedByUser(this.user.username)
                   .subscribe(foods => {
-                    this.sortUserAddedFoods(foods);
+                    this.userAddedFoods = foods;
                   });
               }
             },

@@ -58,7 +58,9 @@ const FoodSchema = mongoose.Schema(
 const Food = (module.exports = mongoose.model('Food', FoodSchema));
 
 module.exports.getFoods = callback => {
-  Food.find(callback);
+  Food.find()
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };
 
 module.exports.getUserFoods = (user, callback) => {

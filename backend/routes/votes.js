@@ -77,6 +77,8 @@ router.post('/votepost', (req, res) => {
     userId: req.body.userId,
     username: req.body.username,
     vote: req.body.vote,
+    category: req.body.category,
+    content: req.body.content,
     postId: req.body.postId
   });
 
@@ -90,8 +92,14 @@ router.post('/votepost', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Äänestys epäonnistui' });
     } else {
-      Answer.incrementPointTotal(vote.postId, vote.vote);
-      Comment.incrementPointTotal(vote.postId, vote.vote);
+      if (vote.category === 'Answer') {
+        Answer.incrementPointTotal(vote.postId, vote.vote);
+      }
+
+      if (vote.category === 'Comment') {
+        Comment.incrementPointTotal(vote.postId, vote.vote);
+      }
+
       res.status(200);
       res.json({ success: true, msg: 'Ääni rekisteröity' });
     }
@@ -103,6 +111,8 @@ router.post('/replacepreviousvote', (req, res) => {
     userId: req.body.userId,
     username: req.body.username,
     vote: req.body.vote,
+    category: req.body.category,
+    content: req.body.content,
     postId: req.body.postId
   };
   Vote.replaceVote(vote, (err, vote) => {
@@ -115,8 +125,13 @@ router.post('/replacepreviousvote', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Äänestys epäonnistui' });
     } else {
-      Answer.incrementPointTotal(vote.postId, vote.vote);
-      Comment.incrementPointTotal(vote.postId, vote.vote);
+      if (vote.category === 'Answer') {
+        Answer.incrementPointTotal(vote.postId, vote.vote);
+      }
+
+      if (vote.category === 'Comment') {
+        Comment.incrementPointTotal(vote.postId, vote.vote);
+      }
       res.status(200);
       res.json({ success: true, msg: 'Ääni rekisteröity' });
     }

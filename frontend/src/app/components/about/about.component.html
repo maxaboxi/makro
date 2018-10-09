@@ -44,59 +44,84 @@
       <hr>
     </div>
   </div>
-  <div class="row justify-content-center mb-3">
+  <div class="row justify-content-center mt-2 mb-3">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <div class="card">
-        <div class="card-header lead">
-          Uudet ominaisuudet (2.2)
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Haun toimintaa parannettu.</li>
-          <li class="list-group-item">Jaetuille aterioille voi asettaa nyt tageja. Vähintään yksi on laitettava.</li>
-          <li class="list-group-item">Haku jaettuihin aterioihin. Voi hakea nimen, kuvaksen, tagin tai tekijän nimellä.</li>
-          <li class="list-group-item">Q&A lisätty.</li>
-        </ul>
-      </div>
+      <button class="btn btn-block btn-outline-primary" (click)="toggleShowOlderUpdates()">{{ showOlderUpdates ?
+        'Piilota vanhemmat päivitykset' :
+        'Näytä vanhemmat päivitykset' }}</button>
     </div>
   </div>
   <div class="row justify-content-center mb-3">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <div class="card">
         <div class="card-header lead">
-          Uudet ominaisuudet (2.1)
+          Uudet ominaisuudet (2.2.1)
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Valmiin aterian voi tallentaa muille käyttäjille käytettäväksi.</li>
-          <li class="list-group-item">Kaikki itse jakamat ateriat löytää profiilisivun kautta.</li>
+          <li class="list-group-item">Profiilisivu uudistettu.</li>
+          <li class="list-group-item">Kysymykset, vastaukset, kommentit ja annetut äänet näkyvät nyt profiilisivulla.</li>
+          <li class="list-group-item">Tavoitearvot näkyvät nyt myös prosentteina.</li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="row justify-content-center mb-5">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <div class="card">
-        <div class="card-header lead">
-          Uudet ominaisuudet (2.0)
+  <ng-container *ngIf="showOlderUpdates">
+    <div class="row justify-content-center mb-3">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header lead">
+            Uudet ominaisuudet (2.2)
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Haun toimintaa parannettu.</li>
+            <li class="list-group-item">Jaetuille aterioille voi asettaa nyt tageja. Vähintään yksi on laitettava.</li>
+            <li class="list-group-item">Haku jaettuihin aterioihin. Voi hakea nimen, kuvaksen, tagin tai tekijän
+              nimellä.</li>
+            <li class="list-group-item">Q&A lisätty.</li>
+          </ul>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Haun toimintaa parannettu.</li>
-          <li class="list-group-item">Ruokien siirtely hiirellä aterian sisällä ja aterioiden välillä.</li>
-          <li class="list-group-item">Kaikki itse lisätyt ruoat näkyvät profiilisivulla.</li>
-          <li class="list-group-item">Itse lisäämiä ruokia voi muokata profiilisivun kautta.</li>
-          <li class="list-group-item">Ruoalle voi asettaa sekä pakkaus- että annoskoon, jotka tulevat näkyviin omina
-            nappeinaan, kun ruokaa lisätään, jos ne eivät ole samat kuin oletusannoskoot.</li>
-          <li class="list-group-item">Itse lisäämiä ruokia sekä tallennettuja päiviä voi poistaa useamman kuin yhden
-            kerralla. Ruokia ja päiviä ei poisteta pysyvästi ennen kuin tallenna muutokset -nappia painetaan.</li>
-          <li class="list-group-item">Mahdollisuus jakaa suunniteltuja aterioita ja/tai päiviä.</li>
-          <li class="list-group-item">Palautteen voi jättää omalla nimimerkillä niin halutessaan.</li>
-          <li class="list-group-item">Salasanan voi vaihtaa profiilisivun kautta.</li>
-          <li class="list-group-item">Jos unohdat salasanasi, voi sen nollata kirjautumissivun kautta, mikäli olet
-            tallentanut sähköpostiosoitteen omiin tietoihin. Tällöin uusi salasana lähetetään tallennettuun
-            sähköpostiosoitteeseen.</li>
-          <li class="list-group-item">Lisätty mahdollisuus poistaa käyttäjätili.</li>
-          <li class="list-group-item">Valmiin aterian voi tallentaa muille käyttäjille käytettäväksi.</li>
-        </ul>
       </div>
     </div>
-  </div>
+    <div class="row justify-content-center mb-3">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header lead">
+            Uudet ominaisuudet (2.1)
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Valmiin aterian voi tallentaa muille käyttäjille käytettäväksi.</li>
+            <li class="list-group-item">Kaikki itse jakamat ateriat löytää profiilisivun kautta.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header lead">
+            Uudet ominaisuudet (2.0)
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Haun toimintaa parannettu.</li>
+            <li class="list-group-item">Ruokien siirtely hiirellä aterian sisällä ja aterioiden välillä.</li>
+            <li class="list-group-item">Kaikki itse lisätyt ruoat näkyvät profiilisivulla.</li>
+            <li class="list-group-item">Itse lisäämiä ruokia voi muokata profiilisivun kautta.</li>
+            <li class="list-group-item">Ruoalle voi asettaa sekä pakkaus- että annoskoon, jotka tulevat näkyviin omina
+              nappeinaan, kun ruokaa lisätään, jos ne eivät ole samat kuin oletusannoskoot.</li>
+            <li class="list-group-item">Itse lisäämiä ruokia sekä tallennettuja päiviä voi poistaa useamman kuin yhden
+              kerralla. Ruokia ja päiviä ei poisteta pysyvästi ennen kuin tallenna muutokset -nappia painetaan.</li>
+            <li class="list-group-item">Mahdollisuus jakaa suunniteltuja aterioita ja/tai päiviä.</li>
+            <li class="list-group-item">Palautteen voi jättää omalla nimimerkillä niin halutessaan.</li>
+            <li class="list-group-item">Salasanan voi vaihtaa profiilisivun kautta.</li>
+            <li class="list-group-item">Jos unohdat salasanasi, voi sen nollata kirjautumissivun kautta, mikäli olet
+              tallentanut sähköpostiosoitteen omiin tietoihin. Tällöin uusi salasana lähetetään tallennettuun
+              sähköpostiosoitteeseen.</li>
+            <li class="list-group-item">Lisätty mahdollisuus poistaa käyttäjätili.</li>
+            <li class="list-group-item">Valmiin aterian voi tallentaa muille käyttäjille käytettäväksi.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
 </div>

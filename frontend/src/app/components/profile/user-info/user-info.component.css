@@ -1,0 +1,34 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.list:hover {
+  font-size: 30px;
+}
+
+.day-list-name:hover {
+  cursor: pointer;
+}
+
+.fa-info:hover {
+  cursor: pointer;
+}
+
+.fa-minus-square:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+.info-box {
+  border: solid #ffc107 2px;
+  padding: 5px;
+}
+
+.fa-trash-alt {
+  color: #ff3b3f;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

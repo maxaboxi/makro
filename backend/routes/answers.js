@@ -114,4 +114,22 @@ router.post('/editanswer', (req, res) => {
   });
 });
 
+router.get('/getallanswerswithusername/:name', (req, res) => {
+  const username = req.params.name;
+  Answer.getAllAnswersWithUsername(username, (err, answers) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(answers);
+    }
+  });
+});
+
 module.exports = router;

@@ -1,12 +1,11 @@
-<div class="container mt-3 mb-5" *ngIf="userAddedFoods.length > 0 || userAddedFoodsFirst.length > 0 || userAddedFoodsSecond.length > 0 || foodsDeleted">
-  <hr>
+<div class="container mt-3 mb-5">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
       <h1 class="display-4">Lisäämäni
         ruoat</h1>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="!foodsSplit">
+  <div class="row justify-content-center" *ngIf="userAddedFoods.length > 0 || foodsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let food of userAddedFoods; let i = index;">
@@ -15,7 +14,7 @@
               {{ food.name }}
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square text-right" (click)="deleteFood(i, 'userAddedFoods')" title="Poista ruoka"></i>
+              <i class="far fa-minus-square float-right" (click)="deleteFood(i)" title="Poista ruoka"></i>
             </div>
           </div>
         </li>
@@ -23,38 +22,14 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="foodsSplit">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let food of userAddedFoodsFirst; let i = index;">
-          <div class="row">
-            <div class="col-10 day-list-name" (click)="openFoodModal(foodModal, food)" title="Muokkaa ruokaa">
-              {{ food.name }}
-            </div>
-            <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteFood(i, 'userAddedFoodsFirst')" title="Poista ruoka"></i>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let food of userAddedFoodsSecond; let i = index;">
-          <div class="row">
-            <div class="col-10 day-list-name" (click)="openFoodModal(foodModal, food)">
-              {{ food.name }}
-            </div>
-            <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteFood(i, 'userAddedFoodsSecond')" title="Poista ruoka"></i>
-            </div>
-          </div>
-        </li>
-      </ul>
+  <div class="row justify-content-center mt-4" *ngIf="userAddedFoods.length === 0 && !foodsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei lisättyjä ruokia.</h2>
     </div>
   </div>
+
   <div class="row justify-content-center" *ngIf="foodsDeleted">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna
         muutokset</button>
       <p class="lead">Ruoka/ruoat poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>

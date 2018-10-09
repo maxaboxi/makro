@@ -17,9 +17,6 @@ import { AuthService } from '../../../services/auth.service';
 export class SavedDaysComponent implements OnInit {
   user: User;
   savedDays: Day[] = [];
-  savedDaysFirst: Day[] = [];
-  savedDaysSecond: Day[] = [];
-  daysSplit = false;
   deletedDays = [];
   daysDeleted = false;
 
@@ -37,82 +34,27 @@ export class SavedDaysComponent implements OnInit {
       this.user = user;
       if (user.username) {
         this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
-          this.sortSavedDays(days);
+          this.savedDays = days;
         });
       }
     });
   }
 
-  sortSavedDays(days) {
-    if (days.length <= 10) {
-      this.daysSplit = false;
-      this.savedDays = days;
-    } else {
-      this.daysSplit = true;
-      if (days.length % 2 === 0) {
-        this.savedDaysFirst = days.splice(0, Math.floor(days.length / 2));
-      } else {
-        this.savedDaysFirst = days.splice(0, Math.floor(days.length / 2) + 1);
-      }
-      this.savedDaysSecond = days;
-    }
-  }
-
-  loadDay(index, array) {
-    if (array === 'savedDays') {
-      localStorage.setItem(
-        'meals',
-        JSON.stringify(this.savedDays[index].meals)
-      );
-      localStorage.setItem(
-        'loadedDay',
-        JSON.stringify(this.savedDays[index]._id)
-      );
-    }
-
-    if (array === 'savedDaysFirst') {
-      localStorage.setItem(
-        'meals',
-        JSON.stringify(this.savedDaysFirst[index].meals)
-      );
-      localStorage.setItem(
-        'loadedDay',
-        JSON.stringify(this.savedDaysFirst[index]._id)
-      );
-    }
-
-    if (array === 'savedDaysSecond') {
-      localStorage.setItem(
-        'meals',
-        JSON.stringify(this.savedDaysSecond[index].meals)
-      );
-      localStorage.setItem(
-        'loadedDay',
-        JSON.stringify(this.savedDaysSecond[index]._id)
-      );
-    }
+  loadDay(index) {
+    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
+    localStorage.setItem(
+      'loadedDay',
+      JSON.stringify(this.savedDays[index]._id)
+    );
     this.addedFoodsService._mealsEdited.next(false);
     this.addedFoodsService._openedSavedMeal.next(true);
     this.addedFoodsService.setMealsFromLocalStorage();
     this.router.navigate(['/']);
   }
 
-  deleteDay(index, array) {
-    if (array === 'savedDays') {
-      this.deletedDays.push(this.savedDays[index]._id);
-      this.savedDays.splice(index, 1);
-    }
-
-    if (array === 'savedDaysFirst') {
-      this.deletedDays.push(this.savedDaysFirst[index]._id);
-      this.savedDaysFirst.splice(index, 1);
-    }
-
-    if (array === 'savedDaysSecond') {
-      this.deletedDays.push(this.savedDaysSecond[index]._id);
-      this.savedDaysSecond.splice(index, 1);
-    }
-
+  deleteDay(index) {
+    this.deletedDays.push(this.savedDays[index]._id);
+    this.savedDays.splice(index, 1);
     this.daysDeleted = true;
   }
 
@@ -127,7 +69,7 @@ export class SavedDaysComponent implements OnInit {
           this.dayService
             .getAllSavedDays(this.user.username)
             .subscribe(days => {
-              this.sortSavedDays(days);
+              this.savedDays = days;
             });
           this.daysDeleted = false;
         }
@@ -162,7 +104,7 @@ export class SavedDaysComponent implements OnInit {
                 this.dayService
                   .getAllSavedDays(this.user.username)
                   .subscribe(days => {
-                    this.sortSavedDays(days);
+                    this.savedDays = days;
                   });
               }
             },

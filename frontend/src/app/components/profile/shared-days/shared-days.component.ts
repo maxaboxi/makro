@@ -12,9 +12,6 @@ import { User } from '../../../models/User';
 export class SharedDaysComponent implements OnInit {
   user: User;
   sharedDays = [];
-  sharedDaysFirst = [];
-  sharedDaysSecond = [];
-  daysSplit = false;
   deletedDays = [];
   daysDeleted = false;
 
@@ -29,43 +26,15 @@ export class SharedDaysComponent implements OnInit {
       this.user = user;
       if (user.username) {
         this.dayService.getSharedDaysByUser(this.user._id).subscribe(days => {
-          this.sortsharedDays(days);
+          this.sharedDays = JSON.parse(JSON.stringify(days));
         });
       }
     });
   }
 
-  sortsharedDays(days) {
-    if (days.length <= 10) {
-      this.daysSplit = false;
-      this.sharedDays = days;
-    } else {
-      this.daysSplit = true;
-      if (days.length % 2 === 0) {
-        this.sharedDaysFirst = days.splice(0, Math.floor(days.length / 2));
-      } else {
-        this.sharedDaysFirst = days.splice(0, Math.floor(days.length / 2) + 1);
-      }
-      this.sharedDaysSecond = days;
-    }
-  }
-
-  deleteDay(index, array) {
-    if (array === 'sharedDays') {
-      this.deletedDays.push(this.sharedDays[index]._id);
-      this.sharedDays.splice(index, 1);
-    }
-
-    if (array === 'sharedDaysFirst') {
-      this.deletedDays.push(this.sharedDaysFirst[index]._id);
-      this.sharedDaysFirst.splice(index, 1);
-    }
-
-    if (array === 'sharedDaysSecond') {
-      this.deletedDays.push(this.sharedDaysSecond[index]._id);
-      this.sharedDaysSecond.splice(index, 1);
-    }
-
+  deleteDay(index) {
+    this.deletedDays.push(this.sharedDays[index]._id);
+    this.sharedDays.splice(index, 1);
     this.daysDeleted = true;
   }
 
@@ -78,7 +47,7 @@ export class SharedDaysComponent implements OnInit {
             timeout: 2000
           });
           this.dayService.getSharedDaysByUser(this.user._id).subscribe(days => {
-            this.sortsharedDays(days);
+            this.sharedDays = JSON.parse(JSON.stringify(days));
           });
           this.daysDeleted = false;
         }

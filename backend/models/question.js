@@ -27,17 +27,16 @@ const QuestionSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const question = (module.exports = mongoose.model('question', QuestionSchema));
+const Question = (module.exports = mongoose.model('question', QuestionSchema));
 
 module.exports.getAllQuestions = callback => {
-  question
-    .find()
+  Question.find()
     .sort({ createdAt: -1 })
     .exec(callback);
 };
 
 module.exports.getQuestionWithId = (id, callback) => {
-  question.findById({ _id: id }, callback);
+  Question.findById({ _id: id }, callback);
 };
 
 module.exports.saveQuestion = (q, callback) => {
@@ -47,4 +46,11 @@ module.exports.saveQuestion = (q, callback) => {
 module.exports.incrementPointTotal = (id, value) => {
   const query = { _id: id };
   Question.findByIdAndUpdate(query, { $inc: { pointsTotal: value } }).exec();
+};
+
+module.exports.getAllQuestionsWithUsername = (username, callback) => {
+  const query = { username: username };
+  Question.find(query)
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };

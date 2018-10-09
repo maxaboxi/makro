@@ -35,6 +35,12 @@ import { QuestionCardComponent } from './components/qa/question-card/question-ca
 import { QuestionComponent } from './components/qa/question/question.component';
 import { QuestionAnswerComponent } from './components/qa/question/question-answer/question-answer.component';
 import { AnswerCommentComponent } from './components/qa/question/question-answer/answer-comment/answer-comment.component';
+import { UserInfoComponent } from './components/profile/user-info/user-info.component';
+import { UserQaComponent } from './components/profile/user-qa/user-qa.component';
+import { UserQuestionsComponent } from './components/profile/user-qa/user-questions/user-questions.component';
+import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
+import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
+import { UserVotesComponent } from './components/profile/user-qa/user-votes/user-votes.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +69,13 @@ import { AnswerCommentComponent } from './components/qa/question/question-answer
     QuestionCardComponent,
     QuestionComponent,
     QuestionAnswerComponent,
-    AnswerCommentComponent
+    AnswerCommentComponent,
+    UserInfoComponent,
+    UserQaComponent,
+    UserQuestionsComponent,
+    UserCommentsComponent,
+    UserAnswersComponent,
+    UserVotesComponent
   ],
   imports: [
     BrowserModule,

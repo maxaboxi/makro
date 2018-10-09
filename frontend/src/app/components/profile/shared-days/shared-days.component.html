@@ -1,4 +1,4 @@
-<div class="container mt-3" *ngIf="sharedDays.length > 0 || sharedDaysFirst.length > 0 || sharedDaysSecond.length > 0 || daysDeleted">
+<div class="container mt-3">
   <hr>
   <div class="row justify-content-center">
     <div class="col-6 text-center">
@@ -6,7 +6,7 @@
         päivät</h1>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="!daysSplit">
+  <div class="row justify-content-center" *ngIf="sharedDays.length > 0 || daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let day of sharedDays; let i = index;">
@@ -15,33 +15,20 @@
               <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a>
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'sharedDays')" title="Poista päivä"></i>
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
             </div>
           </div>
         </li>
       </ul>
     </div>
   </div>
-  <div class="row" *ngIf="daysSplit">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let day of sharedDaysFirst; let i = index;">
-          <span class="day-list-name"><a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id
-              }}</a></span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'sharedDaysFirst')" title="Poista päivä"></i>
-        </li>
-      </ul>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let day of sharedDaysSecond; let i = index;">
-          <span class="day-list-name"><a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id
-              }}</a></span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'sharedDaysSecond')" title="Poista päivä"></i>
-        </li>
-      </ul>
+
+  <div class="row justify-content-center mt-4" *ngIf="sharedDays.length === 0 && !daysDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei jaettuja päiviä.</h2>
     </div>
   </div>
+
   <div class="row justify-content-center" *ngIf="daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>

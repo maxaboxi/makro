@@ -56,7 +56,8 @@ router.post('/addcomment', (req, res) => {
     userId: req.body.userId,
     comment: req.body.comment,
     postId: req.body.postId,
-    replyTo: req.body.replyTo
+    replyTo: req.body.replyTo,
+    questionId: req.body.questionId
   });
 
   Comment.addNewComment(comment, (err, cb) => {
@@ -71,6 +72,24 @@ router.post('/addcomment', (req, res) => {
     } else {
       res.status(200);
       res.json({ success: true, msg: 'Kommentti lisätty.' });
+    }
+  });
+});
+
+router.get('/getallcommentswithuserid/:id', (req, res) => {
+  const userId = req.params.id;
+  Comment.getAllCommentsWithUserId(userId, (err, comments) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(comments);
     }
   });
 });

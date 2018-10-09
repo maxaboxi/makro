@@ -14,6 +14,10 @@ const CommentSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    questionId: {
+      type: String,
+      required: true
+    },
     postId: {
       type: String,
       required: true
@@ -47,4 +51,11 @@ module.exports.addNewComment = (c, callback) => {
 module.exports.incrementPointTotal = (id, value) => {
   const query = { _id: id };
   Comment.findByIdAndUpdate(query, { $inc: { pointsTotal: value } }).exec();
+};
+
+module.exports.getAllCommentsWithUserId = (id, callback) => {
+  const query = { userId: id };
+  Comment.find(query)
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };

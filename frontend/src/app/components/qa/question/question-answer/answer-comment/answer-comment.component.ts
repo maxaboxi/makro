@@ -6,6 +6,7 @@ import { QaService } from '../../../../../services/qa.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Vote } from '../../../../../models/Vote';
+import { Answer } from 'src/app/models/Answer';
 
 @Component({
   selector: 'app-answer-comment',
@@ -15,6 +16,7 @@ import { Vote } from '../../../../../models/Vote';
 export class AnswerCommentComponent implements OnInit {
   private _comment = new BehaviorSubject<Comment>(null);
   private _user = new BehaviorSubject<User>(null);
+  private _answer = new BehaviorSubject<Answer>(null);
   commentText = '';
   commentVotes: Vote[];
   pointsTotal;
@@ -36,6 +38,15 @@ export class AnswerCommentComponent implements OnInit {
 
   get user() {
     return this._user.getValue();
+  }
+
+  @Input()
+  set answer(answer) {
+    this._answer.next(answer);
+  }
+
+  get answer() {
+    return this._answer.getValue();
   }
 
   @Output()
@@ -71,7 +82,8 @@ export class AnswerCommentComponent implements OnInit {
             replyTo: this.comment.username,
             username: this.user.username,
             userId: this.user._id,
-            comment: this.commentText
+            comment: this.commentText,
+            questionId: this.answer.questionId
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {
@@ -102,6 +114,8 @@ export class AnswerCommentComponent implements OnInit {
       userId: this.user._id,
       username: this.user.username,
       postId: this.comment._id,
+      category: 'Comment',
+      content: this.comment.comment,
       vote: 0
     };
     if (!this.userVote) {

@@ -91,4 +91,22 @@ router.get('/getquestion/:id', (req, res) => {
   });
 });
 
+router.get('/getallquestionswithusername/:name', (req, res) => {
+  const username = req.params.name;
+  Question.getAllQuestionsWithUsername(username, (err, questions) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(questions);
+    }
+  });
+});
+
 module.exports = router;

@@ -17,11 +17,11 @@
 <p (click)="showOnlyFirstComment = true" class="text-muted comment-button" *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">Piilota</p>
 <div class="bg-light margin-left">
   <app-answer-comment *ngIf="showOnlyFirstComment && answer.comments?.length > 0" [comment]="answer.comments[0]" [user]="user"
-    (commented)="fetchComments($event)"></app-answer-comment>
+    [answer]="answer" (commented)="fetchComments($event)"></app-answer-comment>
 
   <div *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">
     <ng-container *ngFor="let comment of answer.comments">
-      <app-answer-comment [comment]="comment" [user]="user" (commented)="fetchComments($event)"></app-answer-comment>
+      <app-answer-comment [comment]="comment" [user]="user" [answer]="answer" (commented)="fetchComments($event)"></app-answer-comment>
     </ng-container>
   </div>
 </div>

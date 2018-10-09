@@ -17,9 +17,6 @@ export class UserSharedMealsComponent implements OnInit {
   user: User;
   allFoods: Food[];
   sharedMeals: Meal[] = [];
-  sharedMealsFirst: Meal[] = [];
-  sharedMealsSecond: Meal[] = [];
-  sharedMealsSplit = false;
   deletedSharedMeals = [];
   sharedMealsDeleted = false;
   selectedSharedMeal: Meal;
@@ -42,7 +39,7 @@ export class UserSharedMealsComponent implements OnInit {
         this.sharedMealsService
           .getMealsByUser(this.user.username)
           .subscribe(meals => {
-            this.sortSharedMeals(meals);
+            this.sharedMeals = meals;
             this.foodService
               .getAllFoods()
               .subscribe(foods => (this.allFoods = foods));
@@ -51,40 +48,9 @@ export class UserSharedMealsComponent implements OnInit {
     });
   }
 
-  sortSharedMeals(meals) {
-    if (meals.length <= 10) {
-      this.sharedMealsSplit = false;
-      this.sharedMeals = meals;
-    } else {
-      this.sharedMealsSplit = true;
-      if (meals.length % 2 === 0) {
-        this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
-      } else {
-        this.sharedMealsFirst = meals.splice(
-          0,
-          Math.floor(meals.length / 2) + 1
-        );
-      }
-      this.sharedMealsSecond = meals;
-    }
-  }
-
-  deleteSharedMeal(index, array) {
-    if (array === 'sharedMeals') {
-      this.deletedSharedMeals.push(this.sharedMeals[index]._id);
-      this.sharedMeals.splice(index, 1);
-    }
-
-    if (array === 'sharedMealsFirst') {
-      this.deletedSharedMeals.push(this.sharedMealsFirst[index]._id);
-      this.sharedMealsFirst.splice(index, 1);
-    }
-
-    if (array === 'sharedMealsSecond') {
-      this.deletedSharedMeals.push(this.sharedMealsSecond[index]._id);
-      this.sharedMealsSecond.splice(index, 1);
-    }
-
+  deleteSharedMeal(index) {
+    this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+    this.sharedMeals.splice(index, 1);
     this.sharedMealsDeleted = true;
   }
 
@@ -99,7 +65,7 @@ export class UserSharedMealsComponent implements OnInit {
           this.sharedMealsService
             .getMealsByUser(this.user.username)
             .subscribe(meals => {
-              this.sortSharedMeals(meals);
+              this.sharedMeals = meals;
             });
           this.sharedMealsDeleted = false;
         }
@@ -151,7 +117,7 @@ export class UserSharedMealsComponent implements OnInit {
                 this.sharedMealsService
                   .getMealsByUser(this.user.username)
                   .subscribe(meals => {
-                    this.sortSharedMeals(meals);
+                    this.sharedMeals = meals;
                     this.selectedSharedMealOrigFoods = undefined;
                     this.selectedSharedMeal = undefined;
                     this.sharedMealTag = '';

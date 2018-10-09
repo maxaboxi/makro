@@ -53,3 +53,10 @@ module.exports.incrementPointTotal = (id, value) => {
   const query = { _id: id };
   Answer.findByIdAndUpdate(query, { $inc: { pointsTotal: value } }).exec();
 };
+
+module.exports.getAllAnswersWithUsername = (username, callback) => {
+  const query = { username: username };
+  Answer.find(query)
+    .sort({ createdAt: -1 })
+    .exec(callback);
+};

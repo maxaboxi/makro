@@ -85,7 +85,8 @@ export class QuestionAnswerComponent implements OnInit {
             username: this.user.username,
             userId: this.user._id,
             comment: this.commentText,
-            replyTo: this.answer._id
+            replyTo: this.answer._id,
+            questionId: this.answer.questionId
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {
@@ -122,6 +123,8 @@ export class QuestionAnswerComponent implements OnInit {
       userId: this.user._id,
       username: this.user.username,
       postId: this.answer._id,
+      category: 'Answer',
+      content: this.answer.answer,
       vote: 0
     };
     if (!this.userVote) {

@@ -35,7 +35,9 @@ module.exports.getDays = (username, callback) => {
 };
 
 module.exports.getAllDays = callback => {
-  Day.find(callback);
+  Day.find()
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };
 
 module.exports.removeDays = (deletedDays, callback) => {

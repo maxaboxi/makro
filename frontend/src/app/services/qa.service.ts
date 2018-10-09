@@ -137,6 +137,46 @@ export class QaService {
     return this.http.post(url, answer, { headers: headers });
   }
 
+  getAllUserVotesWithId(id) {
+    const url = `${this.baseUrl}/getallvoteswithuserid/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Vote[]>(url, { headers: headers });
+  }
+
+  getAllUserQuestionsWithUsername(username) {
+    const url = `${this.baseUrl}/getallquestionswithusername/${username}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Question[]>(url, { headers: headers });
+  }
+
+  getAllUserAnswersWithUsername(username) {
+    const url = `${this.baseUrl}/getallanswerswithusername/${username}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Answer[]>(url, { headers: headers });
+  }
+
+  getAllUserCommentsWithId(id) {
+    const url = `${this.baseUrl}/getallcommentswithuserid/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Comment[]>(url, { headers: headers });
+  }
+
   editQuestion(question: Question) {
     const url = `${this.baseUrl}/editquestion`;
 
@@ -157,8 +197,8 @@ export class QaService {
     return this.http.post(url, answer, { headers: headers });
   }
 
-  removeQuestion(questionId) {
-    const url = `${this.baseUrl}/removequestion`;
+  removeQuestions(questionIds) {
+    const url = `${this.baseUrl}/removequestions`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -166,14 +206,14 @@ export class QaService {
 
     const options = {
       headers: headers,
-      body: questionId
+      body: questionIds
     };
 
     return this.http.delete(url, options);
   }
 
-  removeAnswer(answerId) {
-    const url = `${this.baseUrl}/removeanswer`;
+  removeAnswers(answerIds) {
+    const url = `${this.baseUrl}/removeanswers`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -181,7 +221,37 @@ export class QaService {
 
     const options = {
       headers: headers,
-      body: answerId
+      body: answerIds
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  removeComments(commentIds) {
+    const url = `${this.baseUrl}/removecomments`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: commentIds
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  removeVotes(voteIds) {
+    const url = `${this.baseUrl}/removevotes`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: voteIds
     };
 
     return this.http.delete(url, options);

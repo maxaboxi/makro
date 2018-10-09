@@ -39,5 +39,7 @@ module.exports.removeSharedDays = (deletedDays, callback) => {
 };
 
 module.exports.getAllSharedDays = callback => {
-  SharedDay.find(callback);
+  SharedDay.find()
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };

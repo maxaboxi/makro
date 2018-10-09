@@ -1,0 +1,37 @@
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-6 text-center">
+      <h1 class="display-4">Kysymykseni</h1>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="questions.length > 0 || questionsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ul>
+        <li class="big-list lead" *ngFor="let question of questions; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="navigate(question)">
+              {{ question.question }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteQuestion(i)" title="Poista kysymys"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="questions.length === 0 && !questionsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei kysymyksiä.</h2>
+    </div>
+  </div>
+
+  <div class="row justify-content-center" *ngIf="questionsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteQuestionsFromDb()">Tallenna
+        muutokset</button>
+      <p class="lead">Kysymykset poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+    </div>
+  </div>
+</div>

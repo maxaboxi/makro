@@ -1,5 +1,4 @@
-<div class="container mt-3" *ngIf="savedDays.length > 0 || savedDaysFirst.length > 0 || savedDaysSecond.length > 0 || daysDeleted">
-  <hr>
+<div class="container mt-3 mb-2">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
       <h1 class="display-4">Tallentamani
@@ -8,40 +7,29 @@
         Muokkaa nimiä</button>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="!daysSplit">
+  <div class="row justify-content-center" *ngIf="savedDays.length > 0 || daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let day of savedDays; let i = index;">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="loadDay(i, 'savedDays')" title="Avaa päivä">
+            <div class="col-10 day-list-name" (click)="loadDay(i)" title="Avaa päivä">
               {{ day.name }}
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'savedDays')" title="Poista päivä"></i>
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
             </div>
           </div>
         </li>
       </ul>
     </div>
   </div>
-  <div class="row" *ngIf="daysSplit">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let day of savedDaysFirst; let i = index;">
-          <span class="day-list-name" (click)="loadDay(i, 'savedDaysFirst')" title="Avaa päivä">{{ day.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'savedDaysFirst')" title="Poista päivä"></i>
-        </li>
-      </ul>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let day of savedDaysSecond; let i = index;">
-          <span class="day-list-name" (click)="loadDay(i, 'savedDaysSecond')" title="Avaa päivä">{{ day.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteDay(i, 'savedDaysSecond')" title="Poista päivä"></i>
-        </li>
-      </ul>
+
+  <div class="row justify-content-center mt-4" *ngIf="savedDays.length === 0 && !daysDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei tallennettuja päiviä.</h2>
     </div>
   </div>
+
   <div class="row justify-content-center" *ngIf="daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>
@@ -49,6 +37,8 @@
     </div>
   </div>
 </div>
+
+<app-shared-days></app-shared-days>
 
 <ng-template #dayName let-modal>
   <div class="modal-header">

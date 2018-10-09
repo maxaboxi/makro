@@ -1,12 +1,11 @@
-<div class="container mt-3" *ngIf="sharedMeals.length > 0 || sharedMealsFirst.length > 0 || sharedMealsSecond.length > 0 || sharedMealsDeleted">
-  <hr>
+<div class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
       <h1 class="display-4">Jakamani
         ateriat</h1>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="!sharedMealsSplit">
+  <div class="row justify-content-center" *ngIf="sharedMeals.length > 0 || sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let meal of sharedMeals; let i = index;">
@@ -15,33 +14,20 @@
               {{ meal.name }}
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i, 'sharedMeals')" title="Poista ateria"></i>
+              <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="Poista ateria"></i>
             </div>
           </div>
         </li>
       </ul>
     </div>
   </div>
-  <div class="row" *ngIf="sharedMealsSplit">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let meal of sharedMealsFirst; let i = index;">
-          <span class="day-list-name" (click)="openEditSharedMealModal(editShareMealModal, meal)" title="Muokkaa ateriaa">{{
-            meal.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i, 'sharedMealsFirst')" title="Poista ateria"></i>
-        </li>
-      </ul>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 small-column">
-      <ul>
-        <li class="small-list lead" *ngFor="let meal of sharedMealsSecond; let i = index;">
-          <span class="day-list-name" (click)="openEditSharedMealModal(editShareMealModal, meal)" title="Muokkaa ateriaa">{{
-            meal.name }}</span>
-          <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i, 'sharedMealsSecond')" title="Poista ateria"></i>
-        </li>
-      </ul>
+
+  <div class="row justify-content-center mt-4" *ngIf="sharedMeals.length === 0 && !sharedMealsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei jaettuja aterioita.</h2>
     </div>
   </div>
+
   <div class="row justify-content-center" *ngIf="sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna

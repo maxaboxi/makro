@@ -1,0 +1,38 @@
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-6 text-center">
+      <h1 class="display-4">Kommenttini</h1>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="comments.length > 0 || commentsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ul>
+        <li class="big-list lead" *ngFor="let comment of comments; let i = index;">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="navigate(comment)">
+              <p [innerHTML]="comment.comment"></p>
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteComment(i)" title="Poista kommentti"></i>
+            </div>
+          </div>
+          <hr>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="comments.length === 0 && !commentsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">Ei vastauksia.</h2>
+    </div>
+  </div>
+
+  <div class="row justify-content-center" *ngIf="commentsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteCommentsFromDb()">Tallenna
+        muutokset</button>
+      <p class="lead">Kommentit poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+    </div>
+  </div>
+</div>

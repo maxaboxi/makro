@@ -163,7 +163,10 @@ module.exports.updateLastLogin = username => {
 };
 
 module.exports.getAllUsers = callback => {
-  User.find(callback).select('-password');
+  User.find()
+    .select('-password')
+    .sort({ lastLogin: -1 })
+    .exec(callback);
 };
 
 module.exports.removeUsers = (deletedUsers, callback) => {

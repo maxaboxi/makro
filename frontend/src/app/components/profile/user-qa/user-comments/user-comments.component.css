@@ -1,0 +1,36 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.big-list {
+  word-break: break-all;
+  font-size: 25px;
+}
+
+.big-list:hover {
+  font-size: 35px;
+}
+
+.fa-minus-square:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+.fa-eraser:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}
+
+.day-list-name:hover {
+  cursor: pointer;
+}
+
+.tag:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
