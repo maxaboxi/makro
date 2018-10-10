@@ -165,7 +165,6 @@ export class AddedFoodsService {
   }
 
   moveFoodToNewMeal(food, mealName, componentIndex) {
-    console.log('a');
     if (this._openedSavedMeal.getValue()) {
       this._mealsEdited.next(true);
     }
@@ -178,17 +177,33 @@ export class AddedFoodsService {
           m.foods.push(food);
         }
       });
-      this.removeFoodFromMeal(food._id, componentIndex);
+      this.removeFoodFromMeal(food, componentIndex);
     }
   }
 
-  removeFoodFromMeal(foodId, componentIndex) {
+  removeFoodFromMeal(food, componentIndex) {
     const meals = this.getMeals();
-    meals[componentIndex].foods.forEach((f, i) => {
-      if (f._id === foodId) {
-        meals[componentIndex].foods.splice(i, 1);
+    // Changed to regular for instead of forEach to be able to break the  loop
+    for (let i = 0; i < meals[componentIndex].foods.length; i++) {
+      // Check if food has ID since days saved in previous version don't include food IDs
+      if (food._id) {
+        if (
+          meals[componentIndex].foods[i]._id === food._id &&
+          meals[componentIndex].foods[i].amount === food.amount
+        ) {
+          meals[componentIndex].foods.splice(i, 1);
+          break;
+        }
+      } else {
+        if (
+          meals[componentIndex].foods[i].name === food.name &&
+          meals[componentIndex].foods[i].amount === food.amount
+        ) {
+          meals[componentIndex].foods.splice(i, 1);
+          break;
+        }
       }
-    });
+    }
     this._meals.next(meals);
     localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
   }
