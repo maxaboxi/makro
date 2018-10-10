@@ -55,3 +55,8 @@ module.exports.replaceVote = (v, callback) => {
   const query = { postId: v.postId, userId: v.userId };
   Vote.findOneAndUpdate(query, v, { new: true }, callback);
 };
+
+module.exports.removeVotes = (deletedVotes, callback) => {
+  const query = { _id: { $in: deletedVotes } };
+  Vote.remove(query, callback);
+};

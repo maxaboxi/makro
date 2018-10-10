@@ -133,4 +133,22 @@ router.get('/getallanswerswithusername/:name', (req, res) => {
   });
 });
 
+router.delete('/removeanswers', (req, res) => {
+  const deletedAnswers = req.body;
+  Answer.removeAnswers(deletedAnswers, (err, answers) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Vastaukset poistettu.' });
+    }
+  });
+});
+
 module.exports = router;

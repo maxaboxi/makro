@@ -63,3 +63,8 @@ module.exports.getAllCommentsWithUserId = (id, callback) => {
     .sort({ createdAt: -1 })
     .exec(callback);
 };
+
+module.exports.removeComments = (deletedComments, callback) => {
+  const query = { _id: { $in: deletedComments } };
+  Comment.remove(query, callback);
+};

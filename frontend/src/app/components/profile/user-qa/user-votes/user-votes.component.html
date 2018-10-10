@@ -15,7 +15,7 @@
             <div class="col-2">
               <i *ngIf="vote.vote > 0" class="fas fa-thumbs-up mr-3" style="color:#ff3b3f;"></i>
               <i *ngIf="vote.vote < 0" class="fas fa-thumbs-down mr-3" style="color:#ff3b3f;"></i>
-              <i class="far fa-minus-square" (click)="deleteVote(i)" title="Poista tykkäys"></i>
+              <i class="far fa-minus-square" (click)="deleteVote(i, vote)" title="Poista tykkäys"></i>
             </div>
           </div>
           <hr>

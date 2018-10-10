@@ -54,3 +54,8 @@ module.exports.getAllQuestionsWithUsername = (username, callback) => {
     .sort({ createdAt: -1 })
     .exec(callback);
 };
+
+module.exports.removeQuestions = (deletedQuestions, callback) => {
+  const query = { _id: { $in: deletedQuestions } };
+  Question.remove(query, callback);
+};

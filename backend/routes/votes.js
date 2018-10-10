@@ -138,4 +138,34 @@ router.post('/replacepreviousvote', (req, res) => {
   });
 });
 
+router.delete('/removevotes', (req, res) => {
+  const deletedVotes = req.body;
+  let deletedVoteIds = [];
+  deletedVotes.forEach(vote => {
+    deletedVoteIds.push(vote._id);
+    vote.vote *= -1;
+    if (vote.category === 'Answer') {
+      Answer.incrementPointTotal(vote.postId, vote.vote);
+    }
+
+    if (vote.category === 'Comment') {
+      Comment.incrementPointTotal(vote.postId, vote.vote);
+    }
+  });
+  Vote.removeVotes(deletedVoteIds, (err, votes) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Tykkäykset poistettu.' });
+    }
+  });
+});
+
 module.exports = router;

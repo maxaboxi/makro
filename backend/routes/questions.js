@@ -109,4 +109,22 @@ router.get('/getallquestionswithusername/:name', (req, res) => {
   });
 });
 
+router.delete('/removequestions', (req, res) => {
+  const deletedQuestions = req.body;
+  Question.removeQuestions(deletedQuestions, (err, questions) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Kysymykset poistettu.' });
+    }
+  });
+});
+
 module.exports = router;

@@ -95,4 +95,22 @@ router.get('/getallcommentswithuserid/:id', (req, res) => {
   });
 });
 
+router.delete('/removecomments', (req, res) => {
+  const deletedComments = req.body;
+  Comment.removeComments(deletedComments, (err, comments) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Kommentit poistettu.' });
+    }
+  });
+});
+
 module.exports = router;

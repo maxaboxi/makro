@@ -33,8 +33,8 @@ export class UserVotesComponent implements OnInit {
     });
   }
 
-  deleteVote(index) {
-    this.deletedVotes.push(this.votes[index]._id);
+  deleteVote(index, vote) {
+    this.deletedVotes.push(vote);
     this.votes.splice(index, 1);
     this.votesDeleted = true;
   }
