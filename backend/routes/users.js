@@ -328,7 +328,8 @@ router.post('/resetpassword', (req, res) => {
         res.status(200);
         res.json({
           success: false,
-          msg: 'Käyttäjätunnukseen ei ole liitetty sähköpostia.'
+          msg:
+            'Väärä käyttäjätunnus tai käyttäjätunnukseen ei ole liitetty sähköpostia.'
         });
         return;
       }

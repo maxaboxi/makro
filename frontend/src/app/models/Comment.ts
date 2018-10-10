@@ -6,6 +6,7 @@ export interface Comment {
   postId: String;
   questionId: String;
   replyTo?: String;
+  origPost: String;
   pointsTotal?: Number;
   createdAt?: Date;
   updatedAt?: Date;

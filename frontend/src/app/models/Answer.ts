@@ -5,6 +5,7 @@ export interface Answer {
   questionId: String;
   username: String;
   answer: String;
+  origPost: String;
   pointsTotal?: Number;
   comments?: Comment[];
   updatedAt?: Date;

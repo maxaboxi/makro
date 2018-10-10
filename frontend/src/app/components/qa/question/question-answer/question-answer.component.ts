@@ -86,6 +86,7 @@ export class QuestionAnswerComponent implements OnInit {
             userId: this.user._id,
             comment: this.commentText,
             replyTo: this.answer._id,
+            origPost: this.answer.answer,
             questionId: this.answer.questionId
           };
           this.qaService.postNewComment(comment).subscribe(

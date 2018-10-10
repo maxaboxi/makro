@@ -57,6 +57,7 @@ router.post('/addcomment', (req, res) => {
     comment: req.body.comment,
     postId: req.body.postId,
     replyTo: req.body.replyTo,
+    origPost: req.body.origPost,
     questionId: req.body.questionId
   });
 

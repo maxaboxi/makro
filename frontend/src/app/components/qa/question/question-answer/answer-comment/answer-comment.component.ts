@@ -83,6 +83,7 @@ export class AnswerCommentComponent implements OnInit {
             username: this.user.username,
             userId: this.user._id,
             comment: this.commentText,
+            origPost: this.comment.comment,
             questionId: this.answer.questionId
           };
           this.qaService.postNewComment(comment).subscribe(

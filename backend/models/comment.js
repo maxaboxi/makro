@@ -26,6 +26,10 @@ const CommentSchema = mongoose.Schema(
       type: String,
       required: false
     },
+    origPost: {
+      type: String,
+      required: true
+    },
     pointsTotal: {
       type: Number,
       required: false,

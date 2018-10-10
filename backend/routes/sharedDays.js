@@ -41,6 +41,7 @@ function checkAuthorization() {
 router.use(checkAuthorization());
 
 router.post('/shareday', (req, res) => {
+  console.log(req.body);
   const day = new SharedDay({
     meals: req.body.meals,
     user: req.body.user

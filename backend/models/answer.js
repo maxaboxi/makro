@@ -14,6 +14,10 @@ const AnswerSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    origPost: {
+      type: String,
+      required: true
+    },
     pointsTotal: {
       type: Number,
       required: false,

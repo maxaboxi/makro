@@ -60,7 +60,8 @@ export class QuestionComponent implements OnInit {
           const answer: Answer = {
             username: this.user.username,
             answer: this.answerText,
-            questionId: this.question._id
+            questionId: this.question._id,
+            origPost: this.question.question
           };
           this.qaService.addAnswerToQuestion(answer).subscribe(
             res => {

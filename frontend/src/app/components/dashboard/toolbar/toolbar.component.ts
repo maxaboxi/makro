@@ -232,6 +232,10 @@ export class ToolbarComponent implements OnInit {
   }
 
   generateLink(content) {
+    if (!this.user) {
+      this.auth.user.subscribe(user => this._user.next(user));
+      setTimeout(() => {}, 200);
+    }
     const data = {
       user: this.user._id,
       meals: this.addedFoodsService.getMeals()
@@ -241,6 +245,7 @@ export class ToolbarComponent implements OnInit {
         if (res['id']) {
           this.shareLink = `https://makro.diet/?id=${res['id']}`;
           this.openLinkModal(content);
+          this.auth.user.unsubscribe();
         }
       },
       (error: Error) => {

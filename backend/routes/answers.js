@@ -36,7 +36,8 @@ router.post('/addanswertoquestion', (req, res) => {
   const answer = new Answer({
     username: req.body.username,
     answer: req.body.answer,
-    questionId: req.body.questionId
+    questionId: req.body.questionId,
+    origPost: req.body.origPost
   });
 
   Answer.saveAnswer(answer, (err, answer) => {
