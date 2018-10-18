@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class FeedbackService {
-  private baseUrl = `${environment.baseUrl}/api/v1`;
+  private baseUrl = `${environment.baseUrl}/api/v1/feedbacks`;
 
   constructor(private http: HttpClient) {}
 

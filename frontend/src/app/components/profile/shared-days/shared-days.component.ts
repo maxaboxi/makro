@@ -24,7 +24,7 @@ export class SharedDaysComponent implements OnInit {
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
-      if (user.username) {
+      if (user._id) {
         this.dayService.getSharedDaysByUser(this.user._id).subscribe(days => {
           this.sharedDays = JSON.parse(JSON.stringify(days));
         });

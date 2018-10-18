@@ -13,7 +13,7 @@ export class DayService {
   constructor(private http: HttpClient) {}
 
   getAllSavedDays(user) {
-    const url = `${this.baseUrl}/getalldays/${user}`;
+    const url = `${this.baseUrl}/days/getalldays/${user}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ export class DayService {
   }
 
   saveNewDay(day: Day) {
-    const url = `${this.baseUrl}/addnewday`;
+    const url = `${this.baseUrl}/days/addnewday`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ export class DayService {
   }
 
   saveEditedDay(day) {
-    const url = `${this.baseUrl}/saveday`;
+    const url = `${this.baseUrl}/days/saveday`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export class DayService {
   }
 
   removeDays(days) {
-    const url = `${this.baseUrl}/removedays`;
+    const url = `${this.baseUrl}/days/removedays`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ export class DayService {
   }
 
   updateDayNames(days) {
-    const url = `${this.baseUrl}/updatedaynames`;
+    const url = `${this.baseUrl}/days/updatedaynames`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export class DayService {
   }
 
   saveDayForSharing(meals) {
-    const url = `${this.baseUrl}/shareday`;
+    const url = `${this.baseUrl}/shareddays/shareday`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ export class DayService {
   }
 
   getSharedDay(id) {
-    const url = `${this.baseUrl}/getsharedday/${id}`;
+    const url = `${this.baseUrl}/shareddays/getsharedday/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export class DayService {
   }
 
   getSharedDaysByUser(id) {
-    const url = `${this.baseUrl}/getdayssharedbyuser/${id}`;
+    const url = `${this.baseUrl}/shareddays/getdayssharedbyuser/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ export class DayService {
   }
 
   removeSharedDays(days) {
-    const url = `${this.baseUrl}/removeshareddays`;
+    const url = `${this.baseUrl}/shareddays/removeshareddays`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

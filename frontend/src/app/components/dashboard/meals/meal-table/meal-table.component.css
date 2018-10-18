@@ -45,11 +45,13 @@ td {
   cursor: pointer;
   color: #ff3b3f;
 }
-.fa-share {
+.fa-share,
+.fa-copy {
   font-size: 15px;
 }
 
-.fa-share:hover {
+.fa-share:hover,
+.fa-copy:hover {
   cursor: pointer;
   color: #ff3b3f;
   font-size: 17px;

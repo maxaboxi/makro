@@ -7,7 +7,7 @@ import { Meal } from '../models/Meal';
   providedIn: 'root'
 })
 export class SharedMealsService {
-  private baseUrl = `${environment.baseUrl}/api/v1`;
+  private baseUrl = `${environment.baseUrl}/api/v1/sharedmeals`;
 
   constructor(private http: HttpClient) {}
 

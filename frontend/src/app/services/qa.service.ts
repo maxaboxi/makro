@@ -10,12 +10,12 @@ import { Vote } from '../models/Vote';
   providedIn: 'root'
 })
 export class QaService {
-  private baseUrl = `${environment.baseUrl}/api/v1`;
+  private baseUrl = `${environment.baseUrl}/api/v1/qa`;
 
   constructor(private http: HttpClient) {}
 
   getAllQuestions() {
-    const url = `${this.baseUrl}/getallquestions`;
+    const url = `${this.baseUrl}/questions/getallquestions`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export class QaService {
   }
 
   getQuestionWithId(id) {
-    const url = `${this.baseUrl}/getquestion/${id}`;
+    const url = `${this.baseUrl}/questions/getquestion/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export class QaService {
   }
 
   getCommentsToAnswerWithId(id) {
-    const url = `${this.baseUrl}/getallcomments/${id}`;
+    const url = `${this.baseUrl}/comments/getallcomments/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export class QaService {
   }
 
   getTopResponseToQuestion(questionId) {
-    const url = `${this.baseUrl}/gettopresponsetoquestion`;
+    const url = `${this.baseUrl}/answers/gettopresponsetoquestion`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ export class QaService {
   }
 
   getAllResponsesToQuestion(questionId) {
-    const url = `${this.baseUrl}/getallresponsestoquestion`;
+    const url = `${this.baseUrl}/answers/getallresponsestoquestion`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ export class QaService {
   }
 
   postNewQuestion(question: Question) {
-    const url = `${this.baseUrl}/postnewquestion`;
+    const url = `${this.baseUrl}/questions/postnewquestion`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ export class QaService {
   }
 
   postNewComment(comment: Comment) {
-    const url = `${this.baseUrl}/addcomment`;
+    const url = `${this.baseUrl}/comments/addcomment`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export class QaService {
   }
 
   votePost(vote: Vote) {
-    const url = `${this.baseUrl}/votepost`;
+    const url = `${this.baseUrl}/votes/votepost`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -103,7 +103,7 @@ export class QaService {
   }
 
   replacePreviousVote(vote: Vote) {
-    const url = `${this.baseUrl}/replacepreviousvote`;
+    const url = `${this.baseUrl}/votes/replacepreviousvote`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ export class QaService {
   }
 
   getUserVoteWithId(userId, postId) {
-    const url = `${this.baseUrl}/getuservotewithpostid`;
+    const url = `${this.baseUrl}/votes/getuservotewithpostid`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ export class QaService {
   }
 
   addAnswerToQuestion(answer: Answer) {
-    const url = `${this.baseUrl}/addanswertoquestion`;
+    const url = `${this.baseUrl}/answers/addanswertoquestion`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -138,7 +138,7 @@ export class QaService {
   }
 
   getAllUserVotesWithId(id) {
-    const url = `${this.baseUrl}/getallvoteswithuserid/${id}`;
+    const url = `${this.baseUrl}/votes/getallvoteswithuserid/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -148,7 +148,9 @@ export class QaService {
   }
 
   getAllUserQuestionsWithUsername(username) {
-    const url = `${this.baseUrl}/getallquestionswithusername/${username}`;
+    const url = `${
+      this.baseUrl
+    }/questions/getallquestionswithusername/${username}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -158,7 +160,7 @@ export class QaService {
   }
 
   getAllUserAnswersWithUsername(username) {
-    const url = `${this.baseUrl}/getallanswerswithusername/${username}`;
+    const url = `${this.baseUrl}/answers/getallanswerswithusername/${username}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -168,7 +170,7 @@ export class QaService {
   }
 
   getAllUserCommentsWithId(id) {
-    const url = `${this.baseUrl}/getallcommentswithuserid/${id}`;
+    const url = `${this.baseUrl}/comments/getallcommentswithuserid/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -178,7 +180,7 @@ export class QaService {
   }
 
   editQuestion(question: Question) {
-    const url = `${this.baseUrl}/editquestion`;
+    const url = `${this.baseUrl}/questions/editquestion`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -188,7 +190,7 @@ export class QaService {
   }
 
   editAnswer(answer: Answer) {
-    const url = `${this.baseUrl}/editanswer`;
+    const url = `${this.baseUrl}/answers/editanswer`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -198,7 +200,7 @@ export class QaService {
   }
 
   removeQuestions(questionIds) {
-    const url = `${this.baseUrl}/removequestions`;
+    const url = `${this.baseUrl}/questions/removequestions`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -213,7 +215,7 @@ export class QaService {
   }
 
   removeAnswers(answerIds) {
-    const url = `${this.baseUrl}/removeanswers`;
+    const url = `${this.baseUrl}/answers/removeanswers`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -228,7 +230,7 @@ export class QaService {
   }
 
   removeComments(commentIds) {
-    const url = `${this.baseUrl}/removecomments`;
+    const url = `${this.baseUrl}/comments/removecomments`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -243,7 +245,7 @@ export class QaService {
   }
 
   removeVotes(voteIds) {
-    const url = `${this.baseUrl}/removevotes`;
+    const url = `${this.baseUrl}/votes/removevotes`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

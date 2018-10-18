@@ -233,8 +233,14 @@ export class ToolbarComponent implements OnInit {
 
   generateLink(content) {
     if (!this.user) {
-      this.auth.user.subscribe(user => this._user.next(user));
-      setTimeout(() => {}, 200);
+      this.auth.user.subscribe(user => {
+        if (!user) {
+          this._user.next(this.auth.getUserInfo());
+        } else {
+          this._user.next(user);
+        }
+      });
+      setTimeout(() => {}, 500);
     }
     const data = {
       user: this.user._id,

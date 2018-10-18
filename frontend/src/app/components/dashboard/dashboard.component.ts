@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
     private dayService: DayService,
     private auth: AuthService,
     private addedFoodService: AddedFoodsService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
       this.user = this.auth.getUserInfo();
+      this.setFoods();
       if (Object.keys(this.queryParams).length > 0) {
         this.dayService.getSharedDay(this.queryParams['id']).subscribe(res => {
           if (res !== null) {
@@ -49,7 +50,6 @@ export class DashboardComponent implements OnInit {
           }
         });
       }
-      this.setFoods();
     });
   }
 

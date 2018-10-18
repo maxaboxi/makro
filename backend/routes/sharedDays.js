@@ -20,7 +20,7 @@ const logger = winston.createLogger({
 
 function checkAuthorization() {
   return (req, res, next) => {
-    if (req.path === '/getsharedday/*' && req.method === 'GET') {
+    if (req.path.includes('/getsharedday/') && req.method === 'GET') {
       next();
     } else {
       let token;
@@ -82,6 +82,7 @@ router.get('/getsharedday/:id', (req, res) => {
 
 router.get('/getdayssharedbyuser/:id', (req, res) => {
   const id = req.params.id;
+  console.log(id);
   SharedDay.getDaysSharedByUser(id, (err, days) => {
     if (err) {
       logger.log({
