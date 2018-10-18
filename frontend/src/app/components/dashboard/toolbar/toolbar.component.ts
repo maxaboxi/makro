@@ -256,10 +256,10 @@ export class ToolbarComponent implements OnInit {
       },
       (error: Error) => {
         this.flashMessage.show(
-          'Jotain meni pieleen. Yritä myöhemmin uudestaan',
+          'Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan.',
           {
             cssClass: 'alert-danger',
-            timeout: 2000
+            timeout: 3000
           }
         );
       }
