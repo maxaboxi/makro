@@ -2,7 +2,7 @@
   <div class="card-body">
     <h5 class="card-title text-muted">
       Nimi: {{ meal.name }}
-      <i class="fas fa-plus plus float-right" (click)="openAddMealModal(addMealModal, meal)"></i>
+      <i class="fas fa-plus plus float-right" (click)="openAddMealModal(addMealModal, meal)" title="Lisää ateria ateriasuunnitelmaan."></i>
     </h5>
     <p *ngIf="meal.info" class="card-text text-muted">{{ meal.info }}</p>
   </div>

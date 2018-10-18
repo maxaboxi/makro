@@ -177,13 +177,23 @@ export class AddedFoodsService {
           m.foods.push(food);
         }
       });
-      this.removeFoodFromMeal(food, componentIndex);
+      if (componentIndex) {
+        this.removeFoodFromMeal(food, componentIndex);
+      } else {
+        const meals = this.getMeals();
+        for (let m of meals) {
+          if (m.name === mealName) {
+            this.updateMealsInLocalStorage(m);
+            break;
+          }
+        }
+      }
     }
   }
 
   removeFoodFromMeal(food, componentIndex) {
     const meals = this.getMeals();
-    // Changed to regular for instead of forEach to be able to break the  loop
+    // Changed to regular for instead of forEach to be able to break the loop
     for (let i = 0; i < meals[componentIndex].foods.length; i++) {
       // Check if food has ID since days saved in previous version don't include food IDs
       if (food._id) {
@@ -209,7 +219,9 @@ export class AddedFoodsService {
   }
 
   updateMealsInLocalStorage(meal) {
-    this._mealsEdited.next(true);
+    if (this._openedSavedMeal.getValue()) {
+      this._mealsEdited.next(true);
+    }
     const meals = this.getMeals();
     for (let m of meals) {
       if (m.name === meal.name) {

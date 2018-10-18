@@ -40,6 +40,9 @@ export class MealTableComponent implements OnInit, DoCheck {
     tags: []
   };
   sharedMealTag = '';
+  meals: Meal[];
+  targetMeal: Meal;
+  foodToBeCopied: Food;
 
   @Input()
   set meal(meal) {
@@ -105,7 +108,9 @@ export class MealTableComponent implements OnInit, DoCheck {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.meals = JSON.parse(localStorage.getItem('meals'));
+  }
 
   calculateTotals() {
     this.energyTotal = 0;
@@ -240,6 +245,29 @@ export class MealTableComponent implements OnInit, DoCheck {
         this.sharedMeal.name = '';
         this.sharedMeal.info = '';
         this.sharedMeal.tags = [];
+      }
+    );
+  }
+
+  openCopyFoodModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.addedFoodsService.moveFoodToNewMeal(
+            this.foodToBeCopied,
+            this.targetMeal.name,
+            null
+          );
+          this.foodToBeCopied = undefined;
+          this.targetMeal = undefined;
+        } else {
+          this.foodToBeCopied = undefined;
+          this.targetMeal = undefined;
+        }
+      },
+      dismissed => {
+        this.foodToBeCopied = undefined;
+        this.targetMeal = undefined;
       }
     );
   }

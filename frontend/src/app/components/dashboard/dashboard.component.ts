@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
     private dayService: DayService,
     private auth: AuthService,
     private addedFoodService: AddedFoodsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -44,12 +44,12 @@ export class DashboardComponent implements OnInit {
       this.user = this.auth.getUserInfo();
       if (Object.keys(this.queryParams).length > 0) {
         this.dayService.getSharedDay(this.queryParams['id']).subscribe(res => {
-          localStorage.setItem('meals', JSON.stringify(res['meals']));
-          this.setFoods();
+          if (res !== null) {
+            localStorage.setItem('meals', JSON.stringify(res['meals']));
+          }
         });
-      } else {
-        this.setFoods();
       }
+      this.setFoods();
     });
   }
 

@@ -16,7 +16,9 @@
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
-        <div class="name">{{ meal.name }}</div>
+        <div class="name">
+          <i class="far fa-copy float-left mt-2" title="Kopio ruoka tästä ateriasta toiseen ateriaan" (click)="openCopyFoodModal(copyFoodModal)"></i>
+          {{ meal.name }}</div>
       </th>
       <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ?
         proteinTotal.toFixed(0) : 0 }} g</th>
@@ -105,6 +107,41 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #copyFoodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Kopioi ruoka toiseen ateriaan</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mt-2">
+      <label for="selectFood">Valitse kopioitava ruoka</label>
+      <select class="form-control" [(ngModel)]="foodToBeCopied">
+        <option *ngFor="let food of meal.foods" [ngValue]="food">{{ food.name }}</option>
+      </select>
+    </div>
+    <div class="form-group mt-2">
+      <label for="targetMeal">Mihin ateriaan ruoka kopioidaan</label>
+      <select class="form-control" [(ngModel)]="targetMeal">
+        <option *ngFor="let meal of meals" [ngValue]="meal">{{ meal.name }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-warning" (click)="modal.close('cancel')">Peruuta</button>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary" (click)="modal.close('save')">Kopio</button>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>
