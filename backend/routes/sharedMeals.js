@@ -37,6 +37,7 @@ router.post('/addnewsharedmeal', (req, res) => {
     username: req.body.username,
     name: req.body.name,
     info: req.body.info,
+    recipe: req.body.recipe,
     foods: req.body.foods,
     tags: req.body.tags
   });
@@ -62,6 +63,7 @@ router.post('/saveeditedsharedmeal', (req, res) => {
     _id: req.body._id,
     name: req.body.name,
     info: req.body.info,
+    recipe: req.body.recipe,
     foods: req.body.foods,
     tags: req.body.tags
   });

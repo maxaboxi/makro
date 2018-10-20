@@ -14,6 +14,10 @@ const SharedMealSchema = mongoose.Schema(
       type: String,
       required: false
     },
+    recipe: {
+      type: String,
+      required: false
+    },
     foods: {
       type: Array,
       required: true
