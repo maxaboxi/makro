@@ -3,8 +3,7 @@
     <tr class="text-center">
       <th class="t-head bg-lb lead" scope="row">
         <div class="name">
-          <i *ngIf="user && user.username" (click)="openShareMealModal(shareMealModal)" class="fas fa-share float-left mt-2"
-            title="Jaa ateria muiden käytettäväksi"></i>
+          <i *ngIf="user && user.username" (click)="openShareMealModal(shareMealModal)" class="fas fa-share float-left mt-2" title="Jaa ateria muiden käytettäväksi"></i>
           Ateria
         </div>
       </th>
@@ -12,7 +11,9 @@
       <th scope="col" class="table-primary d-none d-sm-table-cell">HH</th>
       <th scope="col" class="table-danger d-none d-sm-table-cell">R</th>
       <th scope="col" class="table-warning">Kcal</th>
-      <th scope="col" title="Määrä"><i class="fas fa-weight"></i></th>
+      <th scope="col" title="Määrä">
+        <i class="fas fa-weight"></i>
+      </th>
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
@@ -20,12 +21,10 @@
           <i class="far fa-copy float-left mt-2" title="Kopio ruoka tästä ateriasta toiseen ateriaan" (click)="openCopyFoodModal(copyFoodModal)"></i>
           {{ meal.name }}</div>
       </th>
-      <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ?
-        proteinTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-primary align-middle d-none d-sm-table-cell">{{ carbTotal ? carbTotal.toFixed(0) : 0
-        }} g</th>
-      <th scope="col" class="table-danger align-middle d-none d-sm-table-cell">{{ fatTotal ? fatTotal.toFixed(0) : 0 }}
-        g</th>
+      <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-primary align-middle d-none d-sm-table-cell">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" class="table-danger align-middle d-none d-sm-table-cell">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g
+      </th>
       <th scope="col" class="table-warning align-middle">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
       <th scope="col" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
     </tr>
@@ -36,20 +35,18 @@
         [attr.id]="i" (mouseenter)="setTarget(i)">
         <div class="name">{{ food.name }}</div>
       </th>
-      <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0
-        }} g</td>
+      <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
       <td class="table-primary align-middle d-none d-sm-table-cell">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
       <td class="table-danger align-middle d-none d-sm-table-cell">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
-        <span class="food-amount" (click)="food.editing = true" title="Muokkaa ruoan määrää">{{ food.amount.toFixed(0)
-          }} g</span>
+        <span class="food-amount" (click)="food.editing = true" title="Muokkaa ruoan määrää">{{ food.amount.toFixed(0) }} g</span>
         <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="Poista ruoka ateriasta"></i>
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
-          <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)"
-            (blur)="updateAmount(food, i)" #amountInput> {{ amountInput.focus() }}
+          <input class="form-control" type="number" [(ngModel)]="newFoodAmount" (keyup.enter)="updateAmount(food, i)" (blur)="updateAmount(food, i)"
+            #amountInput> {{ amountInput.focus() }}
         </div>
       </td>
     </tr>
@@ -68,8 +65,8 @@
       <form #shareMealForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="nameOfMeal">Nimi</label>
-          <input type="text" name="nameOfMeal" class="form-control" #nameOfMeal="ngModel" [(ngModel)]="sharedMeal.name"
-            [ngClass]="{'is-invalid':nameOfMeal.errors && nameOfMeal.touched}" minlength="3" required>
+          <input type="text" name="nameOfMeal" class="form-control" #nameOfMeal="ngModel" [(ngModel)]="sharedMeal.name" [ngClass]="{'is-invalid':nameOfMeal.errors && nameOfMeal.touched}"
+            minlength="3" required>
           <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback">
             Nimi on vaadittu tieto
           </div>
@@ -82,14 +79,18 @@
           <textarea type="textarea" name="description" class="form-control" [(ngModel)]="sharedMeal.info" rows="3"></textarea>
         </div>
         <div class="form-group">
+          <label for="sharedMealRecipe">Valmistusohjeet</label>
+          <textarea type="textarea" name="sharedMealRecipe" class="form-control" [(ngModel)]="sharedMeal.recipe" rows="3"></textarea>
+        </div>
+        <div class="form-group">
           <label for="hashtags">Tagit (erota pilkulla)</label>
           <p class="text-muted" *ngIf="sharedMeal.tags.length > 0">
             <ng-container *ngFor="let tag of sharedMeal.tags; let i = index;">
               <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
             </ng-container>
           </p>
-          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag"
-            [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}" minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
+          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag" [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}"
+            minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
           <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
             Tagin pitää olla vähintään kolme merkkiä pitkä
           </div>

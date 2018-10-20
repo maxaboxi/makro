@@ -213,6 +213,7 @@ export class MealTableComponent implements OnInit, DoCheck {
             name: this.sharedMeal.name,
             foods: this.meal.foods,
             info: this.sharedMeal.info,
+            recipe: this.sharedMeal.recipe,
             username: this.user.username,
             tags: this.sharedMeal.tags
           };
