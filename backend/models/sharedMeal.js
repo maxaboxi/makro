@@ -25,6 +25,11 @@ const SharedMealSchema = mongoose.Schema(
     tags: {
       type: Array,
       required: true
+    },
+    pointsTotal: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   { timestamps: true }
@@ -59,4 +64,9 @@ module.exports.getAllMeals = callback => {
 module.exports.removeMeals = (deletedMeals, callback) => {
   const query = { _id: { $in: deletedMeals } };
   sharedMeal.remove(query, callback);
+};
+
+module.exports.incrementPointTotal = (id, value) => {
+  const query = { _id: id };
+  sharedMeal.findByIdAndUpdate(query, { $inc: { pointsTotal: value } }).exec();
 };

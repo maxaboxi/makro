@@ -4,6 +4,7 @@ const Vote = require('../models/vote');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const Question = require('../models/question');
+const SharedMeal = require('../models/sharedMeal');
 const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -100,6 +101,10 @@ router.post('/votepost', (req, res) => {
         Comment.incrementPointTotal(vote.postId, vote.vote);
       }
 
+      if (vote.category === 'SharedMeal') {
+        SharedMeal.incrementPointTotal(vote.postId, vote.vote);
+      }
+
       res.status(200);
       res.json({ success: true, msg: 'Ääni rekisteröity' });
     }
@@ -150,6 +155,10 @@ router.delete('/removevotes', (req, res) => {
 
     if (vote.category === 'Comment') {
       Comment.incrementPointTotal(vote.postId, vote.vote);
+    }
+
+    if (vote.category === 'SharedMeal') {
+      SharedMeal.incrementPointTotal(vote.postId, vote.vote);
     }
   });
   Vote.removeVotes(deletedVoteIds, (err, votes) => {

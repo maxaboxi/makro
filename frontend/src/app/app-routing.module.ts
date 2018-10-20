@@ -43,10 +43,10 @@ const routes: Routes = [
         children: [
           { path: '', component: UserQuestionsComponent },
           { path: 'answers', component: UserAnswersComponent },
-          { path: 'comments', component: UserCommentsComponent },
-          { path: 'votes', component: UserVotesComponent }
+          { path: 'comments', component: UserCommentsComponent }
         ]
-      }
+      },
+      { path: 'votes', component: UserVotesComponent }
     ]
   },
   { path: 'feedback', component: FeedbackComponent, canActivate: [AuthGuard] },

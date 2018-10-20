@@ -5,6 +5,8 @@ import { User } from '../../../models/User';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { Router } from '@angular/router';
+import { Vote } from '../../../models/Vote';
+import { QaService } from '../../../services/qa.service';
 
 @Component({
   selector: 'app-shared-meal',
@@ -22,6 +24,8 @@ export class SharedMealComponent implements OnInit {
   selectedMeal: Meal;
   addToMeal = '';
   showRecipe = false;
+  userVote;
+  pointsTotal;
 
   @Input()
   set meal(meal) {
@@ -44,6 +48,7 @@ export class SharedMealComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
+    private qaService: QaService,
     private router: Router
   ) {}
 
@@ -55,6 +60,22 @@ export class SharedMealComponent implements OnInit {
       this.carbTotal += f.hh;
       this.fatTotal += f.rasva;
     });
+    if (this.meal.pointsTotal) {
+      this.pointsTotal = this.meal.pointsTotal;
+    } else {
+      this.pointsTotal = 0;
+    }
+    this.qaService
+      .getUserVoteWithId(this.user._id, this.meal._id)
+      .subscribe(vote => {
+        if (vote[0]) {
+          if (vote[0].vote > 0) {
+            this.userVote = 'up';
+          } else {
+            this.userVote = 'down';
+          }
+        }
+      });
   }
 
   openAddMealModal(content, meal) {
@@ -88,5 +109,57 @@ export class SharedMealComponent implements OnInit {
 
   toggleShowRecipe() {
     this.showRecipe = !this.showRecipe;
+  }
+
+  vote(c) {
+    let vote: Vote = {
+      userId: this.user._id,
+      username: this.user.username,
+      postId: this.meal._id,
+      category: 'SharedMeal',
+      content: this.meal.name,
+      vote: 0
+    };
+    if (!this.userVote) {
+      if (c === '+') {
+        vote.vote = 1;
+        this.userVote = 'up';
+        this.qaService.votePost(vote).subscribe(res => {
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
+        });
+      }
+
+      if (c === '-') {
+        vote.vote = -1;
+        this.userVote = 'down';
+        this.qaService.votePost(vote).subscribe(res => {
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
+        });
+      }
+    } else {
+      if (c === '+') {
+        vote.vote = 2;
+        this.userVote = 'up';
+        this.qaService.replacePreviousVote(vote).subscribe(res => {
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
+        });
+      }
+
+      if (c === '-') {
+        vote.vote = -2;
+        this.userVote = 'down';
+        this.qaService.replacePreviousVote(vote).subscribe(res => {
+          if (res['success']) {
+            this.pointsTotal += vote.vote;
+          }
+        });
+      }
+    }
   }
 }

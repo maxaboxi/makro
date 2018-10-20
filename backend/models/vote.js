@@ -39,7 +39,9 @@ module.exports.getAllVotesWithPostId = (id, callback) => {
 
 module.exports.getAllVotesWithUserId = (id, callback) => {
   const query = { userId: id };
-  Vote.find(query, callback);
+  Vote.find(query)
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };
 
 module.exports.getUserVoteWithPostId = (userId, postId, callback) => {
