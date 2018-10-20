@@ -21,6 +21,7 @@ export class SharedMealComponent implements OnInit {
   fatTotal = 0;
   selectedMeal: Meal;
   addToMeal = '';
+  showRecipe = false;
 
   @Input()
   set meal(meal) {
@@ -83,5 +84,9 @@ export class SharedMealComponent implements OnInit {
         this.selectedMeal = undefined;
       }
     );
+  }
+
+  toggleShowRecipe() {
+    this.showRecipe = !this.showRecipe;
   }
 }

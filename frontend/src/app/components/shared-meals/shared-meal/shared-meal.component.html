@@ -5,6 +5,8 @@
       <i class="fas fa-plus plus float-right" (click)="openAddMealModal(addMealModal, meal)" title="Lisää ateria ateriasuunnitelmaan."></i>
     </h5>
     <p *ngIf="meal.info" class="card-text text-muted">{{ meal.info }}</p>
+    <p *ngIf="meal.recipe" (click)="toggleShowRecipe()" class="card-text text-muted recipe" title="Näytä valmistusohjeet">Valmistusohjeet</p>
+    <p *ngIf="showRecipe" class="card-text text-muted"> {{ meal.recipe }}</p>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item bg-light lead">

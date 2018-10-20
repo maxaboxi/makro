@@ -1,8 +1,8 @@
 <div class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
-      <h1 class="display-4">Jakamani
-        ateriat</h1>
+      <h1 class="display-4">Jakamani ateriat
+      </h1>
     </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMeals.length > 0 || sharedMealsDeleted">
@@ -30,8 +30,8 @@
 
   <div class="row justify-content-center" *ngIf="sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna
-        muutokset</button>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna muutokset
+      </button>
       <p class="lead">Ateria(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
     </div>
   </div>
@@ -53,17 +53,22 @@
         </div>
         <div class="form-group">
           <label for="sharedMealInfo">Lisätietoja</label>
-          <textarea type="textarea" name="sharedMealInfo" class="form-control" [(ngModel)]="selectedSharedMeal.info"
-            rows="3"></textarea>
+          <textarea type="textarea" name="sharedMealInfo" class="form-control" [(ngModel)]="selectedSharedMeal.info" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="sharedMealRecipe">Valmistusohjeet</label>
+          <textarea type="textarea" name="sharedMealRecipe" class="form-control" [(ngModel)]="selectedSharedMeal.recipe" rows="3"></textarea>
         </div>
         <p class="lead">Ruokien määrät grammoina</p>
         <div class="form-group row" *ngFor="let food of selectedSharedMeal.foods; let i = index">
           <label for="foodAmount" class="lead col-sm-6 col-form-label">{{ food.name }}</label>
           <div class="col-sm-4">
-            <input type="number" name="foodAmount" class="form-control" [(ngModel)]="food.amount" required
-              [ngModelOptions]="{standalone: true}" [value]="food.amount">
+            <input type="number" name="foodAmount" class="form-control" [(ngModel)]="food.amount" required [ngModelOptions]="{standalone: true}"
+              [value]="food.amount">
           </div>
-          <div class="col-sm-2"><i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="Poista ruoka ateriasta"></i></div>
+          <div class="col-sm-2">
+            <i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="Poista ruoka ateriasta"></i>
+          </div>
         </div>
         <div class="form-group">
           <label for="hashtags">Tagit (erota pilkulla)</label>
@@ -72,8 +77,8 @@
               <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
             </ng-container>
           </p>
-          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag"
-            [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}" minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
+          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag" [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}"
+            minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
           <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
             Tagin pitää olla vähintään kolme merkkiä pitkä
           </div>
