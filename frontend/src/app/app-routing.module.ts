@@ -22,7 +22,7 @@ import { UserQaComponent } from './components/profile/user-qa/user-qa.component'
 import { UserQuestionsComponent } from './components/profile/user-qa/user-questions/user-questions.component';
 import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
 import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
-import { UserVotesComponent } from './components/profile/user-qa/user-votes/user-votes.component';
+import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },

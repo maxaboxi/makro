@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../../services/auth.service';
-import { QaService } from '../../../../services/qa.service';
+import { AuthService } from '../../../services/auth.service';
+import { QaService } from '../../../services/qa.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { User } from '../../../../models/User';
-import { Vote } from '../../../../models/Vote';
+import { User } from '../../../models/User';
+import { Vote } from '../../../models/Vote';
 
 @Component({
   selector: 'app-user-votes',
