@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { Router } from '@angular/router';
 import { Vote } from '../../../models/Vote';
-import { QaService } from '../../../services/qa.service';
+import { VoteService } from '../../../services/vote.service';
 
 @Component({
   selector: 'app-shared-meal',
@@ -48,7 +48,7 @@ export class SharedMealComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
-    private qaService: QaService,
+    private voteService: VoteService,
     private router: Router
   ) {}
 
@@ -77,7 +77,7 @@ export class SharedMealComponent implements OnInit {
   }
 
   fetchVotes() {
-    this.qaService
+    this.voteService
       .getUserVoteWithId(this.user._id, this.meal._id)
       .subscribe(vote => {
         if (vote[0]) {
@@ -136,7 +136,7 @@ export class SharedMealComponent implements OnInit {
       if (c === '+') {
         vote.vote = 1;
         this.userVote = 'up';
-        this.qaService.votePost(vote).subscribe(res => {
+        this.voteService.votePost(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -146,7 +146,7 @@ export class SharedMealComponent implements OnInit {
       if (c === '-') {
         vote.vote = -1;
         this.userVote = 'down';
-        this.qaService.votePost(vote).subscribe(res => {
+        this.voteService.votePost(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -156,7 +156,7 @@ export class SharedMealComponent implements OnInit {
       if (c === '+') {
         vote.vote = 2;
         this.userVote = 'up';
-        this.qaService.replacePreviousVote(vote).subscribe(res => {
+        this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -166,7 +166,7 @@ export class SharedMealComponent implements OnInit {
       if (c === '-') {
         vote.vote = -2;
         this.userVote = 'down';
-        this.qaService.replacePreviousVote(vote).subscribe(res => {
+        this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }

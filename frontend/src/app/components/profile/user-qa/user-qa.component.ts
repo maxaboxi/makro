@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { QaService } from '../../../services/qa.service';
+import { VoteService } from '../../../services/vote.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/User';
 import { Answer } from '../../../models/Answer';
@@ -18,7 +19,11 @@ export class UserQaComponent implements OnInit {
   votes: Vote[];
   comments: Comment[];
 
-  constructor(private auth: AuthService, private qaService: QaService) {}
+  constructor(
+    private auth: AuthService,
+    private qaService: QaService,
+    private voteService: VoteService
+  ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -29,9 +34,11 @@ export class UserQaComponent implements OnInit {
           .subscribe(answers => {
             this.answers = answers;
           });
-        this.qaService.getAllUserVotesWithId(this.user._id).subscribe(votes => {
-          this.votes = votes;
-        });
+        this.voteService
+          .getAllUserVotesWithId(this.user._id)
+          .subscribe(votes => {
+            this.votes = votes;
+          });
         this.qaService
           .getAllUserCommentsWithId(this.user._id)
           .subscribe(comments => {

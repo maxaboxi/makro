@@ -3,6 +3,7 @@ import { Answer } from '../../../../models/Answer';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../../../../models/User';
 import { QaService } from '../../../../services/qa.service';
+import { VoteService } from '../../../../services/vote.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Comment } from '../../../../models/Comment';
@@ -52,6 +53,7 @@ export class QuestionAnswerComponent implements OnInit {
 
   constructor(
     private qaService: QaService,
+    private voteService: VoteService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService
   ) {}
@@ -62,7 +64,7 @@ export class QuestionAnswerComponent implements OnInit {
       this.qaService
         .getCommentsToAnswerWithId(this.answer._id)
         .subscribe(comments => (this.answer.comments = comments));
-      this.qaService
+      this.voteService
         .getUserVoteWithId(this.user._id, this.answer._id)
         .subscribe(vote => {
           if (vote[0]) {
@@ -132,7 +134,7 @@ export class QuestionAnswerComponent implements OnInit {
       if (c === '+') {
         vote.vote = 1;
         this.userVote = 'up';
-        this.qaService.votePost(vote).subscribe(res => {
+        this.voteService.votePost(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -142,7 +144,7 @@ export class QuestionAnswerComponent implements OnInit {
       if (c === '-') {
         vote.vote = -1;
         this.userVote = 'down';
-        this.qaService.votePost(vote).subscribe(res => {
+        this.voteService.votePost(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -152,7 +154,7 @@ export class QuestionAnswerComponent implements OnInit {
       if (c === '+') {
         vote.vote = 2;
         this.userVote = 'up';
-        this.qaService.replacePreviousVote(vote).subscribe(res => {
+        this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }
@@ -162,7 +164,7 @@ export class QuestionAnswerComponent implements OnInit {
       if (c === '-') {
         vote.vote = -2;
         this.userVote = 'down';
-        this.qaService.replacePreviousVote(vote).subscribe(res => {
+        this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += vote.vote;
           }

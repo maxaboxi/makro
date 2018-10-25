@@ -43,7 +43,7 @@ server.use('/api/v1/sharedmeals', sharedMeals);
 server.use('/api/v1/qa/questions', questions);
 server.use('/api/v1/qa/answers', answers);
 server.use('/api/v1/qa/comments', comments);
-server.use('/api/v1/qa/votes', votes);
+server.use('/api/v1/votes', votes);
 
 server.listen(port, () => {
   console.log(`Server started on port ${port}`);

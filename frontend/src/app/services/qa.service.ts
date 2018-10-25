@@ -4,7 +4,6 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
 import { Comment } from '../models/Comment';
-import { Vote } from '../models/Vote';
 
 @Injectable({
   providedIn: 'root'
@@ -92,41 +91,6 @@ export class QaService {
     return this.http.post(url, comment, { headers: headers });
   }
 
-  votePost(vote: Vote) {
-    const url = `${this.baseUrl}/votes/votepost`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, vote, { headers: headers });
-  }
-
-  replacePreviousVote(vote: Vote) {
-    const url = `${this.baseUrl}/votes/replacepreviousvote`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, vote, { headers: headers });
-  }
-
-  getUserVoteWithId(userId, postId) {
-    const url = `${this.baseUrl}/votes/getuservotewithpostid`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const data = {
-      userId: userId,
-      postId: postId
-    };
-
-    return this.http.post<Vote>(url, data, { headers: headers });
-  }
-
   addAnswerToQuestion(answer: Answer) {
     const url = `${this.baseUrl}/answers/addanswertoquestion`;
 
@@ -135,16 +99,6 @@ export class QaService {
     });
 
     return this.http.post(url, answer, { headers: headers });
-  }
-
-  getAllUserVotesWithId(id) {
-    const url = `${this.baseUrl}/votes/getallvoteswithuserid/${id}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Vote[]>(url, { headers: headers });
   }
 
   getAllUserQuestionsWithUsername(username) {
@@ -239,21 +193,6 @@ export class QaService {
     const options = {
       headers: headers,
       body: commentIds
-    };
-
-    return this.http.delete(url, options);
-  }
-
-  removeVotes(voteIds) {
-    const url = `${this.baseUrl}/votes/removevotes`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const options = {
-      headers: headers,
-      body: voteIds
     };
 
     return this.http.delete(url, options);
