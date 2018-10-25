@@ -53,6 +53,15 @@ export class SharedMealComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.user && this.user._id) {
+      this.fetchVotes();
+    } else {
+      // Wait a bit to get user.
+      setTimeout(() => {
+        this.fetchVotes();
+      }, 500);
+    }
+
     this.meal.foods.forEach(f => {
       this.amountTotal += f.amount;
       this.kcalTotal += f.energia;
@@ -65,6 +74,9 @@ export class SharedMealComponent implements OnInit {
     } else {
       this.pointsTotal = 0;
     }
+  }
+
+  fetchVotes() {
     this.qaService
       .getUserVoteWithId(this.user._id, this.meal._id)
       .subscribe(vote => {
