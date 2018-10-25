@@ -12,6 +12,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminService } from '../../services/admin.service';
 import { SharedMealsService } from '../../services/shared-meals.service';
 import { Meal } from '../../models/Meal';
+import { Vote } from '../../models/Vote';
+import { QaService } from '../../services/qa.service';
+import { Question } from '../../models/Question';
+import { Answer } from '../../models/Answer';
+import { Comment } from '../../models/Comment';
+import { VoteService } from '../../services/vote.service';
 
 @Component({
   selector: 'app-admin',
@@ -23,6 +29,10 @@ export class AdminComponent implements OnInit {
   users: User[];
   days: Day[];
   foods: Food[];
+  votes: Vote[];
+  questions: Question[];
+  answers: Answer[];
+  comments: Comment[];
   feedbacks: Feedback[];
   sharedMeals: Meal[];
   searchTerm = '';
@@ -47,6 +57,14 @@ export class AdminComponent implements OnInit {
   sharedDays = [];
   deletedSharedDays = [];
   sharedDaysDeleted = false;
+  deletedVotes = [];
+  votesDeleted = false;
+  deletedQuestions = [];
+  questionsDeleted = false;
+  deletedAnswers = [];
+  answersDeleted = false;
+  deletedComments = [];
+  commentsDeleted = false;
 
   constructor(
     private auth: AuthService,
@@ -56,7 +74,9 @@ export class AdminComponent implements OnInit {
     private feedbackService: FeedbackService,
     private adminService: AdminService,
     private modalService: NgbModal,
-    private sharedMealsService: SharedMealsService
+    private sharedMealsService: SharedMealsService,
+    private qaService: QaService,
+    private voteService: VoteService
   ) {}
 
   ngOnInit() {
@@ -73,6 +93,16 @@ export class AdminComponent implements OnInit {
     this.adminService.getAllSharedDays().subscribe(days => {
       this.sharedDays = JSON.parse(JSON.stringify(days));
     });
+    this.qaService
+      .getAllQuestions()
+      .subscribe(questions => (this.questions = questions));
+    this.adminService
+      .getAllAnswers()
+      .subscribe(answers => (this.answers = answers));
+    this.adminService
+      .getAllComments()
+      .subscribe(comments => (this.comments = comments));
+    this.adminService.getAllVotes().subscribe(votes => (this.votes = votes));
   }
 
   searchFoods() {
@@ -416,7 +446,6 @@ export class AdminComponent implements OnInit {
   deleteSharedDay(index) {
     this.deletedSharedDays.push(this.sharedDays[index]._id);
     this.sharedDays.splice(index, 1);
-
     this.sharedDaysDeleted = true;
   }
 
@@ -432,6 +461,122 @@ export class AdminComponent implements OnInit {
             this.sharedDays = JSON.parse(JSON.stringify(days));
           });
           this.sharedDaysDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteQuestion(index) {
+    this.deletedQuestions.push(this.questions[index]._id);
+    this.questions.splice(index, 1);
+    this.questionsDeleted = true;
+  }
+
+  deleteQuestionsFromDb() {
+    this.qaService.removeQuestions(this.deletedQuestions).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.qaService
+            .getAllQuestions()
+            .subscribe(questions => (this.questions = questions));
+          this.questionsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteAnswer(index) {
+    this.deletedAnswers.push(this.answers[index]._id);
+    this.answers.splice(index, 1);
+    this.answersDeleted = true;
+  }
+
+  deleteAnswersFromDb() {
+    this.qaService.removeAnswers(this.deletedAnswers).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.adminService
+            .getAllAnswers()
+            .subscribe(answers => (this.answers = answers));
+          this.answersDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteComment(index) {
+    this.deletedComments.push(this.comments[index]._id);
+    this.comments.splice(index, 1);
+    this.commentsDeleted = true;
+  }
+
+  deleteCommentsFromDb() {
+    this.qaService.removeComments(this.deletedComments).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.adminService
+            .getAllComments()
+            .subscribe(comments => (this.comments = comments));
+          this.commentsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteVote(index, vote) {
+    this.deletedVotes.push(vote);
+    this.votes.splice(index, 1);
+    this.votesDeleted = true;
+  }
+
+  deleteVotesFromDb() {
+    this.voteService.removeVotes(this.deletedVotes).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.adminService
+            .getAllVotes()
+            .subscribe(votes => (this.votes = votes));
+          this.votesDeleted = false;
         }
       },
       (error: Error) => {

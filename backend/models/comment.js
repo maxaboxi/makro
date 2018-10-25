@@ -48,6 +48,10 @@ module.exports.getAllCommentsWithId = (id, callback) => {
     .exec(callback);
 };
 
+module.exports.getAllComments = callback => {
+  Comment.find(callback);
+};
+
 module.exports.addNewComment = (c, callback) => {
   c.save(callback);
 };

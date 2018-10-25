@@ -58,7 +58,7 @@ router.post('/addanswertoquestion', (req, res) => {
 
 router.post('/getallresponsestoquestion', (req, res) => {
   const questionId = req.body.questionId;
-  Answer.getAllAnswers(questionId, (err, answers) => {
+  Answer.getAllAnswersWithId(questionId, (err, answers) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),

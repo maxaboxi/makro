@@ -62,3 +62,7 @@ module.exports.removeVotes = (deletedVotes, callback) => {
   const query = { _id: { $in: deletedVotes } };
   Vote.remove(query, callback);
 };
+
+module.exports.getAllVotes = callback => {
+  Vote.find(callback);
+};

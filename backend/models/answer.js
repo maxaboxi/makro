@@ -29,11 +29,15 @@ const AnswerSchema = mongoose.Schema(
 
 const Answer = (module.exports = mongoose.model('answer', AnswerSchema));
 
-module.exports.getAllAnswers = (questionId, callback) => {
+module.exports.getAllAnswersWithId = (questionId, callback) => {
   const query = { questionId: questionId };
   Answer.find(query)
     .sort({ pointsTotal: -1 })
     .exec(callback);
+};
+
+module.exports.getAllAnswers = callback => {
+  Answer.find(callback);
 };
 
 module.exports.saveAnswer = (a, callback) => {

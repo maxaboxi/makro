@@ -4,16 +4,16 @@
       <h2 class="h2 text-muted">Käyttäjät ({{ users?.length }})</h2>
       <div class="row mb-2" *ngIf="usersDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteUsersFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteUsersFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <ul>
         <li *ngFor="let user of users; let i = index;" class="big-list lead">
           <div class="row">
             <div class="col-10 list-name" (click)="openUserModal(userModal, user)">
-              {{ user.username}} <span class="text-muted" *ngIf="user.lastLogin">- {{ user.lastLogin
-                | date:('dd.MM.yyyy klo HH:mm:ss') }}</span>
+              {{ user.username}}
+              <span class="text-muted" *ngIf="user.lastLogin">- {{ user.lastLogin | date:('dd.MM.yyyy klo HH:mm:ss') }}</span>
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteUser(i)" title="Poista käyttäjä"></i>
@@ -26,8 +26,8 @@
       <h2 class="h2 text-muted">Päivät ({{ days?.length }})</h2>
       <div class="row mb-2" *ngIf="daysDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <ul>
@@ -52,8 +52,8 @@
       <h2 class="h2 text-muted">Palautteet ({{ feedbacks?.length }})</h2>
       <div class="row mb-2" *ngIf="feedbacksDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFeedbacksFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFeedbacksFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <ul>
@@ -73,13 +73,12 @@
       <h2 class="h2 text-muted">Ruoat ({{ foods?.length }})</h2>
       <div class="row mb-2" *ngIf="foodsDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <div class="form-group">
-        <input type="text" name="food" class="form-control" placeholder="Hae ruokia" (keyup)="searchFoods()"
-          [(ngModel)]="searchTerm">
+        <input type="text" name="food" class="form-control" placeholder="Hae ruokia" (keyup)="searchFoods()" [(ngModel)]="searchTerm">
       </div>
       <ng-container *ngIf="searchTerm?.length > 0">
         <ul class="search-results" class="big-list lead">
@@ -119,8 +118,8 @@
       <h2 class="h2 text-muted">Jaetut ateriat ({{ sharedMeals?.length }})</h2>
       <div class="row mb-2" *ngIf="sharedMealsDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <ul>
@@ -140,19 +139,122 @@
       <h2 class="h2 text-muted">Jaetut päivät ({{ sharedDays?.length }})</h2>
       <div class="row mb-2" *ngIf="sharedDaysDeleted">
         <div class="col-12">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedDaysFromDb()">Tallenna
-            muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedDaysFromDb()">Tallenna muutokset
+          </button>
         </div>
       </div>
       <ul>
         <li *ngFor="let day of sharedDays; let i = index;" class="big-list lead">
           <div class="row">
             <div class="col-10 list-name">
-              <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a> - {{
-              day.createdAt | date:'dd.MM.yyyy' }}
+              <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a> - {{ day.createdAt | date:'dd.MM.yyyy' }}
             </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteSharedDay(i)" title="Poista linkki"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <h2 class="h2 text-muted">Kysymykset ({{ questions?.length }})</h2>
+      <div class="row mb-2" *ngIf="questionsDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteQuestionsFromDb()">Tallenna muutokset
+          </button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let q of questions; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name">
+              {{ q.username}} - {{ q.createdAt | date:'dd.MM.yyyy' }} - {{ q.question }} - {{ q.info }}
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteQuestion(i)" title="Poista kysymys"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <h2 class="h2 text-muted">Vastaukset ({{ answers?.length }})</h2>
+      <div class="row mb-2" *ngIf="answersDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteAnswersFromDb()">Tallenna muutokset
+          </button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let a of answers; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name">
+              {{ a.username}} - {{ a.createdAt | date:'dd.MM.yyyy' }} - {{ a.answer }} - {{ a.origPost }} - ({{ a.pointsTotal }})
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteAnswer(i)" title="Poista vastaus"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <h2 class="h2 text-muted">Kommentit ({{ comments?.length }})</h2>
+      <div class="row mb-2" *ngIf="commentsDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteCommentsFromDb()">Tallenna muutokset
+          </button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let c of comments; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name">
+              {{ c.username}} - {{ c.createdAt | date:'dd.MM.yyyy' }} - {{ c.comment }} - {{ c.origPost }} - ({{ c.pointsTotal }})
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteComment(i)" title="Poista kommentti"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <h2 class="h2 text-muted">Tykkäykset ({{ votes?.length }})</h2>
+      <div class="row mb-2" *ngIf="votesDeleted">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-success btn-block" (click)="deleteVotesFromDb()">Tallenna muutokset
+          </button>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let vote of votes; let i = index;" class="big-list lead">
+          <div class="row">
+            <div class="col-10 list-name">
+              {{ vote.username}} - {{ vote.createdAt | date:'dd.MM.yyyy' }} - {{ vote.category }} - {{ vote.content }} ({{ vote.vote }})
+            </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteVote(i, vote)" title="Poista tykkäys"></i>
             </div>
           </div>
         </li>
@@ -174,8 +276,8 @@
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodUsername">Lisääjä</label>
           <div class="col-sm-8">
-            <input type="text" name="foodUsername" class="form-control" [(ngModel)]="selectedFood.username"
-              #foodUsername="ngModel" [ngClass]="{'is-invalid':foodUsername.errors && foodUsername.touched}" required>
+            <input type="text" name="foodUsername" class="form-control" [(ngModel)]="selectedFood.username" #foodUsername="ngModel" [ngClass]="{'is-invalid':foodUsername.errors && foodUsername.touched}"
+              required>
             <div [hidden]="!foodUsername.errors?.required" class="invalid-feedback">
               Lisääjä on vaadittu tieto
             </div>
@@ -207,8 +309,8 @@
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodFat">Rasva</label>
           <div class="col-sm-8">
-            <input type="number" name="foodFat" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.rasva"
-              #foodFat="ngModel" [ngClass]="{'is-invalid':foodFat.errors && foodFat.touched}" required>
+            <input type="number" name="foodFat" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.rasva" #foodFat="ngModel"
+              [ngClass]="{'is-invalid':foodFat.errors && foodFat.touched}" required>
             <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">
               Rasvan määrä on vaadittu tieto
             </div>
@@ -217,8 +319,8 @@
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodCarbs">Hiilihydraatit</label>
           <div class="col-sm-8">
-            <input type="number" name="foodCarbs" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.hh"
-              #foodCarbs="ngModel" [ngClass]="{'is-invalid':foodCarbs.errors && foodCarbs.touched}" required>
+            <input type="number" name="foodCarbs" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.hh" #foodCarbs="ngModel"
+              [ngClass]="{'is-invalid':foodCarbs.errors && foodCarbs.touched}" required>
             <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback">
               Hiilihydraattien määrä on vaadittu tieto
             </div>
@@ -237,15 +339,13 @@
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodFiber">Ravintokuidut</label>
           <div class="col-sm-8">
-            <input type="number" name="foodFiber" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.kuitu"
-              #foodFiber="ngModel">
+            <input type="number" name="foodFiber" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.kuitu" #foodFiber="ngModel">
           </div>
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodSugar">Sokerit</label>
           <div class="col-sm-8">
-            <input type="number" name="foodSugar" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.sokeri"
-              #foodSugar="ngModel">
+            <input type="number" name="foodSugar" class="form-control" placeholder="g / 100 g" [(ngModel)]="selectedFood.sokeri" #foodSugar="ngModel">
           </div>
         </div>
         <div class="form-group row">
@@ -330,16 +430,16 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <p class="lead">{{ selectedUser.username }} <span *ngIf="selectedUser.lastLogin">- {{ selectedUser.lastLogin
-              | date:('dd.MM.yyyy klo HH:mm:ss') }}</span></p>
+          <p class="lead">{{ selectedUser.username }}
+            <span *ngIf="selectedUser.lastLogin">- {{ selectedUser.lastLogin | date:('dd.MM.yyyy klo HH:mm:ss') }}</span>
+          </p>
         </div>
       </div>
       <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
           <div class="col-sm-8">
-            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi"
-              [(ngModel)]="selectedUser.email">
+            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi" [(ngModel)]="selectedUser.email">
           </div>
         </div>
         <div class="form-group row">
@@ -421,8 +521,7 @@
         </div>
         <label for="meals">Ateriat:</label>
         <div class="form-group" *ngFor="let meal of selectedUser.meals">
-          <input type="text" name="{{meal.name}}" class="form-control" [(ngModel)]="meal.name" [value]="meal.name"
-            required [ngModelOptions]="{standalone: true}">
+          <input type="text" name="{{meal.name}}" class="form-control" [(ngModel)]="meal.name" [value]="meal.name" required [ngModelOptions]="{standalone: true}">
         </div>
         <div class="container text-center">
           <div class="row">
@@ -452,8 +551,8 @@
     <div class="container">
       <h5 class="h5 text-muted" *ngIf="selectedDay.username">Tekijä: {{ selectedDay.username }}</h5>
       <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt">Luotu: {{ selectedDay.createdAt | date:'dd.MM.yyyy' }}</h5>
-      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">Päivitetty: {{ selectedDay.updatedAt | date:'dd.MM.yyyy'
-        }}</h5>
+      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">Päivitetty: {{ selectedDay.updatedAt | date:'dd.MM.yyyy' }}
+      </h5>
       <hr *ngIf="selectedDay.username || selectedDay.createdAt || selectedDay.updatedAt">
       <ng-container *ngFor="let meal of selectedDay.meals">
         <p class="text-muted">{{ meal.name }}</p>

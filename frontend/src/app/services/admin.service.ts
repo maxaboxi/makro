@@ -4,6 +4,9 @@ import { Day } from '../models/Day';
 import { Feedback } from '../models/Feedback';
 import { User } from '../models/User';
 import { environment } from '../../environments/environment';
+import { Vote } from '../models/Vote';
+import { Answer } from '../models/Answer';
+import { Comment } from '../models/Comment';
 
 @Injectable({
   providedIn: 'root'
@@ -97,5 +100,32 @@ export class AdminService {
     const url = `${this.baseUrl}/getallusers`;
 
     return this.http.get<User[]>(url, { headers: headers });
+  }
+
+  getAllVotes() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getallvotes`;
+
+    return this.http.get<Vote[]>(url, { headers: headers });
+  }
+
+  getAllAnswers() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getallanswers`;
+
+    return this.http.get<Answer[]>(url, { headers: headers });
+  }
+
+  getAllComments() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getallcomments`;
+
+    return this.http.get<Comment[]>(url, { headers: headers });
   }
 }
