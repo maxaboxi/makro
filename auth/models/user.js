@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const winston = require('winston');
 const path = require('path');
 
@@ -110,4 +111,65 @@ const User = (module.exports = mongoose.model('User', UserSchema));
 
 module.exports.getUserById = (userId, callback) => {
   User.findById(userId, callback);
+};
+
+module.exports.getUserByUserName = (username, callback) => {
+  const query = { username: username };
+  User.findOne(query, callback);
+};
+
+module.exports.addUser = (newUser, callback) => {
+  bcrypt.genSalt(12, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) {
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+      }
+      newUser.password = hash;
+      newUser.save(callback);
+    });
+  });
+};
+
+module.exports.comparePassword = (candidatePassword, hash, callback) => {
+  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+    }
+    callback(null, isMatch);
+  });
+};
+
+module.exports.updateUserInformation = (userObject, userId, callback) => {
+  const query = { _id: userId };
+  User.findOneAndUpdate(query, userObject, { new: true }, callback);
+};
+
+module.exports.deleteAccount = (userId, callback) => {
+  const query = { _id: userId };
+  User.deleteOne(query, callback);
+};
+
+module.exports.updateLastLogin = username => {
+  const query = { username: username };
+  User.findOneAndUpdate(query, { lastLogin: Date.now() }).exec();
+};
+
+module.exports.getAllUsers = callback => {
+  User.find()
+    .select('-password')
+    .sort({ lastLogin: -1 })
+    .exec(callback);
+};
+
+module.exports.removeUsers = (deletedUsers, callback) => {
+  const query = { _id: { $in: deletedUsers } };
+  User.remove(query, callback);
 };

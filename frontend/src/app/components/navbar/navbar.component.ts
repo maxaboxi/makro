@@ -29,9 +29,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
+    this.router.navigate(['/login']);
     this.addedFoodsService.resetTotals();
     this.auth.logout();
     this.addedFoodsService.setMealsFromLocalStorage();
-    this.router.navigate(['/login']);
   }
 }

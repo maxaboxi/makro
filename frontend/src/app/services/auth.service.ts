@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${environment.baseUrl}/auth`;
+  private baseUrl = `${environment.auth}/auth`;
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);

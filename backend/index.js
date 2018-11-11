@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const users = require('./routes/users');
 const foods = require('./routes/foods');
 const days = require('./routes/days');
 const feedbacks = require('./routes/feedbacks');
@@ -34,7 +33,6 @@ const port = 1337;
 server.use(cors());
 server.use(express.json());
 server.use('/admin', admin);
-server.use('/auth', users);
 server.use('/api/v1/foods', foods);
 server.use('/api/v1/days', days);
 server.use('/api/v1/feedbacks', feedbacks);

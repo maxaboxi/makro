@@ -13,11 +13,12 @@ import { Comment } from '../models/Comment';
 })
 export class AdminService {
   private baseUrl = `${environment.baseUrl}/admin`;
+  private baseUrlAuth = `${environment.auth}/admin`;
 
   constructor(private http: HttpClient) {}
 
   removeUsers(users) {
-    const url = `${this.baseUrl}/removeusers`;
+    const url = `${this.baseUrlAuth}/removeusers`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -35,7 +36,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/updateuserinformation`;
+    const url = `${this.baseUrlAuth}/updateuserinformation`;
 
     return this.http.post(url, user, { headers: headers });
   }
@@ -44,7 +45,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/updateuserpassword`;
+    const url = `${this.baseUrlAuth}/updateuserpassword`;
 
     return this.http.post(url, user, { headers: headers });
   }
@@ -97,7 +98,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallusers`;
+    const url = `${this.baseUrlAuth}/getallusers`;
 
     return this.http.get<User[]>(url, { headers: headers });
   }

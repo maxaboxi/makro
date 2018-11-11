@@ -1,6 +1,23 @@
 version: '3'
 
 services:
+  auth:
+    container_name: makro-auth
+    restart: always
+    build: ./auth/
+    ports:
+      - '1336:1336'
+    links:
+      - db
+    networks:
+      - back
+      - reverse-proxy
+    environment:
+      - VIRTUAL_PORT=1336
+      - VIRTUAL_HOST=auth.makro.diet
+      - LETSENCRYPT_HOST=auth.makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - WAIT_HOSTS=makro-mongo:27020
   backend:
     container_name: makro-node
     restart: always
