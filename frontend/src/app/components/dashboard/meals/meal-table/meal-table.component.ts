@@ -3,7 +3,8 @@ import {
   OnInit,
   Input,
   DoCheck,
-  IterableDiffers
+  IterableDiffers,
+  ChangeDetectorRef
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../../../../models/Food';
@@ -85,7 +86,8 @@ export class MealTableComponent implements OnInit, DoCheck {
     private addedFoodsService: AddedFoodsService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
-    private sharedMealsService: SharedMealsService
+    private sharedMealsService: SharedMealsService,
+    private cdr: ChangeDetectorRef
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
   }
@@ -192,9 +194,11 @@ export class MealTableComponent implements OnInit, DoCheck {
     if (parseInt(index) === parseInt(this.componentIndex)) {
       setTimeout(() => {
         this.meal.foods.splice(start, 1);
+        // dropTargetIndex is the index of the item in array where the cursor is on
+        // TODO: needs some work; food is not moved UNLESS the cursor is moved before stuff inside timeout gets executed
         this.meal.foods.splice(this.dropTargetIndex, 0, food);
         this.addedFoodsService.updateMealsInLocalStorage(this.meal);
-      }, 10);
+      }, 100);
       return;
     } else {
       this.addedFoodsService.moveFoodToNewMeal(food, mealName, index);
