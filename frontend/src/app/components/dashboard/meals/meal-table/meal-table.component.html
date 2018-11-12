@@ -32,7 +32,7 @@
   <tbody>
     <tr *ngFor="let food of meal.foods; let i = index" class="text-center">
       <th class="t-head drag" scope="row" draggable="true" (dragstart)="drag($event, food)" title="Siirrä toiseen ateriaan raahaamalla"
-        [attr.id]="i" (mouseenter)="setTarget(i)">
+        [attr.id]="i" (dragover)="setTarget(i)">
         <div class="name">{{ food.name }}</div>
       </th>
       <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>

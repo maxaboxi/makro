@@ -192,13 +192,12 @@ export class MealTableComponent implements OnInit, DoCheck {
     const index = ev.dataTransfer.getData('index');
     const start = ev.dataTransfer.getData('start');
     if (parseInt(index) === parseInt(this.componentIndex)) {
-      setTimeout(() => {
-        this.meal.foods.splice(start, 1);
-        // dropTargetIndex is the index of the item in array where the cursor is on
-        // TODO: needs some work; food is not moved UNLESS the cursor is moved before stuff inside timeout gets executed
-        this.meal.foods.splice(this.dropTargetIndex, 0, food);
-        this.addedFoodsService.updateMealsInLocalStorage(this.meal);
-      }, 100);
+      this.meal.foods.splice(start, 1);
+      // dropTargetIndex is the index of the item in array where the cursor is on
+      // TODO: needs some work; food is not moved UNLESS the cursor is moved before stuff inside timeout gets executed
+      // Kinda fixed by using dragover event to set target.
+      this.meal.foods.splice(this.dropTargetIndex, 0, food);
+      this.addedFoodsService.updateMealsInLocalStorage(this.meal);
       return;
     } else {
       this.addedFoodsService.moveFoodToNewMeal(food, mealName, index);
