@@ -388,19 +388,12 @@
   </div>
   <div class="modal-body">
     <div class="container">
-      <p>{{ selectedFeedback.feedback }}</p>
+      <p [innerHTML]="selectedFeedback.feedback"></p>
       <p>{{ selectedFeedback.username }} - {{ selectedFeedback.createdAt | date:'dd.MM.yyyy' }}</p>
       <form #feedbackForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="feedbackAnswer">Vastaus</label>
-          <input type="text" name="feedbackAnswer" class="form-control" #feedbackAnswer="ngModel" [(ngModel)]="selectedFeedback.answer"
-            [ngClass]="{'is-invalid':feedbackAnswer.errors && feedbackAnswer.touched}" minlength="10" required>
-          <div [hidden]="!feedbackAnswer.errors?.required" class="invalid-feedback">
-            Vaadittu kenttä
-          </div>
-          <div [hidden]="!feedbackAnswer.errors?.minlength" class="invalid-feedback">
-            Vastauksen täytyy olla vähintään 10 merkkiä pitkä
-          </div>
+          <app-tinymce name="feedbackAnswer" [(ngModel)]="selectedFeedback.answer" minlength="10" required></app-tinymce>
         </div>
         <div class="container text-center">
           <div class="row">
