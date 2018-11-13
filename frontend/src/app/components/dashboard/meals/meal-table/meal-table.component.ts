@@ -258,7 +258,7 @@ export class MealTableComponent implements OnInit, DoCheck {
       result => {
         if (result === 'save') {
           this.addedFoodsService.moveFoodToNewMeal(
-            this.foodToBeCopied,
+            JSON.parse(JSON.stringify(this.foodToBeCopied)),
             this.targetMeal.name,
             null
           );
