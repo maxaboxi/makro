@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:1337',
-  auth: 'http://localhost:1336'
+  auth: 'http://localhost:1336',
+  foods: 'http://localhost:1338'
 };
 
 /*
