@@ -18,7 +18,7 @@ services:
       - LETSENCRYPT_HOST=auth.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
       - WAIT_HOSTS=makro-mongo:27020
-  auth:
+  foods:
     container_name: makro-foods
     restart: always
     build: ./foods/
