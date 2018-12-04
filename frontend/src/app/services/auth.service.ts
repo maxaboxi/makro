@@ -138,6 +138,20 @@ export class AuthService {
     return this.http.post(url, user, { headers: headers });
   }
 
+  updateShowTargets(showTargets: boolean) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    this.user.getValue().showTargets = showTargets;
+
+    const url = `${this.baseUrl}/updateshowtargets`;
+
+    this.http
+      .post(url, { showTargets: showTargets }, { headers: headers })
+      .subscribe();
+  }
+
   changePassword(user) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

@@ -30,6 +30,7 @@ export class AddedFoodsService {
 
   setShowTargets() {
     this._showTargets.next(!this._showTargets.getValue());
+    this.auth.updateShowTargets(this._showTargets.getValue());
   }
 
   setMealsFromLocalStorage() {
@@ -81,6 +82,7 @@ export class AddedFoodsService {
 
   setTargets() {
     const user = this.auth.getUserInfo();
+    this._showTargets.next(user.showTargets);
     if (user.weight) {
       this.proteinTarget = user.weight * 2;
       this.fatTarget = user.weight;

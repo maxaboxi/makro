@@ -102,6 +102,11 @@ const UserSchema = mongoose.Schema(
         { name: 'Välipala 2', foods: [] },
         { name: 'Iltapala', foods: [] }
       ]
+    },
+    showTargets: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   { timestamps: true }
@@ -172,4 +177,14 @@ module.exports.getAllUsers = callback => {
 module.exports.removeUsers = (deletedUsers, callback) => {
   const query = { _id: { $in: deletedUsers } };
   User.remove(query, callback);
+};
+
+module.exports.updateShowTargets = (id, showTargets, callback) => {
+  const query = { _id: id };
+  User.findByIdAndUpdate(
+    query,
+    { showTargets: showTargets },
+    { new: true },
+    callback
+  );
 };

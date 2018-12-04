@@ -17,4 +17,5 @@ export interface User {
   userAddedFatTarget?: number;
   meals?: Meal[];
   lastLogin?: Date;
+  showTargets?: boolean;
 }

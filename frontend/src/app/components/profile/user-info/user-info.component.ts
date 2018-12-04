@@ -93,7 +93,8 @@ export class UserInfoComponent implements OnInit {
       userAddedProteinTarget: this.user.userAddedProteinTarget,
       userAddedCarbTarget: this.user.userAddedCarbTarget,
       userAddedFatTarget: this.user.userAddedFatTarget,
-      meals: this.user.meals
+      meals: this.user.meals,
+      showTargets: this.user.showTargets
     };
     this.auth.updateUserInfo(userInfo).subscribe(
       res => {

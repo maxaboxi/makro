@@ -176,7 +176,8 @@ router.post('/login', (req, res) => {
             userAddedProteinTarget: user.userAddedProteinTarget,
             userAddedCarbTarget: user.userAddedCarbTarget,
             userAddedFatTarget: user.userAddedFatTarget,
-            meals: user.meals
+            meals: user.meals,
+            showTargets: user.showTargets
           }
         });
       } else {
@@ -220,7 +221,8 @@ router.get('/getuserinfo', (req, res) => {
           userAddedProteinTarget: user.userAddedProteinTarget,
           userAddedCarbTarget: user.userAddedCarbTarget,
           userAddedFatTarget: user.userAddedFatTarget,
-          meals: user.meals
+          meals: user.meals,
+          showTargets: user.showTargets
         }
       });
     }
@@ -243,7 +245,8 @@ router.post('/updateuserinformation', (req, res) => {
     userAddedProteinTarget: req.body.userAddedProteinTarget,
     userAddedCarbTarget: req.body.userAddedCarbTarget,
     userAddedFatTarget: req.body.userAddedFatTarget,
-    meals: req.body.meals
+    meals: req.body.meals,
+    showTargets: req.body.showTargets
   };
   User.updateUserInformation(userInfo, userId, (err, user) => {
     if (err) {
@@ -271,9 +274,30 @@ router.post('/updateuserinformation', (req, res) => {
           userAddedProteinTarget: user.userAddedProteinTarget,
           userAddedCarbTarget: user.userAddedCarbTarget,
           userAddedFatTarget: user.userAddedFatTarget,
-          meals: user.meals
+          meals: user.meals,
+          showTargets: user.showTargets
         }
       });
+    }
+  });
+});
+
+router.post('/updateshowtargets', (req, res) => {
+  const token = jwt.decode(req.headers['authorization']);
+  const userId = token.id;
+  const showTargets = req.body.showTargets;
+  User.updateShowTargets(userId, showTargets, (err, user) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json({ success: true });
     }
   });
 });
