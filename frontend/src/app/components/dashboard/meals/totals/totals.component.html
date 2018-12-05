@@ -1,4 +1,4 @@
-<table class="table table-sm table-responsive-xs mt-2">
+<table class="table table-sm table-responsive-xs mt-2" id="totals">
   <thead>
     <tr class="text-center">
       <th class="t-head bg-lb lead" scope="row" title="Yhteensä">
@@ -7,22 +7,53 @@
       <th scope="col" class="table-success" title="Proteiini">P</th>
       <th scope="col" class="table-primary" title="Hiilihydraatti">HH</th>
       <th scope="col" class="table-danger" title="Rasva">R</th>
-      <th scope="col" class="table-secondary d-none d-sm-table-cell" title="Sokeri">S</th>
+      <th
+        scope="col"
+        class="table-secondary d-none d-sm-table-cell"
+        title="Sokeri"
+      >
+        S
+      </th>
       <th scope="col" class="fiber d-none d-sm-table-cell" title="Kuitu">K</th>
       <th scope="col" class="table-warning">Kcal</th>
       <th scope="col" title="Määrä"><i class="fas fa-weight"></i></th>
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
-        <div class="name"><i (click)="openModal(clearFoods)" class="far fa-trash-alt" title="Poista kaikki valitut ruoat"></i></div>
+        <div class="name">
+          <i
+            (click)="openModal(clearFoods)"
+            class="far fa-trash-alt"
+            title="Poista kaikki valitut ruoat"
+          ></i>
+        </div>
       </th>
-      <th scope="col" class="table-success align-middle" title="Proteiini">{{ totals.protein.toFixed(0) }} g</th>
-      <th scope="col" class="table-primary align-middle" title="Hiilihydraatti">{{ totals.carb.toFixed(0) }} g</th>
-      <th scope="col" class="table-danger align-middle" title="Rasva">{{ totals.fat.toFixed(0) }} g</th>
-      <th scope="col" class="table-secondary align-middle d-none d-sm-table-cell" title="Sokeri">{{
-        totals.sugar.toFixed(0) }} g</th>
-      <th scope="col" class="fiber align-middle d-none d-sm-table-cell" title="Kuitu">{{ totals.fiber.toFixed(0) }} g</th>
-      <th scope="col" class="table-warning align-middle">{{ totals.energy.toFixed(0) }}</th>
+      <th scope="col" class="table-success align-middle" title="Proteiini">
+        {{ totals.protein.toFixed(0) }} g
+      </th>
+      <th scope="col" class="table-primary align-middle" title="Hiilihydraatti">
+        {{ totals.carb.toFixed(0) }} g
+      </th>
+      <th scope="col" class="table-danger align-middle" title="Rasva">
+        {{ totals.fat.toFixed(0) }} g
+      </th>
+      <th
+        scope="col"
+        class="table-secondary align-middle d-none d-sm-table-cell"
+        title="Sokeri"
+      >
+        {{ totals.sugar.toFixed(0) }} g
+      </th>
+      <th
+        scope="col"
+        class="fiber align-middle d-none d-sm-table-cell"
+        title="Kuitu"
+      >
+        {{ totals.fiber.toFixed(0) }} g
+      </th>
+      <th scope="col" class="table-warning align-middle">
+        {{ totals.energy.toFixed(0) }}
+      </th>
       <th scope="col" class="align-middle">{{ totals.amount.toFixed(0) }} g</th>
     </tr>
   </thead>
@@ -31,7 +62,12 @@
 <ng-template #clearFoods let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Haluatko varmasti poistaa kaikki valitut ruoat?</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('x')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -39,10 +75,20 @@
     <div class="container text-center">
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+          <button
+            type="button"
+            class="btn btn-warning btn-block"
+            (click)="modal.close('cancel')"
+          >
+            Peruuta
+          </button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-primary btn-block" (click)="modal.close('save')">
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            (click)="modal.close('save')"
+          >
             Poista
           </button>
         </div>

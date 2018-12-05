@@ -16,6 +16,9 @@ import { Day } from '../../../models/Day';
 import { BehaviorSubject } from 'rxjs';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
+import { Meal } from '../../../models/Meal';
+
+declare var jsPDF: any;
 
 @Component({
   selector: 'app-toolbar',
@@ -270,5 +273,39 @@ export class ToolbarComponent implements OnInit {
     this.modalService
       .open(content, { centered: true })
       .result.then(result => {}, dismissed => {});
+  }
+
+  createPdf() {
+    const d = new Date();
+    const date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()} - ${d.getHours()}.${d.getMinutes()}.${d.getSeconds()}`;
+    const doc = new jsPDF('p', 'pt');
+    const totalsTable = document.getElementById('totals');
+    const mealElement = document.getElementById('meals');
+    const foodTables = mealElement.getElementsByTagName('table');
+
+    const totals = doc.autoTableHtmlToJson(totalsTable);
+    totals.columns[0]['innerHTML'] = 'Yhteensä';
+    totals.columns[7]['innerHTML'] = 'Määrä';
+    doc.autoTable(totals.columns, totals.data, {
+      startY: 30,
+      columnStyles: {
+        0: { columnWidth: 200, overflow: 'linebreak' }
+      }
+    });
+
+    Array.from(foodTables).forEach(t => {
+      const res = doc.autoTableHtmlToJson(t);
+      res.columns[5]['innerHTML'] = 'Määrä';
+      const first = doc.autoTable.previous;
+      doc.autoTable(res.columns, res.data, {
+        startY: first.finalY + 10,
+        pageBreak: 'avoid',
+        columnStyles: {
+          0: { columnWidth: 200, overflow: 'linebreak' }
+        }
+      });
+    });
+
+    doc.save(`Päivä-${date}.pdf`);
   }
 }

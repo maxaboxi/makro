@@ -1,24 +1,47 @@
 <div class="row">
-  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> Lisää ruoka</span>
-  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> Tallenna päivä</span>
-  <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> Jaa päivä</span>
-  <span *ngIf="shareLink.length > 0" (click)="openLinkModal(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i>
-    Näytä linkki</span>
+  <span (click)="openAddFoodModal(addFood)"
+    ><i class="fas fa-plus-circle"></i> Lisää ruoka</span
+  >
+  <span (click)="openSaveDayModal(dayName)" class="ml-4"
+    ><i class="fas fa-save"></i> Tallenna päivä</span
+  >
+  <span (click)="generateLink(sharedDayModal)" class="ml-4"
+    ><i class="fas fa-share"></i> Jaa päivä</span
+  >
+  <span
+    *ngIf="shareLink.length > 0"
+    (click)="openLinkModal(sharedDayModal)"
+    class="ml-4"
+    ><i class="fas fa-share"></i> Näytä linkki</span
+  >
+  <span (click)="createPdf()" class="ml-4"
+    ><i class="far fa-file-pdf"></i> Luo PDF</span
+  >
   <div class="ml-auto">
-    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"><i class="far fa-edit"></i> Muokkaa
-      tavoitearvoja</span>
-    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> Näytä tavoitearvot</span>
-    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> Piilota
-      tavoitearvot</span>
+    <span
+      *ngIf="showTargets"
+      (click)="openTargetModal(targetModal)"
+      class="mr-2"
+      ><i class="far fa-edit"></i> Muokkaa tavoitearvoja</span
+    >
+    <span *ngIf="!showTargets" (click)="toggleTargets()"
+      ><i class="fas fa-bars"></i> Näytä tavoitearvot</span
+    >
+    <span *ngIf="showTargets" (click)="toggleTargets()"
+      ><i class="fas fa-minus"></i> Piilota tavoitearvot</span
+    >
   </div>
 </div>
-
-
 
 <ng-template #addFood let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Lisää uusi ruoka</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('x')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -26,96 +49,205 @@
     <div class="container">
       <form #addFoodForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodName">Nimi</label>
+          <label class="lead col-sm-4 col-form-label" for="foodName"
+            >Nimi</label
+          >
           <div class="col-sm-8">
-            <input type="text" name="foodName" class="form-control" placeholder="Ruoan nimi" minlength="2" [(ngModel)]="food.name"
-              #foodName="ngModel" [ngClass]="{'is-invalid':foodName.errors && foodName.touched}" required>
+            <input
+              type="text"
+              name="foodName"
+              class="form-control"
+              placeholder="Ruoan nimi"
+              minlength="2"
+              [(ngModel)]="food.name"
+              #foodName="ngModel"
+              [ngClass]="{ 'is-invalid': foodName.errors && foodName.touched }"
+              required
+            />
             <div [hidden]="!foodName.errors?.required" class="invalid-feedback">
               Ruoan nimi vaaditaan
             </div>
-            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback">
+            <div
+              [hidden]="!foodName.errors?.minlength"
+              class="invalid-feedback"
+            >
               Ruoan nimen täytyy olla vähintään kaksi merkkiä pitkä
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <p class="lead">Arvot per 100 grammaa</p>
-        </div>
+        <div class="form-group"><p class="lead">Arvot per 100 grammaa</p></div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodEnergy">Energia</label>
+          <label class="lead col-sm-4 col-form-label" for="foodEnergy"
+            >Energia</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodEnergy" class="form-control" placeholder="Kcal / 100 g" [(ngModel)]="food.energia"
-              #foodEnergy="ngModel" [ngClass]="{'is-invalid':foodEnergy.errors && foodEnergy.touched}" required>
-            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback">
+            <input
+              type="number"
+              name="foodEnergy"
+              class="form-control"
+              placeholder="Kcal / 100 g"
+              [(ngModel)]="food.energia"
+              #foodEnergy="ngModel"
+              [ngClass]="{
+                'is-invalid': foodEnergy.errors && foodEnergy.touched
+              }"
+              required
+            />
+            <div
+              [hidden]="!foodEnergy.errors?.required"
+              class="invalid-feedback"
+            >
               Kalorimäärä on vaadittu tieto
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodFat">Rasva</label>
+          <label class="lead col-sm-4 col-form-label" for="foodFat"
+            >Rasva</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodFat" class="form-control" placeholder="g / 100 g" [(ngModel)]="food.rasva"
-              #foodFat="ngModel" [ngClass]="{'is-invalid':foodFat.errors && foodFat.touched}" required>
+            <input
+              type="number"
+              name="foodFat"
+              class="form-control"
+              placeholder="g / 100 g"
+              [(ngModel)]="food.rasva"
+              #foodFat="ngModel"
+              [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
+              required
+            />
             <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">
               Rasvan määrä on vaadittu tieto
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodCarbs">Hiilihydraatit</label>
+          <label class="lead col-sm-4 col-form-label" for="foodCarbs"
+            >Hiilihydraatit</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodCarbs" class="form-control" placeholder="g / 100 g" [(ngModel)]="food.hh"
-              #foodCarbs="ngModel" [ngClass]="{'is-invalid':foodCarbs.errors && foodCarbs.touched}" required>
-            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback">
+            <input
+              type="number"
+              name="foodCarbs"
+              class="form-control"
+              placeholder="g / 100 g"
+              [(ngModel)]="food.hh"
+              #foodCarbs="ngModel"
+              [ngClass]="{
+                'is-invalid': foodCarbs.errors && foodCarbs.touched
+              }"
+              required
+            />
+            <div
+              [hidden]="!foodCarbs.errors?.required"
+              class="invalid-feedback"
+            >
               Hiilihydraattien määrä on vaadittu tieto
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodProtein">Proteiinit</label>
+          <label class="lead col-sm-4 col-form-label" for="foodProtein"
+            >Proteiinit</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodProtein" class="form-control" placeholder="g / 100 g" [(ngModel)]="food.proteiini"
-              #foodProtein="ngModel" [ngClass]="{'is-invalid':foodProtein.errors && foodProtein.touched}" required>
-            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback">
+            <input
+              type="number"
+              name="foodProtein"
+              class="form-control"
+              placeholder="g / 100 g"
+              [(ngModel)]="food.proteiini"
+              #foodProtein="ngModel"
+              [ngClass]="{
+                'is-invalid': foodProtein.errors && foodProtein.touched
+              }"
+              required
+            />
+            <div
+              [hidden]="!foodProtein.errors?.required"
+              class="invalid-feedback"
+            >
               Proteiinin määrä on vaadittu tieto
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodFiber">Ravintokuidut</label>
+          <label class="lead col-sm-4 col-form-label" for="foodFiber"
+            >Ravintokuidut</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodFiber" class="form-control" placeholder="g / 100 g" [(ngModel)]="food.kuitu"
-              #foodFiber="ngModel">
+            <input
+              type="number"
+              name="foodFiber"
+              class="form-control"
+              placeholder="g / 100 g"
+              [(ngModel)]="food.kuitu"
+              #foodFiber="ngModel"
+            />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodSugar">Sokerit</label>
+          <label class="lead col-sm-4 col-form-label" for="foodSugar"
+            >Sokerit</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodSugar" class="form-control" placeholder="g / 100 g" [(ngModel)]="food.sokeri"
-              #foodSugar="ngModel">
+            <input
+              type="number"
+              name="foodSugar"
+              class="form-control"
+              placeholder="g / 100 g"
+              [(ngModel)]="food.sokeri"
+              #foodSugar="ngModel"
+            />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodServingSize">Annoskoko</label>
+          <label class="lead col-sm-4 col-form-label" for="foodServingSize"
+            >Annoskoko</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodServingSize" class="form-control" placeholder="grammaa" [(ngModel)]="food.servingSize"
-              #servingSize="ngModel">
+            <input
+              type="number"
+              name="foodServingSize"
+              class="form-control"
+              placeholder="grammaa"
+              [(ngModel)]="food.servingSize"
+              #servingSize="ngModel"
+            />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodPackageSize">Pakkauskoko</label>
+          <label class="lead col-sm-4 col-form-label" for="foodPackageSize"
+            >Pakkauskoko</label
+          >
           <div class="col-sm-8">
-            <input type="number" name="foodPackageSize" class="form-control" placeholder="grammaa" [(ngModel)]="food.packageSize"
-              #packageSize="ngModel">
+            <input
+              type="number"
+              name="foodPackageSize"
+              class="form-control"
+              placeholder="grammaa"
+              [(ngModel)]="food.packageSize"
+              #packageSize="ngModel"
+            />
           </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button
+                type="button"
+                class="btn btn-warning btn-block"
+                (click)="modal.close('cancel')"
+              >
+                Peruuta
+              </button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!addFoodForm.form.valid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]="!addFoodForm.form.valid"
+              >
                 Tallenna ruoka
               </button>
             </div>
@@ -129,7 +261,12 @@
 <ng-template #dayName let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Tallenna päivä</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('x')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -138,8 +275,16 @@
       <form #saveDayForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="nameOfDay">Nimi</label>
-          <input type="text" name="nameOfDay" class="form-control" #nameOfDay="ngModel" [(ngModel)]="day.name"
-            [ngClass]="{'is-invalid':nameOfDay.errors && nameOfDay.touched}" minlength="3" required>
+          <input
+            type="text"
+            name="nameOfDay"
+            class="form-control"
+            #nameOfDay="ngModel"
+            [(ngModel)]="day.name"
+            [ngClass]="{ 'is-invalid': nameOfDay.errors && nameOfDay.touched }"
+            minlength="3"
+            required
+          />
           <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback">
             Nimi on vaadittu tieto
           </div>
@@ -150,10 +295,20 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button
+                type="button"
+                class="btn btn-warning btn-block"
+                (click)="modal.close('cancel')"
+              >
+                Peruuta
+              </button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!saveDayForm.form.valid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]="!saveDayForm.form.valid"
+              >
                 Tallenna
               </button>
             </div>
@@ -167,7 +322,12 @@
 <ng-template #targetModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Muokkaa tavoitearvoja</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('x')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -176,28 +336,59 @@
       <form #targetForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="expenditure">Kulutus</label>
-          <input type="number" name="expenditure" class="form-control" [(ngModel)]="user.userAddedExpenditure">
+          <input
+            type="number"
+            name="expenditure"
+            class="form-control"
+            [(ngModel)]="user.userAddedExpenditure"
+          />
         </div>
         <div class="form-group">
           <label for="proteinTarget">Proteiinit</label>
-          <input type="number" name="proteinTarget" class="form-control" [(ngModel)]="user.userAddedProteinTarget">
+          <input
+            type="number"
+            name="proteinTarget"
+            class="form-control"
+            [(ngModel)]="user.userAddedProteinTarget"
+          />
         </div>
         <div class="form-group">
           <label for="carbTarget">Hiilihydraatit</label>
-          <input type="number" name="carbTarget" class="form-control" [(ngModel)]="user.userAddedCarbTarget">
+          <input
+            type="number"
+            name="carbTarget"
+            class="form-control"
+            [(ngModel)]="user.userAddedCarbTarget"
+          />
         </div>
         <div class="form-group">
           <label for="fatTarget">Rasvat</label>
-          <input type="number" name="fatTarget" class="form-control" [(ngModel)]="user.userAddedFatTarget">
+          <input
+            type="number"
+            name="fatTarget"
+            class="form-control"
+            [(ngModel)]="user.userAddedFatTarget"
+          />
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button
+                type="button"
+                class="btn btn-warning btn-block"
+                (click)="modal.close('cancel')"
+              >
+                Peruuta
+              </button>
             </div>
             <div class="col">
-              <button type="button" class="btn btn-primary btn-block" (click)="modal.close('reset')">Palauta
-                oletusarvot</button>
+              <button
+                type="button"
+                class="btn btn-primary btn-block"
+                (click)="modal.close('reset')"
+              >
+                Palauta oletusarvot
+              </button>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block">
@@ -214,7 +405,12 @@
 <ng-template #sharedDayModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Linkki</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('x')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -225,7 +421,13 @@
     <div class="container text-center mt-3">
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-primary btn-block" (click)="modal.close('ok')">OK</button>
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            (click)="modal.close('ok')"
+          >
+            OK
+          </button>
         </div>
       </div>
     </div>

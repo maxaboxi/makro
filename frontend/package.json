@@ -24,6 +24,8 @@
     "angular2-flash-messages": "^3.0.1",
     "angular2-tinymce": "^3.3.0",
     "core-js": "^2.5.4",
+    "jspdf": "^1.4.1",
+    "jspdf-autotable": "^2.3.5",
     "rxjs": "^6.0.0",
     "tinymce": "^4.8.3",
     "zone.js": "~0.8.26"
@@ -35,6 +37,7 @@
     "@angular/language-service": "^6.1.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
+    "@types/jspdf": "^1.2.2",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",
