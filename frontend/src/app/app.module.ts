@@ -41,6 +41,8 @@ import { UserQuestionsComponent } from './components/profile/user-qa/user-questi
 import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
 import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
 import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
+import { ArticlesComponent } from './components/articles/articles.component';
+import { ArticleComponent } from './components/articles/article/article.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { UserVotesComponent } from './components/profile/user-votes/user-votes.c
     UserQuestionsComponent,
     UserCommentsComponent,
     UserAnswersComponent,
-    UserVotesComponent
+    UserVotesComponent,
+    ArticlesComponent,
+    ArticleComponent
   ],
   imports: [
     BrowserModule,

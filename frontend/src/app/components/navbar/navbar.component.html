@@ -1,30 +1,76 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"><i class="fas fa-home"></i> Makro - ilmainen
-    kalorilaskuri</a>
-  <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed =! isNavbarCollapsed
-   "
-    data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"
+    ><i class="fas fa-home"></i> Makro - ilmainen kalorilaskuri</a
+  >
+  <button
+    class="navbar-toggler hidden-sm-up"
+    type="button"
+    (click)="isNavbarCollapsed = !isNavbarCollapsed"
+    data-target="#navbarsDefault"
+    aria-controls="navbarsDefault"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+  <div
+    [ngbCollapse]="isNavbarCollapsed"
+    class="collapse navbar-collapse"
+    id="navbarsDefault"
+  >
     <ul class="navbar-nav mr-auto">
-      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/profile"><i class="far fa-user-circle"></i>
-          Profiili</a></li>
-      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/sharedmeals"><i class="fas fa-utensils"></i>
-          Ateriat</a></li>
-      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/qa"><i class="fas fa-question"></i>
-          Q&A</a></li>
-      <li *ngIf="isLoggedIn"><a class="nav-link" routerLink="/feedback"><i class="fab fa-readme"></i>
-          Palautteet</a></li>
-      <li><a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> Tietoa</a></li>
-      <li *ngIf="isAdmin"><a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i>
-          Hallintapaneeli</a></li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link" routerLink="/profile"
+          ><i class="far fa-user-circle"></i> Profiili</a
+        >
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link" routerLink="/sharedmeals"
+          ><i class="fas fa-utensils"></i> Ateriat</a
+        >
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link" routerLink="/qa"
+          ><i class="fas fa-question"></i> Q&A</a
+        >
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link" routerLink="/feedback"
+          ><i class="fab fa-readme"></i> Palautteet</a
+        >
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/articles"
+          ><i class="fas fa-book"></i> Artikkelit</a
+        >
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/about"
+          ><i class="fas fa-info"></i> Tietoa</a
+        >
+      </li>
+      <li *ngIf="isAdmin">
+        <a class="nav-link" routerLink="/admin"
+          ><i class="fas fa-cogs"></i> Hallintapaneeli</a
+        >
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li *ngIf="!isLoggedIn"><a class="nav-link" routerLink="/login"><i class="fas fa-sign-in-alt"></i> Kirjaudu
-          sisään</a></li>
-      <li *ngIf="!isLoggedIn"><a class="nav-link" routerLink="/register"><i class="fas fa-user-plus"></i> Rekisteröidy</a></li>
-      <li *ngIf="isLoggedIn" (click)="logout()"><a class="nav-link"><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a></li>
+      <li *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/login"
+          ><i class="fas fa-sign-in-alt"></i> Kirjaudu sisään</a
+        >
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/register"
+          ><i class="fas fa-user-plus"></i> Rekisteröidy</a
+        >
+      </li>
+      <li *ngIf="isLoggedIn" (click)="logout()">
+        <a class="nav-link"
+          ><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a
+        >
+      </li>
     </ul>
   </div>
 </nav>

@@ -23,6 +23,7 @@ import { UserQuestionsComponent } from './components/profile/user-qa/user-questi
 import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
 import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
 import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
+import { ArticlesComponent } from './components/articles/articles.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
   },
   { path: 'qa', component: QaComponent, canActivate: [AuthGuard] },
   { path: 'question', component: QuestionComponent, canActivate: [AuthGuard] },
+  { path: 'articles', component: ArticlesComponent },
   { path: 'about', component: AboutComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
   { path: '**', component: DashboardComponent }
