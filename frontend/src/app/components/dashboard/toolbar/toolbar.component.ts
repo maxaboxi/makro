@@ -285,7 +285,11 @@ export class ToolbarComponent implements OnInit {
 
     const totals = doc.autoTableHtmlToJson(totalsTable);
     totals.columns[0]['innerHTML'] = 'Yhteensä';
-    totals.columns[7]['innerHTML'] = 'Määrä';
+    if (totals.columns[7]) {
+      totals.columns[7]['innerHTML'] = 'Määrä';
+    } else {
+      totals.columns[5]['innerHTML'] = 'Määrä';
+    }
     doc.autoTable(totals.columns, totals.data, {
       startY: 30,
       columnStyles: {
@@ -295,7 +299,12 @@ export class ToolbarComponent implements OnInit {
 
     Array.from(foodTables).forEach(t => {
       const res = doc.autoTableHtmlToJson(t);
-      res.columns[5]['innerHTML'] = 'Määrä';
+      if (res.columns[5]) {
+        res.columns[5]['innerHTML'] = 'Määrä';
+      } else {
+        res.columns[2]['innerHTML'] = 'Määrä';
+      }
+
       const first = doc.autoTable.previous;
       doc.autoTable(res.columns, res.data, {
         startY: first.finalY + 10,
@@ -306,6 +315,6 @@ export class ToolbarComponent implements OnInit {
       });
     });
 
-    doc.save(`Päivä-${date}.pdf`);
+    window.open(doc.output('bloburl'), '_blank');
   }
 }
