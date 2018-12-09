@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Article } from '../../../models/Article';
 import { User } from '../../../models/User';
 import { BehaviorSubject } from 'rxjs';
+import { ArticleService } from '../../../services/article.service';
 
 @Component({
   selector: 'app-article',
@@ -11,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ArticleComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _article = new BehaviorSubject<Article>(null);
+  image: File;
 
   @Input()
   set user(user) {
@@ -30,7 +32,16 @@ export class ArticleComponent implements OnInit {
     return this._article.getValue();
   }
 
-  constructor() {}
+  constructor(private articleService: ArticleService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.article.imgId) {
+      this.articleService
+        .getImageForArticle(this.article.imgId)
+        .subscribe(res => {
+          console.log(res);
+          this.image = res;
+        });
+    }
+  }
 }

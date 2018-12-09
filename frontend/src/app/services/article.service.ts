@@ -21,6 +21,16 @@ export class ArticleService {
     return this.http.get<Article[]>(url, { headers: headers });
   }
 
+  getImageForArticle(imgId) {
+    const url = `${this.baseUrl}/articleimage/${imgId}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<File>(url, { headers: headers });
+  }
+
   getArticlesByUser(user) {
     const url = `${this.baseUrl}/getarticles/${user}`;
 

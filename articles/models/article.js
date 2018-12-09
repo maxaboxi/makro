@@ -16,7 +16,8 @@ const ArticleSchema = mongoose.Schema(
     },
     imgId: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     tags: {
       type: Array,

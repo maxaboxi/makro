@@ -182,6 +182,26 @@ router.get('/getallarticles', (req, res) => {
   });
 });
 
+router.get('/articleimage/:img', (req, res) => {
+  console.log(req.params.img);
+  gfs.files.findOne({ _id: req.params.img }, (err, img) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    }
+    console.log(img);
+    if (img && img.filename) {
+      const readstream = gfs.createReadStream(img.filename);
+      readstream.pipe(res);
+    }
+  });
+});
+
 router.delete('/removearticles', (req, res) => {
   const deletedArticles = req.body;
   Article.removeArticles(deletedArticles, (err, articles) => {
