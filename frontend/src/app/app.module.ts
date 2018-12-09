@@ -43,6 +43,7 @@ import { UserAnswersComponent } from './components/profile/user-qa/user-answers/
 import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
 import { ArticlesComponent } from './components/articles/articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
+import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { ArticleComponent } from './components/articles/article/article.componen
     UserAnswersComponent,
     UserVotesComponent,
     ArticlesComponent,
-    ArticleComponent
+    ArticleComponent,
+    AddArticleComponent
   ],
   imports: [
     BrowserModule,

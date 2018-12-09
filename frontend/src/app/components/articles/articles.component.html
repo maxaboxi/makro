@@ -1,3 +1,21 @@
-<p>
-  articles works!
-</p>
+<div class="container mb-5" style="max-width:700px;">
+  <button
+    *ngIf="this.user?.username"
+    class="btn btn-block btn-outline-success mt-3"
+    title="Lisää artikkeli"
+    routerLink="/articles/addarticle"
+  >
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <div *ngIf="articles && articles.length === 0" class="mt-3">
+    <h1 class="display-4 text-center">Ei artikkeleita</h1>
+  </div>
+  <div *ngIf="articles && articles.length > 0" class=" mt-3">
+    <app-article
+      *ngFor="let a of articles"
+      [user]="user"
+      [article]="a"
+    ></app-article>
+  </div>
+</div>

@@ -14,8 +14,8 @@ const ArticleSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    img: {
-      type: Buffer,
+    imgId: {
+      type: String,
       required: false
     },
     tags: {
@@ -34,7 +34,7 @@ const ArticleSchema = mongoose.Schema(
 const Article = (module.exports = mongoose.model('Article', ArticleSchema));
 
 module.exports.saveArticle = (article, callback) => {
-  Article.save(callback);
+  article.save(callback);
 };
 
 module.exports.saveEditedArticle = (article, callback) => {

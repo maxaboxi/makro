@@ -1,0 +1,84 @@
+<div class="container mt-5" style="max-width:800px;">
+  <div class="card">
+    <div *ngIf="!editing" class="card-header">Add guild</div>
+    <div *ngIf="editing" class="card-header">Edit guild</div>
+    <div class="card-body">
+      <form #addArticleForm="ngForm" (ngSubmit)="addArticle(addArticleForm)">
+        <div class="form-group">
+          <label for="articleHeaderImg">Kuva</label>
+          <input
+            type="file"
+            name="articleImage"
+            class="form-control-file"
+            (change)="onSelectFile($event)"
+          />
+        </div>
+        <div id="croppedImg"></div>
+        <p *ngIf="image">Kuva tallennettu.</p>
+        <div class="form-group">
+          <label for="articleTitle">Otsikko</label>
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            #articleTitle="ngModel"
+            [ngClass]="{
+              'is-invalid': articleTitle.errors && articleTitle.touched
+            }"
+            [(ngModel)]="article.title"
+            minlength="5"
+            required
+          />
+          <div
+            [hidden]="!articleTitle.errors?.required"
+            class="invalid-feedback"
+          >
+            Otsikko vaaditaan
+          </div>
+          <div
+            [hidden]="!articleTitle.errors?.minlength"
+            class="invalid-feedback"
+          >
+            Otsikon pitää olla vähintään 5 merkkiä pitkä
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="articleBody">Teksti</label>
+          <app-tinymce
+            name="body"
+            [(ngModel)]="article.body"
+            minlength="100"
+            required
+          ></app-tinymce>
+        </div>
+        <div class="form-group">
+          <label for="hashtags">Tagit (erota pilkulla)</label>
+          <p class="text-muted" *ngIf="article.tags.length > 0">
+            <ng-container *ngFor="let tag of article.tags; let i = index">
+              <span class="tag" (click)="removeTagArticle(i)">#{{ tag }} </span>
+            </ng-container>
+          </p>
+          <input
+            type="text"
+            name="hashtags"
+            class="form-control"
+            #hashtags="ngModel"
+            [(ngModel)]="articleTag"
+            [ngClass]="{ 'is-invalid': hashtags.errors && hashtags.touched }"
+            minlength="3"
+            (keyup)="addTagToArticle($event.key)"
+          />
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
+            Tagin pitää olla vähintään kolme merkkiä pitkä
+          </div>
+        </div>
+        <input
+          type="submit"
+          value="Tallenna"
+          class="btn btn-primary btn-block"
+          [disabled]="!addArticleForm.form.valid || article.tags.length === 0"
+        />
+      </form>
+    </div>
+  </div>
+</div>
