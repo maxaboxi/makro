@@ -94,7 +94,7 @@ router.post('/addnewarticle', (req, res) => {
     username: req.body.username,
     title: req.body.title,
     body: req.body.body,
-    imgId: req.body.img,
+    headerImgId: req.body.headerImgId,
     tags: req.body.tags
   });
 
@@ -183,8 +183,8 @@ router.get('/getallarticles', (req, res) => {
 });
 
 router.get('/articleimage/:img', (req, res) => {
-  console.log(req.params.img);
-  gfs.files.findOne({ _id: req.params.img }, (err, img) => {
+  const imgId = mongoose.Types.ObjectId(req.params.img);
+  gfs.files.findOne({ _id: imgId }, (err, img) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -194,10 +194,18 @@ router.get('/articleimage/:img', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Something went wrong.' });
     }
-    console.log(img);
     if (img && img.filename) {
       const readstream = gfs.createReadStream(img.filename);
+      res.status(200);
+
+      res.set('Content-Type', img.contentType);
+      res.set(
+        'Content-Disposition',
+        'attachment; filename="' + img.filename + '"'
+      );
       readstream.pipe(res);
+    } else {
+      res.json({ success: false, msg: 'No image found' });
     }
   });
 });
@@ -221,7 +229,6 @@ router.delete('/removearticles', (req, res) => {
 });
 
 router.delete('/removearticleimages', (req, res) => {
-  console.log('kuva');
   const oldImages = req.body;
   for (const img of oldImages) {
     gfs.remove({ _id: img }, (err, gridStore) => {

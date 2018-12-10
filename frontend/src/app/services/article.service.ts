@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Article } from '../models/Article';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class ArticleService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<File>(url, { headers: headers });
+    return this.http.get(url, { headers: headers });
   }
 
   getArticlesByUser(user) {

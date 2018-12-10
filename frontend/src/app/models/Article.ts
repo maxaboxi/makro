@@ -5,7 +5,7 @@ export interface Article {
   origTitle?: String;
   body: String;
   origBody?: String;
-  imgId?: String;
+  headerImgId?: String;
   tags: String[];
   pointsTotal?: Number;
   createdAt?: Date;

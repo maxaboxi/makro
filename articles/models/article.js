@@ -14,7 +14,7 @@ const ArticleSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    imgId: {
+    headerImgId: {
       type: String,
       required: false,
       default: null

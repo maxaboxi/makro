@@ -15,7 +15,7 @@ export class AddArticleComponent implements OnInit {
   editing = false;
   queryParams = {};
   articleTag = '';
-  image: File;
+  image: String;
   oldImages = [];
   article: Article = {
     title: '',
@@ -92,7 +92,7 @@ export class AddArticleComponent implements OnInit {
 
   addArticle() {
     if (this.image) {
-      this.article.img = this.image;
+      this.article.headerImgId = this.image;
     }
     this.article.username = this.user.username;
     console.log(this.article);

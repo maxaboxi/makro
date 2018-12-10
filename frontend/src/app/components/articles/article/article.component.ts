@@ -35,12 +35,11 @@ export class ArticleComponent implements OnInit {
   constructor(private articleService: ArticleService) {}
 
   ngOnInit() {
-    if (this.article.imgId) {
+    if (this.article.headerImgId) {
       this.articleService
-        .getImageForArticle(this.article.imgId)
+        .getImageForArticle(this.article.headerImgId)
         .subscribe(res => {
           console.log(res);
-          this.image = res;
         });
     }
   }
