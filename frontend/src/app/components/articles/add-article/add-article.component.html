@@ -14,7 +14,8 @@
           />
         </div>
         <div id="croppedImg"></div>
-        <p *ngIf="image">Kuva tallennettu.</p>
+        <p *ngIf="image" class="text-muted">Kuva tallennettu.</p>
+        <p *ngIf="fileError" class="text-danger">{{ fileError }}</p>
         <div class="form-group">
           <label for="articleTitle">Otsikko</label>
           <input

@@ -17,6 +17,7 @@ export class AddArticleComponent implements OnInit {
   queryParams = {};
   articleTag = '';
   image: String;
+  fileError: String;
   oldImages = [];
   article: Article = {
     title: '',
@@ -44,42 +45,65 @@ export class AddArticleComponent implements OnInit {
 
   onSelectFile(e) {
     if (e.target.files && e.target.files[0]) {
-      const width = 700;
-      const fileName = e.target.files[0].name;
-      const reader = new FileReader();
+      if (this.image) {
+        document.getElementById('canvas').remove();
+        this.oldImages.push(this.image);
+        this.image = undefined;
+      }
 
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = event => {
-        const img = new Image();
-        img.src = event.target['result'];
+      if (e.target.files[0].type.indexOf('image') === -1) {
+        this.fileError = 'Väärä tiedostotyyppi.';
+        return;
+      }
 
-        (img.onload = () => {
-          const scaleFactor = width / img.width;
-          const height = img.height * scaleFactor;
-          const elem = document.createElement('canvas');
-          elem.width = width;
-          elem.height = height;
+      if (e.target.files[0].size > 5242880) {
+        this.fileError =
+          'Kuva on liian suuri. Maksimikoko kuvalle on 5 megatavua.';
+        return;
+      }
 
-          const ctx = elem.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          document.getElementById('croppedImg').innerHTML = '';
-          document.getElementById('croppedImg').appendChild(elem);
-
-          ctx.canvas.toBlob(
-            blob => {
-              const file = new File([blob], fileName, {
-                type: 'image/jpeg',
-                lastModified: Date.now()
-              });
-              this.saveImage(file);
-            },
-            'image/jpeg',
-            1
-          );
-        }),
-          (reader.onerror = error => console.log(error));
-      };
+      this.processImage(e.target.files[0]);
     }
+  }
+
+  processImage(image) {
+    this.fileError = undefined;
+    const width = 700;
+    const fileName = image.name;
+    const reader = new FileReader();
+
+    reader.readAsDataURL(image);
+    reader.onload = event => {
+      const img = new Image();
+      img.src = event.target['result'];
+
+      (img.onload = () => {
+        const scaleFactor = width / img.width;
+        const height = img.height * scaleFactor;
+        const elem = document.createElement('canvas');
+        elem.id = 'canvas';
+        elem.width = width;
+        elem.height = height;
+
+        const ctx = elem.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        document.getElementById('croppedImg').innerHTML = '';
+        document.getElementById('croppedImg').appendChild(elem);
+
+        ctx.canvas.toBlob(
+          blob => {
+            const file = new File([blob], fileName, {
+              type: image.type,
+              lastModified: Date.now()
+            });
+            this.saveImage(file);
+          },
+          image.type,
+          1
+        );
+      }),
+        (reader.onerror = error => console.log(error));
+    };
   }
 
   saveImage(file) {
