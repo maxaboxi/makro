@@ -12,7 +12,7 @@ import { ArticleService } from '../../../services/article.service';
 export class ArticleComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _article = new BehaviorSubject<Article>(null);
-  image: File;
+  image: Blob;
 
   @Input()
   set user(user) {
@@ -39,8 +39,25 @@ export class ArticleComponent implements OnInit {
       this.articleService
         .getImageForArticle(this.article.headerImgId)
         .subscribe(res => {
-          console.log(res);
+          if (res) {
+            this.createImageFromBlob(res);
+          }
         });
+    }
+  }
+
+  createImageFromBlob(image: Blob) {
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        this.image = reader.result;
+      },
+      false
+    );
+
+    if (image) {
+      reader.readAsDataURL(image);
     }
   }
 }

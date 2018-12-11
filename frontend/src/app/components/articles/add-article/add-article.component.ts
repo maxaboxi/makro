@@ -3,7 +3,8 @@ import { ArticleService } from '../../../services/article.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/User';
 import { Article } from '../../../models/Article';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-add-article',
@@ -26,7 +27,9 @@ export class AddArticleComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private auth: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private flashMessage: FlashMessagesService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -95,10 +98,24 @@ export class AddArticleComponent implements OnInit {
       this.article.headerImgId = this.image;
     }
     this.article.username = this.user.username;
-    console.log(this.article);
-    this.articleService
-      .addArticle(this.article)
-      .subscribe(res => console.log(res));
+    this.articleService.addArticle(this.article).subscribe(
+      res => {
+        if (res['success']) {
+          this.router.navigate(['/articles']);
+          this.resetArticle();
+          this.flashMessage.show('Artikkeli julkaistu onnistuneesti.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
 
     if (this.oldImages.length > 0) {
       this.articleService
@@ -118,5 +135,13 @@ export class AddArticleComponent implements OnInit {
 
   removeTagFromArticle(index) {
     this.article.tags.splice(index, 1);
+  }
+
+  resetArticle() {
+    this.article = {
+      title: '',
+      body: '',
+      tags: []
+    };
   }
 }

@@ -29,7 +29,7 @@ export class ArticleService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get(url, { headers: headers });
+    return this.http.get(url, { responseType: 'blob', headers: headers });
   }
 
   getArticlesByUser(user) {

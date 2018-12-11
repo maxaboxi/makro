@@ -68,7 +68,10 @@ const storage = new GridFsStorage({
 const upload = multer({ storage: storage }).single('img');
 
 router.use((req, res, next) => {
-  if (req.path === '/getallarticles' && req.method === 'GET') {
+  if (
+    (req.path === '/getallarticles' && req.method === 'GET') ||
+    (req.path.indexOf('/articleimage/') > -1 && req.method === 'GET')
+  ) {
     next();
   } else {
     let token;
@@ -203,6 +206,7 @@ router.get('/articleimage/:img', (req, res) => {
         'Content-Disposition',
         'attachment; filename="' + img.filename + '"'
       );
+
       readstream.pipe(res);
     } else {
       res.json({ success: false, msg: 'No image found' });
