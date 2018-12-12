@@ -83,6 +83,11 @@ router.post('/votepost', (req, res) => {
     postId: req.body.postId
   });
 
+  if (!vote.userId) {
+    const token = jwt.decode(req.headers['authorization']);
+    vote.userId = token.id;
+  }
+
   Vote.addNewVote(vote, (err, vote) => {
     if (err) {
       logger.log({
