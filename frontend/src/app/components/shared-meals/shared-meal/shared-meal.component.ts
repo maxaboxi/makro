@@ -26,6 +26,7 @@ export class SharedMealComponent implements OnInit {
   showRecipe = false;
   userVote;
   pointsTotal;
+  votesLoaded = false;
 
   @Input()
   set meal(meal) {
@@ -87,6 +88,7 @@ export class SharedMealComponent implements OnInit {
             this.userVote = 'down';
           }
         }
+        this.votesLoaded = true;
       });
   }
 
