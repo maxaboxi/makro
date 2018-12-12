@@ -5,6 +5,7 @@ import { User } from '../../../models/User';
 import { Article } from '../../../models/Article';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-add-article',
@@ -24,6 +25,11 @@ export class AddArticleComponent implements OnInit {
     body: '',
     tags: []
   };
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  imageBlob: Blob = undefined;
+  showCropper = false;
+  uploadingImage = false;
 
   constructor(
     private articleService: ArticleService,
@@ -43,76 +49,39 @@ export class AddArticleComponent implements OnInit {
     this.auth.user.subscribe(user => (this.user = user));
   }
 
-  onSelectFile(e) {
-    if (e.target.files && e.target.files[0]) {
-      if (this.image) {
-        document.getElementById('canvas').remove();
-        this.oldImages.push(this.image);
-        this.image = undefined;
-      }
-
-      if (e.target.files[0].type.indexOf('image') === -1) {
-        this.fileError = 'Väärä tiedostotyyppi.';
-        return;
-      }
-
-      if (e.target.files[0].size > 5242880) {
-        this.fileError =
-          'Kuva on liian suuri. Maksimikoko kuvalle on 5 megatavua.';
-        return;
-      }
-
-      this.processImage(e.target.files[0]);
-    }
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    this.showCropper = true;
   }
 
-  processImage(image) {
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+    this.imageBlob = event.file;
+  }
+
+  imageLoaded() {
     this.fileError = undefined;
-    const width = 700;
-    const fileName = image.name;
-    const reader = new FileReader();
-
-    reader.readAsDataURL(image);
-    reader.onload = event => {
-      const img = new Image();
-      img.src = event.target['result'];
-
-      (img.onload = () => {
-        const scaleFactor = width / img.width;
-        const height = img.height * scaleFactor;
-        const elem = document.createElement('canvas');
-        elem.id = 'canvas';
-        elem.width = width;
-        elem.height = height;
-
-        const ctx = elem.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        document.getElementById('croppedImg').innerHTML = '';
-        document.getElementById('croppedImg').appendChild(elem);
-
-        ctx.canvas.toBlob(
-          blob => {
-            const file = new File([blob], fileName, {
-              type: image.type,
-              lastModified: Date.now()
-            });
-            this.saveImage(file);
-          },
-          image.type,
-          1
-        );
-      }),
-        (reader.onerror = error => console.log(error));
-    };
   }
 
-  saveImage(file) {
+  loadImageFailed() {
+    this.fileError =
+      'Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif.';
+  }
+
+  saveImage() {
+    this.uploadingImage = true;
+    const file = new File([this.imageBlob], 'headerImage', {
+      type: this.imageBlob.type,
+      lastModified: Date.now()
+    });
     this.articleService.addImageToArticle(file).subscribe(res => {
+      this.uploadingImage = false;
       if (res['success']) {
         if (this.image) {
           this.oldImages.push(this.image);
         }
         this.image = res['file'];
+        this.showCropper = false;
       }
     });
   }

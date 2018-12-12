@@ -1,7 +1,7 @@
 <div class="container mt-5" style="max-width:800px;">
   <div class="card">
-    <div *ngIf="!editing" class="card-header">Add guild</div>
-    <div *ngIf="editing" class="card-header">Edit guild</div>
+    <div *ngIf="!editing" class="card-header">Julkaise artikkeli</div>
+    <div *ngIf="editing" class="card-header">Muokkaa artikkelia</div>
     <div class="card-body">
       <form #addArticleForm="ngForm" (ngSubmit)="addArticle(addArticleForm)">
         <div class="form-group">
@@ -10,12 +10,33 @@
             type="file"
             name="articleImage"
             class="form-control-file"
-            (change)="onSelectFile($event)"
+            (change)="fileChangeEvent($event)"
           />
         </div>
-        <div id="croppedImg"></div>
-        <p *ngIf="image" class="text-muted">Kuva tallennettu.</p>
+        <image-cropper
+          *ngIf="showCropper"
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="21 / 9"
+          [resizeToWidth]="700"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+        ></image-cropper>
+
         <p *ngIf="fileError" class="text-danger">{{ fileError }}</p>
+        <div class="text-center"><img [src]="croppedImage" class="mb-3" /></div>
+
+        <button
+          type="button"
+          *ngIf="croppedImage"
+          class="btn btn-primary mb-5"
+          (click)="saveImage()"
+        >
+          Tallenna kuva
+        </button>
+
         <div class="form-group">
           <label for="articleTitle">Otsikko</label>
           <input
@@ -75,9 +96,13 @@
         </div>
         <input
           type="submit"
-          value="Tallenna"
+          value="Julkaise"
           class="btn btn-primary btn-block"
-          [disabled]="!addArticleForm.form.valid || article.tags.length === 0"
+          [disabled]="
+            !addArticleForm.form.valid ||
+            article.tags.length === 0 ||
+            uploadingImage
+          "
         />
       </form>
     </div>

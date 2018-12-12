@@ -119,10 +119,13 @@ router.post('/addnewarticle', (req, res) => {
 
 router.post('/addimagetoarticle', upload, (req, res) => {
   if (req.file) {
+    res.status(200);
     return res.json({
       success: true,
       file: req.file.id
     });
+  } else {
+    return res.json({ success: false });
   }
 });
 
@@ -237,9 +240,16 @@ router.delete('/removearticleimages', (req, res) => {
   for (const img of oldImages) {
     gfs.remove({ _id: img }, (err, gridStore) => {
       if (err) {
-        console.log(err);
+        logger.log({
+          timestamp: tsFormat(),
+          level: 'error',
+          errorMsg: err
+        });
+        res.status(500);
+        res.json({ success: false, msg: 'Poisto epäonnistui.' });
       } else {
-        console.log('suc');
+        res.status(200);
+        res.json({ success: true });
       }
     });
   }

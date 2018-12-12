@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { TinymceModule } from 'angular2-tinymce';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AuthInterceptor } from './auth.interceptor';
 
@@ -89,6 +90,7 @@ import { AddArticleComponent } from './components/articles/add-article/add-artic
     HttpClientModule,
     AppRoutingModule,
     NgbModule.forRoot(),
+    ImageCropperModule,
     FlashMessagesModule.forRoot(),
     TinymceModule.withConfig({
       auto_focus: true,

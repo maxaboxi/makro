@@ -26,6 +26,7 @@
     "core-js": "^2.5.4",
     "jspdf": "^1.4.1",
     "jspdf-autotable": "^2.3.5",
+    "ngx-image-cropper": "^1.2.4",
     "rxjs": "^6.0.0",
     "tinymce": "^4.8.3",
     "zone.js": "~0.8.26"
