@@ -1,19 +1,40 @@
-<div class="container mb-5" style="max-width:720px;">
-  <button
-    *ngIf="this.user?.username"
-    class="btn btn-block btn-outline-success mt-3"
-    title="Lisää artikkeli"
-    routerLink="/articles/addarticle"
+<div class="row mt-2 mb-3 justify-content-center">
+  <span *ngIf="this.user?.username" routerLink="/articles/addarticle"
+    ><i class="fas fa-plus-circle"></i> Kirjoita artikkeli</span
   >
-    <i class="fas fa-plus"></i>
-  </button>
-
+</div>
+<div class="row mb-2 justify-content-center">
+  <div class="form-group">
+    <input
+      type="text"
+      name="article"
+      class="form-control"
+      placeholder="Hae kirjoituksia otsikolla, tagilla tai tekijän nimellä"
+      (keyup)="searchArticles()"
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+</div>
+<div class="container mb-5">
   <div *ngIf="articles && articles.length === 0" class="mt-3">
     <h1 class="display-4 text-center">Ei artikkeleita</h1>
   </div>
-  <div *ngIf="articles && articles.length > 0" class=" mt-3">
+  <div *ngIf="results.length === 0 && searchTerm.length > 0" class="mt-3">
+    <h1 class="display-4 text-center">Ei hakutuloksia</h1>
+  </div>
+  <div
+    *ngIf="articles && articles.length > 0 && results.length === 0"
+    class=" mt-3"
+  >
     <app-article
       *ngFor="let a of articles"
+      [user]="user"
+      [article]="a"
+    ></app-article>
+  </div>
+  <div *ngIf="results.length > 0" class="mt-3">
+    <app-article
+      *ngFor="let a of results"
       [user]="user"
       [article]="a"
     ></app-article>

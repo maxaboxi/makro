@@ -1,0 +1,16 @@
+.fas:hover {
+  cursor: pointer;
+}
+
+.fas {
+  color: #ff3b3f;
+}
+
+.form-group {
+  max-width: 700px;
+  width: 100%;
+}
+
+.container {
+  max-width: 720px;
+}

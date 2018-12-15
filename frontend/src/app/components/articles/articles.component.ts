@@ -12,6 +12,8 @@ import { Article } from '../../models/Article';
 export class ArticlesComponent implements OnInit {
   user: User;
   articles: Article[];
+  results: Article[] = [];
+  searchTerm = '';
 
   constructor(
     private auth: AuthService,
@@ -23,5 +25,70 @@ export class ArticlesComponent implements OnInit {
     this.articleService
       .getAllArticles()
       .subscribe(articles => (this.articles = articles));
+  }
+
+  searchArticles() {
+    this.results = [];
+    const secondaryResults = [];
+    const tertiaryResults = [];
+    const quaternaryResults = [];
+    const st = this.searchTerm.toLowerCase();
+    this.articles.forEach(a => {
+      const titleLc = a.title.toLowerCase();
+      const userLc = a.username.toLowerCase();
+      if (titleLc === st) {
+        this.results.push(a);
+      } else if (st === titleLc.slice(0, st.length)) {
+        this.results.push(a);
+      } else {
+        const containsWhitespaces = titleLc.indexOf(' ') > 1;
+        let added = false;
+        if (containsWhitespaces) {
+          for (let i = 0; i < titleLc.length; i++) {
+            if (
+              st.length > 1 &&
+              titleLc[i] === ' ' &&
+              titleLc.slice(i + 1, i + 1 + st.length) === st
+            ) {
+              secondaryResults.push(a);
+              added = true;
+            }
+          }
+        }
+
+        if (!added && st.length > 1) {
+          for (let tag of a.tags) {
+            const tagLc = tag.toLowerCase();
+            if (tagLc === st) {
+              tertiaryResults.push(a);
+              added = true;
+              break;
+            }
+          }
+        }
+
+        if (!added && titleLc.indexOf(st) !== -1) {
+          quaternaryResults.push(a);
+          added = true;
+        }
+
+        if (!added && userLc.indexOf(st) !== -1) {
+          quaternaryResults.push(a);
+          added = true;
+        }
+      }
+    });
+
+    if (secondaryResults.length > 0) {
+      this.results = this.results.concat(secondaryResults);
+    }
+
+    if (tertiaryResults.length > 0) {
+      this.results = this.results.concat(tertiaryResults);
+    }
+
+    if (quaternaryResults.length > 0) {
+      this.results = this.results.concat(quaternaryResults);
+    }
   }
 }
