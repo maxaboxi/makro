@@ -26,7 +26,12 @@
     <h1 class="display-4 text-center">Ei hakutuloksia</h1>
   </div>
   <div
-    *ngIf="articles && articles.length > 0 && results.length === 0"
+    *ngIf="
+      articles &&
+      articles.length > 0 &&
+      results.length === 0 &&
+      searchTerm.length === 0
+    "
     class=" mt-3"
   >
     <app-article
