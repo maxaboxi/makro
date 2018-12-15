@@ -74,14 +74,18 @@ export class AddArticleComponent implements OnInit {
       type: this.imageBlob.type,
       lastModified: Date.now()
     });
-    this.articleService.addImageToArticle(file).subscribe(res => {
-      this.uploadingImage = false;
-      if (res['success']) {
-        if (this.image) {
-          this.oldImages.push(this.image);
-        }
-        this.image = res['file'];
-        this.showCropper = false;
+    this.articleService.scanFile(file).subscribe(res => {
+      if (res['success'] && res['clean']) {
+        this.articleService.addImageToArticle(file).subscribe(response => {
+          this.uploadingImage = false;
+          if (response['success']) {
+            if (this.image) {
+              this.oldImages.push(this.image);
+            }
+            this.image = response['file'];
+            this.showCropper = false;
+          }
+        });
       }
     });
   }

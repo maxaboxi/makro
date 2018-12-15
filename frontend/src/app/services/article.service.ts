@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Article } from '../models/Article';
-import { Observable } from 'rxjs';
+import { of, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
   private baseUrl = `${environment.articles}/api/v1/articles`;
+  private scannerUrl = environment.scanner;
 
   constructor(private http: HttpClient) {}
 
@@ -59,6 +60,12 @@ export class ArticleService {
     formData.append('img', image);
 
     return this.http.post(url, formData, { headers: new HttpHeaders() });
+  }
+
+  scanFile(image: File) {
+    const formData = new FormData();
+    formData.append('img', image);
+    return this.http.post(this.scannerUrl, formData);
   }
 
   editArticle(article: Article) {
