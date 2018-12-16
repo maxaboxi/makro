@@ -22,6 +22,7 @@ export class AnswerCommentComponent implements OnInit {
   commentVotes: Vote[];
   pointsTotal;
   userVote;
+  voteFetched = false;
 
   @Input()
   set comment(comment) {
@@ -72,6 +73,7 @@ export class AnswerCommentComponent implements OnInit {
             this.userVote = 'down';
           }
         }
+        this.voteFetched = true;
       });
   }
 
