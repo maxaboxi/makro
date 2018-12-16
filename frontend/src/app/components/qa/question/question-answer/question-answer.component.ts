@@ -23,6 +23,7 @@ export class QuestionAnswerComponent implements OnInit {
   answerVotes: Vote[];
   pointsTotal;
   userVote;
+  voteFetched = false;
 
   @Input()
   set user(user) {
@@ -74,6 +75,7 @@ export class QuestionAnswerComponent implements OnInit {
               this.userVote = 'down';
             }
           }
+          this.voteFetched = true;
         });
     }
   }
