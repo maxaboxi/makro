@@ -3,6 +3,7 @@ import { Article } from '../../../models/Article';
 import { User } from '../../../models/User';
 import { BehaviorSubject } from 'rxjs';
 import { ArticleService } from '../../../services/article.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article',
@@ -32,7 +33,7 @@ export class ArticleComponent implements OnInit {
     return this._article.getValue();
   }
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private router: Router) {}
 
   ngOnInit() {
     if (this.article.headerImgId) {
@@ -59,5 +60,17 @@ export class ArticleComponent implements OnInit {
     if (image) {
       reader.readAsDataURL(image);
     }
+  }
+
+  editArticle() {
+    this.router.navigate(['/articles/addarticle'], {
+      queryParams: {
+        _id: this.article._id
+        // title: this.article.title,
+        // body: this.article.body,
+        // tags: this.article.tags,
+        // headerImgId: this.article.headerImgId
+      }
+    });
   }
 }

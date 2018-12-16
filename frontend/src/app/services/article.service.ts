@@ -43,6 +43,16 @@ export class ArticleService {
     return this.http.get<Article[]>(url, { headers: headers });
   }
 
+  getArticleById(id) {
+    const url = `${this.baseUrl}/getarticle/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Article>(url, { headers: headers });
+  }
+
   addArticle(article: Article) {
     const url = `${this.baseUrl}/addnewarticle`;
 

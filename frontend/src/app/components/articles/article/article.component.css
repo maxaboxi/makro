@@ -2,3 +2,7 @@
   padding: 10px;
   word-wrap: break-word;
 }
+
+.edit-article:hover {
+  cursor: pointer;
+}

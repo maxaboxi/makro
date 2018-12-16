@@ -47,6 +47,33 @@ export class AddArticleComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
+    if (this.queryParams['_id']) {
+      this.editing = true;
+      this.articleService.getArticleById(this.queryParams['_id']).subscribe(
+        article => {
+          this.article._id = this.queryParams['_id'];
+          this.article.title = article[0].title;
+          this.article.origTitle = article[0].title;
+          this.article.body = article[0].body;
+          this.article.origBody = article[0].body;
+          this.article.headerImgId = article[0].headerImgId;
+          this.article.tags = article[0].tags;
+
+          if (this.article.headerImgId) {
+            this.articleService
+              .getImageForArticle(this.article.headerImgId)
+              .subscribe(res => {
+                if (res) {
+                  this.createImageFromBlob(res);
+                }
+              });
+          }
+        },
+        (error: Error) => {
+          this.router.navigate(['/articles']);
+        }
+      );
+    }
   }
 
   fileChangeEvent(event: any): void {
@@ -84,8 +111,13 @@ export class AddArticleComponent implements OnInit {
             }
             this.image = response['file'];
             this.showCropper = false;
+            this.fileError = '';
           }
         });
+      } else if (res['success'] && !res['clean']) {
+        this.fileError = 'Kuva ei läpäissyt virustarkistusta.';
+      } else {
+        this.fileError = 'Virhe kuvaa tallennettaessa.';
       }
     });
   }
@@ -95,24 +127,45 @@ export class AddArticleComponent implements OnInit {
       this.article.headerImgId = this.image;
     }
     this.article.username = this.user.username;
-    this.articleService.addArticle(this.article).subscribe(
-      res => {
-        if (res['success']) {
-          this.router.navigate(['/articles']);
-          this.resetArticle();
-          this.flashMessage.show('Artikkeli julkaistu onnistuneesti.', {
-            cssClass: 'alert-success',
+    if (!this.editing) {
+      this.articleService.addArticle(this.article).subscribe(
+        res => {
+          if (res['success']) {
+            this.router.navigate(['/articles']);
+            this.resetArticle();
+            this.flashMessage.show('Artikkeli julkaistu onnistuneesti.', {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
-    );
+      );
+    } else {
+      this.articleService.editArticle(this.article).subscribe(
+        res => {
+          if (res['success']) {
+            this.router.navigate(['/articles']);
+            this.resetArticle();
+            this.flashMessage.show('Artikkeli muokattu onnistuneesti.', {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
+    }
 
     if (this.oldImages.length > 0) {
       this.articleService
@@ -140,5 +193,20 @@ export class AddArticleComponent implements OnInit {
       body: '',
       tags: []
     };
+  }
+
+  createImageFromBlob(image: Blob) {
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        this.croppedImage = reader.result;
+      },
+      false
+    );
+
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 }

@@ -26,5 +26,12 @@
       </p>
     </div>
   </div>
+  <div *ngIf="article.username === user.username" class="row">
+    <div class="col">
+      <span class="text-warning edit-article" (click)="editArticle()"
+        ><i class="far fa-edit"></i> Muokkaa</span
+      >
+    </div>
+  </div>
 </div>
 <hr />

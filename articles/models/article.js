@@ -10,9 +10,17 @@ const ArticleSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    origTitle: {
+      type: String,
+      required: false
+    },
     body: {
       type: String,
       required: true
+    },
+    origBody: {
+      type: String,
+      required: false
     },
     headerImgId: {
       type: String,
@@ -22,11 +30,6 @@ const ArticleSchema = mongoose.Schema(
     tags: {
       type: Array,
       required: true
-    },
-    pointsTotal: {
-      type: Number,
-      required: false,
-      default: 0
     }
   },
   { timestamps: true }
@@ -38,13 +41,18 @@ module.exports.saveArticle = (article, callback) => {
   article.save(callback);
 };
 
-module.exports.saveEditedArticle = (article, callback) => {
-  const query = { _id: article._id };
+module.exports.saveEditedArticle = (id, article, callback) => {
+  const query = { _id: id };
   Article.findByIdAndUpdate(query, article, { new: true }, callback);
 };
 
 module.exports.getArticlesByUser = (username, callback) => {
   const query = { username: username };
+  Article.find(query, callback);
+};
+
+module.exports.getArticleById = (id, callback) => {
+  const query = { _id: id };
   Article.find(query, callback);
 };
 

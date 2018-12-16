@@ -129,15 +129,18 @@ router.post('/addimagetoarticle', upload, (req, res) => {
   }
 });
 
-router.post('/editedarticle', (req, res) => {
-  const article = new Article({
-    _id: req.body._id,
+router.post('/editarticle', (req, res) => {
+  const id = mongoose.Types.ObjectId(req.body._id);
+  const article = {
     title: req.body.title,
+    origTitle: req.body.origTitle,
     body: req.body.body,
+    origBody: req.body.origBody,
+    headerImgId: req.body.headerImgId,
     tags: req.body.tags
-  });
+  };
 
-  Article.saveEditedArticle(article, (err, article) => {
+  Article.saveEditedArticle(id, article, (err, ar) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -167,6 +170,24 @@ router.get('/getarticles/:username', (req, res) => {
     } else {
       res.status(200);
       res.json(articles);
+    }
+  });
+});
+
+router.get('/getarticle/:id', (req, res) => {
+  const id = req.params.id;
+  Article.getArticleById(id, (err, article) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(article);
     }
   });
 });
