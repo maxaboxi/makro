@@ -88,7 +88,15 @@ export class ArticleService {
     return this.http.post(url, article, { headers: headers });
   }
 
-  editArticleImage() {}
+  deleteArticle(id) {
+    const url = `${this.baseUrl}/removearticle/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.delete(url, { headers: headers });
+  }
 
   deleteArticles(articles) {
     const url = `${this.baseUrl}/removearticles`;

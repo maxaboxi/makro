@@ -22,6 +22,10 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
+    this.getAllArticles();
+  }
+
+  getAllArticles() {
     this.articleService
       .getAllArticles()
       .subscribe(articles => (this.articles = articles));

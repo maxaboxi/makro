@@ -238,6 +238,24 @@ router.get('/articleimage/:img', (req, res) => {
   });
 });
 
+router.delete('/removearticle/:id', (req, res) => {
+  const id = mongoose.Types.ObjectId(req.params.id);
+  Article.removeArticle(id, (err, article) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Poisto epäonnistui.' });
+    } else {
+      res.status(200);
+      res.json({ success: true, msg: 'Artikkeli poistettu.' });
+    }
+  });
+});
+
 router.delete('/removearticles', (req, res) => {
   const deletedArticles = req.body;
   Article.removeArticles(deletedArticles, (err, articles) => {

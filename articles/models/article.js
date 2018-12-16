@@ -62,6 +62,11 @@ module.exports.getAllArticles = callback => {
     .exec(callback);
 };
 
+module.exports.removeArticle = (id, callback) => {
+  const query = { _id: id };
+  Article.remove(query, callback);
+};
+
 module.exports.removeArticles = (deletedArticles, callback) => {
   const query = { _id: { $in: deletedArticles } };
   Article.remove(query, callback);

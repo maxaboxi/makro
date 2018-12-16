@@ -1,9 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Article } from '../../../models/Article';
 import { User } from '../../../models/User';
 import { BehaviorSubject } from 'rxjs';
 import { ArticleService } from '../../../services/article.service';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-article',
@@ -33,7 +35,15 @@ export class ArticleComponent implements OnInit {
     return this._article.getValue();
   }
 
-  constructor(private articleService: ArticleService, private router: Router) {}
+  @Output()
+  deleted = new EventEmitter();
+
+  constructor(
+    private articleService: ArticleService,
+    private router: Router,
+    private modalService: NgbModal,
+    private flashMessage: FlashMessagesService
+  ) {}
 
   ngOnInit() {
     if (this.article.headerImgId) {
@@ -64,13 +74,26 @@ export class ArticleComponent implements OnInit {
 
   editArticle() {
     this.router.navigate(['/articles/addarticle'], {
-      queryParams: {
-        _id: this.article._id
-        // title: this.article.title,
-        // body: this.article.body,
-        // tags: this.article.tags,
-        // headerImgId: this.article.headerImgId
-      }
+      queryParams: { _id: this.article._id }
     });
+  }
+
+  openDeleteArticleModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.articleService.deleteArticle(this.article._id).subscribe(res => {
+            this.flashMessage.show(res['msg'], {
+              cssClass: res['success'] ? 'alert-success' : 'alert-danger',
+              timeout: 2000
+            });
+            if (res['success']) {
+              this.deleted.emit('deleted');
+            }
+          });
+        }
+      },
+      dismissed => {}
+    );
   }
 }
