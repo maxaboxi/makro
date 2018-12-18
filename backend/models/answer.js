@@ -32,7 +32,7 @@ const Answer = (module.exports = mongoose.model('answer', AnswerSchema));
 module.exports.getAllAnswersWithId = (questionId, callback) => {
   const query = { questionId: questionId };
   Answer.find(query)
-    .sort({ pointsTotal: -1 })
+    .sort({ createdAt: -1 })
     .exec(callback);
 };
 
@@ -42,14 +42,6 @@ module.exports.getAllAnswers = callback => {
 
 module.exports.saveAnswer = (a, callback) => {
   a.save(callback);
-};
-
-module.exports.getTopAnswer = (questionId, callback) => {
-  const query = { questionId: questionId };
-  Answer.find(query)
-    .sort({ pointsTotal: -1 })
-    .limit(1)
-    .exec(callback);
 };
 
 module.exports.editAnswer = (a, callback) => {

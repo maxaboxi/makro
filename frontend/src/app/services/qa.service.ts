@@ -43,20 +43,6 @@ export class QaService {
     return this.http.get<Comment[]>(url, { headers: headers });
   }
 
-  getTopResponseToQuestion(questionId) {
-    const url = `${this.baseUrl}/answers/gettopresponsetoquestion`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post<Answer>(
-      url,
-      { questionId: questionId },
-      { headers: headers }
-    );
-  }
-
   getAllResponsesToQuestion(questionId) {
     const url = `${this.baseUrl}/answers/getallresponsestoquestion`;
 
@@ -64,11 +50,7 @@ export class QaService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<Answer[]>(
-      url,
-      { questionId: questionId },
-      { headers: headers }
-    );
+    return this.http.post<Answer[]>(url, { questionId: questionId }, { headers: headers });
   }
 
   postNewQuestion(question: Question) {
@@ -102,9 +84,7 @@ export class QaService {
   }
 
   getAllUserQuestionsWithUsername(username) {
-    const url = `${
-      this.baseUrl
-    }/questions/getallquestionswithusername/${username}`;
+    const url = `${this.baseUrl}/questions/getallquestionswithusername/${username}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

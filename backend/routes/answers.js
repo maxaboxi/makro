@@ -5,8 +5,7 @@ const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -70,24 +69,6 @@ router.post('/getallresponsestoquestion', (req, res) => {
     } else {
       res.status(200);
       res.json(answers);
-    }
-  });
-});
-
-router.post('/gettopresponsetoquestion', (req, res) => {
-  const questionId = req.body.questionId;
-  Answer.getTopAnswer(questionId, (err, answer) => {
-    if (err) {
-      logger.log({
-        timestamp: tsFormat(),
-        level: 'error',
-        errorMsg: err
-      });
-      res.status(500);
-      res.json({ success: false, msg: 'Something went wrong.' });
-    } else {
-      res.status(200);
-      res.json(answer);
     }
   });
 });

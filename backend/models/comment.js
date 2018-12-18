@@ -44,7 +44,7 @@ const Comment = (module.exports = mongoose.model('comment', CommentSchema));
 module.exports.getAllCommentsWithId = (id, callback) => {
   const query = { postId: id };
   Comment.find(query)
-    .sort({ pointsTotal: -1 })
+    .sort({ createdAt: -1 })
     .exec(callback);
 };
 

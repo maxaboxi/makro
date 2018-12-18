@@ -38,11 +38,9 @@ export class QuestionCardComponent implements OnInit {
   constructor(private qaService: QaService, private router: Router) {}
 
   ngOnInit() {
-    this.qaService
-      .getTopResponseToQuestion(this.question._id)
-      .subscribe(answer => {
-        this.answer = answer[0];
-      });
+    this.qaService.getAllResponsesToQuestion(this.question._id).subscribe(answer => {
+      this.answer = answer[0];
+    });
   }
 
   openQuestion(qId) {
