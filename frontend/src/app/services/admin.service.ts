@@ -14,6 +14,7 @@ import { Comment } from '../models/Comment';
 export class AdminService {
   private baseUrl = `${environment.baseUrl}/admin`;
   private baseUrlAuth = `${environment.auth}/admin`;
+  private baseUrlVotes = `${environment.votes}/admin`;
 
   constructor(private http: HttpClient) {}
 
@@ -107,7 +108,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallvotes`;
+    const url = `${this.baseUrlVotes}/getallvotes`;
 
     return this.http.get<Vote[]>(url, { headers: headers });
   }
