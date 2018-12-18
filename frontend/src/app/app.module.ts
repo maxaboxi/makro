@@ -45,6 +45,7 @@ import { UserVotesComponent } from './components/profile/user-votes/user-votes.c
 import { ArticlesComponent } from './components/articles/articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
+import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { AddArticleComponent } from './components/articles/add-article/add-artic
     UserVotesComponent,
     ArticlesComponent,
     ArticleComponent,
-    AddArticleComponent
+    AddArticleComponent,
+    UserArticlesComponent
   ],
   imports: [
     BrowserModule,

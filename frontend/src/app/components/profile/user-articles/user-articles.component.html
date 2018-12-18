@@ -1,0 +1,28 @@
+<div class="container mt-3 mb-2">
+  <div class="row justify-content-center">
+    <div class="col-6 text-center"> <h1 class="display-4">Kirjoittamani artikkelit</h1> </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="articles.length > 0 || articlesDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ul>
+        <li class="big-list lead" *ngFor="let article of articles; let i = index">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="editArticle(i)" title="Muokkaa artikkelia">{{ article.title }}</div>
+            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteArticle(i)" title="Poista artikkeli"></i> </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="articles.length === 0 && !articlesDeleted">
+    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei julkaistuja artikkeleita.</h2> </div>
+  </div>
+
+  <div class="row justify-content-center" *ngIf="articlesDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteArticlesFromDb()"> Tallenna muutokset </button>
+      <p class="lead"> Artikkeli(t) poistetaan vasta, kun tallenna muutokset nappia on painettu. </p>
+    </div>
+  </div>
+</div>
