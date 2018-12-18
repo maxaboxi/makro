@@ -60,13 +60,11 @@ export class AddArticleComponent implements OnInit {
           this.article.tags = article[0].tags;
 
           if (this.article.headerImgId) {
-            this.articleService
-              .getImageForArticle(this.article.headerImgId)
-              .subscribe(res => {
-                if (res) {
-                  this.createImageFromBlob(res);
-                }
-              });
+            this.articleService.getImageForArticle(this.article.headerImgId).subscribe(res => {
+              if (res) {
+                this.createImageFromBlob(res);
+              }
+            });
           }
         },
         (error: Error) => {
@@ -91,8 +89,7 @@ export class AddArticleComponent implements OnInit {
   }
 
   loadImageFailed() {
-    this.fileError =
-      'Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif.';
+    this.fileError = 'Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif.';
   }
 
   saveImage() {
@@ -101,25 +98,38 @@ export class AddArticleComponent implements OnInit {
       type: this.imageBlob.type,
       lastModified: Date.now()
     });
-    this.articleService.scanFile(file).subscribe(res => {
-      if (res['success'] && res['clean']) {
-        this.articleService.addImageToArticle(file).subscribe(response => {
-          this.uploadingImage = false;
-          if (response['success']) {
-            if (this.image) {
-              this.oldImages.push(this.image);
-            }
-            this.image = response['file'];
-            this.showCropper = false;
-            this.fileError = '';
-          }
-        });
-      } else if (res['success'] && !res['clean']) {
-        this.fileError = 'Kuva ei läpäissyt virustarkistusta.';
-      } else {
-        this.fileError = 'Virhe kuvaa tallennettaessa.';
+
+    this.articleService.addImageToArticle(file).subscribe(response => {
+      this.uploadingImage = false;
+      if (response['success']) {
+        if (this.image) {
+          this.oldImages.push(this.image);
+        }
+        this.image = response['file'];
+        this.showCropper = false;
+        this.fileError = '';
       }
     });
+
+    // this.articleService.scanFile(file).subscribe(res => {
+    //   if (res['success'] && res['clean']) {
+    //     this.articleService.addImageToArticle(file).subscribe(response => {
+    //       this.uploadingImage = false;
+    //       if (response['success']) {
+    //         if (this.image) {
+    //           this.oldImages.push(this.image);
+    //         }
+    //         this.image = response['file'];
+    //         this.showCropper = false;
+    //         this.fileError = '';
+    //       }
+    //     });
+    //   } else if (res['success'] && !res['clean']) {
+    //     this.fileError = 'Kuva ei läpäissyt virustarkistusta.';
+    //   } else {
+    //     this.fileError = 'Virhe kuvaa tallennettaessa.';
+    //   }
+    // });
   }
 
   addArticle() {
@@ -168,17 +178,13 @@ export class AddArticleComponent implements OnInit {
     }
 
     if (this.oldImages.length > 0) {
-      this.articleService
-        .deleteArticleImages(this.oldImages)
-        .subscribe(() => (this.oldImages = []));
+      this.articleService.deleteArticleImages(this.oldImages).subscribe(() => (this.oldImages = []));
     }
   }
 
   addTagToArticle(char) {
     if (this.articleTag.length >= 3 && char === ',') {
-      this.article.tags.push(
-        this.articleTag.slice(0, this.articleTag.length - 1)
-      );
+      this.article.tags.push(this.articleTag.slice(0, this.articleTag.length - 1));
       this.articleTag = '';
     }
   }

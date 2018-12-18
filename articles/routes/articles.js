@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const Article = require('../models/Article');
+const Article = require('../models/article');
 const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -17,6 +17,7 @@ const options = {
 };
 
 let gfs;
+let storage;
 mongoose
   .connect(
     config['database'].url,
@@ -26,11 +27,33 @@ mongoose
     console.log('Connected to MongoDB');
     gfs = Grid(mongoose.connection.db, mongoose.mongo);
     gfs.collection('images');
+    storage = new GridFsStorage({
+      db: mongoose.connection.db,
+      file: (req, file) => {
+        return new Promise((resolve, reject) => {
+          crypto.randomBytes(16, (err, buf) => {
+            if (err) {
+              logger.log({
+                timestamp: tsFormat(),
+                level: 'error',
+                errorMsg: err
+              });
+              return reject(err);
+            }
+            const filename = buf.toString('hex') + path.extname(file.originalname);
+            const fileInfo = {
+              filename: filename,
+              bucketName: 'images'
+            };
+            resolve(fileInfo);
+          });
+        });
+      }
+    });
   })
   .catch(err => console.log(err));
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -42,36 +65,10 @@ const logger = winston.createLogger({
   ]
 });
 
-const storage = new GridFsStorage({
-  url: config['database'].url,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          logger.log({
-            timestamp: tsFormat(),
-            level: 'error',
-            errorMsg: err
-          });
-          return reject(err);
-        }
-        const filename = buf.toString('hex') + path.extname(file.originalname);
-        const fileInfo = {
-          filename: filename,
-          bucketName: 'images'
-        };
-        resolve(fileInfo);
-      });
-    });
-  }
-});
 const upload = multer({ storage: storage }).single('img');
 
 router.use((req, res, next) => {
-  if (
-    (req.path === '/getallarticles' && req.method === 'GET') ||
-    (req.path.indexOf('/articleimage/') > -1 && req.method === 'GET')
-  ) {
+  if ((req.path === '/getallarticles' && req.method === 'GET') || (req.path.indexOf('/articleimage/') > -1 && req.method === 'GET')) {
     next();
   } else {
     let token;
@@ -226,10 +223,7 @@ router.get('/articleimage/:img', (req, res) => {
       res.status(200);
 
       res.set('Content-Type', img.contentType);
-      res.set(
-        'Content-Disposition',
-        'attachment; filename="' + img.filename + '"'
-      );
+      res.set('Content-Disposition', 'attachment; filename="' + img.filename + '"');
 
       readstream.pipe(res);
     } else {
