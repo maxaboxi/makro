@@ -1,17 +1,11 @@
 <div class="container mt-5" style="max-width:800px;">
   <div class="card">
-    <div *ngIf="!editing" class="card-header">Julkaise artikkeli</div>
-    <div *ngIf="editing" class="card-header">Muokkaa artikkelia</div>
+    <div *ngIf="!editing" class="card-header">Julkaise artikkeli</div> <div *ngIf="editing" class="card-header">Muokkaa artikkelia</div>
     <div class="card-body">
-      <form #addArticleForm="ngForm" (ngSubmit)="addArticle(addArticleForm)">
+      <form #addArticleForm="ngForm" (ngSubmit)="addArticle()">
         <div class="form-group">
           <label for="articleHeaderImg">Kuva</label>
-          <input
-            type="file"
-            name="articleImage"
-            class="form-control-file"
-            (change)="fileChangeEvent($event)"
-          />
+          <input type="file" name="articleImage" class="form-control-file" (change)="fileChangeEvent($event)" />
         </div>
         <image-cropper
           *ngIf="showCropper"
@@ -25,15 +19,9 @@
           (loadImageFailed)="loadImageFailed()"
         ></image-cropper>
 
-        <p *ngIf="fileError" class="text-danger">{{ fileError }}</p>
-        <div class="text-center"><img [src]="croppedImage" class="mb-3" /></div>
+        <p *ngIf="fileError" class="text-danger">{{ fileError }}</p> <div class="text-center"><img [src]="croppedImage" class="mb-3"/></div>
 
-        <button
-          type="button"
-          *ngIf="croppedImage && showCropper"
-          class="btn btn-primary mb-5"
-          (click)="saveImage()"
-        >
+        <button type="button" *ngIf="croppedImage && showCropper" class="btn btn-primary mb-5" (click)="saveImage()">
           Tallenna kuva
         </button>
 
@@ -51,35 +39,18 @@
             minlength="5"
             required
           />
-          <div
-            [hidden]="!articleTitle.errors?.required"
-            class="invalid-feedback"
-          >
-            Otsikko vaaditaan
-          </div>
-          <div
-            [hidden]="!articleTitle.errors?.minlength"
-            class="invalid-feedback"
-          >
-            Otsikon pitää olla vähintään 5 merkkiä pitkä
-          </div>
+          <div [hidden]="!articleTitle.errors?.required" class="invalid-feedback"> Otsikko vaaditaan </div>
+          <div [hidden]="!articleTitle.errors?.minlength" class="invalid-feedback"> Otsikon pitää olla vähintään 5 merkkiä pitkä </div>
         </div>
         <div class="form-group">
           <label for="articleBody">Teksti</label>
-          <app-tinymce
-            name="body"
-            [(ngModel)]="article.body"
-            minlength="100"
-            required
-          ></app-tinymce>
+          <app-tinymce name="body" [(ngModel)]="article.body" minlength="100" required></app-tinymce>
         </div>
         <div class="form-group">
           <label for="hashtags">Tagit (erota pilkulla)</label>
           <p class="text-muted" *ngIf="article.tags.length > 0">
             <ng-container *ngFor="let tag of article.tags; let i = index">
-              <span class="tag" (click)="removeTagFromArticle(i)"
-                >#{{ tag }}
-              </span>
+              <span class="tag" (click)="removeTagFromArticle(i)">#{{ tag }} </span>
             </ng-container>
           </p>
           <input
@@ -92,19 +63,13 @@
             minlength="3"
             (keyup)="addTagToArticle($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
-            Tagin pitää olla vähintään kolme merkkiä pitkä
-          </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> Tagin pitää olla vähintään kolme merkkiä pitkä </div>
         </div>
         <input
           type="submit"
           value="Julkaise"
           class="btn btn-primary btn-block"
-          [disabled]="
-            !addArticleForm.form.valid ||
-            article.tags.length === 0 ||
-            uploadingImage
-          "
+          [disabled]="!addArticleForm.form.valid || article.tags.length === 0 || uploadingImage"
         />
       </form>
     </div>
