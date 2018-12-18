@@ -20,7 +20,7 @@ const VoteSchema = mongoose.Schema(
     },
     category: {
       type: String,
-      required: true
+      required: false
     },
     content: {
       type: String,
@@ -39,6 +39,13 @@ module.exports.getAllVotesWithPostId = (id, callback) => {
 
 module.exports.getAllVotesWithUserId = (id, callback) => {
   const query = { userId: id };
+  Vote.find(query)
+    .sort({ createdAt: -1 })
+    .exec(callback);
+};
+
+module.exports.getAllVotesWithPostId = (id, callback) => {
+  const query = { postId: id };
   Vote.find(query)
     .sort({ createdAt: -1 })
     .exec(callback);

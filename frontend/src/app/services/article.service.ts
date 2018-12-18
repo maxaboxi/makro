@@ -3,12 +3,14 @@ import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Article } from '../models/Article';
 import { of, Observable } from 'rxjs';
+import { Comment } from '../models/Comment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
   private baseUrl = `${environment.articles}/api/v1/articles`;
+  private commentUrl = `${environment.articles}/api/v1/comments`;
   private scannerUrl = environment.scanner;
 
   constructor(private http: HttpClient) {}
@@ -126,5 +128,25 @@ export class ArticleService {
     };
 
     return this.http.delete(url, options);
+  }
+
+  postNewComment(comment: Comment) {
+    const url = `${this.commentUrl}/addcomment`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, comment, { headers: headers });
+  }
+
+  getCommentsToArticleWithId(id) {
+    const url = `${this.commentUrl}/getallcomments/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Comment[]>(url, { headers: headers });
   }
 }

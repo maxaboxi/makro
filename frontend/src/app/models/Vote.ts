@@ -4,6 +4,6 @@ export interface Vote {
   userId: String;
   vote: number;
   postId: String;
-  category: String;
+  category?: String;
   content: String;
 }

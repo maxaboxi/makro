@@ -46,6 +46,7 @@ import { ArticlesComponent } from './components/articles/articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
+import { ArticleCommentComponent } from './components/articles/article/article-comment/article-comment.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { UserArticlesComponent } from './components/profile/user-articles/user-a
     ArticlesComponent,
     ArticleComponent,
     AddArticleComponent,
-    UserArticlesComponent
+    UserArticlesComponent,
+    ArticleCommentComponent
   ],
   imports: [
     BrowserModule,

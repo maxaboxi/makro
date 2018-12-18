@@ -45,9 +45,7 @@ export class QuestionComponent implements OnInit {
       this.qaService.getQuestionWithId(this.queryParams['id']).subscribe(q => {
         this.question = q;
       });
-      this.qaService
-        .getAllResponsesToQuestion(this.queryParams['id'])
-        .subscribe(a => (this.answers = a));
+      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(a => (this.answers = a));
     } else {
       this.router.navigate(['/qa']);
     }
@@ -66,9 +64,7 @@ export class QuestionComponent implements OnInit {
           this.qaService.addAnswerToQuestion(answer).subscribe(
             res => {
               if (res['success']) {
-                this.qaService
-                  .getAllResponsesToQuestion(this.question._id)
-                  .subscribe(answers => (this.answers = answers));
+                this.qaService.getAllResponsesToQuestion(this.question._id).subscribe(answers => (this.answers = answers));
                 this.flashMessage.show('Vastaus lisätty', {
                   cssClass: 'alert-success',
                   timeout: 2000

@@ -56,6 +56,16 @@ export class VoteService {
     return this.http.get<Vote[]>(url, { headers: headers });
   }
 
+  getAllVotesWithPostId(id) {
+    const url = `${this.baseUrl}/getallvoteswithpostid/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Vote[]>(url, { headers: headers });
+  }
+
   removeVotes(voteIds) {
     const url = `${this.baseUrl}/removevotes`;
 

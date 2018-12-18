@@ -4,7 +4,8 @@ export interface Comment {
   userId: String;
   comment: String;
   postId: String;
-  questionId: String;
+  questionId?: String;
+  articleId?: String;
   replyTo?: String;
   origPost: String;
   pointsTotal?: Number;

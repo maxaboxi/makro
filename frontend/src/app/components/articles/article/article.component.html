@@ -1,36 +1,72 @@
-<img *ngIf="image" class="img-fluid" [src]="image" />
-<div class="article justify-content-center">
-  <h1 class="h1">{{ article.title }}</h1> <p class="lead" [innerHTML]="article.body"></p>
-  <div class="row">
-    <div class="col-4">
-      <p class="text-muted">Kirjoittaja: {{ article.username }}</p>
+<div class="container mt-3">
+  <img *ngIf="image" class="img-fluid" [src]="image" />
+  <div *ngIf="article" class="article justify-content-center">
+    <h1 class="h1">{{ article.title }}</h1> <p class="lead" [innerHTML]="article.body"></p>
+    <div class="row">
+      <div class="col-4">
+        <p class="text-muted">Kirjoittaja: {{ article.username }}</p>
+      </div>
+      <div class="col-4">
+        <p class="text-muted"> Julkaistu: {{ article.createdAt | date: 'dd.MM.yyyy' }} </p>
+      </div>
+      <div class="col-4">
+        <p class="text-muted"> Päivitetty: {{ article.updatedAt | date: 'dd.MM.yyyy' }} </p>
+      </div>
     </div>
-    <div class="col-4">
-      <p class="text-muted"> Julkaistu: {{ article.createdAt | date: 'dd.MM.yyyy' }} </p>
+    <div class="row">
+      <div class="col">
+        <p class="text-muted">
+          <ng-container *ngFor="let tag of article.tags">#{{ tag }} </ng-container>
+        </p>
+      </div>
     </div>
-    <div class="col-4">
-      <p class="text-muted"> Päivitetty: {{ article.updatedAt | date: 'dd.MM.yyyy' }} </p>
+    <div class="row">
+      <div class="col-6">
+        <div class="d-flex" *ngIf="votesFetched">
+          <i *ngIf="!userVote || userVote === 'down'" class="far fa-thumbs-up" (click)="vote('+')"></i>
+          <i *ngIf="userVote && userVote === 'up'" class="fas fa-thumbs-up" style="color:#ff3b3f" (click)="vote('-')"></i>
+          <i *ngIf="!userVote || userVote === 'up'" class="ml-3 far fa-thumbs-down" (click)="vote('-')"></i>
+          <i *ngIf="userVote && userVote === 'down'" class="ml-3 fas fa-thumbs-down" (click)="vote('-')" style="color:#ff3b3f"></i>
+          <span class="ml-3 text-muted">{{ pointsTotal }} pistettä</span>
+        </div>
+      </div>
+      <div class="col-6">
+        <span
+          *ngIf="!singleArticle"
+          class="answer-button float-right text-muted"
+          (click)="openArticle()"
+          title="Kommentoiminen onnistuu tätä kautta"
+          >Avaa</span
+        >
+        <span
+          *ngIf="singleArticle"
+          class="answer-button float-right text-muted"
+          (click)="openCommentModal(commentModal, null)"
+          title="Jätä kommentti"
+          >Kommentoi</span
+        >
+      </div>
     </div>
+    <div *ngIf="article.username === user.username" class="row mt-3">
+      <div class="col">
+        <span class="text-warning edit-remove-button" (click)="editArticle()"><i class="far fa-edit"></i> Muokkaa</span>
+      </div>
+      <div class="col text-right">
+        <span class="text-danger edit-remove-button" (click)="openDeleteArticleModal(deleteArticle)"
+          ><i class="far fa-trash-alt" title="Poista artikkeli"></i> Poista</span
+        >
+      </div>
+    </div>
+    <ng-container *ngIf="singleArticle">
+      <div class="mt-3 bg-light">
+        <div class="" *ngFor="let comment of comments">
+          <app-article-comment [comment]="comment" [article]="article" [user]="user" (commented)="fetchComments()"></app-article-comment>
+        </div>
+      </div>
+    </ng-container>
   </div>
-  <div class="row">
-    <div class="col">
-      <p class="text-muted">
-        <ng-container *ngFor="let tag of article.tags">#{{ tag }} </ng-container>
-      </p>
-    </div>
-  </div>
-  <div *ngIf="article.username === user.username" class="row">
-    <div class="col">
-      <span class="text-warning edit-remove-button" (click)="editArticle()"><i class="far fa-edit"></i> Muokkaa</span>
-    </div>
-    <div class="col text-right">
-      <span class="text-danger edit-remove-button" (click)="openDeleteArticleModal(deleteArticle)"
-        ><i class="far fa-trash-alt" title="Poista artikkeli"></i> Poista</span
-      >
-    </div>
-  </div>
+  <hr />
 </div>
-<hr />
 
 <ng-template #deleteArticle let-modal>
   <div class="modal-header">
@@ -43,6 +79,30 @@
         <div class="col"> <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> Peruuta </button> </div>
         <div class="col"> <button type="button" class="btn btn-primary btn-block" (click)="modal.close('save')"> Poista </button> </div>
       </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #commentModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Lisää kommentti</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #commentForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group"> <app-tinymce name="comment" [(ngModel)]="commentText" minlength="5" required></app-tinymce> </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> Peruuta </button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!commentForm.form.valid"> Lisää </button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </ng-template>

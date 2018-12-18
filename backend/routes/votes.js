@@ -9,8 +9,7 @@ const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -58,6 +57,24 @@ router.post('/getuservotewithpostid', (req, res) => {
 router.get('/getallvoteswithuserid/:id', (req, res) => {
   const userId = req.params.id;
   Vote.getAllVotesWithUserId(userId, (err, votes) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+      res.json({ success: false, msg: 'Something went wrong.' });
+    } else {
+      res.status(200);
+      res.json(votes);
+    }
+  });
+});
+
+router.get('/getallvoteswithpostid/:id', (req, res) => {
+  const postId = req.params.id;
+  Vote.getAllVotesWithPostId(postId, (err, votes) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),

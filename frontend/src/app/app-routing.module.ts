@@ -26,6 +26,7 @@ import { UserVotesComponent } from './components/profile/user-votes/user-votes.c
 import { ArticlesComponent } from './components/articles/articles.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
+import { ArticleComponent } from './components/articles/article/article.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -62,6 +63,7 @@ const routes: Routes = [
   { path: 'qa', component: QaComponent, canActivate: [AuthGuard] },
   { path: 'question', component: QuestionComponent, canActivate: [AuthGuard] },
   { path: 'articles', component: ArticlesComponent },
+  { path: 'article', component: ArticleComponent },
   {
     path: 'articles/addarticle',
     component: AddArticleComponent,
