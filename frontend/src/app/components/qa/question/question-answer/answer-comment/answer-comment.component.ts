@@ -20,9 +20,9 @@ export class AnswerCommentComponent implements OnInit {
   private _answer = new BehaviorSubject<Answer>(null);
   commentText = '';
   commentVotes: Vote[];
-  pointsTotal;
+  pointsTotal = 0;
   userVote;
-  voteFetched = false;
+  votesFetched = false;
 
   @Input()
   set comment(comment) {
@@ -62,19 +62,15 @@ export class AnswerCommentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pointsTotal = this.comment.pointsTotal;
-    this.voteService
-      .getUserVoteWithId(this.user._id, this.comment._id)
-      .subscribe(vote => {
-        if (vote[0]) {
-          if (vote[0].vote > 0) {
-            this.userVote = 'up';
-          } else {
-            this.userVote = 'down';
-          }
+    this.voteService.getAllVotesWithPostId(this.comment._id).subscribe(votes => {
+      votes.forEach(v => {
+        this.pointsTotal += v.vote;
+        if (v.userId === this.user._id) {
+          v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
         }
-        this.voteFetched = true;
       });
+      this.votesFetched = true;
+    });
   }
 
   openCommentModal(content) {
@@ -119,7 +115,6 @@ export class AnswerCommentComponent implements OnInit {
       userId: this.user._id,
       username: this.user.username,
       postId: this.comment._id,
-      category: 'Comment',
       content: this.comment.comment,
       vote: 0
     };

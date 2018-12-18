@@ -25,8 +25,8 @@ export class SharedMealComponent implements OnInit {
   addToMeal = '';
   showRecipe = false;
   userVote;
-  pointsTotal;
-  votesLoaded = false;
+  pointsTotal = 0;
+  votesFetched = false;
 
   @Input()
   set meal(meal) {
@@ -78,18 +78,15 @@ export class SharedMealComponent implements OnInit {
   }
 
   fetchVotes() {
-    this.voteService
-      .getUserVoteWithId(this.user._id, this.meal._id)
-      .subscribe(vote => {
-        if (vote[0]) {
-          if (vote[0].vote > 0) {
-            this.userVote = 'up';
-          } else {
-            this.userVote = 'down';
-          }
+    this.voteService.getAllVotesWithPostId(this.meal._id).subscribe(votes => {
+      votes.forEach(v => {
+        this.pointsTotal += v.vote;
+        if (v.userId === this.user._id) {
+          v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
         }
-        this.votesLoaded = true;
       });
+      this.votesFetched = true;
+    });
   }
 
   openAddMealModal(content, meal) {
@@ -97,9 +94,7 @@ export class SharedMealComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          const mealsFromLocalStorage: Meal[] = JSON.parse(
-            localStorage.getItem('meals')
-          );
+          const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
 
           for (let m of mealsFromLocalStorage) {
             if (m.name === this.addToMeal) {
@@ -130,7 +125,6 @@ export class SharedMealComponent implements OnInit {
       userId: this.user._id,
       username: this.user.username,
       postId: this.meal._id,
-      category: 'SharedMeal',
       content: this.meal.name,
       vote: 0
     };

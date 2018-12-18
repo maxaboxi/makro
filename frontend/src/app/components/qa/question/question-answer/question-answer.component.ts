@@ -21,9 +21,9 @@ export class QuestionAnswerComponent implements OnInit {
   commentText = '';
   showOnlyFirstComment = true;
   answerVotes: Vote[];
-  pointsTotal;
+  pointsTotal = 0;
   userVote;
-  voteFetched = false;
+  votesFetched = false;
 
   @Input()
   set user(user) {
@@ -61,22 +61,16 @@ export class QuestionAnswerComponent implements OnInit {
 
   ngOnInit() {
     if (this.answer) {
-      this.pointsTotal = this.answer.pointsTotal;
-      this.qaService
-        .getCommentsToAnswerWithId(this.answer._id)
-        .subscribe(comments => (this.answer.comments = comments));
-      this.voteService
-        .getUserVoteWithId(this.user._id, this.answer._id)
-        .subscribe(vote => {
-          if (vote[0]) {
-            if (vote[0].vote > 0) {
-              this.userVote = 'up';
-            } else {
-              this.userVote = 'down';
-            }
+      this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => (this.answer.comments = comments));
+      this.voteService.getAllVotesWithPostId(this.answer._id).subscribe(votes => {
+        votes.forEach(v => {
+          this.pointsTotal += v.vote;
+          if (v.userId === this.user._id) {
+            v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
           }
-          this.voteFetched = true;
         });
+        this.votesFetched = true;
+      });
     }
   }
 
@@ -96,9 +90,7 @@ export class QuestionAnswerComponent implements OnInit {
           this.qaService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
-                this.qaService
-                  .getCommentsToAnswerWithId(this.answer._id)
-                  .subscribe(comments => (this.answer.comments = comments));
+                this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => (this.answer.comments = comments));
                 this.flashMessage.show('Kommentti lisätty', {
                   cssClass: 'alert-success',
                   timeout: 2000
@@ -128,7 +120,6 @@ export class QuestionAnswerComponent implements OnInit {
       userId: this.user._id,
       username: this.user.username,
       postId: this.answer._id,
-      category: 'Answer',
       content: this.answer.answer,
       vote: 0
     };
@@ -176,10 +167,8 @@ export class QuestionAnswerComponent implements OnInit {
   }
 
   fetchComments(e) {
-    this.qaService
-      .getCommentsToAnswerWithId(this.answer._id)
-      .subscribe(comments => {
-        this.answer.comments = comments;
-      });
+    this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => {
+      this.answer.comments = comments;
+    });
   }
 }
