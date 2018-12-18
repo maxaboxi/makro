@@ -16,43 +16,6 @@ const options = {
   authSource: 'admin'
 };
 
-let gfs;
-let storage;
-mongoose
-  .connect(
-    config['database'].url,
-    options
-  )
-  .then(() => {
-    console.log('Connected to MongoDB');
-    gfs = Grid(mongoose.connection.db, mongoose.mongo);
-    gfs.collection('images');
-    storage = new GridFsStorage({
-      db: mongoose.connection.db,
-      file: (req, file) => {
-        return new Promise((resolve, reject) => {
-          crypto.randomBytes(16, (err, buf) => {
-            if (err) {
-              logger.log({
-                timestamp: tsFormat(),
-                level: 'error',
-                errorMsg: err
-              });
-              return reject(err);
-            }
-            const filename = buf.toString('hex') + path.extname(file.originalname);
-            const fileInfo = {
-              filename: filename,
-              bucketName: 'images'
-            };
-            resolve(fileInfo);
-          });
-        });
-      }
-    });
-  })
-  .catch(err => console.log(err));
-
 const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
@@ -63,6 +26,44 @@ const logger = winston.createLogger({
       filename: path.join(__dirname, '../logs', 'articles.error.log')
     })
   ]
+});
+
+let gfs;
+mongoose
+  .connect(
+    config['database'].url,
+    options
+  )
+  .then(() => {
+    console.log('Connected to MongoDB');
+    gfs = Grid(mongoose.connection.db, mongoose.mongo);
+    gfs.collection('images');
+  })
+  .catch(err => console.log(err));
+
+const storage = new GridFsStorage({
+  url: config['database'].url,
+  options,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          logger.log({
+            timestamp: tsFormat(),
+            level: 'error',
+            errorMsg: err
+          });
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'images'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
 });
 
 const upload = multer({ storage: storage }).single('img');
