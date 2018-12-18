@@ -18,6 +18,8 @@ import { Question } from '../../models/Question';
 import { Answer } from '../../models/Answer';
 import { Comment } from '../../models/Comment';
 import { VoteService } from '../../services/vote.service';
+import { Article } from '../../models/Article';
+import { ArticleService } from '../../services/article.service';
 
 @Component({
   selector: 'app-admin',
@@ -35,6 +37,7 @@ export class AdminComponent implements OnInit {
   comments: Comment[];
   feedbacks: Feedback[];
   sharedMeals: Meal[];
+  articles: Article[];
   searchTerm = '';
   results = [];
   selectedFood: Food;
@@ -65,6 +68,8 @@ export class AdminComponent implements OnInit {
   answersDeleted = false;
   deletedComments = [];
   commentsDeleted = false;
+  deletedArticles = [];
+  articlesDeleted = false;
 
   constructor(
     private auth: AuthService,
@@ -76,33 +81,25 @@ export class AdminComponent implements OnInit {
     private modalService: NgbModal,
     private sharedMealsService: SharedMealsService,
     private qaService: QaService,
-    private voteService: VoteService
+    private voteService: VoteService,
+    private articleService: ArticleService
   ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
     this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
-    this.feedbackService
-      .getAllFeedbacks()
-      .subscribe(feedbacks => (this.feedbacks = feedbacks));
+    this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
     this.adminService.getAllUsers().subscribe(users => (this.users = users));
     this.adminService.getAllDays().subscribe(days => (this.days = days));
-    this.sharedMealsService
-      .getAllMeals()
-      .subscribe(meals => (this.sharedMeals = meals));
+    this.sharedMealsService.getAllMeals().subscribe(meals => (this.sharedMeals = meals));
     this.adminService.getAllSharedDays().subscribe(days => {
       this.sharedDays = JSON.parse(JSON.stringify(days));
     });
-    this.qaService
-      .getAllQuestions()
-      .subscribe(questions => (this.questions = questions));
-    this.adminService
-      .getAllAnswers()
-      .subscribe(answers => (this.answers = answers));
-    this.adminService
-      .getAllComments()
-      .subscribe(comments => (this.comments = comments));
+    this.qaService.getAllQuestions().subscribe(questions => (this.questions = questions));
+    this.adminService.getAllAnswers().subscribe(answers => (this.answers = answers));
+    this.adminService.getAllComments().subscribe(comments => (this.comments = comments));
     this.adminService.getAllVotes().subscribe(votes => (this.votes = votes));
+    this.articleService.getAllArticles().subscribe(articles => (this.articles = articles));
   }
 
   searchFoods() {
@@ -120,22 +117,14 @@ export class AdminComponent implements OnInit {
         const containsBrackets = fLc.indexOf('(') > 1;
         if (containsWhitespaces && !containsBrackets) {
           for (let i = 0; i < fLc.length; i++) {
-            if (
-              st.length > 1 &&
-              fLc[i] === ' ' &&
-              fLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && fLc[i] === ' ' && fLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(f);
             }
           }
         }
         if (containsWhitespaces && containsBrackets) {
           for (let i = 0; i < fLc.length; i++) {
-            if (
-              st.length > 1 &&
-              fLc[i] === '(' &&
-              fLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && fLc[i] === '(' && fLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(f);
             }
           }
@@ -155,13 +144,10 @@ export class AdminComponent implements OnInit {
         if (result === 'save') {
           if (this.newUserPassword && this.newUserPasswordAgain) {
             if (this.newUserPassword !== this.newUserPasswordAgain) {
-              this.flashMessage.show(
-                'Salasanat eivät täsmänneet. Muutoksia ei tallennettu.',
-                {
-                  cssClass: 'alert-danger',
-                  timeout: 2000
-                }
-              );
+              this.flashMessage.show('Salasanat eivät täsmänneet. Muutoksia ei tallennettu.', {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
               this.newUserPassword = null;
               this.newUserPasswordAgain = null;
             } else {
@@ -187,27 +173,23 @@ export class AdminComponent implements OnInit {
               );
             }
           } else {
-            this.adminService
-              .updateUserInformation(this.selectedUser)
-              .subscribe(
-                res => {
-                  if (res['success']) {
-                    this.flashMessage.show('Käyttäjän tiedot päivitetty', {
-                      cssClass: 'alert-success',
-                      timeout: 2000
-                    });
-                    this.adminService
-                      .getAllUsers()
-                      .subscribe(users => (this.users = users));
-                  }
-                },
-                (error: Error) => {
-                  this.flashMessage.show(error['error'].msg, {
-                    cssClass: 'alert-danger',
+            this.adminService.updateUserInformation(this.selectedUser).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show('Käyttäjän tiedot päivitetty', {
+                    cssClass: 'alert-success',
                     timeout: 2000
                   });
+                  this.adminService.getAllUsers().subscribe(users => (this.users = users));
                 }
-              );
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            );
           }
         }
         this.selectedUser = null;
@@ -230,9 +212,7 @@ export class AdminComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.foodService
-                  .getAllFoods()
-                  .subscribe(foods => (this.foods = foods));
+                this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
               }
             },
             (error: Error) => {
@@ -264,9 +244,7 @@ export class AdminComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.feedbackService
-                  .getAllFeedbacks()
-                  .subscribe(feedbacks => (this.feedbacks = feedbacks));
+                this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
               }
             },
             (error: Error) => {
@@ -369,9 +347,7 @@ export class AdminComponent implements OnInit {
           });
           this.deletedUsers = [];
           this.usersDeleted = false;
-          this.adminService
-            .getAllUsers()
-            .subscribe(users => (this.users = users));
+          this.adminService.getAllUsers().subscribe(users => (this.users = users));
         }
       },
       (error: Error) => {
@@ -399,9 +375,7 @@ export class AdminComponent implements OnInit {
           });
           this.deletedFeedbacks = [];
           this.feedbacksDeleted = false;
-          this.feedbackService
-            .getAllFeedbacks()
-            .subscribe(feedbacks => (this.feedbacks = feedbacks));
+          this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
         }
       },
       (error: Error) => {
@@ -428,9 +402,7 @@ export class AdminComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.sharedMealsService
-            .getAllMeals()
-            .subscribe(meals => (this.sharedMeals = meals));
+          this.sharedMealsService.getAllMeals().subscribe(meals => (this.sharedMeals = meals));
           this.sharedMealsDeleted = false;
         }
       },
@@ -486,9 +458,7 @@ export class AdminComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.qaService
-            .getAllQuestions()
-            .subscribe(questions => (this.questions = questions));
+          this.qaService.getAllQuestions().subscribe(questions => (this.questions = questions));
           this.questionsDeleted = false;
         }
       },
@@ -515,9 +485,7 @@ export class AdminComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.adminService
-            .getAllAnswers()
-            .subscribe(answers => (this.answers = answers));
+          this.adminService.getAllAnswers().subscribe(answers => (this.answers = answers));
           this.answersDeleted = false;
         }
       },
@@ -544,9 +512,7 @@ export class AdminComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.adminService
-            .getAllComments()
-            .subscribe(comments => (this.comments = comments));
+          this.adminService.getAllComments().subscribe(comments => (this.comments = comments));
           this.commentsDeleted = false;
         }
       },
@@ -573,10 +539,37 @@ export class AdminComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.adminService
-            .getAllVotes()
-            .subscribe(votes => (this.votes = votes));
+          this.adminService.getAllVotes().subscribe(votes => (this.votes = votes));
           this.votesDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteArticle(index) {
+    this.deletedArticles.push(this.articles[index]._id);
+    this.articles.splice(index, 1);
+    this.articlesDeleted = true;
+  }
+
+  deleteArticlesFromDb() {
+    this.articleService.deleteArticles(this.deletedArticles).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show('Muutokset tallennettu.', {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.articleService.getArticlesByUser(this.user.username).subscribe(articles => {
+            this.articles = articles;
+          });
+          this.articlesDeleted = false;
         }
       },
       (error: Error) => {
