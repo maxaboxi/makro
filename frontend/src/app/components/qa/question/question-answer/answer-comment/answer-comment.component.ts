@@ -140,21 +140,21 @@ export class AnswerCommentComponent implements OnInit {
       }
     } else {
       if (c === '+') {
-        vote.vote = 2;
+        vote.vote = 1;
         this.userVote = 'up';
         this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += 2;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -2;
+        vote.vote = -1;
         this.userVote = 'down';
         this.voteService.replacePreviousVote(vote).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += 2;
           }
         });
       }
