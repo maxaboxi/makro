@@ -7,7 +7,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class VoteService {
-  private baseUrl = `${environment.baseUrl}/api/v1/votes`;
+  private baseUrl = `${environment.votes}/api/v1/votes`;
 
   constructor(private http: HttpClient) {}
 

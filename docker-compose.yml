@@ -1,6 +1,41 @@
 version: '3'
 
 services:
+  virusscanner:
+    container_name: makro-scanner
+    restart: always
+    build: ./virusscanner/
+    ports:
+      - '1330:1330'
+    links:
+      - article-db
+    networks:
+      - back
+      - reverse-proxy
+    environment:
+      - VIRTUAL_PORT=1330
+      - VIRTUAL_HOST=virusscanner.makro.diet
+      - LETSENCRYPT_HOST=virusscanner.makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+
+  votes:
+    container_name: makro-votes
+    restart: always
+    build: ./votes/
+    ports:
+      - '1335:1335'
+    links:
+      - db
+    networks:
+      - back
+      - reverse-proxy
+    environment:
+      - VIRTUAL_PORT=1335
+      - VIRTUAL_HOST=votes.makro.diet
+      - LETSENCRYPT_HOST=votes.makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - WAIT_HOSTS=makro-mongo:27020
+
   auth:
     container_name: makro-auth
     restart: always
@@ -16,42 +51,6 @@ services:
       - VIRTUAL_PORT=1336
       - VIRTUAL_HOST=auth.makro.diet
       - LETSENCRYPT_HOST=auth.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo:27020
-
-  articles:
-    container_name: makro-articles
-    restart: always
-    build: ./auth/
-    ports:
-      - '1339:1339'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1339
-      - VIRTUAL_HOST=articles.makro.diet
-      - LETSENCRYPT_HOST=articles.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo-articles:27021
-
-  foods:
-    container_name: makro-foods
-    restart: always
-    build: ./foods/
-    ports:
-      - '1338:1338'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1338
-      - VIRTUAL_HOST=foods.makro.diet
-      - LETSENCRYPT_HOST=foods.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
       - WAIT_HOSTS=makro-mongo:27020
 
@@ -72,23 +71,41 @@ services:
       - LETSENCRYPT_HOST=api.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
       - WAIT_HOSTS=makro-mongo:27020
-
-  virusscanner:
-    container_name: makro-scanner
+  foods:
+    container_name: makro-foods
     restart: always
-    build: ./auth/
+    build: ./foods/
     ports:
-      - '1330:1330'
+      - '1338:1338'
     links:
-      - article-db
+      - db
     networks:
       - back
       - reverse-proxy
     environment:
-      - VIRTUAL_PORT=1330
-      - VIRTUAL_HOST=virusscanner.makro.diet
-      - LETSENCRYPT_HOST=virusscanner.makro.diet
+      - VIRTUAL_PORT=1338
+      - VIRTUAL_HOST=foods.makro.diet
+      - LETSENCRYPT_HOST=foods.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - WAIT_HOSTS=makro-mongo:27020
+
+  articles:
+    container_name: makro-articles
+    restart: always
+    build: ./articles/
+    ports:
+      - '1339:1339'
+    links:
+      - db
+    networks:
+      - back
+      - reverse-proxy
+    environment:
+      - VIRTUAL_PORT=1339
+      - VIRTUAL_HOST=articles.makro.diet
+      - LETSENCRYPT_HOST=articles.makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - WAIT_HOSTS=makro-mongo-articles:27021
 
   db:
     container_name: makro-mongo

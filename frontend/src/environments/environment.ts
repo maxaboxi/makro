@@ -8,7 +8,8 @@ export const environment = {
   auth: 'http://localhost:1336',
   foods: 'http://localhost:1338',
   articles: 'http://localhost:1339',
-  scanner: 'http://localhost:1330/scanner/scan'
+  scanner: 'http://localhost:1330/scanner/scan',
+  votes: 'http://localhost:1335'
 };
 
 /*

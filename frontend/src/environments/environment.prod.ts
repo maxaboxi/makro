@@ -4,5 +4,6 @@ export const environment = {
   auth: 'https://auth.makro.diet',
   foods: 'https://foods.makro.diet',
   articles: 'https://articles.makro.diet',
-  scanner: 'https://virusscanner.makro.diet/scanner/scan'
+  scanner: 'https://virusscanner.makro.diet/scanner/scan',
+  votes: 'https://votes.makro.diet'
 };
