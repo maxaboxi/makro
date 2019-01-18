@@ -45,6 +45,11 @@ router.post('/shareday', (req, res) => {
     user: req.body.user
   });
 
+  if (!day.user) {
+    const token = jwt.decode(req.headers['authorization']);
+    day.user = token.user;
+  }
+
   SharedDay.saveSharedDay(day, (err, savedDay) => {
     if (err) {
       logger.log({
