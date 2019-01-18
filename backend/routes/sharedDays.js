@@ -5,8 +5,7 @@ const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',

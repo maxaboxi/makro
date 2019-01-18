@@ -19,7 +19,7 @@ import { Comment } from '../../../models/Comment';
 export class ArticleComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _article = new BehaviorSubject<Article>(null);
-  image: Blob;
+  image;
   votesFetched = false;
   votes: Vote[];
   userVote;

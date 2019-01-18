@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  Output,
-  EventEmitter,
-  Input
-} from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { User } from '../../../models/User';
@@ -73,9 +66,18 @@ export class ToolbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.addedFoodsService._showTargets.subscribe(
-      show => (this.showTargets = show)
-    );
+    this.addedFoodsService._showTargets.subscribe(show => {
+      this.showTargets = show;
+      if (!this.user) {
+        this.auth.user.subscribe(user => {
+          if (!user) {
+            this._user.next(this.auth.getUserInfo());
+          } else {
+            this._user.next(user);
+          }
+        });
+      }
+    });
   }
 
   openAddFoodModal(content) {
@@ -129,13 +131,10 @@ export class ToolbarComponent implements OnInit {
       foodsAdded += m.foods.length;
     });
     if (foodsAdded === 0) {
-      this.flashMessage.show(
-        'Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa.',
-        {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        }
-      );
+      this.flashMessage.show('Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa.', {
+        cssClass: 'alert-danger',
+        timeout: 2000
+      });
       return;
     }
     this.modalService.open(content, { centered: true }).result.then(
@@ -235,16 +234,6 @@ export class ToolbarComponent implements OnInit {
   }
 
   generateLink(content) {
-    if (!this.user) {
-      this.auth.user.subscribe(user => {
-        if (!user) {
-          this._user.next(this.auth.getUserInfo());
-        } else {
-          this._user.next(user);
-        }
-      });
-      setTimeout(() => {}, 500);
-    }
     const data = {
       user: this.user._id,
       meals: this.addedFoodsService.getMeals()
@@ -258,21 +247,16 @@ export class ToolbarComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.flashMessage.show(
-          'Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan.',
-          {
-            cssClass: 'alert-danger',
-            timeout: 3000
-          }
-        );
+        this.flashMessage.show('Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan.', {
+          cssClass: 'alert-danger',
+          timeout: 3000
+        });
       }
     );
   }
 
   openLinkModal(content) {
-    this.modalService
-      .open(content, { centered: true })
-      .result.then(result => {}, dismissed => {});
+    this.modalService.open(content, { centered: true }).result.then(result => {}, dismissed => {});
   }
 
   createPdf() {
