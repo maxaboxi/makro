@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
@@ -24,6 +24,12 @@ export class SearchComponent implements OnInit {
   isLoggedIn = false;
   defaultValues = [10, 30, 50, 100];
   private _user = new BehaviorSubject<User>(null);
+
+  @ViewChild('searchbar') search: ElementRef;
+
+  ngAfterViewInit() {
+    this.search.nativeElement.focus();
+  }
 
   @Input()
   set foods(foods) {
@@ -52,11 +58,7 @@ export class SearchComponent implements OnInit {
     return this._user.getValue();
   }
 
-  constructor(
-    private modalService: NgbModal,
-    private auth: AuthService,
-    private addedFoodsService: AddedFoodsService
-  ) {}
+  constructor(private modalService: NgbModal, private auth: AuthService, private addedFoodsService: AddedFoodsService) {}
 
   ngOnInit() {
     this.auth.isLoggedIn.subscribe(res => {
@@ -101,11 +103,7 @@ export class SearchComponent implements OnInit {
           let added = false;
           if (containsWhitespaces && !containsBrackets) {
             for (let i = 0; i < fLc.length; i++) {
-              if (
-                st.length > 1 &&
-                fLc[i] === ' ' &&
-                fLc.slice(i + 1, i + 1 + st.length) === st
-              ) {
+              if (st.length > 1 && fLc[i] === ' ' && fLc.slice(i + 1, i + 1 + st.length) === st) {
                 secondaryResults.push(f);
                 added = true;
               }
@@ -113,11 +111,7 @@ export class SearchComponent implements OnInit {
           }
           if (containsWhitespaces && containsBrackets) {
             for (let i = 0; i < fLc.length; i++) {
-              if (
-                st.length > 1 &&
-                fLc[i] === '(' &&
-                fLc.slice(i + 1, i + 1 + st.length) === st
-              ) {
+              if (st.length > 1 && fLc[i] === '(' && fLc.slice(i + 1, i + 1 + st.length) === st) {
                 secondaryResults.push(f);
                 added = true;
               }
