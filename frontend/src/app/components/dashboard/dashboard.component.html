@@ -2,9 +2,9 @@
   <app-toolbar class="ml" (changed)="fetchFoods()" [user]="user"></app-toolbar>
 </div>
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
-<div *ngIf="!loading" class="container-fluid">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+    <div *ngIf="!loading" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
       <app-search [foods]="foods" [allFoods]="allFoods" [user]="user" (changed)="fetchFoods()"></app-search>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-7"> <app-meals [foods]="allFoods" [user]="user"></app-meals> </div>
