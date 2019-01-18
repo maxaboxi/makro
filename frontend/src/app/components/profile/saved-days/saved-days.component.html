@@ -1,23 +1,20 @@
-<div class="container mt-3 mb-2">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="container mt-3 mb-2">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
-      <h1 class="display-4">Tallentamani
-        päivät</h1>
-      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openDayModal(dayName)"><i class="far fa-edit"></i>
-        Muokkaa nimiä</button>
+      <h1 class="display-4">Tallentamani päivät</h1>
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openDayModal(dayName)"
+        ><i class="far fa-edit"></i> Muokkaa nimiä</button
+      >
     </div>
   </div>
   <div class="row justify-content-center" *ngIf="savedDays.length > 0 || daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
-        <li class="big-list lead" *ngFor="let day of savedDays; let i = index;">
+        <li class="big-list lead" *ngFor="let day of savedDays; let i = index">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="loadDay(i)" title="Avaa päivä">
-              {{ day.name }}
-            </div>
-            <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i>
-            </div>
+            <div class="col-10 day-list-name" (click)="loadDay(i)" title="Avaa päivä"> {{ day.name }} </div>
+            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i> </div>
           </div>
         </li>
       </ul>
@@ -25,9 +22,7 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="savedDays.length === 0 && !daysDeleted">
-    <div class="col-6 text-center">
-      <h2 class="h2 text-muted">Ei tallennettuja päiviä.</h2>
-    </div>
+    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei tallennettuja päiviä.</h2> </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="daysDeleted">
@@ -43,27 +38,28 @@
 <ng-template #dayName let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Muokkaa päivien nimiä</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #editDaysForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group" *ngFor="let day of savedDays">
-          <input type="text" name="{{day.name}}" class="form-control" [(ngModel)]="day.name" [value]="day.name"
-            required [ngModelOptions]="{standalone: true}">
+          <input
+            type="text"
+            name="{{ day.name }}"
+            class="form-control"
+            [(ngModel)]="day.name"
+            [value]="day.name"
+            required
+            [ngModelOptions]="{ standalone: true }"
+          />
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
-                Tallenna
-              </button>
-            </div>
+            <div class="col"> <button type="submit" class="btn btn-primary btn-block"> Tallenna </button> </div>
           </div>
         </div>
       </form>

@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   user: User;
   isLoggedIn = false;
   queryParams = {};
+  loading = true;
 
   constructor(
     private foodService: FoodService,
@@ -60,14 +61,16 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFoods() {
+    this.loading = true;
     if (this.isLoggedIn) {
-      this.foodService
-        .getFoodsByUserAndAdmin(this.user.username)
-        .subscribe(foods => {
-          this.foods = foods;
-          this.auth.checkAdmin();
-        });
+      this.foodService.getFoodsByUserAndAdmin(this.user.username).subscribe(foods => {
+        this.foods = foods;
+        this.auth.checkAdmin();
+      });
     }
-    this.foodService.getAllFoods().subscribe(foods => (this.allFoods = foods));
+    this.foodService.getAllFoods().subscribe(foods => {
+      this.allFoods = foods;
+      this.loading = false;
+    });
   }
 }

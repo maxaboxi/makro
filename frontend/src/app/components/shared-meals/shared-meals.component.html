@@ -1,33 +1,32 @@
-<div class="container">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="container">
   <div class="row justify-content-center">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-center">
-      <h1 class="display-4">Valmiit ateriakokonaisuudet</h1>
-    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-center"> <h1 class="display-4">Valmiit ateriakokonaisuudet</h1> </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMealsFirst?.length === 0">
     <h3 class="h3 text-muted mt-3">Ei jaettuja ateriakokonaisuuksia.</h3>
   </div>
   <div class="form-group">
-    <input type="text" name="meal" class="form-control" placeholder="Hae aterioita nimellä, kuvauksella, tagilla tai tekijän nimellä"
-      (keyup)="searchMeals()" [(ngModel)]="searchTerm">
+    <input
+      type="text"
+      name="meal"
+      class="form-control"
+      placeholder="Hae aterioita nimellä, kuvauksella, tagilla tai tekijän nimellä"
+      (keyup)="searchMeals()"
+      [(ngModel)]="searchTerm"
+    />
   </div>
   <ng-container *ngIf="searchTerm?.length > 0">
     <ul>
-      <li *ngFor="let meal of results; let i = index;">
-        <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal>
-      </li>
+      <li *ngFor="let meal of results; let i = index"> <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal> </li>
     </ul>
   </ng-container>
   <div *ngIf="sharedMealsFirst && !searchTerm" class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-3">
-      <ng-container *ngFor="let meal of sharedMealsFirst">
-        <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal>
-      </ng-container>
+      <ng-container *ngFor="let meal of sharedMealsFirst"> <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal> </ng-container>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-3">
-      <ng-container *ngFor="let meal of sharedMealsSecond">
-        <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal>
-      </ng-container>
+      <ng-container *ngFor="let meal of sharedMealsSecond"> <app-shared-meal [meal]="meal" [user]="user"></app-shared-meal> </ng-container>
     </div>
   </div>
 </div>

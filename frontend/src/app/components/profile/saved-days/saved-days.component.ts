@@ -19,6 +19,7 @@ export class SavedDaysComponent implements OnInit {
   savedDays: Day[] = [];
   deletedDays = [];
   daysDeleted = false;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -35,6 +36,7 @@ export class SavedDaysComponent implements OnInit {
       if (user.username) {
         this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
           this.savedDays = days;
+          this.loading = false;
         });
       }
     });
@@ -42,10 +44,7 @@ export class SavedDaysComponent implements OnInit {
 
   loadDay(index) {
     localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
-    localStorage.setItem(
-      'loadedDay',
-      JSON.stringify(this.savedDays[index]._id)
-    );
+    localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index]._id));
     this.addedFoodsService._mealsEdited.next(false);
     this.addedFoodsService._openedSavedMeal.next(true);
     this.addedFoodsService.setMealsFromLocalStorage();
@@ -66,11 +65,9 @@ export class SavedDaysComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.dayService
-            .getAllSavedDays(this.user.username)
-            .subscribe(days => {
-              this.savedDays = days;
-            });
+          this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+            this.savedDays = days;
+          });
           this.daysDeleted = false;
         }
       },
@@ -101,11 +98,9 @@ export class SavedDaysComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.dayService
-                  .getAllSavedDays(this.user.username)
-                  .subscribe(days => {
-                    this.savedDays = days;
-                  });
+                this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+                  this.savedDays = days;
+                });
               }
             },
             (error: Error) => {

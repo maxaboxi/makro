@@ -5,7 +5,13 @@
       <h6 class="h6 text-muted text-center">
         Ongelmatilanteissa apua saa <a href="mailto:support@makro.diet">täältä.</a> Saa toki olla yhteydessä muutenkin. :)
       </h6>
-      <p class="lead text-muted text-center mt-3"> Rekisteröityneitä käyttäjiä {{ usersCount }}, ruokia yhteensä {{ foodsCount }} </p>
+      <div class="mt-3">
+        <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+        <p *ngIf="!loading" class="lead text-muted text-center">
+          Rekisteröityneitä käyttäjiä {{ usersCount }}, ruokia yhteensä {{ foodsCount }}
+        </p>
+      </div>
+
       <p class="lead">
         Makro on ilmainen jokaiselle käyttäjälle - nyt ja aina. Ylläpitoa ei rahoiteta mainoksilla, vaan kaikki kustannukset (palvelin ~60€
         / vuosi ja sähköposti ~50€ / vuosi) menevät minun omasta pussista. Jos sinulla on PayPal-tili ja haluat auttaa

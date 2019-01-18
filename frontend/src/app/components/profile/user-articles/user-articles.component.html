@@ -1,4 +1,5 @@
-<div class="container mt-3 mb-2">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="container mt-3 mb-2">
   <div class="row justify-content-center">
     <div class="col-6 text-center"> <h1 class="display-4">Kirjoittamani artikkelit</h1> </div>
   </div>

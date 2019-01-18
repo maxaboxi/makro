@@ -1,21 +1,17 @@
-<div class="container mt-3">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="container mt-3">
   <div class="row justify-content-center">
-    <div class="col-6 text-center">
-      <h1 class="display-4">Jakamani ateriat
-      </h1>
-    </div>
+    <div class="col-6 text-center"> <h1 class="display-4">Jakamani ateriat </h1> </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMeals.length > 0 || sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
-        <li class="big-list lead" *ngFor="let meal of sharedMeals; let i = index;">
+        <li class="big-list lead" *ngFor="let meal of sharedMeals; let i = index">
           <div class="row">
             <div class="col-10 day-list-name" (click)="openEditSharedMealModal(editShareMealModal, meal)" title="Muokkaa ateriaa">
               {{ meal.name }}
             </div>
-            <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="Poista ateria"></i>
-            </div>
+            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="Poista ateria"></i> </div>
           </div>
         </li>
       </ul>
@@ -23,15 +19,12 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="sharedMeals.length === 0 && !sharedMealsDeleted">
-    <div class="col-6 text-center">
-      <h2 class="h2 text-muted">Ei jaettuja aterioita.</h2>
-    </div>
+    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei jaettuja aterioita.</h2> </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna muutokset
-      </button>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna muutokset </button>
       <p class="lead">Ateria(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
     </div>
   </div>
@@ -40,16 +33,14 @@
 <ng-template #editShareMealModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Muokkaa ateriaa</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #editShareMealForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="sharedMealName">Nimi</label>
-          <input type="text" name="sharedMealName" class="form-control" [(ngModel)]="selectedSharedMeal.name" required>
+          <input type="text" name="sharedMealName" class="form-control" [(ngModel)]="selectedSharedMeal.name" required />
         </div>
         <div class="form-group">
           <label for="sharedMealInfo">Lisätietoja</label>
@@ -57,14 +48,27 @@
         </div>
         <div class="form-group">
           <label for="sharedMealRecipe">Valmistusohjeet</label>
-          <textarea type="textarea" name="sharedMealRecipe" class="form-control" [(ngModel)]="selectedSharedMeal.recipe" rows="3"></textarea>
+          <textarea
+            type="textarea"
+            name="sharedMealRecipe"
+            class="form-control"
+            [(ngModel)]="selectedSharedMeal.recipe"
+            rows="3"
+          ></textarea>
         </div>
         <p class="lead">Ruokien määrät grammoina</p>
         <div class="form-group row" *ngFor="let food of selectedSharedMeal.foods; let i = index">
           <label for="foodAmount" class="lead col-sm-6 col-form-label">{{ food.name }}</label>
           <div class="col-sm-4">
-            <input type="number" name="foodAmount" class="form-control" [(ngModel)]="food.amount" required [ngModelOptions]="{standalone: true}"
-              [value]="food.amount">
+            <input
+              type="number"
+              name="foodAmount"
+              class="form-control"
+              [(ngModel)]="food.amount"
+              required
+              [ngModelOptions]="{ standalone: true }"
+              [value]="food.amount"
+            />
           </div>
           <div class="col-sm-2">
             <i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="Poista ruoka ateriasta"></i>
@@ -73,26 +77,28 @@
         <div class="form-group">
           <label for="hashtags">Tagit (erota pilkulla)</label>
           <p class="text-muted" *ngIf="selectedSharedMeal.tags.length > 0">
-            <ng-container *ngFor="let tag of selectedSharedMeal.tags; let i = index;">
+            <ng-container *ngFor="let tag of selectedSharedMeal.tags; let i = index">
               <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
             </ng-container>
           </p>
-          <input type="text" name="hashtags" class="form-control" #hashtags="ngModel" [(ngModel)]="sharedMealTag" [ngClass]="{'is-invalid':hashtags.errors && hashtags.touched}"
-            minlength="3" (keyup)="addTagToSharedMealTags($event.key)">
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">
-            Tagin pitää olla vähintään kolme merkkiä pitkä
-          </div>
+          <input
+            type="text"
+            name="hashtags"
+            class="form-control"
+            #hashtags="ngModel"
+            [(ngModel)]="sharedMealTag"
+            [ngClass]="{ 'is-invalid': hashtags.errors && hashtags.touched }"
+            minlength="3"
+            (keyup)="addTagToSharedMealTags($event.key)"
+          />
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> Tagin pitää olla vähintään kolme merkkiä pitkä </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
-                Tallenna
-              </button>
-            </div>
+            <div class="col"> <button type="submit" class="btn btn-primary btn-block"> Tallenna </button> </div>
           </div>
         </div>
       </form>

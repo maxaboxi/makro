@@ -16,6 +16,7 @@ export class UserCommentsComponent implements OnInit {
   comments: Comment[] = [];
   deletedComments = [];
   commentsDeleted = false;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -28,11 +29,10 @@ export class UserCommentsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.qaService
-          .getAllUserCommentsWithId(this.user._id)
-          .subscribe(comments => {
-            this.comments = comments;
-          });
+        this.qaService.getAllUserCommentsWithId(this.user._id).subscribe(comments => {
+          this.comments = comments;
+          this.loading = false;
+        });
       }
     });
   }
@@ -51,11 +51,9 @@ export class UserCommentsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.qaService
-            .getAllUserCommentsWithId(this.user._id)
-            .subscribe(comments => {
-              this.comments = comments;
-            });
+          this.qaService.getAllUserCommentsWithId(this.user._id).subscribe(comments => {
+            this.comments = comments;
+          });
           this.commentsDeleted = false;
         }
       },

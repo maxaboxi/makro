@@ -17,6 +17,7 @@ export class UserQuestionsComponent implements OnInit {
   questions: Question[] = [];
   deletedQuestions = [];
   questionsDeleted = false;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -29,11 +30,10 @@ export class UserQuestionsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.qaService
-          .getAllUserQuestionsWithUsername(this.user.username)
-          .subscribe(questions => {
-            this.questions = questions;
-          });
+        this.qaService.getAllUserQuestionsWithUsername(this.user.username).subscribe(questions => {
+          this.questions = questions;
+          this.loading = false;
+        });
       }
     });
   }
@@ -52,11 +52,9 @@ export class UserQuestionsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.qaService
-            .getAllUserQuestionsWithUsername(this.user.username)
-            .subscribe(questions => {
-              this.questions = questions;
-            });
+          this.qaService.getAllUserQuestionsWithUsername(this.user.username).subscribe(questions => {
+            this.questions = questions;
+          });
           this.questionsDeleted = false;
         }
       },

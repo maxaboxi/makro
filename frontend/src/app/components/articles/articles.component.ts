@@ -14,11 +14,9 @@ export class ArticlesComponent implements OnInit {
   articles: Article[];
   results: Article[] = [];
   searchTerm = '';
+  loading = true;
 
-  constructor(
-    private auth: AuthService,
-    private articleService: ArticleService
-  ) {}
+  constructor(private auth: AuthService, private articleService: ArticleService) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
@@ -26,9 +24,10 @@ export class ArticlesComponent implements OnInit {
   }
 
   getAllArticles() {
-    this.articleService
-      .getAllArticles()
-      .subscribe(articles => (this.articles = articles));
+    this.articleService.getAllArticles().subscribe(articles => {
+      this.articles = articles;
+      this.loading = false;
+    });
   }
 
   searchArticles() {
@@ -49,11 +48,7 @@ export class ArticlesComponent implements OnInit {
         let added = false;
         if (containsWhitespaces) {
           for (let i = 0; i < titleLc.length; i++) {
-            if (
-              st.length > 1 &&
-              titleLc[i] === ' ' &&
-              titleLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && titleLc[i] === ' ' && titleLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(a);
               added = true;
             }

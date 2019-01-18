@@ -14,12 +14,9 @@ export class SharedDaysComponent implements OnInit {
   sharedDays = [];
   deletedDays = [];
   daysDeleted = false;
+  loading = true;
 
-  constructor(
-    private auth: AuthService,
-    private dayService: DayService,
-    private flashMessage: FlashMessagesService
-  ) {}
+  constructor(private auth: AuthService, private dayService: DayService, private flashMessage: FlashMessagesService) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -27,6 +24,7 @@ export class SharedDaysComponent implements OnInit {
       if (user._id) {
         this.dayService.getSharedDaysByUser(this.user._id).subscribe(days => {
           this.sharedDays = JSON.parse(JSON.stringify(days));
+          this.loading = false;
         });
       }
     });

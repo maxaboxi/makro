@@ -18,6 +18,7 @@ export class FeedbackComponent implements OnInit {
     feedback: '',
     username: 'Nimetön'
   };
+  loading = true;
 
   constructor(
     private feedbackService: FeedbackService,
@@ -32,9 +33,10 @@ export class FeedbackComponent implements OnInit {
   }
 
   getAllFeedbacks() {
-    this.feedbackService
-      .getAllFeedbacks()
-      .subscribe(feedbacks => (this.feedbacks = feedbacks));
+    this.feedbackService.getAllFeedbacks().subscribe(feedbacks => {
+      this.feedbacks = feedbacks;
+      this.loading = false;
+    });
   }
 
   resetForm() {

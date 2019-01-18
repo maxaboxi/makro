@@ -11,12 +11,18 @@ export class AboutComponent implements OnInit {
   showOlderUpdates = false;
   usersCount: number;
   foodsCount: number;
+  loading = true;
 
   constructor(private auth: AuthService, private foodService: FoodService) {}
 
   ngOnInit() {
-    this.auth.getUsersCount().subscribe(res => (this.usersCount = res['count']));
-    this.foodService.getFoodsCount().subscribe(res => (this.foodsCount = res['count']));
+    this.auth.getUsersCount().subscribe(res => {
+      this.usersCount = res['count'];
+      this.foodService.getFoodsCount().subscribe(res => {
+        this.foodsCount = res['count'];
+        this.loading = false;
+      });
+    });
   }
 
   toggleShowOlderUpdates() {

@@ -17,6 +17,7 @@ export class UserInfoComponent implements OnInit {
   showDeleteAccount = false;
   newUserPassword;
   newUserPasswordAgain;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -33,28 +34,15 @@ export class UserInfoComponent implements OnInit {
   }
 
   calculateBaseExpenditure() {
-    if (
-      this.user.height !== 0 &&
-      this.user.weight !== 0 &&
-      this.user.age !== 0 &&
-      this.user.sex !== null &&
-      this.user.activity >= 1
-    ) {
+    if (this.user.height !== 0 && this.user.weight !== 0 && this.user.age !== 0 && this.user.sex !== null && this.user.activity >= 1) {
       if (this.user.sex == 'mies') {
-        this.user.dailyExpenditure =
-          88.4 +
-          13.4 * this.user.weight +
-          4.8 * this.user.height -
-          5.7 * this.user.age;
+        this.user.dailyExpenditure = 88.4 + 13.4 * this.user.weight + 4.8 * this.user.height - 5.7 * this.user.age;
       } else {
-        this.user.dailyExpenditure =
-          447.6 +
-          9.25 * this.user.weight +
-          3.1 * this.user.height -
-          4.3 * this.user.age;
+        this.user.dailyExpenditure = 447.6 + 9.25 * this.user.weight + 3.1 * this.user.height - 4.3 * this.user.age;
       }
       this.user.dailyExpenditure *= this.user.activity;
     }
+    this.loading = false;
   }
 
   toggleInfo() {
@@ -140,13 +128,10 @@ export class UserInfoComponent implements OnInit {
       result => {
         if (result === 'save') {
           if (this.newUserPassword !== this.newUserPasswordAgain) {
-            this.flashMessage.show(
-              'Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.',
-              {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              }
-            );
+            this.flashMessage.show('Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.', {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
           } else {
             const user = {
               _id: this.user._id,

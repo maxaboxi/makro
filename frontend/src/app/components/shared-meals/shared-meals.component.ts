@@ -16,11 +16,9 @@ export class SharedMealsComponent implements OnInit {
   user: User;
   searchTerm = '';
   results = [];
+  loading = true;
 
-  constructor(
-    private auth: AuthService,
-    private sharedMealService: SharedMealsService
-  ) {}
+  constructor(private auth: AuthService, private sharedMealService: SharedMealsService) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
@@ -29,12 +27,10 @@ export class SharedMealsComponent implements OnInit {
       if (meals.length % 2 === 0) {
         this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
       } else {
-        this.sharedMealsFirst = meals.splice(
-          0,
-          Math.floor(meals.length / 2) + 1
-        );
+        this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2) + 1);
       }
       this.sharedMealsSecond = meals;
+      this.loading = false;
     });
   }
 
@@ -58,20 +54,12 @@ export class SharedMealsComponent implements OnInit {
         let added = false;
         if (containsWhitespaces && !containsBrackets) {
           for (let i = 0; i < mLc.length; i++) {
-            if (
-              st.length > 1 &&
-              mLc[i] === ' ' &&
-              mLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && mLc[i] === ' ' && mLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(m);
               added = true;
             }
 
-            if (
-              st.length > 1 &&
-              mdLc[i] === ' ' &&
-              mdLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && mdLc[i] === ' ' && mdLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(m);
               added = true;
             }
@@ -79,20 +67,12 @@ export class SharedMealsComponent implements OnInit {
         }
         if (containsWhitespaces && containsBrackets) {
           for (let i = 0; i < mLc.length; i++) {
-            if (
-              st.length > 1 &&
-              mLc[i] === '(' &&
-              mLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && mLc[i] === '(' && mLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(m);
               added = true;
             }
 
-            if (
-              st.length > 1 &&
-              mdLc[i] === '(' &&
-              mdLc.slice(i + 1, i + 1 + st.length) === st
-            ) {
+            if (st.length > 1 && mdLc[i] === '(' && mdLc.slice(i + 1, i + 1 + st.length) === st) {
               secondaryResults.push(m);
               added = true;
             }
@@ -110,10 +90,7 @@ export class SharedMealsComponent implements OnInit {
           }
         }
 
-        if (
-          (!added && mLc.indexOf(st) !== -1) ||
-          (!added && mdLc.indexOf(st) !== -1)
-        ) {
+        if ((!added && mLc.indexOf(st) !== -1) || (!added && mdLc.indexOf(st) !== -1)) {
           quaternaryResults.push(m);
           added = true;
         }

@@ -15,22 +15,18 @@ export class UserVotesComponent implements OnInit {
   votes: Vote[] = [];
   deletedVotes = [];
   votesDeleted = false;
+  loading = true;
 
-  constructor(
-    private auth: AuthService,
-    private voteService: VoteService,
-    private flashMessage: FlashMessagesService
-  ) {}
+  constructor(private auth: AuthService, private voteService: VoteService, private flashMessage: FlashMessagesService) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.voteService
-          .getAllUserVotesWithId(this.user._id)
-          .subscribe(votes => {
-            this.votes = votes;
-          });
+        this.voteService.getAllUserVotesWithId(this.user._id).subscribe(votes => {
+          this.votes = votes;
+          this.loading = false;
+        });
       }
     });
   }
@@ -49,11 +45,9 @@ export class UserVotesComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.voteService
-            .getAllUserVotesWithId(this.user._id)
-            .subscribe(votes => {
-              this.votes = votes;
-            });
+          this.voteService.getAllUserVotesWithId(this.user._id).subscribe(votes => {
+            this.votes = votes;
+          });
           this.votesDeleted = false;
         }
       },

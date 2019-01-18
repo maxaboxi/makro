@@ -28,6 +28,7 @@ export class ArticleComponent implements OnInit {
   singleArticle = false;
   commentText = '';
   comments;
+  loading = true;
 
   @Input()
   set user(user) {
@@ -99,6 +100,7 @@ export class ArticleComponent implements OnInit {
         }
       });
       this.votesFetched = true;
+      this.loading = false;
     });
   }
 

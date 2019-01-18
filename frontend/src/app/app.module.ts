@@ -47,6 +47,7 @@ import { ArticleComponent } from './components/articles/article/article.componen
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 import { ArticleCommentComponent } from './components/articles/article/article-comment/article-comment.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { ArticleCommentComponent } from './components/articles/article/article-c
     ArticleComponent,
     AddArticleComponent,
     UserArticlesComponent,
-    ArticleCommentComponent
+    ArticleCommentComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,

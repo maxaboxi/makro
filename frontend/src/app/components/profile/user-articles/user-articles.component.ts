@@ -16,6 +16,7 @@ export class UserArticlesComponent implements OnInit {
   articles: Article[] = [];
   deletedArticles = [];
   articlesDeleted = false;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -30,6 +31,7 @@ export class UserArticlesComponent implements OnInit {
       if (user.username) {
         this.articleService.getArticlesByUser(user.username).subscribe(articles => {
           this.articles = articles;
+          this.loading = false;
         });
       }
     });

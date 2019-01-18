@@ -17,6 +17,7 @@ export class AddedFoodsComponent implements OnInit {
   userAddedFoods: Food[] = [];
   deletedFoods = [];
   foodsDeleted = false;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -29,11 +30,10 @@ export class AddedFoodsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.foodService
-          .getFoodsAddedByUser(this.user.username)
-          .subscribe(foods => {
-            this.userAddedFoods = foods;
-          });
+        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
+          this.userAddedFoods = foods;
+          this.loading = false;
+        });
       }
     });
   }
@@ -59,11 +59,9 @@ export class AddedFoodsComponent implements OnInit {
         }
         this.deletedFoods = [];
         this.foodsDeleted = false;
-        this.foodService
-          .getFoodsAddedByUser(this.user.username)
-          .subscribe(foods => {
-            this.userAddedFoods = foods;
-          });
+        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
+          this.userAddedFoods = foods;
+        });
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {
@@ -86,11 +84,9 @@ export class AddedFoodsComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.foodService
-                  .getFoodsAddedByUser(this.user.username)
-                  .subscribe(foods => {
-                    this.userAddedFoods = foods;
-                  });
+                this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
+                  this.userAddedFoods = foods;
+                });
               }
             },
             (error: Error) => {

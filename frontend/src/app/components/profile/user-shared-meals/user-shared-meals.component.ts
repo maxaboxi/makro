@@ -23,6 +23,7 @@ export class UserSharedMealsComponent implements OnInit {
   selectedSharedMealOrigFoods: Food[];
   sharedMealTag = '';
   selectedSharedMealOrigTags = undefined;
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -36,14 +37,13 @@ export class UserSharedMealsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.sharedMealsService
-          .getMealsByUser(this.user.username)
-          .subscribe(meals => {
-            this.sharedMeals = meals;
-            this.foodService
-              .getAllFoods()
-              .subscribe(foods => (this.allFoods = foods));
+        this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
+          this.sharedMeals = meals;
+          this.foodService.getAllFoods().subscribe(foods => {
+            this.allFoods = foods;
+            this.loading = false;
           });
+        });
       }
     });
   }
@@ -62,11 +62,9 @@ export class UserSharedMealsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.sharedMealsService
-            .getMealsByUser(this.user.username)
-            .subscribe(meals => {
-              this.sharedMeals = meals;
-            });
+          this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
+            this.sharedMeals = meals;
+          });
           this.sharedMealsDeleted = false;
         }
       },
@@ -82,15 +80,11 @@ export class UserSharedMealsComponent implements OnInit {
   openEditSharedMealModal(content, meal) {
     this.selectedSharedMeal = meal;
     if (!this.selectedSharedMealOrigFoods) {
-      this.selectedSharedMealOrigFoods = JSON.parse(
-        JSON.stringify(this.selectedSharedMeal.foods)
-      );
+      this.selectedSharedMealOrigFoods = JSON.parse(JSON.stringify(this.selectedSharedMeal.foods));
     }
 
     if (!this.selectedSharedMealOrigTags) {
-      this.selectedSharedMealOrigTags = JSON.parse(
-        JSON.stringify(this.selectedSharedMeal.tags)
-      );
+      this.selectedSharedMealOrigTags = JSON.parse(JSON.stringify(this.selectedSharedMeal.tags));
     }
     this.modalService.open(content, { centered: true }).result.then(
       result => {
@@ -110,25 +104,21 @@ export class UserSharedMealsComponent implements OnInit {
               f.sokeri = origFood[0].sokeri * a;
             }
           });
-          this.sharedMealsService
-            .saveEditedMeal(this.selectedSharedMeal)
-            .subscribe(res => {
-              if (res['success']) {
-                this.sharedMealsService
-                  .getMealsByUser(this.user.username)
-                  .subscribe(meals => {
-                    this.sharedMeals = meals;
-                    this.selectedSharedMealOrigFoods = undefined;
-                    this.selectedSharedMeal = undefined;
-                    this.sharedMealTag = '';
-                    this.selectedSharedMealOrigTags = undefined;
-                    this.flashMessage.show('Muutokset tallennettu.', {
-                      cssClass: 'alert-success',
-                      timeout: 2000
-                    });
-                  });
-              }
-            });
+          this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
+            if (res['success']) {
+              this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
+                this.sharedMeals = meals;
+                this.selectedSharedMealOrigFoods = undefined;
+                this.selectedSharedMeal = undefined;
+                this.sharedMealTag = '';
+                this.selectedSharedMealOrigTags = undefined;
+                this.flashMessage.show('Muutokset tallennettu.', {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+              });
+            }
+          });
         } else {
           this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
           this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
@@ -169,9 +159,7 @@ export class UserSharedMealsComponent implements OnInit {
 
   addTagToSharedMealTags(char) {
     if (this.sharedMealTag.length >= 3 && char === ',') {
-      this.selectedSharedMeal.tags.push(
-        this.sharedMealTag.slice(0, this.sharedMealTag.length - 1)
-      );
+      this.selectedSharedMeal.tags.push(this.sharedMealTag.slice(0, this.sharedMealTag.length - 1));
       this.sharedMealTag = '';
     }
   }
