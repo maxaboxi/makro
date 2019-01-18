@@ -8,8 +8,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -40,7 +39,8 @@ function checkAuthorization() {
     if (
       (req.path === '/login' && req.method === 'POST') ||
       (req.path === '/register' && req.method === 'POST') ||
-      (req.path === '/resetpassword' && req.method === 'POST')
+      (req.path === '/resetpassword' && req.method === 'POST') ||
+      (req.path === '/getamountofusers' && req.method === 'GET')
     ) {
       next();
     } else {
@@ -152,13 +152,9 @@ router.post('/login', (req, res) => {
       }
       if (isMatch) {
         User.updateLastLogin(username);
-        const token = jwt.sign(
-          { user: user.username, id: user._id },
-          config['jwt'].secret,
-          {
-            expiresIn: 86400 // 24 hours
-          }
-        );
+        const token = jwt.sign({ user: user.username, id: user._id }, config['jwt'].secret, {
+          expiresIn: 86400 // 24 hours
+        });
         res.status(200);
         res.json({
           success: true,
@@ -352,8 +348,7 @@ router.post('/resetpassword', (req, res) => {
         res.status(200);
         res.json({
           success: false,
-          msg:
-            'Väärä käyttäjätunnus tai käyttäjätunnukseen ei ole liitetty sähköpostia.'
+          msg: 'Väärä käyttäjätunnus tai käyttäjätunnukseen ei ole liitetty sähköpostia.'
         });
         return;
       }
@@ -388,8 +383,7 @@ router.post('/resetpassword', (req, res) => {
               res.status(200);
               res.json({
                 success: true,
-                msg:
-                  'Salasana vaihdettu ja uusi salasana lähetetty sähköpostilla.'
+                msg: 'Salasana vaihdettu ja uusi salasana lähetetty sähköpostilla.'
               });
             }
           });
@@ -452,6 +446,22 @@ router.post('/validatetoken', (req, res) => {
         }
       }
     });
+  });
+});
+
+router.get('/getamountofusers', (req, res) => {
+  User.getAmountOfUsers((err, count) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+    } else {
+      res.status(200);
+      res.json({ count: count });
+    }
   });
 });
 

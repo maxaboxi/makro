@@ -5,8 +5,7 @@ const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -20,7 +19,7 @@ const logger = winston.createLogger({
 
 function checkAuthorization() {
   return (req, res, next) => {
-    if (req.path === '/getallfoods' && req.method === 'GET') {
+    if ((req.path === '/getallfoods' && req.method === 'GET') || (req.path === '/getamountoffoods' && req.method === 'GET')) {
       next();
     } else {
       let token;
@@ -167,6 +166,22 @@ router.delete('/removefoods/', (req, res) => {
     } else {
       res.status(200);
       res.json({ success: true, msg: 'Ruoka/ruoat poistettu.' });
+    }
+  });
+});
+
+router.get('/getamountoffoods', (req, res) => {
+  Food.getAmountOfFoods((err, count) => {
+    if (err) {
+      logger.log({
+        timestamp: tsFormat(),
+        level: 'error',
+        errorMsg: err
+      });
+      res.status(500);
+    } else {
+      res.status(200);
+      res.json({ count: count });
     }
   });
 });

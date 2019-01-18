@@ -84,3 +84,7 @@ module.exports.removeFoods = (deletedFoods, callback) => {
   const query = { _id: { $in: deletedFoods } };
   Food.remove(query, callback);
 };
+
+module.exports.getAmountOfFoods = callback => {
+  Food.countDocuments(callback);
+};

@@ -75,4 +75,13 @@ export class FoodService {
 
     return this.http.delete(url, options);
   }
+
+  getFoodsCount() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getamountoffoods`;
+
+    return this.http.get(url, { headers: headers });
+  }
 }

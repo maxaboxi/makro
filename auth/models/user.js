@@ -188,3 +188,7 @@ module.exports.updateShowTargets = (id, showTargets, callback) => {
     callback
   );
 };
+
+module.exports.getAmountOfUsers = (callback) => {
+  User.countDocuments(callback);
+}

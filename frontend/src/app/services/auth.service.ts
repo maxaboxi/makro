@@ -209,4 +209,13 @@ export class AuthService {
 
     return this.http.delete(url, { headers: headers });
   }
+
+  getUsersCount() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/getamountofusers`;
+
+    return this.http.get(url, { headers: headers });
+  }
 }
