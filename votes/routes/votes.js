@@ -17,19 +17,30 @@ const logger = winston.createLogger({
   ]
 });
 
-router.use((req, res, next) => {
-  let token;
-  if (req.headers['authorization']) {
-    token = jwt.decode(req.headers['authorization']);
-    if (token) {
+function checkAuthorization() {
+  return (req, res, next) => {
+    if (
+      (req.path.includes('/getuservotewithpostid/') && req.method === 'GET') ||
+      (req.path.includes('/getallvoteswithpostid/') && req.method === 'GET')
+    ) {
       next();
+    } else {
+      let token;
+      if (req.headers['authorization']) {
+        token = jwt.decode(req.headers['authorization']);
+        if (token) {
+          next();
+        }
+      } else {
+        res.status(401);
+        res.json({ success: false, msg: 'Unauthorized' });
+        return;
+      }
     }
-  } else {
-    res.status(401);
-    res.json({ success: false, msg: 'Unauthorized' });
-    return;
-  }
-});
+  };
+}
+
+router.use(checkAuthorization());
 
 router.post('/getuservotewithpostid', (req, res) => {
   const userId = req.body.userId;
