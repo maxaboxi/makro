@@ -10,10 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class TotalsComponent implements OnInit {
   totals;
 
-  constructor(
-    private addedFoodsService: AddedFoodsService,
-    private modalService: NgbModal
-  ) {}
+  constructor(private addedFoodsService: AddedFoodsService, private modalService: NgbModal) {}
 
   ngOnInit() {
     this.addedFoodsService._totals.subscribe(totals => {

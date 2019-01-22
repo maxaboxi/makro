@@ -14,11 +14,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: Boolean;
   isAdmin: Boolean;
 
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private addedFoodsService: AddedFoodsService
-  ) {}
+  constructor(private auth: AuthService, private router: Router, private addedFoodsService: AddedFoodsService) {}
 
   ngOnInit() {
     this.auth.getUserInfo();

@@ -1,3 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
 @import 'https://use.fontawesome.com/releases/v5.3.1/css/all.css';
+
+.colors {
+  background: #feffff;
+  color: rgba(0, 0, 0, 0.8);
+  opacity: 0.99;
+  font-family: 'Roboto', sans-serif;
+}
