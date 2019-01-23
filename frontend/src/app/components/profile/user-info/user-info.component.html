@@ -2,7 +2,7 @@
 <div class="container mt-2" *ngIf="this.user && !loading">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-      <h1 class="display-4">{{ 'MY_INFO' | translate }}</h1>
+      <h2 class="h2">{{ 'MY_INFO' | translate }}</h2>
       <ul>
         <li class="list lead"><i class="far fa-user"></i> {{ 'USERNAME' | translate }}: {{ user.username }}</li>
         <li *ngIf="user.email" class="list lead"><i class="fas fa-at"></i> Email: {{ user.email }}</li>
@@ -58,7 +58,7 @@
   <hr />
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-      <h1 class="display-4">{{ 'MEAL_NAMES' | translate }}</h1>
+      <h2 class="h2">{{ 'MEAL_NAMES' | translate }}</h2>
       <ul>
         <li *ngFor="let meal of user.meals; let i = index" class="list lead">
           {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>

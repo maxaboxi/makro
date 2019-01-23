@@ -2,9 +2,11 @@
 <div *ngIf="!loading" class="container mt-3">
   <hr />
   <div class="row justify-content-center">
-    <div class="col-6 text-center"> <h1 class="display-4">Jakamani päivät</h1> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_SHARED_DAYS' | translate }}</h2>
+    </div>
   </div>
-  <div class="row justify-content-center" *ngIf="sharedDays.length > 0 || daysDeleted">
+  <div class="row justify-content-center mt-2" *ngIf="sharedDays.length > 0 || daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let day of sharedDays; let i = index">
@@ -12,7 +14,9 @@
             <div class="col-10 day-list-name">
               <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a>
             </div>
-            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="Poista päivä"></i> </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="{{ 'DELETE_DAY' | translate }}"></i>
+            </div>
           </div>
         </li>
       </ul>
@@ -20,13 +24,15 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="sharedDays.length === 0 && !daysDeleted">
-    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei jaettuja päiviä.</h2> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_SHARED_DAYS' | translate }}</h2>
+    </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">Tallenna muutokset</button>
-      <p class="lead">Päivä(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">{{ 'SAVE_CHANGES' | translate }}</button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 </div>

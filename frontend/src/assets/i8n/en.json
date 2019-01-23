@@ -186,5 +186,11 @@
   "TRAIN_TWICE_DAY": "Heavy training twice a day",
   "PASSWORD": "Password",
   "PASSWORD_AGAIN": "Password again",
-  "PASSWORD_NOT_LONG_ENOUGH": "Password has to be at least 10 characters long"
+  "PASSWORD_NOT_LONG_ENOUGH": "Password has to be at least 10 characters long",
+  "MY_SAVED_DAYS": "Days that I have saved",
+  "LOAD_DAY": "Load day",
+  "DELETE_DAY": "Delete day",
+  "NO_SAVED_DAYS": "I haven't saved any days",
+  "MY_SHARED_DAYS": "Days that I have shared",
+  "NO_SHARED_DAYS": "I haven't shared any days"
 }

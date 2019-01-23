@@ -186,5 +186,11 @@
   "TRAIN_TWICE_DAY": "Raskas treeni kahdesti päivässä",
   "PASSWORD": "Salasana",
   "PASSWORD_AGAIN": "Salasana uudestaan",
-  "PASSWORD_NOT_LONG_ENOUGH": "Salasanan täytyy olla vähintään 10 merkkiä pitkä"
+  "PASSWORD_NOT_LONG_ENOUGH": "Salasanan täytyy olla vähintään 10 merkkiä pitkä",
+  "MY_SAVED_DAYS": "Tallentamani päivät",
+  "LOAD_DAY": "Avaa päivä",
+  "DELETE_DAY": "Poista päivä",
+  "NO_SAVED_DAYS": "Ei tallennettuja päiviä",
+  "MY_SHARED_DAYS": "Jakamani päivät",
+  "NO_SHARED_DAYS": "Ei jaettuja päiviä"
 }
