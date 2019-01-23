@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { TinymceModule } from 'angular2-tinymce';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AuthInterceptor } from './auth.interceptor';
 
@@ -48,6 +50,10 @@ import { AddArticleComponent } from './components/articles/add-article/add-artic
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 import { ArticleCommentComponent } from './components/articles/article/article-comment/article-comment.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -98,6 +104,13 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     NgbModule.forRoot(),
     ImageCropperModule,
     FlashMessagesModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     TinymceModule.withConfig({
       auto_focus: true,
       branding: false,

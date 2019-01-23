@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^7.2.1",
     "@angular/router": "^7.2.1",
     "@ng-bootstrap/ng-bootstrap": "^4.0.1",
+    "@ngx-translate/core": "^11.0.1",
+    "@ngx-translate/http-loader": "^4.0.0",
     "angular2-flash-messages": "^3.0.1",
     "angular2-tinymce": "^3.3.0",
     "core-js": "^2.6.2",
