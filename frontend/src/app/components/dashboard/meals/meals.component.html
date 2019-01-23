@@ -4,9 +4,9 @@
   class="btn btn-block btn-outline-success mb-3"
   *ngIf="openedSavedMeal && mealsEdited"
   (click)="saveEditedDay()"
-  title="Tallenna muokattu päivä"
+  title="{{ 'SAVE_EDITED_DAY' | translate }}"
 >
-  Tallenna muutokset
+  {{ 'SAVE_CHANGES' | translate }}
 </button>
 <div id="meals">
   <app-meal-table

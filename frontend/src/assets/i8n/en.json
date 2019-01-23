@@ -48,9 +48,20 @@
   "KCAL": "cal",
   "INTAKE": "Intake",
   "REMAINING": "Remaining",
-  "CARBS_ABBREVIATION": "Carbs",
+  "CARBS_ABBREVIATION_FINNISH": "Carbs",
   "SEARCH_FOODS": "Search for foods",
   "INCLUDE_FOODS_BY_OTHERS": "Include foods addded by other users",
   "AMOUNT": "Amount",
-  "ADD": "Add"
+  "ADD": "Add",
+  "SAVE_CHANGES": "Save changes",
+  "SAVE_EDITED_DAY": "Save edited day",
+  "DELETE": "Delete",
+  "TOTAL": "Total",
+  "PROTEIN_ABBREVIATION_BOTH": "P",
+  "CARBS_ABBREVIATION_BOTH": "C",
+  "FAT_ABBREVIATION_BOTH": "Fat",
+  "SUGAR_ABBREVIATION_BOTH": "S",
+  "FIBER_ABBREVIATION_BOTH": "F",
+  "CLEAR_FOODS_CONFIRMATION": "Are you sure that you want to remove the selected foods?",
+  "REMOVE_FOODS_TEXT": "Remove all selected foods"
 }

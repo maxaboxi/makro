@@ -48,9 +48,20 @@
   "KCAL": "kcal",
   "INTAKE": "Syöty",
   "REMAINING": "Jäljellä",
-  "CARBS_ABBREVIATION": "HH",
+  "CARBS_ABBREVIATION_FINNISH": "HH",
   "SEARCH_FOODS": "Hae ruokia",
   "INCLUDE_FOODS_BY_OTHERS": "Sisällytä hakuun muiden lisäämät ruoat",
   "AMOUNT": "Määrä",
-  "ADD": "Lisää"
+  "ADD": "Lisää",
+  "SAVE_CHANGES": "Tallenna muutokset",
+  "SAVE_EDITED_DAY": "Tallenna muokattu päivä",
+  "DELETE": "Poista",
+  "TOTAL": "Yhteensä",
+  "PROTEIN_ABBREVIATION_BOTH": "P",
+  "CARBS_ABBREVIATION_BOTH": "HH",
+  "FAT_ABBREVIATION_BOTH": "R",
+  "SUGAR_ABBREVIATION_BOTH": "S",
+  "FIBER_ABBREVIATION_BOTH": "K",
+  "CLEAR_FOODS_CONFIRMATION": "Haluatko varmasti poistaa kaikki valitut ruoat?",
+  "REMOVE_FOODS_TEXT": "Poista kaikki valitut ruoat"
 }
