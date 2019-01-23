@@ -1,17 +1,19 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="container">
   <div class="row justify-content-center">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-center"> <h1 class="display-4">Valmiit ateriakokonaisuudet</h1> </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-center">
+      <h1 class="display-4">{{ 'SHARED_MEALS' | translate }}</h1>
+    </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMealsFirst?.length === 0">
-    <h3 class="h3 text-muted mt-3">Ei jaettuja ateriakokonaisuuksia.</h3>
+    <h3 class="h3 text-muted mt-3">{{ 'NO_SHARED_MEALS' | translate }}</h3>
   </div>
   <div class="form-group">
     <input
       type="text"
       name="meal"
       class="form-control"
-      placeholder="Hae aterioita nimellä, kuvauksella, tagilla tai tekijän nimellä"
+      placeholder="{{ 'SEARCH_MEALS_PLACEHOLDER' | translate }}"
       (keyup)="searchMeals()"
       [(ngModel)]="searchTerm"
     />

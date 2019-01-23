@@ -77,5 +77,15 @@
   "CHOOSE_FOOD_TO_BE_COPIED": "Valitse kopioitava ruoka",
   "CHOOSE_TARGET_MEAL": "Mihin ateriaan ruoka kopioidaan",
   "COPY": "Kopioi",
-  "SHARE": "Jaa"
+  "SHARE": "Jaa",
+  "SHARED_MEALS": "Muiden käyttäjien jakamat ateriat",
+  "NO_SHARED_MEALS": "Ei jaettuja aterioita",
+  "SEARCH_MEALS_PLACEHOLDER": "Hae aterioita nimellä, kuvauksella, tagilla tai tekijän nimellä",
+  "ADD_MEAL_TO_MEALPLAN": "Lisää ateria ateriasuunnitelmaan",
+  "SHOW_RECIPE": "Näytä valmistusohjeet",
+  "MACROS": "Makrot",
+  "FOODS": "Ruoat",
+  "MEAL_MADE_BY": "Tekijä",
+  "POINTS": "pistettä",
+  "CHOOSE_MEAL": "Valitse ateria"
 }
