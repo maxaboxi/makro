@@ -38,13 +38,13 @@ export class NavbarComponent implements OnInit {
   }
 
   changeLanguage() {
-    const lang = localStorage.getItem('lang');
+    const lang = localStorage.getItem('makro_lang');
     if (lang === 'fi') {
       this.translate.use('en');
-      localStorage.setItem('lang', 'en');
+      localStorage.setItem('makro_lang', 'en');
     } else {
       this.translate.use('fi');
-      localStorage.setItem('lang', 'fi');
+      localStorage.setItem('makro_lang', 'fi');
     }
   }
 }

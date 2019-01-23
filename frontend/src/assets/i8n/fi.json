@@ -48,5 +48,9 @@
   "KCAL": "kcal",
   "INTAKE": "Syöty",
   "REMAINING": "Jäljellä",
-  "CARBS_ABBREVIATION": "HH"
+  "CARBS_ABBREVIATION": "HH",
+  "SEARCH_FOODS": "Hae ruokia",
+  "INCLUDE_FOODS_BY_OTHERS": "Sisällytä hakuun muiden lisäämät ruoat",
+  "AMOUNT": "Määrä",
+  "ADD": "Lisää"
 }

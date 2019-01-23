@@ -48,5 +48,9 @@
   "KCAL": "cal",
   "INTAKE": "Intake",
   "REMAINING": "Remaining",
-  "CARBS_ABBREVIATION": "Carbs"
+  "CARBS_ABBREVIATION": "Carbs",
+  "SEARCH_FOODS": "Search for foods",
+  "INCLUDE_FOODS_BY_OTHERS": "Include foods addded by other users",
+  "AMOUNT": "Amount",
+  "ADD": "Add"
 }

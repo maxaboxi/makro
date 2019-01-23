@@ -12,7 +12,8 @@ export class AppComponent {
   constructor(private renderer: Renderer2, translate: TranslateService) {
     this.renderer.addClass(document.body, 'colors');
     translate.setDefaultLang('fi');
-    translate.use('fi');
-    localStorage.setItem('lang', 'fi');
+    const lang = localStorage.getItem('makro_lang') ? localStorage.getItem('makro_lang') : 'fi';
+    translate.use(lang);
+    localStorage.setItem('makro_lang', lang);
   }
 }
