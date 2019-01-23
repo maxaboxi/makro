@@ -1,23 +1,23 @@
 <div class="row">
-  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'MAKRO_TOOLBAR_ADDFOOD' | translate }}</span>
-  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'MAKRO_TOOLBAR_SAVEDAY' | translate }}</span>
-  <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'MAKRO_TOOLBAR_SHAREDAY' | translate }}</span>
+  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}</span>
+  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</span>
+  <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}</span>
   <span *ngIf="shareLink.length > 0" (click)="openLinkModal(sharedDayModal)" class="ml-4"
-    ><i class="fas fa-share"></i> {{ 'MAKRO_TOOLBAR_SHOWLINK' | translate }}</span
+    ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
-  <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'MAKRO_TOOLBAR_CREATEPDF' | translate }}</span>
+  <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
   <div class="ml-auto">
     <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
-      ><i class="far fa-edit"></i> {{ 'MAKRO_TOOLBAR_EDITTARGETS' | translate }}</span
+      ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
     >
-    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'MAKRO_TOOLBAR_SHOWTARGETS' | translate }}</span>
-    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'MAKRO_TOOLBAR_HIDETARGETS' | translate }}</span>
+    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>
+    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
   </div>
 </div>
 
 <ng-template #addFood let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_ADDFOOD' | translate }}</h4>
+    <h4 class="modal-title">{{ 'ADD_FOOD' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
@@ -185,7 +185,7 @@
 
 <ng-template #dayName let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_SAVEDAY' | translate }}</h4>
+    <h4 class="modal-title">{{ 'SAVE_DAY' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
@@ -225,7 +225,7 @@
 
 <ng-template #targetModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_EDITTARGETS' | translate }}</h4>
+    <h4 class="modal-title">{{ 'EDIT_TARGETS' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
