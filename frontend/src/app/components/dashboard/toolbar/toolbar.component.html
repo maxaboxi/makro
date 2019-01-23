@@ -1,91 +1,57 @@
 <div class="row">
-  <span (click)="openAddFoodModal(addFood)"
-    ><i class="fas fa-plus-circle"></i> Lisää ruoka</span
+  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'MAKRO_TOOLBAR_ADDFOOD' | translate }}</span>
+  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'MAKRO_TOOLBAR_SAVEDAY' | translate }}</span>
+  <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'MAKRO_TOOLBAR_SHAREDAY' | translate }}</span>
+  <span *ngIf="shareLink.length > 0" (click)="openLinkModal(sharedDayModal)" class="ml-4"
+    ><i class="fas fa-share"></i> {{ 'MAKRO_TOOLBAR_SHOWLINK' | translate }}</span
   >
-  <span (click)="openSaveDayModal(dayName)" class="ml-4"
-    ><i class="fas fa-save"></i> Tallenna päivä</span
-  >
-  <span (click)="generateLink(sharedDayModal)" class="ml-4"
-    ><i class="fas fa-share"></i> Jaa päivä</span
-  >
-  <span
-    *ngIf="shareLink.length > 0"
-    (click)="openLinkModal(sharedDayModal)"
-    class="ml-4"
-    ><i class="fas fa-share"></i> Näytä linkki</span
-  >
-  <span (click)="createPdf()" class="ml-4"
-    ><i class="far fa-file-pdf"></i> Luo PDF</span
-  >
+  <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'MAKRO_TOOLBAR_CREATEPDF' | translate }}</span>
   <div class="ml-auto">
-    <span
-      *ngIf="showTargets"
-      (click)="openTargetModal(targetModal)"
-      class="mr-2"
-      ><i class="far fa-edit"></i> Muokkaa tavoitearvoja</span
+    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
+      ><i class="far fa-edit"></i> {{ 'MAKRO_TOOLBAR_EDITTARGETS' | translate }}</span
     >
-    <span *ngIf="!showTargets" (click)="toggleTargets()"
-      ><i class="fas fa-bars"></i> Näytä tavoitearvot</span
-    >
-    <span *ngIf="showTargets" (click)="toggleTargets()"
-      ><i class="fas fa-minus"></i> Piilota tavoitearvot</span
-    >
+    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'MAKRO_TOOLBAR_SHOWTARGETS' | translate }}</span>
+    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'MAKRO_TOOLBAR_HIDETARGETS' | translate }}</span>
   </div>
 </div>
 
 <ng-template #addFood let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Lisää uusi ruoka</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('x')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_ADDFOOD' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #addFoodForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodName"
-            >Nimi</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodName">{{ 'NAME' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="text"
               name="foodName"
               class="form-control"
-              placeholder="Ruoan nimi"
+              placeholder="{{ 'FOOD_NAME' | translate }}"
               minlength="2"
               [(ngModel)]="food.name"
               #foodName="ngModel"
               [ngClass]="{ 'is-invalid': foodName.errors && foodName.touched }"
               required
             />
-            <div [hidden]="!foodName.errors?.required" class="invalid-feedback">
-              Ruoan nimi vaaditaan
-            </div>
-            <div
-              [hidden]="!foodName.errors?.minlength"
-              class="invalid-feedback"
-            >
-              Ruoan nimen täytyy olla vähintään kaksi merkkiä pitkä
-            </div>
+            <div [hidden]="!foodName.errors?.required" class="invalid-feedback"> {{ 'FOOD_NAME_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback"> {{ 'FOOD_NAME_NOT_LONG_ENOUGH' | translate }} </div>
           </div>
         </div>
-        <div class="form-group"><p class="lead">Arvot per 100 grammaa</p></div>
+        <div class="form-group"
+          ><p class="lead">{{ 'AMOUNT_PER_100_GRAMS' | translate }}</p></div
+        >
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodEnergy"
-            >Energia</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodEnergy">{{ 'ENERGY' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
               name="foodEnergy"
               class="form-control"
-              placeholder="Kcal / 100 g"
+              placeholder="{{ 'CALORIES_PER_100_GRAMS' | translate }}"
               [(ngModel)]="food.energia"
               #foodEnergy="ngModel"
               [ngClass]="{
@@ -93,18 +59,11 @@
               }"
               required
             />
-            <div
-              [hidden]="!foodEnergy.errors?.required"
-              class="invalid-feedback"
-            >
-              Kalorimäärä on vaadittu tieto
-            </div>
+            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback"> {{ 'ENERGY_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodFat"
-            >Rasva</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodFat">{{ 'FAT' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
@@ -116,15 +75,11 @@
               [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
               required
             />
-            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">
-              Rasvan määrä on vaadittu tieto
-            </div>
+            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback"> {{ 'FAT_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodCarbs"
-            >Hiilihydraatit</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodCarbs">{{ 'CARBS' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
@@ -138,18 +93,11 @@
               }"
               required
             />
-            <div
-              [hidden]="!foodCarbs.errors?.required"
-              class="invalid-feedback"
-            >
-              Hiilihydraattien määrä on vaadittu tieto
-            </div>
+            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback"> {{ 'CARBS_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodProtein"
-            >Proteiinit</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodProtein">{{ 'PROTEIN' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
@@ -163,18 +111,11 @@
               }"
               required
             />
-            <div
-              [hidden]="!foodProtein.errors?.required"
-              class="invalid-feedback"
-            >
-              Proteiinin määrä on vaadittu tieto
-            </div>
+            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback"> {{ 'PROTEIN_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodFiber"
-            >Ravintokuidut</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodFiber">{{ 'FIBER' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
@@ -187,9 +128,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodSugar"
-            >Sokerit</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodSugar">{{ 'SUGAR' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
@@ -202,30 +141,26 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodServingSize"
-            >Annoskoko</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodServingSize">{{ 'PORTION_SIZE' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
               name="foodServingSize"
               class="form-control"
-              placeholder="grammaa"
+              placeholder="{{ 'GRAMS' | translate }}"
               [(ngModel)]="food.servingSize"
               #servingSize="ngModel"
             />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodPackageSize"
-            >Pakkauskoko</label
-          >
+          <label class="lead col-sm-4 col-form-label" for="foodPackageSize">{{ 'PACKAGE_SIZE' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
               name="foodPackageSize"
               class="form-control"
-              placeholder="grammaa"
+              placeholder="{{ 'GRAMS' | translate }}"
               [(ngModel)]="food.packageSize"
               #packageSize="ngModel"
             />
@@ -234,21 +169,11 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button
-                type="button"
-                class="btn btn-warning btn-block"
-                (click)="modal.close('cancel')"
-              >
-                Peruuta
-              </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
             </div>
             <div class="col">
-              <button
-                type="submit"
-                class="btn btn-primary btn-block"
-                [disabled]="!addFoodForm.form.valid"
-              >
-                Tallenna ruoka
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!addFoodForm.form.valid">
+                {{ 'SAVE_FOOD' | translate }}
               </button>
             </div>
           </div>
@@ -260,21 +185,14 @@
 
 <ng-template #dayName let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Tallenna päivä</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('x')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_SAVEDAY' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #saveDayForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
-          <label for="nameOfDay">Nimi</label>
+          <label for="nameOfDay">{{ 'NAME' | translate }}</label>
           <input
             type="text"
             name="nameOfDay"
@@ -285,31 +203,17 @@
             minlength="3"
             required
           />
-          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback">
-            Nimi on vaadittu tieto
-          </div>
-          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback">
-            Nimen pitää olla vähintään kolme merkkiä pitkä
-          </div>
+          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback"> {{ 'NAME_REQUIRED' | translate }} </div>
+          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback"> N{{ 'NAME_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button
-                type="button"
-                class="btn btn-warning btn-block"
-                (click)="modal.close('cancel')"
-              >
-                Peruuta
-              </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
             </div>
             <div class="col">
-              <button
-                type="submit"
-                class="btn btn-primary btn-block"
-                [disabled]="!saveDayForm.form.valid"
-              >
-                Tallenna
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!saveDayForm.form.valid">
+                {{ 'SAVE' | translate }}
               </button>
             </div>
           </div>
@@ -321,79 +225,40 @@
 
 <ng-template #targetModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Muokkaa tavoitearvoja</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('x')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">{{ 'MAKRO_TOOLBAR_EDITTARGETS' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #targetForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
-          <label for="expenditure">Kulutus</label>
-          <input
-            type="number"
-            name="expenditure"
-            class="form-control"
-            [(ngModel)]="user.userAddedExpenditure"
-          />
+          <label for="expenditure">{{ 'EXPENDITURE' | translate }}</label>
+          <input type="number" name="expenditure" class="form-control" [(ngModel)]="user.userAddedExpenditure" />
         </div>
         <div class="form-group">
-          <label for="proteinTarget">Proteiinit</label>
-          <input
-            type="number"
-            name="proteinTarget"
-            class="form-control"
-            [(ngModel)]="user.userAddedProteinTarget"
-          />
+          <label for="proteinTarget">{{ 'PROTEIN' | translate }}</label>
+          <input type="number" name="proteinTarget" class="form-control" [(ngModel)]="user.userAddedProteinTarget" />
         </div>
         <div class="form-group">
-          <label for="carbTarget">Hiilihydraatit</label>
-          <input
-            type="number"
-            name="carbTarget"
-            class="form-control"
-            [(ngModel)]="user.userAddedCarbTarget"
-          />
+          <label for="carbTarget">{{ 'CARBS' | translate }}</label>
+          <input type="number" name="carbTarget" class="form-control" [(ngModel)]="user.userAddedCarbTarget" />
         </div>
         <div class="form-group">
-          <label for="fatTarget">Rasvat</label>
-          <input
-            type="number"
-            name="fatTarget"
-            class="form-control"
-            [(ngModel)]="user.userAddedFatTarget"
-          />
+          <label for="fatTarget">{{ 'FAT' | translate }}</label>
+          <input type="number" name="fatTarget" class="form-control" [(ngModel)]="user.userAddedFatTarget" />
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button
-                type="button"
-                class="btn btn-warning btn-block"
-                (click)="modal.close('cancel')"
-              >
-                Peruuta
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-primary btn-block" (click)="modal.close('reset')">
+                {{ 'RESET_DEFAULTS' | translate }}
               </button>
             </div>
             <div class="col">
-              <button
-                type="button"
-                class="btn btn-primary btn-block"
-                (click)="modal.close('reset')"
-              >
-                Palauta oletusarvot
-              </button>
-            </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
-                Tallenna
-              </button>
+              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
             </div>
           </div>
         </div>
@@ -404,15 +269,8 @@
 
 <ng-template #sharedDayModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Linkki</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('x')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">{{ 'LINK' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -420,15 +278,7 @@
     </div>
     <div class="container text-center mt-3">
       <div class="row">
-        <div class="col">
-          <button
-            type="button"
-            class="btn btn-primary btn-block"
-            (click)="modal.close('ok')"
-          >
-            OK
-          </button>
-        </div>
+        <div class="col"> <button type="button" class="btn btn-primary btn-block" (click)="modal.close('ok')"> OK </button> </div>
       </div>
     </div>
   </div>
