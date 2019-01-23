@@ -22,10 +22,10 @@
       <i class="fas fa-plus"></i> {{ 'WRITE_ARTICLE' | translate }}
     </button>
     <div *ngIf="articles && articles.length === 0" class="mt-3">
-      <h1 class="display-4 text-center">{{ 'NO_ARTICLES' | translate }}</h1>
+      <h2 class="h2 text-center">{{ 'NO_ARTICLES' | translate }}</h2>
     </div>
     <div *ngIf="results.length === 0 && searchTerm.length > 0" class="mt-3">
-      <h1 class="display-4 text-center">{{ 'NO_SEARCH_RESULTS' | translate }}</h1>
+      <h2 class="h2 text-center">{{ 'NO_SEARCH_RESULTS' | translate }}</h2>
     </div>
     <div *ngIf="articles && articles.length > 0 && results.length === 0 && searchTerm.length === 0">
       <app-article *ngFor="let a of articles" [user]="user" [article]="a" (deleted)="getAllArticles()"></app-article>
