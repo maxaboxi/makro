@@ -211,5 +211,8 @@
   "NO_ASNWERS": "Ei vastauksia",
   "MY_COMMENTS": "Kommenttini",
   "NO_COMMENTS": "Ei kommentteja",
-  "DELETE_COMMENT": "Poista kommentti"
+  "DELETE_COMMENT": "Poista kommentti",
+  "MY_ARTICLES": "Kirjoittamani artikkelit",
+  "DELETE_ARTICLE": "Poista artikkeli",
+  "NO_WRITTEN_ARTICLES": "Ei artikkeleita"
 }

@@ -211,5 +211,8 @@
   "NO_ASNWERS": "I haven't answered to any questions",
   "MY_COMMENTS": "Comments that I have written",
   "NO_COMMENTS": "I haven't commented anything",
-  "DELETE_COMMENT": "Delete comment"
+  "DELETE_COMMENT": "Delete comment",
+  "MY_ARTICLES": "Articles that I have written",
+  "DELETE_ARTICLE": "Delete article",
+  "NO_WRITTEN_ARTICLES": "I haven't written any articles"
 }
