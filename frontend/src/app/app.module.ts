@@ -52,7 +52,7 @@ import { ArticleCommentComponent } from './components/articles/article/article-c
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i8n/', '.json');
 }
 
 @NgModule({

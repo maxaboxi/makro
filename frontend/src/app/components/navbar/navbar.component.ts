@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { AddedFoodsService } from '../../services/added-foods.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,12 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: Boolean;
   isAdmin: Boolean;
 
-  constructor(private auth: AuthService, private router: Router, private addedFoodsService: AddedFoodsService) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private addedFoodsService: AddedFoodsService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.auth.getUserInfo();
@@ -29,5 +35,16 @@ export class NavbarComponent implements OnInit {
     this.addedFoodsService.resetTotals();
     this.auth.logout();
     this.addedFoodsService.setMealsFromLocalStorage();
+  }
+
+  changeLanguage() {
+    const lang = localStorage.getItem('lang');
+    if (lang === 'fi') {
+      this.translate.use('en');
+      localStorage.setItem('lang', 'en');
+    } else {
+      this.translate.use('fi');
+      localStorage.setItem('lang', 'fi');
+    }
   }
 }

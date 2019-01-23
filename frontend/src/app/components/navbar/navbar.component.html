@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"><i class="fas fa-home"></i> Makro - ilmainen kalorilaskuri</a>
+  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"><i class="fas fa-home"></i> {{ 'MAKRO_TITLE' | translate }}</a>
   <button
     class="navbar-toggler hidden-sm-up"
     type="button"
@@ -14,36 +14,39 @@
   <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
     <ul class="navbar-nav mr-auto">
       <li *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/profile"><i class="far fa-user-circle"></i> Profiili</a>
+        <a class="nav-link" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'MAKRO_NAV_PROFILE' | translate }}</a>
       </li>
       <li *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> Ateriat</a>
+        <a class="nav-link" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MAKRO_NAV_MEALS' | translate }}</a>
       </li>
       <li *ngIf="isLoggedIn">
         <a class="nav-link" routerLink="/qa"><i class="fas fa-question"></i> Q&A</a>
       </li>
       <li *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="/feedback"><i class="fab fa-readme"></i> Palautteet</a>
+        <a class="nav-link" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'MAKRO_NAV_FEEDBACK' | translate }}</a>
       </li>
       <li>
-        <a class="nav-link" routerLink="/articles"><i class="fas fa-book"></i> Artikkelit</a>
+        <a class="nav-link" routerLink="/articles"><i class="fas fa-book"></i> {{ 'MAKRO_NAV_ARTICLES' | translate }}</a>
       </li>
       <li>
-        <a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> Tietoa</a>
+        <a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> {{ 'MAKRO_NAV_ABOUT' | translate }}</a>
+      </li>
+      <li>
+        <a class="nav-link" (click)="changeLanguage()"><i class="fas fa-flag"></i> {{ 'MAKRO_NAV_LANG' | translate }}</a>
       </li>
       <li *ngIf="isAdmin">
-        <a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i> Hallintapaneeli</a>
+        <a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'MAKRO_NAV_ADMIN' | translate }}</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li *ngIf="!isLoggedIn">
-        <a class="nav-link" routerLink="/login"><i class="fas fa-sign-in-alt"></i> Kirjaudu sisään</a>
+        <a class="nav-link" routerLink="/login"><i class="fas fa-sign-in-alt"></i> {{ 'MAKRO_NAV_LOGIN' | translate }}</a>
       </li>
       <li *ngIf="!isLoggedIn">
-        <a class="nav-link" routerLink="/register"><i class="fas fa-user-plus"></i> Rekisteröidy</a>
+        <a class="nav-link" routerLink="/register"><i class="fas fa-user-plus"></i> {{ 'MAKRO_NAV_REGISTER' | translate }}</a>
       </li>
       <li *ngIf="isLoggedIn" (click)="logout()">
-        <a class="nav-link"><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a>
+        <a class="nav-link"><i class="fas fa-sign-out-alt"></i> {{ 'MAKRO_NAV_LOGOUT' | translate }}</a>
       </li>
     </ul>
   </div>
