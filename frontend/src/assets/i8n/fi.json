@@ -2,7 +2,7 @@
   "MAKRO_TITLE": "Makro - Ilmainen kalorilaskuri",
   "PROFILE": "Profiili",
   "MEALS": "Ateriat",
-  "FEEDBACK": "Palautteet",
+  "FEEDBACK_NAV": "Palautteet",
   "ARTICLES": "Artikkelit",
   "ABOUT": "Tietoa",
   "LANG": "Kieli",
@@ -105,5 +105,10 @@
   "HIDE": "Piilota",
   "ANSWER": "Vastaus",
   "REPLY_TO": "Vastaus käyttäjälle",
-  "REPLY_TO_COMMENT": "Vastaa kommenttiin"
+  "REPLY_TO_COMMENT": "Vastaa kommenttiin",
+  "FEEDBACK_TITLE": "Kaikki palautteet",
+  "NO_FEEDBACKS": "Ei palautteita",
+  "ADD_FEEDBACK": "Anna palautetta",
+  "FEEDBACK": "Palaute",
+  "ANONYMOUS": "Nimetön"
 }

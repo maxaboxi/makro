@@ -2,7 +2,7 @@
   "MAKRO_TITLE": "Makro - Free calorie counter",
   "PROFILE": "Profile",
   "MEALS": "Meals",
-  "FEEDBACK": "Feedbacks",
+  "FEEDBACK_NAV": "Feedbacks",
   "ARTICLES": "Articles",
   "ABOUT": "About",
   "LANG": "Language",
@@ -105,5 +105,10 @@
   "HIDE": "Hide",
   "ANSWER": "Answer",
   "REPLY_TO": "Reply to",
-  "REPLY_TO_COMMENT": "Reply to comment"
+  "REPLY_TO_COMMENT": "Reply to comment",
+  "FEEDBACK_TITLE": "All feedbacks",
+  "NO_FEEDBACKS": "No feedback has been given",
+  "ADD_FEEDBACK": "Add a new feedback",
+  "FEEDBACK": "Feedback",
+  "ANONYMOUS": "Anonymous"
 }
