@@ -1,10 +1,7 @@
-<hr style="max-width:60%">
+<hr style="max-width:60%" />
 <div class="row justify-content-center mt-3">
-  <a routerLink="/profile/qa">
-    <i class="fas fa-question"></i> Kysymykset</a>
-  <a routerLink="/profile/qa/answers" class="ml-4">
-    <i class="fas fa-exclamation"></i> Vastaukset</a>
-  <a routerLink="/profile/qa/comments" class="ml-4">
-    <i class="far fa-comments"></i> Kommentit</a>
+  <a routerLink="/profile/qa"> <i class="fas fa-question"></i> {{ 'QUESTIONS' | translate }}</a>
+  <a routerLink="/profile/qa/answers" class="ml-4"> <i class="fas fa-exclamation"></i> {{ 'ANSWERS' | translate }}</a>
+  <a routerLink="/profile/qa/comments" class="ml-4"> <i class="far fa-comments"></i> {{ 'COMMENTS' | translate }}</a>
 </div>
 <router-outlet></router-outlet>

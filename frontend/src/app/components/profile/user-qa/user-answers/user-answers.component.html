@@ -1,7 +1,9 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="container mt-3">
   <div class="row justify-content-center">
-    <div class="col-6 text-center"> <h1 class="display-4">Vastaukseni</h1> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_ANSWERS' | translate }}</h2>
+    </div>
   </div>
   <div class="row justify-content-center" *ngIf="answers.length > 0 || answersDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -9,7 +11,9 @@
         <li class="big-list lead" *ngFor="let answer of answers; let i = index">
           <div class="row">
             <div class="col-10 day-list-name" (click)="navigate(answer)"> <p [innerHTML]="answer.answer"></p> </div>
-            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteAnswer(i)" title="Poista vastaus"></i> </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteAnswer(i)" title="{{ 'DELETE_ANSWER' | translate }}"></i>
+            </div>
           </div>
           <hr />
         </li>
@@ -18,13 +22,17 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="answers.length === 0 && !answersDeleted">
-    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei vastauksia.</h2> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_ANSWERS' | translate }}</h2>
+    </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="answersDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteAnswersFromDb()">Tallenna muutokset</button>
-      <p class="lead">Vastaukset poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteAnswersFromDb()">{{
+        'SAVE_CHANGES' | translate
+      }}</button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 </div>

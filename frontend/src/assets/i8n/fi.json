@@ -200,5 +200,16 @@
   "FOODS_ADDED": "Lisäämäni ruoat",
   "NO_FOODS_ADDED": "Ei lisättyjä ruokia",
   "EDIT_FOOD": "Muokkaa ruokaa",
-  "DELETE_FOOD": "Poista ruoka"
+  "DELETE_FOOD": "Poista ruoka",
+  "QUESTIONS": "Kysymykset",
+  "ANSWERS": "Vastaukset",
+  "COMMENTS": "Kommentit",
+  "QUESTIONS_ASKED": "Kysymykseni",
+  "DELETE_QUESTION": "Poista kysymys",
+  "MY_ANSWERS": "Vastaukseni",
+  "DELETE_ANSWER": "Poista vastaus",
+  "NO_ASNWERS": "Ei vastauksia",
+  "MY_COMMENTS": "Kommenttini",
+  "NO_COMMENTS": "Ei kommentteja",
+  "DELETE_COMMENT": "Poista kommentti"
 }
