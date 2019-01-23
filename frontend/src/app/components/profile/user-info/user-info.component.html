@@ -2,60 +2,70 @@
 <div class="container mt-2" *ngIf="this.user && !loading">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-      <h1 class="display-4">Omat tiedot</h1>
+      <h1 class="display-4">{{ 'MY_INFO' | translate }}</h1>
       <ul>
-        <li class="list lead"><i class="far fa-user"></i> Käyttäjätunnus: {{ user.username }}</li>
+        <li class="list lead"><i class="far fa-user"></i> {{ 'USERNAME' | translate }}: {{ user.username }}</li>
         <li *ngIf="user.email" class="list lead"><i class="fas fa-at"></i> Email: {{ user.email }}</li>
         <li class="list lead">
-          <i class="fas fa-fire"></i>
-          Kulutus: {{ user.userAddedExpenditure ? (user.userAddedExpenditure).toFixed(0) :
-          (user.dailyExpenditure).toFixed(0) }} kcal/päivä
-          <i *ngIf="!user.userAddedExpenditure" class="fas fa-info float-right" (click)="toggleInfo()" title="Mistä luku tulee"></i>
+          <i class="fas fa-fire"></i> {{ 'EXPENDITURE' | translate }}:
+          {{ user.userAddedExpenditure ? user.userAddedExpenditure.toFixed(0) : user.dailyExpenditure.toFixed(0) }}
+          {{ 'KCAL' | translate }}/{{ 'DAY' | translate }}
+          <i
+            *ngIf="!user.userAddedExpenditure"
+            class="fas fa-info float-right"
+            (click)="toggleInfo()"
+            title="{{ 'EXPENDITURE_INFO_BUTTON' | translate }}"
+          ></i>
         </li>
-        <li class="list lead"><i class="fas fa-weight"></i> Paino: {{ user.weight }} kg</li>
-        <li class="list lead"><i class="fas fa-arrows-alt-v"></i> Pituus: {{ user.height }} cm</li>
-        <li class="list lead"><i class="fas fa-heartbeat"></i> Ikä: {{ user.age }} vuotta</li>
-        <li class="list lead"><i class="fas fa-child"></i> Sukupuoli: {{ user.sex }}</li>
+        <li class="list lead"><i class="fas fa-weight"></i> {{ 'WEIGHT' | translate }}: {{ user.weight }} kg</li>
+        <li class="list lead"><i class="fas fa-arrows-alt-v"></i> {{ 'HEIGHT' | translate }}: {{ user.height }} cm</li>
+        <li class="list lead"><i class="fas fa-heartbeat"></i> {{ 'AGE' | translate }}: {{ user.age }} {{ 'YEARS' | translate }}</li>
+        <li class="list lead"
+          ><i class="fas fa-child"></i> {{ 'SEX' | translate }}: {{ (user.sex === 'mies' ? 'MALE' : 'FEMALE') | translate }}</li
+        >
         <li class="list lead">
           <span class="day-list-name" (click)="openChangePasswordModal(changePasswordModal)">
-            <i class="fas fa-key"></i>
-            Vaihda salasana
+            <i class="fas fa-key"></i> {{ 'CHANGE_PASSWORD' | translate }}
           </span>
         </li>
         <li class="list lead">
-          <span class="day-list-name" (click)="toggleDelete()">
-            <i class="fas fa-trash-alt"></i>
-            Poista tili
-          </span>
+          <span class="day-list-name" (click)="toggleDelete()"> <i class="fas fa-trash-alt"></i> {{ 'DELETE_ACCOUNT' | translate }} </span>
         </li>
         <li *ngIf="showInfo" class="lead mt-3 info-box">
-          <p>Kaava, mitä käytetään kulutuksen laskemiseen on <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation"
-              target="_blank">Harris-Benedictin yhtälö</a>:</p>
-          <p>Miehet: 88,4 + (13,4 x kehon massa kiloina) + (4,8 x pituus sentteinä) – (5,7 x ikä
-            vuosissa).</p>
-          <p>Naiset: 447,6 + (9,25 x kehon massa kiloina) + (3,1 x pituus sentteinä) – (4,3 x ikä
-            vuosissa)</p>
+          <p
+            >Kaava, mitä käytetään kulutuksen laskemiseen on
+            <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation" target="_blank">Harris-Benedictin yhtälö</a>:</p
+          >
+          <p
+            >{{ 'MEN' | translate }}: 88,4 + (13,4 x {{ 'BODY_MASS_IN_KG' | translate }}) + (4,8 x {{ 'HEIGHT_IN_CM' | translate }}) – (5,7
+            x {{ 'AGE_IN_YEARS' | translate }}).</p
+          >
+          <p
+            >{{ 'WOMEN' | translate }}: 447,6 + (9,25 x {{ 'BODY_MASS_IN_KG' | translate }}) + (3,1 x {{ 'HEIGHT_IN_CM' | translate }}) –
+            (4,3 x {{ 'AGE_IN_YEARS' | translate }})</p
+          >
         </li>
       </ul>
-      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"><i class="far fa-edit"></i>
-        Muokkaa tietoja</button>
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"
+        ><i class="far fa-edit"></i> {{ 'EDIT_INFORMATION' | translate }}</button
+      >
       <button *ngIf="showDeleteAccount" class="btn btn-danger btn-block" (click)="deleteAccount()">
-        <i class="fas fa-user-minus mr-1"></i>
-        Poista käyttäjätili</button>
+        <i class="fas fa-user-minus mr-1"></i> {{ 'DELETE_ACCOUNT' | translate }}</button
+      >
     </div>
   </div>
-  <hr>
+  <hr />
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
       <h1 class="display-4">Aterioiden nimet</h1>
       <ul>
         <li *ngFor="let meal of user.meals; let i = index" class="list lead">
-          {{ meal.name }}
-          <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="Poista ateria"></i>
+          {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="Poista ateria"></i>
         </li>
       </ul>
-      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"><i class="far fa-edit"></i>
-        Muokkaa nimiä</button>
+      <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"
+        ><i class="far fa-edit"></i> Muokkaa nimiä</button
+      >
       <div class="row mt-1">
         <div class="col">
           <button type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">Lisää ateria</button>
@@ -69,13 +79,10 @@
   </div>
 </div>
 
-
 <ng-template #userInfo let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Muokkaa käyttäjätietoja</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -83,26 +90,25 @@
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
           <div class="col-sm-8">
-            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi"
-              [(ngModel)]="user.email">
+            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi" [(ngModel)]="user.email" />
           </div>
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userHeight">Pituus</label>
           <div class="col-sm-8">
-            <input type="number" name="userHeight" class="form-control" placeholder="cm" [(ngModel)]="user.height">
+            <input type="number" name="userHeight" class="form-control" placeholder="cm" [(ngModel)]="user.height" />
           </div>
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userWeight">Paino</label>
           <div class="col-sm-8">
-            <input type="number" name="userWeight" class="form-control" placeholder="kg" [(ngModel)]="user.weight">
+            <input type="number" name="userWeight" class="form-control" placeholder="kg" [(ngModel)]="user.weight" />
           </div>
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userAge">Ikä</label>
           <div class="col-sm-8">
-            <input type="number" name="userAge" class="form-control" placeholder="vuotta" [(ngModel)]="user.age">
+            <input type="number" name="userAge" class="form-control" placeholder="vuotta" [(ngModel)]="user.age" />
           </div>
         </div>
         <div class="form-group row">
@@ -132,11 +138,7 @@
             <div class="col">
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
-                Tallenna
-              </button>
-            </div>
+            <div class="col"> <button type="submit" class="btn btn-primary btn-block"> Tallenna </button> </div>
           </div>
         </div>
       </form>
@@ -147,32 +149,29 @@
 <ng-template #mealName let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Muokkaa aterioita</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #editMealsForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group" *ngFor="let meal of user.meals">
-          <input type="text" name="{{meal.name}}" class="form-control" [(ngModel)]="meal.name" [value]="meal.name"
-            required [ngModelOptions]="{standalone: true}">
+          <input
+            type="text"
+            name="{{ meal.name }}"
+            class="form-control"
+            [(ngModel)]="meal.name"
+            [value]="meal.name"
+            required
+            [ngModelOptions]="{ standalone: true }"
+          />
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
-            <div class="col">
-              <span class="btn btn-primary btn-block" (click)="addNewMeal()">
-                Lisää ateria
-              </span>
-            </div>
-            <div class="col">
-              <button type="submit" class="btn btn-success btn-block">
-                Tallenna
-              </button>
-            </div>
+            <div class="col"> <span class="btn btn-primary btn-block" (click)="addNewMeal()"> Lisää ateria </span> </div>
+            <div class="col"> <button type="submit" class="btn btn-success btn-block"> Tallenna </button> </div>
           </div>
         </div>
       </form>
@@ -183,31 +182,39 @@
 <ng-template #changePasswordModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Vaihda salasana</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="userPassword">Salasana</label>
-          <input type="password" name="password" #userPassword="ngModel" class="form-control" [(ngModel)]="newUserPassword"
-            minlength="10" required [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}">
-          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">
-            Vaadittu kenttä
-          </div>
-          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback">
-            Salasanan täytyy olla vähintään 10 merkkiä pitkä
-          </div>
+          <input
+            type="password"
+            name="password"
+            #userPassword="ngModel"
+            class="form-control"
+            [(ngModel)]="newUserPassword"
+            minlength="10"
+            required
+            [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+          />
+          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> Vaadittu kenttä </div>
+          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback"> Salasanan täytyy olla vähintään 10 merkkiä pitkä </div>
         </div>
         <div class="form-group">
           <label for="userPasswordAgain">Salasana uudestaan</label>
-          <input type="password" name="passwordAgain" #userPasswordAgain="ngModel" class="form-control" [(ngModel)]="newUserPasswordAgain"
-            minlength="10" required [ngClass]="{'is-invalid':userPasswordAgain.errors && userPasswordAgain.touched}">
-          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback">
-            Vaadittu kenttä
-          </div>
+          <input
+            type="password"
+            name="passwordAgain"
+            #userPasswordAgain="ngModel"
+            class="form-control"
+            [(ngModel)]="newUserPasswordAgain"
+            minlength="10"
+            required
+            [ngClass]="{ 'is-invalid': userPasswordAgain.errors && userPasswordAgain.touched }"
+          />
+          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback"> Vaadittu kenttä </div>
           <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback">
             Salasanan täytyy olla vähintään 10 merkkiä pitkä
           </div>
@@ -218,9 +225,7 @@
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!changePasswordForm.form.valid">
-                Vaihda salasana
-              </button>
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!changePasswordForm.form.valid"> Vaihda salasana </button>
             </div>
           </div>
         </div>
