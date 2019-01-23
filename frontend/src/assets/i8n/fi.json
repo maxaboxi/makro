@@ -217,5 +217,8 @@
   "NO_WRITTEN_ARTICLES": "Ei artikkeleita",
   "MY_LIKES": "Tykkäykseni",
   "NO_LIKES": "Ei tykkäyksiä",
-  "DELETE_LIKE": "Poista tykkäys"
+  "DELETE_LIKE": "Poista tykkäys",
+  "USERNAME_REQUIRED": "Käyttäjätunnus vaaditaan",
+  "USERNAME_NOT_LONG_ENOUGH": "Käyttäjätunnuksen täytyy olla vähintään kaksi merkkiä pitkä",
+  "EMAIL_NOT_REQUIRED": "Ei vaadita, mutta ilman sähköpostiosoitetta salasanan nollaus ei ole mahdollista"
 }

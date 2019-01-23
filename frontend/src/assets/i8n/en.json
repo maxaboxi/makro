@@ -217,5 +217,8 @@
   "NO_WRITTEN_ARTICLES": "I haven't written any articles",
   "MY_LIKES": "My likes",
   "NO_LIKES": "I don't like anything",
-  "DELETE_LIKE": "Remove like"
+  "DELETE_LIKE": "Remove like",
+  "USERNAME_REQUIRED": "Username is required",
+  "USERNAME_NOT_LONG_ENOUGH": "Username has to be at least two characters long",
+  "EMAIL_NOT_REQUIRED": "Email address is not required but without it it's impossible to reset password"
 }
