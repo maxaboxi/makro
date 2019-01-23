@@ -196,5 +196,9 @@
   "MY_SHARED_MEALS": "Meals that I have shared",
   "FOOD_AMOUNT_GRAMS": "The amount of foods in grams",
   "EDIT_MEAL": "Edit meal",
-  "REMOVE_FOOD_FROM_MEAL": "Remove food from meal"
+  "REMOVE_FOOD_FROM_MEAL": "Remove food from meal",
+  "FOODS_ADDED": "Foods that I have added",
+  "NO_FOODS_ADDED": "I haven't added any foods",
+  "EDIT_FOOD": "Edit food",
+  "DELETE_FOOD": "Delete food"
 }

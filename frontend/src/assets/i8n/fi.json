@@ -196,5 +196,9 @@
   "MY_SHARED_MEALS": "Jakamani ateriat",
   "FOOD_AMOUNT_GRAMS": "Ruokien määrät grammoina",
   "EDIT_MEAL": "Muokkaa ateriaa",
-  "REMOVE_FOOD_FROM_MEAL": "Poista ruoka ateriasta"
+  "REMOVE_FOOD_FROM_MEAL": "Poista ruoka ateriasta",
+  "FOODS_ADDED": "Lisäämäni ruoat",
+  "NO_FOODS_ADDED": "Ei lisättyjä ruokia",
+  "EDIT_FOOD": "Muokkaa ruokaa",
+  "DELETE_FOOD": "Poista ruoka"
 }
