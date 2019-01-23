@@ -7,24 +7,20 @@
             *ngIf="user && user.username"
             (click)="openShareMealModal(shareMealModal)"
             class="fas fa-share float-left mt-2"
-            title="Jaa ateria muiden käytettäväksi"
+            title="{{ 'SHARE_MEAL_FOR_OTHERS' | translate }}"
           ></i>
-          Ateria
+          {{ 'MEAL' | translate }}
         </div>
       </th>
-      <th scope="col" class="table-success d-none d-sm-table-cell">P</th>
-      <th scope="col" class="table-primary d-none d-sm-table-cell">HH</th>
-      <th scope="col" class="table-danger d-none d-sm-table-cell">R</th> <th scope="col" class="table-warning">Kcal</th>
-      <th scope="col" title="Määrä"> <i class="fas fa-weight"></i> </th>
+      <th scope="col" class="table-success d-none d-sm-table-cell">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}</th>
+      <th scope="col" class="table-primary d-none d-sm-table-cell">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}</th>
+      <th scope="col" class="table-danger d-none d-sm-table-cell">{{ 'FAT_ABBREVIATION_BOTH' | translate }}</th>
+      <th scope="col" class="table-warning">{{ 'KCAL' | translate }}</th> <th scope="col" title="Määrä"> <i class="fas fa-weight"></i> </th>
     </tr>
     <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
         <div class="name">
-          <i
-            class="far fa-copy float-left mt-2"
-            title="Kopioi ruoka tästä ateriasta toiseen ateriaan"
-            (click)="openCopyFoodModal(copyFoodModal)"
-          ></i>
+          <i class="far fa-copy float-left mt-2" title="{{ 'COPY_FOOD_TEXT' | translate }}" (click)="openCopyFoodModal(copyFoodModal)"></i>
           {{ meal.name }}</div
         >
       </th>
@@ -42,7 +38,7 @@
         scope="row"
         draggable="true"
         (dragstart)="drag($event, food)"
-        title="Siirrä toiseen ateriaan raahaamalla"
+        title="{{ 'DRAG_FOOD_TEXT' | translate }}"
         [attr.id]="i"
         (dragover)="setTarget(i)"
       >
@@ -51,10 +47,12 @@
       <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
       <td class="table-primary align-middle d-none d-sm-table-cell">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
       <td class="table-danger align-middle d-none d-sm-table-cell">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
-      <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} kcal</td>
+      <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} {{ 'KCAL' | translate }}</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
-        <span class="food-amount" (click)="food.editing = true" title="Muokkaa ruoan määrää">{{ food.amount.toFixed(0) }} g</span>
-        <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="Poista ruoka ateriasta"></i>
+        <span class="food-amount" (click)="food.editing = true" title="{{ 'EDIT_FOOD_AMOUNT_TEXT' | translate }}"
+          >{{ food.amount.toFixed(0) }} g</span
+        >
+        <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
@@ -75,14 +73,14 @@
 
 <ng-template #shareMealModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Jaa ateria muille</h4>
+    <h4 class="modal-title">{{ 'SHARE_MEAL_FOR_OTHERS' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #shareMealForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
-          <label for="nameOfMeal">Nimi</label>
+          <label for="nameOfMeal">{{ 'NAME' | translate }}</label>
           <input
             type="text"
             name="nameOfMeal"
@@ -93,19 +91,19 @@
             minlength="3"
             required
           />
-          <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback"> Nimi on vaadittu tieto </div>
-          <div [hidden]="!nameOfMeal.errors?.minlength" class="invalid-feedback"> Nimen pitää olla vähintään kolme merkkiä pitkä </div>
+          <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback"> {{ 'NAME_REQUIRED' | translate }} </div>
+          <div [hidden]="!nameOfMeal.errors?.minlength" class="invalid-feedback"> {{ 'NAME_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="form-group">
-          <label for="description">Lisätietoja</label>
+          <label for="description">{{ 'MORE_INFO_ABOUT_MEAL' | translate }}</label>
           <textarea type="textarea" name="description" class="form-control" [(ngModel)]="sharedMeal.info" rows="3"></textarea>
         </div>
         <div class="form-group">
-          <label for="sharedMealRecipe">Valmistusohjeet</label>
+          <label for="sharedMealRecipe">{{ 'RECIPE' | translate }}</label>
           <textarea type="textarea" name="sharedMealRecipe" class="form-control" [(ngModel)]="sharedMeal.recipe" rows="3"></textarea>
         </div>
         <div class="form-group">
-          <label for="hashtags">Tagit (erota pilkulla)</label>
+          <label for="hashtags">{{ 'TAGS_SEPARATED_BY_COMMA' | translate }}</label>
           <p class="text-muted" *ngIf="sharedMeal.tags.length > 0">
             <ng-container *ngFor="let tag of sharedMeal.tags; let i = index">
               <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
@@ -121,12 +119,12 @@
             minlength="3"
             (keyup)="addTagToSharedMealTags($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> Tagin pitää olla vähintään kolme merkkiä pitkä </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> {{ 'TAG_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
               <button
@@ -134,7 +132,7 @@
                 class="btn btn-primary btn-block"
                 [disabled]="!shareMealForm.form.valid || sharedMeal.tags.length === 0"
               >
-                Jaa
+                {{ 'SHARE' | translate }}
               </button>
             </div>
           </div>
@@ -146,18 +144,18 @@
 
 <ng-template #copyFoodModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Kopioi ruoka toiseen ateriaan</h4>
+    <h4 class="modal-title">{{ 'COPY_FOOD_TEXT' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="form-group mt-2">
-      <label for="selectFood">Valitse kopioitava ruoka</label>
+      <label for="selectFood">{{ 'CHOOSE_FOOD_TO_BE_COPIED' | translate }}</label>
       <select class="form-control" [(ngModel)]="foodToBeCopied">
         <option *ngFor="let food of meal.foods" [ngValue]="food">{{ food.name }}</option>
       </select>
     </div>
     <div class="form-group mt-2">
-      <label for="targetMeal">Mihin ateriaan ruoka kopioidaan</label>
+      <label for="targetMeal">{{ 'CHOOSE_TARGET_MEAL' | translate }}</label>
       <select class="form-control" [(ngModel)]="targetMeal">
         <option *ngFor="let meal of meals" [ngValue]="meal">{{ meal.name }}</option>
       </select>
@@ -166,8 +164,12 @@
   <div class="modal-footer">
     <div class="container">
       <div class="row">
-        <div class="col text-center"> <button type="button" class="btn btn-warning" (click)="modal.close('cancel')">Peruuta</button> </div>
-        <div class="col text-center"> <button type="button" class="btn btn-primary" (click)="modal.close('save')">Kopioi</button> </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-warning" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary" (click)="modal.close('save')">{{ 'COPY' | translate }}</button>
+        </div>
       </div>
     </div>
   </div>

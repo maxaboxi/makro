@@ -63,5 +63,19 @@
   "SUGAR_ABBREVIATION_BOTH": "S",
   "FIBER_ABBREVIATION_BOTH": "K",
   "CLEAR_FOODS_CONFIRMATION": "Haluatko varmasti poistaa kaikki valitut ruoat?",
-  "REMOVE_FOODS_TEXT": "Poista kaikki valitut ruoat"
+  "REMOVE_FOODS_TEXT": "Poista kaikki valitut ruoat",
+  "MEAL": "Ateria",
+  "COPY_FOOD_TEXT": "Kopioi ruoka tästä ateriasta toiseen ateriaan",
+  "DRAG_FOOD_TEXT": "Siirrä toiseen ateriaan raahaamalla",
+  "EDIT_FOOD_AMOUNT_TEXT": "Muokkaa ruoan määrää",
+  "REMOVE_FOOD_TEXT": "Poista ruoka ateriasta",
+  "SHARE_MEAL_FOR_OTHERS": "Jaa ateria muille käyttäjille",
+  "MORE_INFO_ABOUT_MEAL": "Lisätietoja",
+  "RECIPE": "Valmistusohje",
+  "TAGS_SEPARATED_BY_COMMA": "Tagit (erota pilkulla)",
+  "TAG_NOT_LONG_ENOUGH": "Tagin pitää olla vähintään kolme merkkiä pitkä",
+  "CHOOSE_FOOD_TO_BE_COPIED": "Valitse kopioitava ruoka",
+  "CHOOSE_TARGET_MEAL": "Mihin ateriaan ruoka kopioidaan",
+  "COPY": "Kopioi",
+  "SHARE": "Jaa"
 }
