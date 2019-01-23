@@ -1,7 +1,9 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="container mt-3">
   <div class="row justify-content-center">
-    <div class="col-6 text-center"> <h1 class="display-4">Tykkäykseni</h1> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_LIKES' | translate }}</h2>
+    </div>
   </div>
   <div class="row justify-content-center" *ngIf="votes.length > 0 || votesDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -12,7 +14,7 @@
             <div class="col-2">
               <i *ngIf="vote.vote > 0" class="fas fa-thumbs-up mr-3" style="color:#ff3b3f;"></i>
               <i *ngIf="vote.vote < 0" class="fas fa-thumbs-down mr-3" style="color:#ff3b3f;"></i>
-              <i class="far fa-minus-square" (click)="deleteVote(i, vote)" title="Poista tykkäys"></i>
+              <i class="far fa-minus-square" (click)="deleteVote(i, vote)" title="{{ 'DELETE_LIKE' | translate }}"></i>
             </div>
           </div>
           <hr />
@@ -22,13 +24,17 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="votes.length === 0 && !votesDeleted">
-    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei tykkäyksiä.</h2> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_LIKES' | translate }}</h2>
+    </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="votesDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteVotesFromDb()">Tallenna muutokset</button>
-      <p class="lead">Tykkäykset poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteVotesFromDb()">{{
+        'SAVE_CHANGES' | translate
+      }}</button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 </div>

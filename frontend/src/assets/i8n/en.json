@@ -214,5 +214,8 @@
   "DELETE_COMMENT": "Delete comment",
   "MY_ARTICLES": "Articles that I have written",
   "DELETE_ARTICLE": "Delete article",
-  "NO_WRITTEN_ARTICLES": "I haven't written any articles"
+  "NO_WRITTEN_ARTICLES": "I haven't written any articles",
+  "MY_LIKES": "My likes",
+  "NO_LIKES": "I don't like anything",
+  "DELETE_LIKE": "Remove like"
 }

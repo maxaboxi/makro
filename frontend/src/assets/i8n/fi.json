@@ -214,5 +214,8 @@
   "DELETE_COMMENT": "Poista kommentti",
   "MY_ARTICLES": "Kirjoittamani artikkelit",
   "DELETE_ARTICLE": "Poista artikkeli",
-  "NO_WRITTEN_ARTICLES": "Ei artikkeleita"
+  "NO_WRITTEN_ARTICLES": "Ei artikkeleita",
+  "MY_LIKES": "Tykkäykseni",
+  "NO_LIKES": "Ei tykkäyksiä",
+  "DELETE_LIKE": "Poista tykkäys"
 }
