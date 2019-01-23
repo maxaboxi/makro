@@ -1,11 +1,14 @@
 <div class="card mt-3">
   <div class="card-body">
-    <h5 class="card-title text-muted answer-button" (click)="openQuestion(question._id)">
-      {{ question.question }}
-    </h5>
+    <h5 class="card-title text-muted answer-button" (click)="openQuestion(question._id)"> {{ question.question }} </h5>
     <ng-container *ngIf="answer">
       <app-question-answer [user]="user" [answer]="answer" [showComment]="false"></app-question-answer>
     </ng-container>
-    <span class="answer-button float-right text-muted" (click)="openQuestion(question._id)" title="Vastaaminen tai kommentoiminen onnistuu tätä kautta">Avaa</span>
+    <span
+      class="answer-button float-right text-muted"
+      (click)="openQuestion(question._id)"
+      title="{{ 'QUESTION_OPEN_TITLE_TEXT' | translate }}"
+      >{{ 'OPEN' | translate }}</span
+    >
   </div>
 </div>

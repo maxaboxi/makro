@@ -1,24 +1,26 @@
 <div class="padding">
   <p class="lead">{{ comment.username }}</p> <p class="text-muted answer-text"> {{ comment.createdAt | date: 'dd.MM.yyyy klo HH:mm' }} </p>
-  <p class="text-muted answer-text" *ngIf="comment.replyTo !== comment.postId"> Vastaus käyttäjälle: {{ comment.replyTo }} </p>
+  <p class="text-muted answer-text" *ngIf="comment.replyTo !== comment.postId"> {{ 'REPLY_TO' | translate }}: {{ comment.replyTo }} </p>
   <p class="lead" [innerHTML]="comment.comment"></p>
   <div class="d-flex" *ngIf="votesFetched">
     <i *ngIf="!userVote || userVote === 'down'" class="far fa-thumbs-up" (click)="vote('+')"></i>
     <i *ngIf="userVote && userVote === 'up'" class="fas fa-thumbs-up" (click)="vote('-')" style="color:#ff3b3f"></i>
     <i *ngIf="!userVote || userVote === 'up'" class="ml-3 far fa-thumbs-down" (click)="vote('-')"></i>
     <i *ngIf="userVote && userVote === 'down'" class="ml-3 fas fa-thumbs-down" (click)="vote('-')" style="color:#ff3b3f"></i>
-    <span class="ml-3 text-muted hidden">{{ pointsTotal }} pistettä</span>
-    <span class="answer-button ml-auto text-muted hidden" (click)="openCommentModal(commentModal)">Vastaa kommenttiin</span>
+    <span class="ml-3 text-muted hidden">{{ pointsTotal }} {{ 'POINTS' | translate }}</span>
+    <span class="answer-button ml-auto text-muted hidden" (click)="openCommentModal(commentModal)">{{
+      'REPLY_TO_COMMENT' | translate
+    }}</span>
   </div>
   <div class="mobile">
-    <span class="text-muted">{{ pointsTotal }} pistettä</span>
-    <span class="answer-button text-muted ml-3" (click)="openCommentModal(commentModal)">Vastaa kommenttiin</span>
+    <span class="text-muted">{{ pointsTotal }} {{ 'POINTS' | translate }}</span>
+    <span class="answer-button text-muted ml-3" (click)="openCommentModal(commentModal)">{{ 'REPLY_TO_COMMENT' | translate }}</span>
   </div>
 </div>
 
 <ng-template #commentModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Lisää kommentti</h4>
+    <h4 class="modal-title">{{ 'ADD_COMMENT' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
@@ -28,10 +30,12 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> Peruuta </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!commentForm.form.valid"> Lisää </button>
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!commentForm.form.valid">
+                {{ 'ADD' | translate }}
+              </button>
             </div>
           </div>
         </div>
