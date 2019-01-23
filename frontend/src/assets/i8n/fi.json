@@ -192,5 +192,9 @@
   "DELETE_DAY": "Poista päivä",
   "NO_SAVED_DAYS": "Ei tallennettuja päiviä",
   "MY_SHARED_DAYS": "Jakamani päivät",
-  "NO_SHARED_DAYS": "Ei jaettuja päiviä"
+  "NO_SHARED_DAYS": "Ei jaettuja päiviä",
+  "MY_SHARED_MEALS": "Jakamani ateriat",
+  "FOOD_AMOUNT_GRAMS": "Ruokien määrät grammoina",
+  "EDIT_MEAL": "Muokkaa ateriaa",
+  "REMOVE_FOOD_FROM_MEAL": "Poista ruoka ateriasta"
 }

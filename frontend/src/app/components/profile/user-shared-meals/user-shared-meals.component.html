@@ -1,17 +1,25 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="container mt-3">
   <div class="row justify-content-center">
-    <div class="col-6 text-center"> <h1 class="display-4">Jakamani ateriat </h1> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_SHARED_MEALS' | translate }} </h2>
+    </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMeals.length > 0 || sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let meal of sharedMeals; let i = index">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="openEditSharedMealModal(editShareMealModal, meal)" title="Muokkaa ateriaa">
+            <div
+              class="col-10 day-list-name"
+              (click)="openEditSharedMealModal(editShareMealModal, meal)"
+              title="{{ 'EDIT_MEAL' | translate }}"
+            >
               {{ meal.name }}
             </div>
-            <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="Poista ateria"></i> </div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="{{ 'DELETE_MEAL' | translate }}"></i>
+            </div>
           </div>
         </li>
       </ul>
@@ -19,35 +27,39 @@
   </div>
 
   <div class="row justify-content-center mt-4" *ngIf="sharedMeals.length === 0 && !sharedMealsDeleted">
-    <div class="col-6 text-center"> <h2 class="h2 text-muted">Ei jaettuja aterioita.</h2> </div>
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_SHARED_MEALS' | translate }}</h2>
+    </div>
   </div>
 
   <div class="row justify-content-center" *ngIf="sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">Tallenna muutokset </button>
-      <p class="lead">Ateria(t) poistetaan vasta, kun tallenna muutokset nappia on painettu.</p>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()"
+        >{{ 'SAVE_CHANGES' | translate }}
+      </button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 </div>
 
 <ng-template #editShareMealModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Muokkaa ateriaa</h4>
+    <h4 class="modal-title">{{ 'EDIT_MEAL' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #editShareMealForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
-          <label for="sharedMealName">Nimi</label>
+          <label for="sharedMealName">{{ 'NAME' | translate }}</label>
           <input type="text" name="sharedMealName" class="form-control" [(ngModel)]="selectedSharedMeal.name" required />
         </div>
         <div class="form-group">
-          <label for="sharedMealInfo">Lisätietoja</label>
+          <label for="sharedMealInfo">{{ 'MORE_INFO_ABOUT_MEAL' | translate }}</label>
           <textarea type="textarea" name="sharedMealInfo" class="form-control" [(ngModel)]="selectedSharedMeal.info" rows="3"></textarea>
         </div>
         <div class="form-group">
-          <label for="sharedMealRecipe">Valmistusohjeet</label>
+          <label for="sharedMealRecipe">{{ 'RECIPE' | translate }}</label>
           <textarea
             type="textarea"
             name="sharedMealRecipe"
@@ -56,7 +68,7 @@
             rows="3"
           ></textarea>
         </div>
-        <p class="lead">Ruokien määrät grammoina</p>
+        <p class="lead">{{ 'FOOD_AMOUNT_GRAMS' | translate }}</p>
         <div class="form-group row" *ngFor="let food of selectedSharedMeal.foods; let i = index">
           <label for="foodAmount" class="lead col-sm-6 col-form-label">{{ food.name }}</label>
           <div class="col-sm-4">
@@ -71,11 +83,11 @@
             />
           </div>
           <div class="col-sm-2">
-            <i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="Poista ruoka ateriasta"></i>
+            <i class="fas fa-eraser ml-3" (click)="removeFoodFromSharedMeal(i)" title="{{ 'REMOVE_FOOD_FROM_MEAL' | translate }}"></i>
           </div>
         </div>
         <div class="form-group">
-          <label for="hashtags">Tagit (erota pilkulla)</label>
+          <label for="hashtags">{{ 'TAGS_SEPARATED_BY_COMMA' | translate }}</label>
           <p class="text-muted" *ngIf="selectedSharedMeal.tags.length > 0">
             <ng-container *ngFor="let tag of selectedSharedMeal.tags; let i = index">
               <span class="tag" (click)="removeTagFromSharedMealTags(i)">#{{ tag }} </span>
@@ -91,14 +103,16 @@
             minlength="3"
             (keyup)="addTagToSharedMealTags($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> Tagin pitää olla vähintään kolme merkkiä pitkä </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> {{ 'TAG_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
-            <div class="col"> <button type="submit" class="btn btn-primary btn-block"> Tallenna </button> </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+            </div>
           </div>
         </div>
       </form>
