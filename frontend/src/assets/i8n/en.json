@@ -44,5 +44,9 @@
   "NAME_NOT_LONG_ENOUGH": "Name has to be at least three characters long",
   "EXPENDITURE": "Expenditure",
   "RESET_DEFAULTS": "Reset default values",
-  "LINK": "Link"
+  "LINK": "Link",
+  "KCAL": "cal",
+  "INTAKE": "Intake",
+  "REMAINING": "Remaining",
+  "CARBS_ABBREVIATION": "Carbs"
 }

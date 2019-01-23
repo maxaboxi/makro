@@ -44,5 +44,9 @@
   "NAME_NOT_LONG_ENOUGH": "Nimen täytyy olla vähintään kolme merkkiä pitkä",
   "EXPENDITURE": "Kulutus",
   "RESET_DEFAULTS": "Palauta oletusarvot",
-  "LINK": "Linkki"
+  "LINK": "Linkki",
+  "KCAL": "kcal",
+  "INTAKE": "Syöty",
+  "REMAINING": "Jäljellä",
+  "CARBS_ABBREVIATION": "HH"
 }

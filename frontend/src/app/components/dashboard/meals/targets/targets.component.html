@@ -1,49 +1,64 @@
 <div class="container-fluid" *ngIf="showTargets">
   <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-fire"></i>
-      Kulutus: <b>{{ targets?.userAddedExpenditure ? targets?.userAddedExpenditure.toFixed(0) :
-        targets?.dailyExpenditure.toFixed(0) }} kcal</b>
+      <i class="fas fa-fire"></i> {{ 'EXPENDITURE' | translate }}:
+      <b>{{ targets?.userAddedExpenditure ? targets?.userAddedExpenditure.toFixed(0) : targets?.dailyExpenditure.toFixed(0) }} kcal</b>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-cookie-bite"></i>
-      Syöty: <b>{{ totals.energy.toFixed(0) }} kcal ({{ targets?.userAddedExpenditure ? ((totals.energy /
-        targets?.userAddedExpenditure) * 100).toFixed(1) : ((totals.energy / targets?.dailyExpenditure) *
-        100).toFixed(1)}}%)</b>
+      <i class="fas fa-cookie-bite"></i> {{ 'INTAKE' | translate }}:
+      <b
+        >{{ totals.energy.toFixed(0) }} kcal ({{
+          targets?.userAddedExpenditure
+            ? ((totals.energy / targets?.userAddedExpenditure) * 100).toFixed(1)
+            : ((totals.energy / targets?.dailyExpenditure) * 100).toFixed(1)
+        }}%)</b
+      >
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-cut"></i>
-      Jäljellä: <span [ngClass]="{'red': targets?.userAddedExpenditure - totals.energy < 0, 'red': targets?.dailyExpenditure - totals.energy < 0}"><b>{{
-          targets?.userAddedExpenditure ? (targets?.userAddedExpenditure - totals.energy).toFixed(0) :
-          (targets?.dailyExpenditure
-          - totals.energy).toFixed(0) }} kcal ({{ targets?.userAddedExpenditure ? (((targets.userAddedExpenditure -
-          totals.energy) /
-          targets?.userAddedExpenditure) * 100).toFixed(1) : (((targets.dailyExpenditure - totals.energy) /
-          targets?.dailyExpenditure) *
-          100).toFixed(1)}}%)</b></span>
+      <i class="fas fa-cut"></i> {{ 'REMAINING' | translate }}:
+      <span [ngClass]="{ red: targets?.userAddedExpenditure - totals.energy < 0, red: targets?.dailyExpenditure - totals.energy < 0 }"
+        ><b
+          >{{
+            targets?.userAddedExpenditure
+              ? (targets?.userAddedExpenditure - totals.energy).toFixed(0)
+              : (targets?.dailyExpenditure - totals.energy).toFixed(0)
+          }}
+          kcal ({{
+            targets?.userAddedExpenditure
+              ? (((targets.userAddedExpenditure - totals.energy) / targets?.userAddedExpenditure) * 100).toFixed(1)
+              : (((targets.dailyExpenditure - totals.energy) / targets?.dailyExpenditure) * 100).toFixed(1)
+          }}%)</b
+        ></span
+      >
     </div>
   </div>
   <div class="row" title="Prosentit eivät välttämättä mene tasan sataan pyöristyksistä johtuen.">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-dove"></i>
-      Proteiini: <b>{{ totals.protein.toFixed(0) }}g / {{ targets?.userAddedProteinTarget ?
-        targets?.userAddedProteinTarget.toFixed(0) :
-        targets?.proteinTarget.toFixed(0) }}g ({{ totals.protein ? (((totals.protein * 4) / totals.energy) *
-        100).toFixed(1) : 0}}%)</b>
+      <i class="fas fa-dove"></i> {{ 'PROTEIN' | translate }}:
+      <b
+        >{{ totals.protein.toFixed(0) }}g /
+        {{ targets?.userAddedProteinTarget ? targets?.userAddedProteinTarget.toFixed(0) : targets?.proteinTarget.toFixed(0) }}g ({{
+          totals.protein ? (((totals.protein * 4) / totals.energy) * 100).toFixed(1) : 0
+        }}%)</b
+      >
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-cookie"></i>
-      HH: <b>{{ totals.carb.toFixed(0) }}g / {{ targets?.userAddedCarbTarget ? targets?.userAddedCarbTarget.toFixed(0)
-        :
-        targets?.carbTarget.toFixed(0) }}g ({{ totals.carb ? (((totals.carb * 4) / totals.energy) * 100).toFixed(1) :
-        0}}%)</b>
+      <i class="fas fa-cookie"></i> {{ 'CARBS_ABBREVIATION' | translate }}:
+      <b
+        >{{ totals.carb.toFixed(0) }}g /
+        {{ targets?.userAddedCarbTarget ? targets?.userAddedCarbTarget.toFixed(0) : targets?.carbTarget.toFixed(0) }}g ({{
+          totals.carb ? (((totals.carb * 4) / totals.energy) * 100).toFixed(1) : 0
+        }}%)</b
+      >
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-      <i class="fas fa-burn"></i>
-      Rasva: <b>{{ totals.fat.toFixed(0) }}g / {{ targets?.userAddedFatTarget ? targets?.userAddedFatTarget.toFixed(0)
-        :
-        targets?.fatTarget.toFixed(0) }}g ({{ totals.fat ? (((totals.fat * 9) / totals.energy) * 100).toFixed(1) :
-        0}}%)</b>
+      <i class="fas fa-burn"></i> {{ 'FAT' | translate }}:
+      <b
+        >{{ totals.fat.toFixed(0) }}g /
+        {{ targets?.userAddedFatTarget ? targets?.userAddedFatTarget.toFixed(0) : targets?.fatTarget.toFixed(0) }}g ({{
+          totals.fat ? (((totals.fat * 9) / totals.energy) * 100).toFixed(1) : 0
+        }}%)</b
+      >
     </div>
   </div>
 </div>
