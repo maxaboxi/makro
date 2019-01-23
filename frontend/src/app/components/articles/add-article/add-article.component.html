@@ -1,10 +1,11 @@
 <div class="container mt-5" style="max-width:800px;">
   <div class="card">
-    <div *ngIf="!editing" class="card-header">Julkaise artikkeli</div> <div *ngIf="editing" class="card-header">Muokkaa artikkelia</div>
+    <div *ngIf="!editing" class="card-header">{{ 'PUBLISH_ARTICLE' | translate }}</div>
+    <div *ngIf="editing" class="card-header">{{ 'EDIT_ARTICLE' | translate }}</div>
     <div class="card-body">
       <form #addArticleForm="ngForm" (ngSubmit)="addArticle()">
         <div class="form-group">
-          <label for="articleHeaderImg">Kuva</label>
+          <label for="articleHeaderImg">{{ 'PICTURE' | translate }}</label>
           <input type="file" name="articleImage" class="form-control-file" (change)="fileChangeEvent($event)" />
         </div>
         <image-cropper
@@ -22,11 +23,11 @@
         <p *ngIf="fileError" class="text-danger">{{ fileError }}</p> <div class="text-center"><img [src]="croppedImage" class="mb-3"/></div>
 
         <button type="button" *ngIf="croppedImage && showCropper" class="btn btn-primary mb-5" (click)="saveImage()">
-          Tallenna kuva
+          {{ 'SAVE_PICTURE' | translate }}
         </button>
 
         <div class="form-group">
-          <label for="articleTitle">Otsikko</label>
+          <label for="articleTitle">{{ 'ARTICLE_TITLE' | translate }}</label>
           <input
             type="text"
             name="title"
@@ -39,15 +40,15 @@
             minlength="5"
             required
           />
-          <div [hidden]="!articleTitle.errors?.required" class="invalid-feedback"> Otsikko vaaditaan </div>
-          <div [hidden]="!articleTitle.errors?.minlength" class="invalid-feedback"> Otsikon pitää olla vähintään 5 merkkiä pitkä </div>
+          <div [hidden]="!articleTitle.errors?.required" class="invalid-feedback"> {{ 'ARTICLE_TITLE_REQUIRED' | translate }} </div>
+          <div [hidden]="!articleTitle.errors?.minlength" class="invalid-feedback"> {{ 'ARTICLE_TITLE_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="form-group">
-          <label for="articleBody">Teksti</label>
+          <label for="articleBody">{{ 'ARTICLE_BODY' | translate }}</label>
           <app-tinymce name="body" [(ngModel)]="article.body" minlength="100" required></app-tinymce>
         </div>
         <div class="form-group">
-          <label for="hashtags">Tagit (erota pilkulla)</label>
+          <label for="hashtags">{{ 'TAGS_SEPARATED_BY_COMMA' | translate }}</label>
           <p class="text-muted" *ngIf="article.tags.length > 0">
             <ng-container *ngFor="let tag of article.tags; let i = index">
               <span class="tag" (click)="removeTagFromArticle(i)">#{{ tag }} </span>
@@ -63,7 +64,7 @@
             minlength="3"
             (keyup)="addTagToArticle($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> Tagin pitää olla vähintään kolme merkkiä pitkä </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> {{ 'TAG_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <input
           type="submit"

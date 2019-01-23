@@ -110,5 +110,22 @@
   "NO_FEEDBACKS": "No feedback has been given",
   "ADD_FEEDBACK": "Add a new feedback",
   "FEEDBACK": "Feedback",
-  "ANONYMOUS": "Anonymous"
+  "ANONYMOUS": "Anonymous",
+  "SEARCH_ARTICLES_PLACEHOLDER": "Search for articles by title, tag or by user",
+  "WRITE_ARTICLE": "Write a new article",
+  "NO_SEARCH_RESULTS": "No search results",
+  "NO_ARTICLES": "No articles have been written",
+  "ARTICLE_WRITTEN_BY": "Written by",
+  "ARTICLE_PUBLISHED": "Published",
+  "ARTICLE_EDITED": "Edited",
+  "EDIT": "Edit",
+  "DELETE_ARTICLE_CONFIRMATION": "Are you sure you want to delete the article?",
+  "PUBLISH_ARTICLE": "Publish the article",
+  "EDIT_ARTICLE": "Edit the article",
+  "PICTURE": "Picture",
+  "SAVE_PICTURE": "Save picture",
+  "ARTICLE_TITLE_REQUIRED": "Article title is required information",
+  "ARTICLE_TITLE_NOT_LONG_ENOUGH": "The title of the article should be at least 5 characters long",
+  "ARTICLE_BODY": "Body",
+  "ARTICLE_TITLE": "The title of the article"
 }

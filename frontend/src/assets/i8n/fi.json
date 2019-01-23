@@ -110,5 +110,22 @@
   "NO_FEEDBACKS": "Ei palautteita",
   "ADD_FEEDBACK": "Anna palautetta",
   "FEEDBACK": "Palaute",
-  "ANONYMOUS": "Nimetön"
+  "ANONYMOUS": "Nimetön",
+  "SEARCH_ARTICLES_PLACEHOLDER": "Hae kirjoituksia otsikolla, tagilla tai tekijän nimellä",
+  "WRITE_ARTICLE": "Kirjoita artikkeli",
+  "NO_SEARCH_RESULTS": "Ei hakutuloksia",
+  "NO_ARTICLES": "Ei artikkeleita",
+  "ARTICLE_WRITTEN_BY": "Kirjoittaja",
+  "ARTICLE_PUBLISHED": "Julkaistu",
+  "ARTICLE_EDITED": "Päivitetty",
+  "EDIT": "Muokkaa",
+  "DELETE_ARTICLE_CONFIRMATION": "Haluatko varmasti poistaa artikkelin?",
+  "PUBLISH_ARTICLE": "Julkaise artikkeli",
+  "EDIT_ARTICLE": "Muokkaa artikkelia",
+  "PICTURE": "Kuva",
+  "SAVE_PICTURE": "Tallenna kuva",
+  "ARTICLE_TITLE_REQUIRED": "Otsikko vaaditaan",
+  "ARTICLE_TITLE_NOT_LONG_ENOUGH": "Otsikon pitää olla vähintään 5 merkkiä pitkä",
+  "ARTICLE_BODY": "Teksti",
+  "ARTICLE_TITLE": "Otsikko"
 }
