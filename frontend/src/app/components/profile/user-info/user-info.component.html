@@ -33,16 +33,17 @@
         </li>
         <li *ngIf="showInfo" class="lead mt-3 info-box">
           <p
-            >Kaava, mitä käytetään kulutuksen laskemiseen on
-            <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation" target="_blank">Harris-Benedictin yhtälö</a>:</p
+            >{{ 'EQUATION_USED' | translate }}
+            <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation" target="_blank">{{ 'HARRIS_BENEDICT' | translate }}</a
+            >:</p
           >
           <p
-            >{{ 'MEN' | translate }}: 88,4 + (13,4 x {{ 'BODY_MASS_IN_KG' | translate }}) + (4,8 x {{ 'HEIGHT_IN_CM' | translate }}) – (5,7
-            x {{ 'AGE_IN_YEARS' | translate }}).</p
+            >{{ 'MEN' | translate }}: 88,4 + (13,4 * {{ 'BODY_MASS_IN_KG' | translate }}) + (4,8 * {{ 'HEIGHT_IN_CM' | translate }}) – (5,7
+            * {{ 'AGE_IN_YEARS' | translate }}).</p
           >
           <p
-            >{{ 'WOMEN' | translate }}: 447,6 + (9,25 x {{ 'BODY_MASS_IN_KG' | translate }}) + (3,1 x {{ 'HEIGHT_IN_CM' | translate }}) –
-            (4,3 x {{ 'AGE_IN_YEARS' | translate }})</p
+            >{{ 'WOMEN' | translate }}: 447,6 + (9,25 * {{ 'BODY_MASS_IN_KG' | translate }}) + (3,1 * {{ 'HEIGHT_IN_CM' | translate }}) –
+            (4,3 * {{ 'AGE_IN_YEARS' | translate }})</p
           >
         </li>
       </ul>
@@ -57,23 +58,23 @@
   <hr />
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-      <h1 class="display-4">Aterioiden nimet</h1>
+      <h1 class="display-4">{{ 'MEAL_NAMES' | translate }}</h1>
       <ul>
         <li *ngFor="let meal of user.meals; let i = index" class="list lead">
-          {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="Poista ateria"></i>
+          {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>
         </li>
       </ul>
       <button class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"
-        ><i class="far fa-edit"></i> Muokkaa nimiä</button
+        ><i class="far fa-edit"></i> {{ 'EDIT_NAMES' | translate }}</button
       >
       <div class="row mt-1">
         <div class="col">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">Lisää ateria</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">{{ 'ADD_MEAL' | translate }}</button>
         </div>
         <div class="col" *ngIf="changed">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">Tallenna muutokset</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">{{ 'SAVE_CHANGES' | translate }}</button>
         </div>
-        <p *ngIf="changed" class="lead">Muutokset tallennetaan vasta, kun nappia on painettu.</p>
+        <p *ngIf="changed" class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
       </div>
     </div>
   </div>
@@ -81,64 +82,66 @@
 
 <ng-template #userInfo let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Muokkaa käyttäjätietoja</h4>
+    <h4 class="modal-title">{{ 'EDIT_INFORMATION' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userEmail">Sähköpostiosoite</label>
+          <label class="lead col-sm-4 col-form-label" for="userEmail">{{ 'EMAIL' | translate }}</label>
           <div class="col-sm-8">
-            <input type="email" name="userEmail" class="form-control" placeholder="matti.meikalainen@email.fi" [(ngModel)]="user.email" />
+            <input type="email" name="userEmail" class="form-control" placeholder="example@email.com" [(ngModel)]="user.email" />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userHeight">Pituus</label>
+          <label class="lead col-sm-4 col-form-label" for="userHeight">{{ 'HEIGHT' | translate }}</label>
           <div class="col-sm-8">
             <input type="number" name="userHeight" class="form-control" placeholder="cm" [(ngModel)]="user.height" />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userWeight">Paino</label>
+          <label class="lead col-sm-4 col-form-label" for="userWeight">{{ 'WEIGHT' | translate }}</label>
           <div class="col-sm-8">
             <input type="number" name="userWeight" class="form-control" placeholder="kg" [(ngModel)]="user.weight" />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userAge">Ikä</label>
+          <label class="lead col-sm-4 col-form-label" for="userAge">{{ 'AGE' | translate }}</label>
           <div class="col-sm-8">
-            <input type="number" name="userAge" class="form-control" placeholder="vuotta" [(ngModel)]="user.age" />
+            <input type="number" name="userAge" class="form-control" placeholder="{{ 'YEARS' | translate }}" [(ngModel)]="user.age" />
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userSex">Sukupuoli</label>
+          <label class="lead col-sm-4 col-form-label" for="userSex">{{ 'SEX' | translate }}</label>
           <div class="col-sm-8">
             <select name="userSex" class="form-control" [(ngModel)]="user.sex">
               <option value="null"></option>
-              <option value="mies">Mies</option>
-              <option value="nainen">Nainen</option>
+              <option value="mies">{{ 'MALE' | translate }}</option>
+              <option value="nainen">{{ 'FEMALE' | translate }}</option>
             </select>
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="userActivity">Liikunta</label>
+          <label class="lead col-sm-4 col-form-label" for="userActivity">{{ 'ACTIVITY' | translate }}</label>
           <div class="col-sm-8">
             <select name="userActivity" class="form-control" [(ngModel)]="user.activity">
-              <option value="1.2">0-0,5 kertaa viikossa</option>
-              <option value="1.375">1-3 kertaa viikossa</option>
-              <option value="1.55">3-5 kertaa viikossa</option>
-              <option value="1.75">6-7 kertaa viikossa</option>
-              <option value="1.9">Raskas treeni kahdesti päivässä</option>
+              <option value="1.2">0-0,5 {{ 'PER_WEEK' | translate }}</option>
+              <option value="1.375">1-3 {{ 'PER_WEEK' | translate }}</option>
+              <option value="1.55">3-5 {{ 'PER_WEEK' | translate }}</option>
+              <option value="1.75">6-7 {{ 'PER_WEEK' | translate }}</option>
+              <option value="1.9">{{ 'TRAIN_TWICE_DAY' | translate }}</option>
             </select>
           </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
-            <div class="col"> <button type="submit" class="btn btn-primary btn-block"> Tallenna </button> </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+            </div>
           </div>
         </div>
       </form>
@@ -148,7 +151,7 @@
 
 <ng-template #mealName let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Muokkaa aterioita</h4>
+    <h4 class="modal-title">{{ 'EDIT_NAMES' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
@@ -168,10 +171,14 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
-            <div class="col"> <span class="btn btn-primary btn-block" (click)="addNewMeal()"> Lisää ateria </span> </div>
-            <div class="col"> <button type="submit" class="btn btn-success btn-block"> Tallenna </button> </div>
+            <div class="col">
+              <span class="btn btn-primary btn-block" (click)="addNewMeal()"> {{ 'ADD_MEAL' | translate }} </span>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-success btn-block"> {{ 'SAVE' | translate }} </button>
+            </div>
           </div>
         </div>
       </form>
@@ -181,14 +188,14 @@
 
 <ng-template #changePasswordModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Vaihda salasana</h4>
+    <h4 class="modal-title">{{ 'CHANGE_PASSWORD' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
-          <label for="userPassword">Salasana</label>
+          <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
           <input
             type="password"
             name="password"
@@ -199,11 +206,11 @@
             required
             [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
           />
-          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> Vaadittu kenttä </div>
-          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback"> Salasanan täytyy olla vähintään 10 merkkiä pitkä </div>
+          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
+          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback"> {{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="form-group">
-          <label for="userPasswordAgain">Salasana uudestaan</label>
+          <label for="userPasswordAgain">{{ 'PASSWORD_AGAIN' | translate }}</label>
           <input
             type="password"
             name="passwordAgain"
@@ -214,18 +221,18 @@
             required
             [ngClass]="{ 'is-invalid': userPasswordAgain.errors && userPasswordAgain.touched }"
           />
-          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback"> Vaadittu kenttä </div>
-          <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback">
-            Salasanan täytyy olla vähintään 10 merkkiä pitkä
-          </div>
+          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
+          <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback"> {{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }} </div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">Peruuta</button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block" [disabled]="!changePasswordForm.form.valid"> Vaihda salasana </button>
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!changePasswordForm.form.valid">
+                {{ 'CHANGE_PASSWORD' | translate }}
+              </button>
             </div>
           </div>
         </div>

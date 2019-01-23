@@ -172,5 +172,19 @@
   "YEARS": "vuotta",
   "BODY_MASS_IN_KG": "kehon massa kiloina",
   "HEIGHT_IN_CM": "pituus sentteinä",
-  "AGE_IN_YEARS": "ikä vuosissa"
+  "AGE_IN_YEARS": "ikä vuosissa",
+  "EQUATION_USED": "Kaava, mitä käytetään kulutuksen laskemiseen on",
+  "HARRIS_BENEDICT": "Harris-Benedictin yhtälö",
+  "MEAL_NAMES": "Aterioiden nimet",
+  "DELETE_MEAL": "Poista ateria",
+  "EDIT_NAMES": "Muokkaa nimiä",
+  "ADD_MEAL": "Lisää uusi ateria",
+  "CHANGES_SAVED_WHEN_TEXT": "Muutokset tallennetaan vasta, kun nappia on painettu.",
+  "EMAIL": "Sähköpostiosoite",
+  "ACTIVITY": "Liikunta",
+  "PER_WEEK": "kertaa viikossa",
+  "TRAIN_TWICE_DAY": "Raskas treeni kahdesti päivässä",
+  "PASSWORD": "Salasana",
+  "PASSWORD_AGAIN": "Salasana uudestaan",
+  "PASSWORD_NOT_LONG_ENOUGH": "Salasanan täytyy olla vähintään 10 merkkiä pitkä"
 }

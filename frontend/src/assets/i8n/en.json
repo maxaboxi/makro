@@ -172,5 +172,19 @@
   "YEARS": "years",
   "BODY_MASS_IN_KG": "body mass in kilograms",
   "HEIGHT_IN_CM": "height in centimeters",
-  "AGE_IN_YEARS": "age in years"
+  "AGE_IN_YEARS": "age in years",
+  "EQUATION_USED": "The equation used for calculating an individual's basal metabolic rate is",
+  "HARRIS_BENEDICT": "the Harris-Benedict equation",
+  "MEAL_NAMES": "Name of my meals",
+  "DELETE_MEAL": "Delete meal",
+  "EDIT_NAMES": "Edit names",
+  "ADD_MEAL": "Add a new meal",
+  "CHANGES_SAVED_WHEN_TEXT": "Changes are saved after the save changes button has been pressed.",
+  "EMAIL": "Email",
+  "ACTIVITY": "Activity",
+  "PER_WEEK": "times per week",
+  "TRAIN_TWICE_DAY": "Heavy training twice a day",
+  "PASSWORD": "Password",
+  "PASSWORD_AGAIN": "Password again",
+  "PASSWORD_NOT_LONG_ENOUGH": "Password has to be at least 10 characters long"
 }
