@@ -1,38 +1,46 @@
 <div class="container mt-5">
-  <h3>Kirjaudu sisään</h3>
-  <br>
+  <h3>{{ 'LOGIN' | translate }}</h3> <br />
   <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
     <div class="form-group">
-      <label class="lead" for="username">Käyttäjätunnus</label>
-      <input type="text" name="username" class="form-control" placeholder="Käyttäjätunnus" minlength="2" [(ngModel)]="user.username"
-        #userUsername="ngModel" [ngClass]="{'is-invalid':userUsername.errors && userUsername.touched}" required>
-      <div [hidden]="!userUsername.errors?.required" class="invalid-feedback">
-        Käyttäjätunnus vaaditaan
-      </div>
-      <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback">
-        Käyttäjätunnuksen pitää olla vähintään kaksi merkkiä pitkä
-      </div>
+      <label class="lead" for="username">{{ 'USERNAME' | translate }}</label>
+      <input
+        type="text"
+        name="username"
+        class="form-control"
+        placeholder="{{ 'USERNAME' | translate }}"
+        minlength="2"
+        [(ngModel)]="user.username"
+        #userUsername="ngModel"
+        [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+        required
+      />
+      <div [hidden]="!userUsername.errors?.required" class="invalid-feedback"> {{ 'USERNAME_REQUIRED' | translate }} </div>
+      <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback"> {{ 'USERNAME_NOT_LONG_ENOUGH' | translate }} </div>
     </div>
     <div class="form-group">
-      <label class="lead" for="password">Salasana</label>
-      <input type="password" name="password" class="form-control" placeholder="Salasana" [(ngModel)]="user.password"
-        #userPassword="ngModel" [ngClass]="{'is-invalid':userPassword.errors && userPassword.touched}" required>
-      <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">
-        Salasana vaaditaan
-      </div>
+      <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="{{ 'PASSWORD' | translate }}"
+        [(ngModel)]="user.password"
+        #userPassword="ngModel"
+        [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+        required
+      />
+      <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> {{ 'PASSWORD_REQUIRED' | translate }} </div>
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Kirjaudu</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">{{ 'LOGIN' | translate }}</button>
   </form>
   <div class="row justify-content-center mt-5" *ngIf="showPasswordReset">
     <div class="col">
       <div class="form-group">
-        <p class="lead text-muted">Uusi salasana lähetetään käyttäjätunnukselle tallennettuun sähköpostiosoitteeseen,
-          jos
-          sellainen on käyttäjätunnukseen liitetty.</p>
-        <button (click)="resetPassword()" [disabled]="!user.username || user.username?.length < 2" class="btn btn-block btn-primary mt-3">Lähetä
-          uusi salasana</button>
+        <p class="lead text-muted">{{ 'NEW_PASSWORD_SENT_TEXT' | translate }}</p>
+        <button (click)="resetPassword()" [disabled]="!user.username || user.username?.length < 2" class="btn btn-block btn-primary mt-3">{{
+          'SEND_NEW_PASSWORD' | translate
+        }}</button>
       </div>
-
     </div>
   </div>
 </div>

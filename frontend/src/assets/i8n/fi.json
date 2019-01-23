@@ -220,5 +220,7 @@
   "DELETE_LIKE": "Poista tykkäys",
   "USERNAME_REQUIRED": "Käyttäjätunnus vaaditaan",
   "USERNAME_NOT_LONG_ENOUGH": "Käyttäjätunnuksen täytyy olla vähintään kaksi merkkiä pitkä",
-  "EMAIL_NOT_REQUIRED": "Ei vaadita, mutta ilman sähköpostiosoitetta salasanan nollaus ei ole mahdollista"
+  "EMAIL_NOT_REQUIRED": "Ei vaadita, mutta ilman sähköpostiosoitetta salasanan nollaus ei ole mahdollista",
+  "NEW_PASSWORD_SENT_TEXT": "Uusi salasana lähetetään käyttäjätunnukselle tallennettuun sähköpostiosoitteeseen,jos sellainen on käyttäjätunnukseen liitetty.",
+  "SEND_NEW_PASSWORD": "Lähetä uusi salasana"
 }
