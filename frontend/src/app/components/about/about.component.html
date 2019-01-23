@@ -1,57 +1,39 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <h1 class="display-4 text-muted text-center">Makro lyhyesti</h1>
+      <h1 class="display-4 text-muted text-center">{{ 'MAKRO_INFO_TITLE' | translate }}</h1>
       <h6 class="h6 text-muted text-center">
-        Ongelmatilanteissa apua saa <a href="mailto:support@makro.diet">täältä.</a> Saa toki olla yhteydessä muutenkin. :)
+        {{ 'MAKRO_INFO_SUBTITLE' | translate }} <a href="mailto:support@makro.diet">{{ 'HERE' | translate }}.</a> :)
       </h6>
       <div class="mt-3">
         <app-loading-spinner *ngIf="loading"></app-loading-spinner>
         <p *ngIf="!loading" class="lead text-muted text-center">
-          Rekisteröityneitä käyttäjiä {{ usersCount }} ja ruokia yhteensä {{ foodsCount }}.
+          {{ usersCount }} {{ 'MAKRO_REGISTERED_USERS_AMOUNT' | translate }} {{ 'AND' | translate }} {{ foodsCount }}
+          {{ 'MAKRO_FOODS_AMOUNT' | translate }}.
         </p>
       </div>
 
-      <p class="lead">
-        Makro on ilmainen jokaiselle käyttäjälle - nyt ja aina. Ylläpitoa ei rahoiteta mainoksilla, vaan kaikki kustannukset (palvelin ~60€
-        / vuosi ja sähköposti ~50€ / vuosi) menevät minun omasta pussista. Jos sinulla on PayPal-tili ja haluat auttaa
-        ylläpitokustannuksissa, voit tehdä lahjoituksen <a href="https://paypal.me/tukki" target="_blank">täältä.</a> Jokainen lahjoitettu
-        euro menee suoraan Makron ylläpitokustannuksiin. Lahjoittaminen ei ole kuitenkaan millään tavalla pakollista - Makro tulee pysymään
-        linjoilla (ilman mainoksia) joka tapauksessa. :)
+      <p class="lead"
+        >{{ 'MAKRO_INFO_TEXT_PART_1' | translate }} <a href="https://paypal.me/tukki" target="_blank">{{ 'HERE' | translate }}.</a>
+        {{ 'MAKRO_INFO_TEXT_PART_2' | translate }}
       </p>
-      <p class="lead">
-        Alunperin kehitin Makron puhtaasti omiin käyttötarkoituksiini, koska en löytänyt sopivaa (ilmaista) työkalua ateriasuunnitteluun.
-        Ensimmäinen versio valmistui loppukesästä 2017 ja laitoin Makron nettiin, jotta kaikki halukkaat voisivat sitä käyttää. Syksyllä
-        2018 päätin, että teen Makrosta uuden version, joka korjaisi olemassa olevat bugit ja lisäisin samalla kaipaamiani ominaisuuksia.
-      </p>
-      <p class="lead">
-        Kehitän Makroa vapaa-ajallani ja lisäilen uusia ominaisuuksia sitä mukaa, kun niitä tulee mieleeni ja löydän aikaa ideoiden
-        toteuttamiseen. Jos kaipaat jotain ominaisuutta, voit jättää palautetta tai laittaa sähköpostia ylempänä olevasta linkistä.
-      </p>
+      <p class="lead"> {{ 'MAKRO_INFO_TEXT_PART_3' | translate }} </p> <p class="lead"> {{ 'MAKRO_INFO_TEXT_PART_4' | translate }} </p>
       <p class="lead">-Arto</p>
     </div>
   </div>
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-3">
       <div class="card">
-        <div class="card-header lead">Vinkkejä käyttöön</div>
+        <div class="card-header lead">{{ 'INFO_TIPS_TITLE' | translate }}</div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"> Ruokia järjestellä aterian sisällä raahamalla hiirellä haluttuun kohtaan. </li>
-          <li class="list-group-item"> Ruoan voi siirtää toiseen ateriaan raahaamalla sen hiirellä uuden aterian päälle. </li>
-          <li class="list-group-item"> Itse lisäämäsi ruoat näkyvät hakutuloksissa oranssilla värillä. </li>
-          <li class="list-group-item">
-            Mikäli profiilisivulta avataan tallennettu päivä ja sitä muokataan, tulee yhteenlaskettujen arvojen alle näkyviin nappula, jota
-            painamalla tallennetaan päivään tehdyt muutokset.
-          </li>
-          <li class="list-group-item">
-            Asetetut tavoitearvot saa korvattua oletusarvoilla joko muuttamalla kaikki nollaksi tai painamalla palauta oletusarvot -nappia.
-          </li>
-          <li class="list-group-item"> Kaikkia tavoitearvoja ei ole pakko asettaa, vaan muutoksia voi tehdä vaikka vain yhteen arvoon. </li>
-          <li class="list-group-item">
-            Aterian voi tallentaa muille käyttäjille käytettäväksi painamalla nuoli-ikonia, jolloin aterialle pääsee asettamaan nimen sekä
-            mahdollisia lisätietoja.
-          </li>
-          <li class="list-group-item"> Jakamasi ateriakokonaisuudet voit poistaa Profiili-sivun kautta. </li>
+          <li class="list-group-item"> {{ 'TIP_1' | translate }} </li>
+          <li class="list-group-item"> {{ 'TIP_2' | translate }} </li>
+          <li class="list-group-item"> {{ 'TIP_3' | translate }} </li>
+          <li class="list-group-item">{{ 'TIP_4' | translate }} </li>
+          <li class="list-group-item">{{ 'TIP_5' | translate }} </li>
+          <li class="list-group-item"> {{ 'TIP_6' | translate }} </li>
+          <li class="list-group-item">{{ 'TIP_7' | translate }} </li>
+          <li class="list-group-item"> {{ 'TIP_8' | translate }} </li>
         </ul>
       </div>
     </div>
@@ -62,7 +44,7 @@
   <div class="row justify-content-center mb-3">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <div class="card">
-        <div class="card-header lead">Muutokset (2.0.8)</div>
+        <div class="card-header lead">{{ 'CHANGES' | translate }} (2.0.8)</div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item"> Rekisteröityneet käyttäjät voivat julkaista artikkelin. </li>
           <li class="list-group-item">Bugikorjauksia.</li>
@@ -73,7 +55,7 @@
   <div class="row justify-content-center mt-2 mb-3">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button class="btn btn-block btn-outline-primary" (click)="toggleShowOlderUpdates()">
-        {{ showOlderUpdates ? 'Piilota vanhemmat päivitykset' : 'Näytä vanhemmat päivitykset' }}
+        {{ (showOlderUpdates ? 'HIDE_OLDER_UPDATES' : 'SHOW_OLDER_UPDATES') | translate }}
       </button>
     </div>
   </div>
@@ -81,7 +63,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Muutokset (2.0.7)</div>
+          <div class="card-header lead">{{ 'CHANGES' | translate }} (2.0.7)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"> Suunnittelemastaan päivästä voi luoda PDF-tiedoston. </li>
             <li class="list-group-item"> Näytä / piilota tavoitearvot valinta tallennetaan. </li>
@@ -92,7 +74,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Muutokset (2.0.6)</div>
+          <div class="card-header lead">{{ 'CHANGES' | translate }} (2.0.6)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"> Korjattu bugi, joka esti kopioudun ruoan määrän muuttamisen. </li>
             <li class="list-group-item"> Ruokien uudelleenjärjestelyn pitäisi toimia nyt paremmin. </li>
@@ -105,7 +87,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Uudet ominaisuudet (2.0.5)</div>
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.0.5)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"> Lisätty mahdollisuus tykätä muiden käyttäjien lisäämistä aterioista. </li>
             <li class="list-group-item"> Ateriaa jakaessa on mahdollisuus nyt lisätä myös valmistusohjeet. </li>
@@ -117,7 +99,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Uudet ominaisuudet (2.0.4)</div>
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.0.4)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"> Lisätty mahdollisuus kopioida ruoka ateriasta toiseen. </li>
           </ul>
@@ -127,7 +109,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Muutokset (2.0.3)</div>
+          <div class="card-header lead">{{ 'CHANGES' | translate }} (2.0.3)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Profiilisivu uudistettu.</li>
             <li class="list-group-item"> Kysymykset, vastaukset, kommentit ja annetut äänet näkyvät nyt profiilisivulla. </li>
@@ -139,7 +121,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Uudet ominaisuudet (2.0.2)</div>
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.0.2)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Haun toimintaa parannettu.</li>
             <li class="list-group-item"> Jaetuille aterioille voi asettaa nyt tageja. Vähintään yksi on laitettava. </li>
@@ -152,7 +134,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Uudet ominaisuudet (2.0.1)</div>
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.0.1)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"> Valmiin aterian voi tallentaa muille käyttäjille käytettäväksi. </li>
             <li class="list-group-item"> Kaikki itse jakamat ateriat löytää profiilisivun kautta. </li>
@@ -163,7 +145,7 @@
     <div class="row justify-content-center mb-5">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
-          <div class="card-header lead">Uudet ominaisuudet (2.0)</div>
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.0)</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Haun toimintaa parannettu.</li>
             <li class="list-group-item"> Ruokien siirtely hiirellä aterian sisällä ja aterioiden välillä. </li>
