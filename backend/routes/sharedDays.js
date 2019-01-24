@@ -86,7 +86,6 @@ router.get('/getsharedday/:id', (req, res) => {
 
 router.get('/getdayssharedbyuser/:id', (req, res) => {
   const id = req.params.id;
-  console.log(id);
   SharedDay.getDaysSharedByUser(id, (err, days) => {
     if (err) {
       logger.log({
