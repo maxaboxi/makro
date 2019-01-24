@@ -247,5 +247,8 @@
   "USER_INFORMATION_UPDATED": "Käyttäjän tiedot päivitetty",
   "FEEDBACK_SAVED": "Palaute tallennettu",
   "COMMENT_SAVED": "Kommentti tallennettu",
-  "FILE_ERROR_MSG": "Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif"
+  "FILE_ERROR_MSG": "Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif",
+  "NO_FOODS_IN_MEALS_ERROR": "Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa",
+  "DAY_SAVED": "Päivä tallennettu",
+  "MEAL_SHARED_SUCCESFULLY": "Ateria jaettu muille käyttäjille onnistuneesti"
 }

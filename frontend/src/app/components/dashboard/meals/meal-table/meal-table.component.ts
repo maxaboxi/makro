@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  IterableDiffers,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, OnInit, Input, DoCheck, IterableDiffers, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../../../../models/Food';
 import { Meal } from '../../../../models/Meal';
@@ -14,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../../models/User';
 import { SharedMealsService } from '../../../../services/shared-meals.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-meal-table',
@@ -87,7 +81,8 @@ export class MealTableComponent implements OnInit, DoCheck {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private sharedMealsService: SharedMealsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translator: TranslateService
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
   }
@@ -223,7 +218,7 @@ export class MealTableComponent implements OnInit, DoCheck {
           this.sharedMealsService.shareNewMeal(meal).subscribe(
             success => {
               if (success) {
-                this.flashMessage.show('Ateria jaettu muille onnistuneesti.', {
+                this.flashMessage.show(this.translator.instant('MEAL_SHARED_SUCCESFULLY'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
@@ -257,11 +252,7 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.addedFoodsService.moveFoodToNewMeal(
-            JSON.parse(JSON.stringify(this.foodToBeCopied)),
-            this.targetMeal.name,
-            null
-          );
+          this.addedFoodsService.moveFoodToNewMeal(JSON.parse(JSON.stringify(this.foodToBeCopied)), this.targetMeal.name, null);
           this.foodToBeCopied = undefined;
           this.targetMeal = undefined;
         } else {
@@ -278,9 +269,7 @@ export class MealTableComponent implements OnInit, DoCheck {
 
   addTagToSharedMealTags(char) {
     if (this.sharedMealTag.length >= 3 && char === ',') {
-      this.sharedMeal.tags.push(
-        this.sharedMealTag.slice(0, this.sharedMealTag.length - 1)
-      );
+      this.sharedMeal.tags.push(this.sharedMealTag.slice(0, this.sharedMealTag.length - 1));
       this.sharedMealTag = '';
     }
   }

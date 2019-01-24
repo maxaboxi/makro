@@ -6,6 +6,7 @@ import { Food } from '../../../models/Food';
 import { DayService } from '../../../services/day.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-meals',
@@ -40,14 +41,13 @@ export class MealsComponent implements OnInit {
   constructor(
     private addedFoodsService: AddedFoodsService,
     private dayService: DayService,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
     this.addedFoodsService._meals.subscribe(meals => (this.addedMeals = meals));
-    this.addedFoodsService._openedSavedMeal.subscribe(
-      b => (this.openedSavedMeal = b)
-    );
+    this.addedFoodsService._openedSavedMeal.subscribe(b => (this.openedSavedMeal = b));
     this.addedFoodsService._mealsEdited.subscribe(b => (this.mealsEdited = b));
   }
 
@@ -58,13 +58,10 @@ export class MealsComponent implements OnInit {
       foodsAdded += m.foods.length;
     });
     if (foodsAdded === 0) {
-      this.flashMessage.show(
-        'Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa.',
-        {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        }
-      );
+      this.flashMessage.show(this.translator.instant('NO_FOODS_IN_MEALS_ERROR'), {
+        cssClass: 'alert-danger',
+        timeout: 2000
+      });
       return;
     }
 
@@ -76,7 +73,7 @@ export class MealsComponent implements OnInit {
     this.dayService.saveEditedDay(editedDay).subscribe(
       success => {
         if (success) {
-          this.flashMessage.show('Päivä tallennettu.', {
+          this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

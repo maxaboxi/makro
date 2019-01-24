@@ -247,5 +247,8 @@
   "USER_INFORMATION_UPDATED": "User information has been updated",
   "FEEDBACK_SAVED": "Feedback saved",
   "COMMENT_SAVED": "Comment saved",
-  "FILE_ERROR_MSG": "Wrong file type. Image should be jpg/jpeg, png or gif"
+  "FILE_ERROR_MSG": "Wrong file type. Image should be jpg/jpeg, png or gif",
+  "NO_FOODS_IN_MEALS_ERROR": "In order to save a day at least one meal should contain foods",
+  "DAY_SAVED": "Day has been saved",
+  "MEAL_SHARED_SUCCESFULLY": "Meal has been shared to other users succesfully"
 }
