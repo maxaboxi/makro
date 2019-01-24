@@ -4,6 +4,7 @@ import { VoteService } from '../../../services/vote.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
 import { Vote } from '../../../models/Vote';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-votes',
@@ -17,7 +18,12 @@ export class UserVotesComponent implements OnInit {
   votesDeleted = false;
   loading = true;
 
-  constructor(private auth: AuthService, private voteService: VoteService, private flashMessage: FlashMessagesService) {}
+  constructor(
+    private auth: AuthService,
+    private voteService: VoteService,
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
+  ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -41,7 +47,7 @@ export class UserVotesComponent implements OnInit {
     this.voteService.removeVotes(this.deletedVotes).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

@@ -5,6 +5,7 @@ import { FoodService } from '../../../services/food.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-added-foods',
@@ -23,7 +24,8 @@ export class AddedFoodsComponent implements OnInit {
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
     private modalService: NgbModal,
-    private foodService: FoodService
+    private foodService: FoodService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class AddedFoodsComponent implements OnInit {
     this.foodService.removeFoods(this.deletedFoods).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -80,7 +82,7 @@ export class AddedFoodsComponent implements OnInit {
           this.foodService.editFood(this.selectedFood).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Muutokset tallennettu', {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

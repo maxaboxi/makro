@@ -6,6 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { QaService } from '../../../../services/qa.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-questions',
@@ -23,7 +24,8 @@ export class UserQuestionsComponent implements OnInit {
     private auth: AuthService,
     private qaService: QaService,
     private flashMessage: FlashMessagesService,
-    private router: Router
+    private router: Router,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class UserQuestionsComponent implements OnInit {
     this.qaService.removeQuestions(this.deletedQuestions).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

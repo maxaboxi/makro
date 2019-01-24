@@ -7,6 +7,7 @@ import { Meal } from '../../../models/Meal';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-shared-meals',
@@ -30,7 +31,8 @@ export class UserSharedMealsComponent implements OnInit {
     private foodService: FoodService,
     private sharedMealsService: SharedMealsService,
     private flashMessage: FlashMessagesService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class UserSharedMealsComponent implements OnInit {
     this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -112,7 +114,7 @@ export class UserSharedMealsComponent implements OnInit {
                 this.selectedSharedMeal = undefined;
                 this.sharedMealTag = '';
                 this.selectedSharedMealOrigTags = undefined;
-                this.flashMessage.show('Muutokset tallennettu.', {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

@@ -5,6 +5,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ArticleService } from '../../../services/article.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-articles',
@@ -22,7 +23,8 @@ export class UserArticlesComponent implements OnInit {
     private auth: AuthService,
     private articleService: ArticleService,
     private router: Router,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class UserArticlesComponent implements OnInit {
     this.articleService.deleteArticles(this.deletedArticles).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

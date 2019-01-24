@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-saved-days',
@@ -27,7 +28,8 @@ export class SavedDaysComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal,
-    private addedFoodsService: AddedFoodsService
+    private addedFoodsService: AddedFoodsService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -61,7 +63,7 @@ export class SavedDaysComponent implements OnInit {
     this.dayService.removeDays(this.deletedDays).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -94,7 +96,7 @@ export class SavedDaysComponent implements OnInit {
           this.dayService.updateDayNames(changedDays).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Muutokset tallennettu', {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

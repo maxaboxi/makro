@@ -5,6 +5,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../../models/User';
 import { Answer } from '../../../../models/Answer';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-answers',
@@ -22,7 +23,8 @@ export class UserAnswersComponent implements OnInit {
     private auth: AuthService,
     private qaService: QaService,
     private flashMessage: FlashMessagesService,
-    private router: Router
+    private router: Router,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class UserAnswersComponent implements OnInit {
     this.qaService.removeAnswers(this.deletedAnswers).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
