@@ -222,5 +222,14 @@
   "USERNAME_NOT_LONG_ENOUGH": "Username has to be at least two characters long",
   "EMAIL_NOT_REQUIRED": "Email address is not required but without it it's impossible to reset password",
   "NEW_PASSWORD_SENT_TEXT": "If the username has an email address associated to it the new password will be sent to that address.",
-  "SEND_NEW_PASSWORD": "Send new password"
+  "SEND_NEW_PASSWORD": "Send new password",
+  "USERS": "Users",
+  "FEEDBACKS": "Feedbacks",
+  "SHARED_DAYS": "Shared days",
+  "ADDED_BY": "Added by",
+  "ADDED_BY_REQUIRED": "Added by is required",
+  "CREATED_BY": "Created by",
+  "CREATED_AT": "Created at",
+  "UPDATED_AT": "Updated at",
+  "CLOSE": "Close"
 }

@@ -222,5 +222,14 @@
   "USERNAME_NOT_LONG_ENOUGH": "Käyttäjätunnuksen täytyy olla vähintään kaksi merkkiä pitkä",
   "EMAIL_NOT_REQUIRED": "Ei vaadita, mutta ilman sähköpostiosoitetta salasanan nollaus ei ole mahdollista",
   "NEW_PASSWORD_SENT_TEXT": "Uusi salasana lähetetään käyttäjätunnukselle tallennettuun sähköpostiosoitteeseen,jos sellainen on käyttäjätunnukseen liitetty.",
-  "SEND_NEW_PASSWORD": "Lähetä uusi salasana"
+  "SEND_NEW_PASSWORD": "Lähetä uusi salasana",
+  "USERS": "Käyttäjät",
+  "FEEDBACKS": "Palautteet",
+  "SHARED_DAYS": "Jaetut päivät",
+  "ADDED_BY": "Lisääjä",
+  "ADDED_BY_REQUIRED": "Lisääjä on vaadittu tieto",
+  "CREATED_BY": "Tekijä",
+  "CREATED_AT": "Luotu",
+  "UPDATED_AT": "Päivitetty",
+  "CLOSE": "Sulje"
 }
