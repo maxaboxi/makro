@@ -252,5 +252,6 @@
   "DAY_SAVED": "Päivä tallennettu",
   "MEAL_SHARED_SUCCESFULLY": "Ateria jaettu muille käyttäjille onnistuneesti",
   "QUESTION_ADDED": "Kysymys lisätty",
-  "COMMENT_ADDED": "Kommentti lisätty"
+  "COMMENT_ADDED": "Kommentti lisätty",
+  "PASSWORD_REQUIRED": "Salasana vaaditaan"
 }

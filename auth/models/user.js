@@ -3,8 +3,7 @@ const bcrypt = require('bcryptjs');
 const winston = require('winston');
 const path = require('path');
 
-const tsFormat = () =>
-  new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
+const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
 const logger = winston.createLogger({
   level: 'error',
@@ -90,6 +89,11 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: false,
       default: 'user'
+    },
+    lang: {
+      type: String,
+      required: false,
+      default: 'fi'
     },
     meals: {
       type: Array,
@@ -181,14 +185,14 @@ module.exports.removeUsers = (deletedUsers, callback) => {
 
 module.exports.updateShowTargets = (id, showTargets, callback) => {
   const query = { _id: id };
-  User.findByIdAndUpdate(
-    query,
-    { showTargets: showTargets },
-    { new: true },
-    callback
-  );
+  User.findByIdAndUpdate(query, { showTargets: showTargets }, { new: true }, callback);
 };
 
-module.exports.getAmountOfUsers = (callback) => {
+module.exports.getAmountOfUsers = callback => {
   User.countDocuments(callback);
-}
+};
+
+module.exports.changeLanguage = (userId, lang, callback) => {
+  const query = { _id: userId };
+  User.findByIdAndUpdate(query, { lang: lang }, { new: true }, callback);
+};

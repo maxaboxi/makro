@@ -41,10 +41,10 @@ export class NavbarComponent implements OnInit {
     const lang = localStorage.getItem('makro_lang');
     if (lang === 'fi') {
       this.translator.use('en');
-      localStorage.setItem('makro_lang', 'en');
+      this.auth.updateLanguage('en');
     } else {
       this.translator.use('fi');
-      localStorage.setItem('makro_lang', 'fi');
+      this.auth.updateLanguage('fi');
     }
   }
 }

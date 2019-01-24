@@ -18,4 +18,5 @@ export interface User {
   meals?: Meal[];
   lastLogin?: Date;
   showTargets?: boolean;
+  lang?: string;
 }

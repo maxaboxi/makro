@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
         localStorage.removeItem('loadedDay');
         localStorage.setItem('token', success['token']);
         this.auth.setUserInfo(success['user']);
+        this.translator.use(success['user'].lang);
         this.addedFoods.setMealsFromLocalStorage();
         this.auth.isLoggedIn.next(true);
         this.router.navigate(['/']);

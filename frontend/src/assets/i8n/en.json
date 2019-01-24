@@ -252,5 +252,6 @@
   "DAY_SAVED": "Day has been saved",
   "MEAL_SHARED_SUCCESFULLY": "Meal has been shared to other users succesfully",
   "QUESTION_ADDED": "Question added",
-  "COMMENT_ADDED": "Comment added"
+  "COMMENT_ADDED": "Comment added",
+  "PASSWORD_REQUIRED": "Password is required"
 }

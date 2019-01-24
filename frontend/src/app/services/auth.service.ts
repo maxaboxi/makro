@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private translator: TranslateService) {}
 
   login(user: User) {
     const headers = new HttpHeaders({
@@ -39,6 +40,8 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('meals');
     localStorage.removeItem('loadedDay');
+    localStorage.setItem('makro_lang', 'fi');
+    this.translator.use('fi');
     this.setDefaultUserInfo();
     this.isLoggedIn.next(false);
     this.isAdmin.next(false);
@@ -46,13 +49,8 @@ export class AuthService {
 
   setUserInfo(user: User) {
     let differentNames = false;
-    const mealsFromLocalStorage: Meal[] = JSON.parse(
-      localStorage.getItem('meals')
-    );
-    if (
-      !mealsFromLocalStorage ||
-      mealsFromLocalStorage.length !== user.meals.length
-    ) {
+    const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
+    if (!mealsFromLocalStorage || mealsFromLocalStorage.length !== user.meals.length) {
       localStorage.setItem('meals', JSON.stringify(user.meals));
     } else if (mealsFromLocalStorage) {
       mealsFromLocalStorage.forEach((m, i) => {
@@ -64,6 +62,7 @@ export class AuthService {
         localStorage.setItem('meals', JSON.stringify(user.meals));
       }
     }
+    localStorage.setItem('makro_lang', user.lang);
     this.user.next(user);
   }
 
@@ -147,9 +146,23 @@ export class AuthService {
 
     const url = `${this.baseUrl}/updateshowtargets`;
 
-    this.http
-      .post(url, { showTargets: showTargets }, { headers: headers })
-      .subscribe();
+    this.http.post(url, { showTargets: showTargets }, { headers: headers }).subscribe();
+  }
+
+  updateLanguage(lang: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    this.user.getValue().lang = lang;
+
+    const url = `${this.baseUrl}/updatelanguage`;
+
+    this.http.post(url, { lang: lang }, { headers: headers }).subscribe(res => {
+      if (res['success']) {
+        localStorage.setItem('makro_lang', lang);
+      }
+    });
   }
 
   changePassword(user) {
@@ -179,9 +192,7 @@ export class AuthService {
     });
     const url = `${this.baseUrl}/checkadmin`;
 
-    this.http
-      .post<boolean>(url, { headers: headers })
-      .subscribe(success => this.isAdmin.next(success), (error: Error) => {});
+    this.http.post<boolean>(url, { headers: headers }).subscribe(success => this.isAdmin.next(success), (error: Error) => {});
   }
 
   validateToken() {
