@@ -6,6 +6,7 @@ import { Article } from '../../../models/Article';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-article',
@@ -36,7 +37,8 @@ export class AddArticleComponent implements OnInit {
     private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -89,7 +91,7 @@ export class AddArticleComponent implements OnInit {
   }
 
   loadImageFailed() {
-    this.fileError = 'Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif.';
+    this.fileError = this.translator.instant('FILE_ERROR_MSG');
   }
 
   saveImage() {
@@ -143,7 +145,7 @@ export class AddArticleComponent implements OnInit {
           if (res['success']) {
             this.router.navigate(['/articles']);
             this.resetArticle();
-            this.flashMessage.show('Artikkeli julkaistu onnistuneesti.', {
+            this.flashMessage.show(this.translator.instant('ARTICLE_PUBLISHED'), {
               cssClass: 'alert-success',
               timeout: 2000
             });
@@ -162,7 +164,7 @@ export class AddArticleComponent implements OnInit {
           if (res['success']) {
             this.router.navigate(['/articles']);
             this.resetArticle();
-            this.flashMessage.show('Artikkeli muokattu onnistuneesti.', {
+            this.flashMessage.show(this.translator.instant('ARTICLE_EDITED'), {
               cssClass: 'alert-success',
               timeout: 2000
             });

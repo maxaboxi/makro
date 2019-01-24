@@ -10,6 +10,7 @@ import { VoteService } from '../../../services/vote.service';
 import { Vote } from '../../../models/Vote';
 import { AuthService } from '../../../services/auth.service';
 import { Comment } from '../../../models/Comment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-article',
@@ -58,7 +59,8 @@ export class ArticleComponent implements OnInit {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private voteService: VoteService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translator: TranslateService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -168,7 +170,7 @@ export class ArticleComponent implements OnInit {
             res => {
               if (res['success']) {
                 this.fetchComments();
-                this.flashMessage.show('Kommentti lisätty', {
+                this.flashMessage.show(this.translator.instant('COMMENT_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

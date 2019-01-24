@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private addedFoodsService: AddedFoodsService,
-    private translate: TranslateService
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -40,10 +40,10 @@ export class NavbarComponent implements OnInit {
   changeLanguage() {
     const lang = localStorage.getItem('makro_lang');
     if (lang === 'fi') {
-      this.translate.use('en');
+      this.translator.use('en');
       localStorage.setItem('makro_lang', 'en');
     } else {
-      this.translate.use('fi');
+      this.translator.use('fi');
       localStorage.setItem('makro_lang', 'fi');
     }
   }

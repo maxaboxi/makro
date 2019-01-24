@@ -20,6 +20,7 @@ import { Comment } from '../../models/Comment';
 import { VoteService } from '../../services/vote.service';
 import { Article } from '../../models/Article';
 import { ArticleService } from '../../services/article.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin',
@@ -82,7 +83,8 @@ export class AdminComponent implements OnInit {
     private sharedMealsService: SharedMealsService,
     private qaService: QaService,
     private voteService: VoteService,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -144,7 +146,7 @@ export class AdminComponent implements OnInit {
         if (result === 'save') {
           if (this.newUserPassword && this.newUserPasswordAgain) {
             if (this.newUserPassword !== this.newUserPasswordAgain) {
-              this.flashMessage.show('Salasanat eivät täsmänneet. Muutoksia ei tallennettu.', {
+              this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
                 cssClass: 'alert-danger',
                 timeout: 2000
               });
@@ -158,7 +160,7 @@ export class AdminComponent implements OnInit {
               this.adminService.updateUserPassword(user).subscribe(
                 res => {
                   if (res['success']) {
-                    this.flashMessage.show('Käyttäjän salasana vaihdettu', {
+                    this.flashMessage.show(this.translator.instant('USER_PASSWORD_CHANGED'), {
                       cssClass: 'alert-success',
                       timeout: 2000
                     });
@@ -176,7 +178,7 @@ export class AdminComponent implements OnInit {
             this.adminService.updateUserInformation(this.selectedUser).subscribe(
               res => {
                 if (res['success']) {
-                  this.flashMessage.show('Käyttäjän tiedot päivitetty', {
+                  this.flashMessage.show(this.translator.instant('USER_INFORMATION_UPDATED'), {
                     cssClass: 'alert-success',
                     timeout: 2000
                   });
@@ -208,7 +210,7 @@ export class AdminComponent implements OnInit {
           this.foodService.editFood(this.selectedFood).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Muutokset tallennettu', {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
@@ -240,7 +242,7 @@ export class AdminComponent implements OnInit {
           this.adminService.submitAnswer(this.selectedFeedback).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Muutokset tallennettu.', {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
@@ -285,7 +287,7 @@ export class AdminComponent implements OnInit {
     this.foodService.removeFoods(this.deletedFoods).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -313,7 +315,7 @@ export class AdminComponent implements OnInit {
     this.dayService.removeDays(this.deletedDays).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -341,7 +343,7 @@ export class AdminComponent implements OnInit {
     this.adminService.removeUsers(this.deletedUsers).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -369,7 +371,7 @@ export class AdminComponent implements OnInit {
     this.adminService.removeFeedbacks(this.deletedFeedbacks).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -398,7 +400,7 @@ export class AdminComponent implements OnInit {
     this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -425,7 +427,7 @@ export class AdminComponent implements OnInit {
     this.dayService.removeSharedDays(this.deletedDays).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -454,7 +456,7 @@ export class AdminComponent implements OnInit {
     this.qaService.removeQuestions(this.deletedQuestions).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -481,7 +483,7 @@ export class AdminComponent implements OnInit {
     this.qaService.removeAnswers(this.deletedAnswers).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -508,7 +510,7 @@ export class AdminComponent implements OnInit {
     this.qaService.removeComments(this.deletedComments).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -535,7 +537,7 @@ export class AdminComponent implements OnInit {
     this.voteService.removeVotes(this.deletedVotes).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -562,7 +564,7 @@ export class AdminComponent implements OnInit {
     this.articleService.deleteArticles(this.deletedArticles).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Muutokset tallennettu.', {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

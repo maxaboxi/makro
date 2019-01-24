@@ -130,7 +130,7 @@ export class UserInfoComponent implements OnInit {
       result => {
         if (result === 'save') {
           if (this.newUserPassword !== this.newUserPasswordAgain) {
-            this.flashMessage.show(this.translator.instant('PASSWORDS_DONT_MATCH'), {
+            this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
               cssClass: 'alert-danger',
               timeout: 2000
             });

@@ -8,6 +8,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { VoteService } from '../../../../services/vote.service';
 import { Article } from '../../../../models/Article';
 import { Vote } from '../../../../models/Vote';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-article-comment',
@@ -57,7 +58,8 @@ export class ArticleCommentComponent implements OnInit {
     private articleService: ArticleService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
-    private voteService: VoteService
+    private voteService: VoteService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -91,7 +93,7 @@ export class ArticleCommentComponent implements OnInit {
             res => {
               if (res['success']) {
                 this.commented.emit('commented');
-                this.flashMessage.show('Kommentti lisätty', {
+                this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

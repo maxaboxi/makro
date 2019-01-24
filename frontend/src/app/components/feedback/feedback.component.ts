@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/User';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-feedback',
@@ -24,7 +25,8 @@ export class FeedbackComponent implements OnInit {
     private feedbackService: FeedbackService,
     private modalService: NgbModal,
     private auth: AuthService,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class FeedbackComponent implements OnInit {
           this.feedbackService.submitFeedback(this.feedback).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Muutokset tallennettu.', {
+                this.flashMessage.show(this.translator.instant('FEEDBACK_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
