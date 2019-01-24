@@ -231,5 +231,10 @@
   "CREATED_BY": "Tekijä",
   "CREATED_AT": "Luotu",
   "UPDATED_AT": "Päivitetty",
-  "CLOSE": "Sulje"
+  "CLOSE": "Sulje",
+  "DELETE_ACCOUNT_CONFIRMATION": "Oletko varma, että haluat poistaa käyttäjätilisi? Tilin mukana poistetaan myös kaikki tallentamasi tieto paitsi lisäämäsi ruoat. Tilin poistoa ei voi perua.",
+  "ACCOUNT_DELETED": "Käyttäjätili poistettu.",
+  "PASSWORDS_DONT_MATCH": "Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.",
+  "PASSWORD_CHANGED": "Salasana vaihdettu",
+  "INFORMATION_UPDATED": "Tiedot päivitetty"
 }

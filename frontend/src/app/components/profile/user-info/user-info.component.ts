@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../models/User';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-info',
@@ -23,7 +24,8 @@ export class UserInfoComponent implements OnInit {
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class UserInfoComponent implements OnInit {
 
   addNewMeal() {
     this.user.meals.push({
-      name: 'Ateria ' + (this.user.meals.length + 1),
+      name: this.translator.instant('MEAL') + ' ' + (this.user.meals.length + 1),
       foods: []
     });
     this.changed = true;
@@ -65,7 +67,7 @@ export class UserInfoComponent implements OnInit {
   updateInfo() {
     this.user.meals.forEach((m, i) => {
       if (m.name.length === 0) {
-        m.name = 'Ateria ' + (i + 1);
+        m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
       }
     });
     const userInfo: User = {
@@ -128,7 +130,7 @@ export class UserInfoComponent implements OnInit {
       result => {
         if (result === 'save') {
           if (this.newUserPassword !== this.newUserPasswordAgain) {
-            this.flashMessage.show('Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.', {
+            this.flashMessage.show(this.translator.instant('PASSWORDS_DONT_MATCH'), {
               cssClass: 'alert-danger',
               timeout: 2000
             });
@@ -140,7 +142,7 @@ export class UserInfoComponent implements OnInit {
             this.auth.changePassword(user).subscribe(
               res => {
                 if (res['success']) {
-                  this.flashMessage.show('Salasana vaihdettu', {
+                  this.flashMessage.show(this.translator.instant('PASSWORD_CHANGED'), {
                     cssClass: 'alert-success',
                     timeout: 2000
                   });
@@ -177,14 +179,10 @@ export class UserInfoComponent implements OnInit {
   }
 
   deleteAccount() {
-    if (
-      confirm(
-        'Oletko varma, että haluat poistaa käyttäjätilisi? Tilin mukana poistetaan myös kaikki tallentamasi tieto paitsi lisäämäsi ruoat. Tilin poistoa ei voi perua.'
-      )
-    ) {
+    if (confirm(this.translator.instant('DELETE_ACCOUNT_CONFIRMATION'))) {
       this.auth.deleteAccount().subscribe(
         success => {
-          this.flashMessage.show('Tili poistettu.', {
+          this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
