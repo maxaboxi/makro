@@ -255,5 +255,6 @@
   "COMMENT_ADDED": "Comment added",
   "PASSWORD_REQUIRED": "Password is required",
   "INFORMATION_SAVED": "Information saved",
-  "GENERAL_ERROR_MSG": "Something went wrong. Try updating page and/or try again later"
+  "GENERAL_ERROR_MSG": "Something went wrong. Try updating page and/or try again later",
+  "TARGETS": "Target values"
 }

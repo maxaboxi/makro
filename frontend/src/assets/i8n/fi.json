@@ -255,5 +255,6 @@
   "COMMENT_ADDED": "Kommentti lisätty",
   "PASSWORD_REQUIRED": "Salasana vaaditaan",
   "INFORMATION_SAVED": "Tiedot tallennettu",
-  "GENERAL_ERROR_MSG": "Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan"
+  "GENERAL_ERROR_MSG": "Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan",
+  "TARGETS": "Tavoitearvot"
 }
