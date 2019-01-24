@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   isNavbarCollapsed = true;
   isLoggedIn: Boolean;
   isAdmin: Boolean;
+  lang: string;
 
   constructor(
     private auth: AuthService,
@@ -23,6 +24,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.lang = localStorage.getItem('makro_lang');
     this.auth.getUserInfo();
     this.auth.isLoggedIn.subscribe(res => {
       this.isLoggedIn = res;
@@ -38,13 +40,14 @@ export class NavbarComponent implements OnInit {
   }
 
   changeLanguage() {
-    const lang = localStorage.getItem('makro_lang');
-    if (lang === 'fi') {
+    if (this.lang === 'fi') {
       this.translator.use('en');
       this.auth.updateLanguage('en');
+      this.lang = 'en';
     } else {
       this.translator.use('fi');
       this.auth.updateLanguage('fi');
+      this.lang = 'fi';
     }
   }
 }

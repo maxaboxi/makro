@@ -16,3 +16,7 @@ a {
 li:hover {
   cursor: pointer;
 }
+
+img {
+  width: 1.7em;
+}

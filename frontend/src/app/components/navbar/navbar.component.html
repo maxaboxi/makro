@@ -31,14 +31,15 @@
       <li>
         <a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</a>
       </li>
-      <li>
-        <a class="nav-link" (click)="changeLanguage()"><i class="fas fa-flag"></i> {{ 'LANG' | translate }}</a>
-      </li>
       <li *ngIf="isAdmin">
         <a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+      <li>
+        <a *ngIf="lang === 'fi'" class="nav-link" (click)="changeLanguage()"><img src="../../assets/img/en.svg" alt="english"/></a>
+        <a *ngIf="lang === 'en'" class="nav-link" (click)="changeLanguage()"><img src="../../assets/img/fi.svg" alt="finnish"/></a>
+      </li>
       <li *ngIf="!isLoggedIn">
         <a class="nav-link" routerLink="/login"><i class="fas fa-sign-in-alt"></i> {{ 'LOGIN' | translate }}</a>
       </li>
