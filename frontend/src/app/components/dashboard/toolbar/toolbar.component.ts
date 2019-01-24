@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
 import { Meal } from '../../../models/Meal';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var jsPDF: any;
 
@@ -62,7 +63,8 @@ export class ToolbarComponent implements OnInit {
     private dayService: DayService,
     private flashMessage: FlashMessagesService,
     private addedFoodsService: AddedFoodsService,
-    private auth: AuthService
+    private auth: AuthService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -268,11 +270,11 @@ export class ToolbarComponent implements OnInit {
     const foodTables = mealElement.getElementsByTagName('table');
 
     const totals = doc.autoTableHtmlToJson(totalsTable);
-    totals.columns[0]['innerHTML'] = 'Yhteensä';
+    totals.columns[0]['innerHTML'] = this.translate.instant('TOTAL');
     if (totals.columns[7]) {
-      totals.columns[7]['innerHTML'] = 'Määrä';
+      totals.columns[7]['innerHTML'] = this.translate.instant('AMOUNT');
     } else {
-      totals.columns[5]['innerHTML'] = 'Määrä';
+      totals.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
     }
     doc.autoTable(totals.columns, totals.data, {
       startY: 30,
@@ -284,9 +286,9 @@ export class ToolbarComponent implements OnInit {
     Array.from(foodTables).forEach(t => {
       const res = doc.autoTableHtmlToJson(t);
       if (res.columns[5]) {
-        res.columns[5]['innerHTML'] = 'Määrä';
+        res.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
       } else {
-        res.columns[2]['innerHTML'] = 'Määrä';
+        res.columns[2]['innerHTML'] = this.translate.instant('AMOUNT');
       }
 
       const first = doc.autoTable.previous;
