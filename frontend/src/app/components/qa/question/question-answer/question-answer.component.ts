@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Comment } from '../../../../models/Comment';
 import { Vote } from '../../../../models/Vote';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-question-answer',
@@ -56,7 +57,8 @@ export class QuestionAnswerComponent implements OnInit {
     private qaService: QaService,
     private voteService: VoteService,
     private modalService: NgbModal,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
@@ -91,7 +93,7 @@ export class QuestionAnswerComponent implements OnInit {
             res => {
               if (res['success']) {
                 this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => (this.answer.comments = comments));
-                this.flashMessage.show('Kommentti lisätty', {
+                this.flashMessage.show(this.translator.instant('COMMENT_ADDED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

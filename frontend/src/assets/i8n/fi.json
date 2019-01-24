@@ -250,5 +250,7 @@
   "FILE_ERROR_MSG": "Väärä tiedostotyyppi. Sallitut tiedostotyypit ovat: jpg/jpeg, png, gif",
   "NO_FOODS_IN_MEALS_ERROR": "Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa",
   "DAY_SAVED": "Päivä tallennettu",
-  "MEAL_SHARED_SUCCESFULLY": "Ateria jaettu muille käyttäjille onnistuneesti"
+  "MEAL_SHARED_SUCCESFULLY": "Ateria jaettu muille käyttäjille onnistuneesti",
+  "QUESTION_ADDED": "Kysymys lisätty",
+  "COMMENT_ADDED": "Kommentti lisätty"
 }

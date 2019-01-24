@@ -5,6 +5,7 @@ import { QaService } from '../../services/qa.service';
 import { Question } from '../../models/Question';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-qa',
@@ -26,15 +27,14 @@ export class QaComponent implements OnInit {
     private auth: AuthService,
     private qaService: QaService,
     private modalService: NgbModal,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
-      this.qaService
-        .getAllQuestions()
-        .subscribe(questions => (this.questions = questions));
+      this.qaService.getAllQuestions().subscribe(questions => (this.questions = questions));
     });
   }
 
@@ -52,13 +52,11 @@ export class QaComponent implements OnInit {
           this.qaService.postNewQuestion(this.question).subscribe(
             res => {
               if (res['success']) {
-                this.flashMessage.show('Kysymys lisätty', {
+                this.flashMessage.show(this.translator.instant('QUESTION_ADDED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.qaService
-                  .getAllQuestions()
-                  .subscribe(questions => (this.questions = questions));
+                this.qaService.getAllQuestions().subscribe(questions => (this.questions = questions));
                 this.resetForm();
               }
             },
@@ -81,9 +79,7 @@ export class QaComponent implements OnInit {
 
   addTagToQuestionTags(char) {
     if (this.questionTag.length >= 3 && char === ',') {
-      this.question.tags.push(
-        this.questionTag.slice(0, this.questionTag.length - 1)
-      );
+      this.question.tags.push(this.questionTag.slice(0, this.questionTag.length - 1));
       this.questionTag = '';
     }
   }
