@@ -236,5 +236,7 @@
   "ACCOUNT_DELETED": "Käyttäjätili poistettu.",
   "PASSWORDS_DONT_MATCH": "Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.",
   "PASSWORD_CHANGED": "Salasana vaihdettu",
-  "INFORMATION_UPDATED": "Tiedot päivitetty"
+  "INFORMATION_UPDATED": "Tiedot päivitetty",
+  "USERNAME_PASSWORD_REQUIRED": "Sekä käyttäjätunnus että salasana on vaadittuja tietoja",
+  "LOGGED_IN": "Olet nyt kirjautunut sisään"
 }

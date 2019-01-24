@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/User';
 import { AddedFoodsService } from '../../services/added-foods.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -25,20 +26,18 @@ export class LoginComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private auth: AuthService,
     private addedFoods: AddedFoodsService,
-    private router: Router
+    private router: Router,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {}
 
   submit({ value, valid }: { value: User; valid: boolean }) {
     if (!valid) {
-      this.flashMessage.show(
-        'Sekä käyttäjätunnus että salasana on vaadittuja tietoja.',
-        {
-          cssClass: 'alert-danger',
-          timeout: 2500
-        }
-      );
+      this.flashMessage.show(this.translator.instant('USERNAME_PASSWORD_REQUIRED'), {
+        cssClass: 'alert-danger',
+        timeout: 2500
+      });
       return;
     }
 
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit {
 
     this.auth.login(data).subscribe(
       success => {
-        this.flashMessage.show('Olet nyt kirjautunut sisään', {
+        this.flashMessage.show(this.translator.instant('LOGGED_IN'), {
           cssClass: 'alert-success',
           timeout: 2000
         });

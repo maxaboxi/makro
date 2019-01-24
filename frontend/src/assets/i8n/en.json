@@ -236,5 +236,7 @@
   "ACCOUNT_DELETED": "Account deleted",
   "PASSWORDS_DONT_MATCH": "Passwords did not match. Password was not changed.",
   "PASSWORD_CHANGED": "Password changed",
-  "INFORMATION_UPDATED": "Information updated"
+  "INFORMATION_UPDATED": "Information updated",
+  "USERNAME_PASSWORD_REQUIRED": "Both username and password are required to login",
+  "LOGGED_IN": "You are now logged in"
 }
