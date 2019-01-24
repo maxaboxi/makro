@@ -42,11 +42,15 @@ export class NavbarComponent implements OnInit {
   changeLanguage() {
     if (this.lang === 'fi') {
       this.translator.use('en');
-      this.auth.updateLanguage('en');
+      if (this.isLoggedIn) {
+        this.auth.updateLanguage('en');
+      }
       this.lang = 'en';
     } else {
       this.translator.use('fi');
-      this.auth.updateLanguage('fi');
+      if (this.isLoggedIn) {
+        this.auth.updateLanguage('fi');
+      }
       this.lang = 'fi';
     }
   }
