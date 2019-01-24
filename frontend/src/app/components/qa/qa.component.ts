@@ -22,6 +22,7 @@ export class QaComponent implements OnInit {
     tags: []
   };
   questionTag = '';
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -34,7 +35,10 @@ export class QaComponent implements OnInit {
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
-      this.qaService.getAllQuestions().subscribe(questions => (this.questions = questions));
+      this.qaService.getAllQuestions().subscribe(questions => {
+        this.questions = questions;
+        this.loading = false;
+      });
     });
   }
 

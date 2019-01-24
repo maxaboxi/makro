@@ -23,6 +23,7 @@ export class QuestionComponent implements OnInit {
   answer: Answer;
   answers: Answer[];
   queryParams = {};
+  loading = true;
 
   constructor(
     private auth: AuthService,
@@ -45,7 +46,10 @@ export class QuestionComponent implements OnInit {
       this.qaService.getQuestionWithId(this.queryParams['id']).subscribe(q => {
         this.question = q;
       });
-      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(a => (this.answers = a));
+      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(a => {
+        this.answers = a;
+        this.loading = false;
+      });
     } else {
       this.router.navigate(['/qa']);
     }

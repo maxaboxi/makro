@@ -1,4 +1,5 @@
-<div class="card mt-3">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="card mt-3">
   <div class="card-body">
     <h5 class="card-title text-muted answer-button" (click)="openQuestion(question._id)"> {{ question.question }} </h5>
     <ng-container *ngIf="answer">

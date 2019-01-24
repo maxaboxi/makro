@@ -23,6 +23,7 @@ export class AnswerCommentComponent implements OnInit {
   pointsTotal = 0;
   userVote;
   votesFetched = false;
+  loading = true;
 
   @Input()
   set comment(comment) {
@@ -70,6 +71,7 @@ export class AnswerCommentComponent implements OnInit {
         }
       });
       this.votesFetched = true;
+      this.loading = false;
     });
   }
 

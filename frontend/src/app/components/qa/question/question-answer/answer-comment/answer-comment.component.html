@@ -1,4 +1,5 @@
-<div class="padding">
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="padding">
   <p class="lead">{{ comment.username }}</p> <p class="text-muted answer-text"> {{ comment.createdAt | date: 'dd.MM.yyyy klo HH:mm' }} </p>
   <p class="text-muted answer-text" *ngIf="comment.replyTo !== comment.postId"> {{ 'REPLY_TO' | translate }}: {{ comment.replyTo }} </p>
   <p class="lead" [innerHTML]="comment.comment"></p>
