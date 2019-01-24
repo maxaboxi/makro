@@ -133,7 +133,7 @@ export class ToolbarComponent implements OnInit {
       foodsAdded += m.foods.length;
     });
     if (foodsAdded === 0) {
-      this.flashMessage.show('Vähintään yhden aterian pitää sisältää lisättyjä ruokia, jotta päivän voi tallentaa.', {
+      this.flashMessage.show(this.translate.instant('NO_FOODS_IN_MEALS_ERROR'), {
         cssClass: 'alert-danger',
         timeout: 2000
       });
@@ -150,7 +150,7 @@ export class ToolbarComponent implements OnInit {
           this.dayService.saveNewDay(newDay).subscribe(
             success => {
               if (success) {
-                this.flashMessage.show('Päivä tallennettu.', {
+                this.flashMessage.show(this.translate.instant('DAY_SAVED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
@@ -209,7 +209,7 @@ export class ToolbarComponent implements OnInit {
     this.auth.updateUserInfo(this.user).subscribe(
       res => {
         if (res['success']) {
-          this.flashMessage.show('Tiedot tallennettu.', {
+          this.flashMessage.show(this.translate.instant('INFORMATION_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
@@ -249,7 +249,7 @@ export class ToolbarComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.flashMessage.show('Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan.', {
+        this.flashMessage.show(this.translate.instant('GENERAL_ERROR_MSG'), {
           cssClass: 'alert-danger',
           timeout: 3000
         });

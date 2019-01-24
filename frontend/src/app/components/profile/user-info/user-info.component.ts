@@ -94,7 +94,7 @@ export class UserInfoComponent implements OnInit {
           this.auth.setUserInfo(res['user']);
           this.user = this.auth.getUserInfo();
           this.calculateBaseExpenditure();
-          this.flashMessage.show('Tiedot päivitetty', {
+          this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });

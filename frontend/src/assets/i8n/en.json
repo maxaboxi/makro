@@ -253,5 +253,7 @@
   "MEAL_SHARED_SUCCESFULLY": "Meal has been shared to other users succesfully",
   "QUESTION_ADDED": "Question added",
   "COMMENT_ADDED": "Comment added",
-  "PASSWORD_REQUIRED": "Password is required"
+  "PASSWORD_REQUIRED": "Password is required",
+  "INFORMATION_SAVED": "Information saved",
+  "GENERAL_ERROR_MSG": "Something went wrong. Try updating page and/or try again later"
 }
