@@ -72,16 +72,16 @@ router.use((req, res, next) => {
   if ((req.path === '/getallarticles' && req.method === 'GET') || (req.path.indexOf('/articleimage/') > -1 && req.method === 'GET')) {
     next();
   } else {
-    let token;
     if (req.headers['authorization']) {
-      token = jwt.decode(req.headers['authorization']);
-      if (token) {
-        next();
-      } else {
-        res.status(401);
-        res.json({ success: false, msg: 'Unauthorized' });
-        return;
-      }
+      const token = req.headers['authorization'];
+      jwt.verify(token, config['jwt'].secret, (err, decoded) => {
+        if (err) {
+          res.status(200);
+          res.json({ success: false, message: 'Unauthorized' });
+        } else {
+          next();
+        }
+      });
     } else {
       res.status(401);
       res.json({ success: false, msg: 'Unauthorized' });

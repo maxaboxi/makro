@@ -4,6 +4,7 @@ const Comment = require('../models/comment');
 const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const config = require('../config/config.json');
 
 const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
@@ -21,12 +22,16 @@ router.use((req, res, next) => {
   if (req.path.indexOf('/getallcomments/') > -1 && req.method === 'GET') {
     next();
   } else {
-    let token;
     if (req.headers['authorization']) {
-      token = jwt.decode(req.headers['authorization']);
-      if (token) {
-        next();
-      }
+      const token = req.headers['authorization'];
+      jwt.verify(token, config['jwt'].secret, (err, decoded) => {
+        if (err) {
+          res.status(200);
+          res.json({ success: false, message: 'Unauthorized' });
+        } else {
+          next();
+        }
+      });
     } else {
       res.status(401);
       res.json({ success: false, msg: 'Unauthorized' });
