@@ -110,19 +110,24 @@ export class AuthService {
     if (!this.user.getValue()) {
       this.setDefaultUserInfo();
       if (localStorage.getItem('token')) {
-        this.validateToken().subscribe(res => {
-          if (res['success']) {
-            this.fetchUserInfo().subscribe(result => {
-              if (result['success']) {
-                this.user.next(result['user']);
-                this.isLoggedIn.next(true);
-              }
-            });
-          } else {
-            localStorage.removeItem('token');
-            this.router.navigate(['/login']);
+        this.validateToken().subscribe(
+          res => {
+            if (res['success']) {
+              this.fetchUserInfo().subscribe(result => {
+                if (result['success']) {
+                  this.user.next(result['user']);
+                  this.isLoggedIn.next(true);
+                }
+              });
+            } else {
+              localStorage.removeItem('token');
+              this.router.navigate(['/login']);
+            }
+          },
+          (error: Error) => {
+            this.isLoggedIn.next(true);
           }
-        });
+        );
       }
     }
     return this.user.getValue();
