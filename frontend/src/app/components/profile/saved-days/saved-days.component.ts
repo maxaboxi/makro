@@ -36,10 +36,19 @@ export class SavedDaysComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
-          this.savedDays = days;
-          this.loading = false;
-        });
+        this.dayService.getAllSavedDays(this.user.username).subscribe(
+          days => {
+            this.savedDays = days;
+            this.loading = false;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

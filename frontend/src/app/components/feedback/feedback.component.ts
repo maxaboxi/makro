@@ -35,10 +35,19 @@ export class FeedbackComponent implements OnInit {
   }
 
   getAllFeedbacks() {
-    this.feedbackService.getAllFeedbacks().subscribe(feedbacks => {
-      this.feedbacks = feedbacks;
-      this.loading = false;
-    });
+    this.feedbackService.getAllFeedbacks().subscribe(
+      feedbacks => {
+        this.feedbacks = feedbacks;
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   resetForm() {

@@ -50,6 +50,8 @@ import { AddArticleComponent } from './components/articles/add-article/add-artic
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 import { ArticleCommentComponent } from './components/articles/article/article-comment/article-comment.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -184,7 +186,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         'undo redo | styleselect | alignleft aligncenter alignright alignjustify outdent indent',
         'bold italic blockquote | emoticons'
       ]
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {

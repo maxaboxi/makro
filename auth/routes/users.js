@@ -153,7 +153,7 @@ router.post('/login', (req, res) => {
       if (isMatch) {
         User.updateLastLogin(username);
         const token = jwt.sign({ user: user.username, id: user._id }, config['jwt'].secret, {
-          expiresIn: 86400 // 24 hours
+          expiresIn: 604800 // 7 days
         });
         res.status(200);
         res.json({

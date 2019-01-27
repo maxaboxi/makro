@@ -28,10 +28,19 @@ export class SharedDaysComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user._id) {
-        this.dayService.getSharedDaysByUser(this.user._id).subscribe(days => {
-          this.sharedDays = JSON.parse(JSON.stringify(days));
-          this.loading = false;
-        });
+        this.dayService.getSharedDaysByUser(this.user._id).subscribe(
+          days => {
+            this.sharedDays = JSON.parse(JSON.stringify(days));
+            this.loading = false;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

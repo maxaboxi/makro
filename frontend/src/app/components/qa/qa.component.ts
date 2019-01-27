@@ -35,10 +35,19 @@ export class QaComponent implements OnInit {
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
-      this.qaService.getAllQuestions().subscribe(questions => {
-        this.questions = questions;
-        this.loading = false;
-      });
+      this.qaService.getAllQuestions().subscribe(
+        questions => {
+          this.questions = questions;
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
     });
   }
 

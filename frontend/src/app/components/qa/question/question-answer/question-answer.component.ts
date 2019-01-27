@@ -64,17 +64,35 @@ export class QuestionAnswerComponent implements OnInit {
 
   ngOnInit() {
     if (this.answer) {
-      this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => (this.answer.comments = comments));
-      this.voteService.getAllVotesWithPostId(this.answer._id).subscribe(votes => {
-        votes.forEach(v => {
-          this.pointsTotal += v.vote;
-          if (v.userId === this.user._id) {
-            v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-          }
-        });
-        this.votesFetched = true;
-        this.loading = false;
-      });
+      this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(
+        comments => (this.answer.comments = comments),
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
+      this.voteService.getAllVotesWithPostId(this.answer._id).subscribe(
+        votes => {
+          votes.forEach(v => {
+            this.pointsTotal += v.vote;
+            if (v.userId === this.user._id) {
+              v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
+            }
+          });
+          this.votesFetched = true;
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
     }
   }
 

@@ -39,13 +39,31 @@ export class UserSharedMealsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
-          this.sharedMeals = meals;
-          this.foodService.getAllFoods().subscribe(foods => {
-            this.allFoods = foods;
+        this.sharedMealsService.getMealsByUser(this.user.username).subscribe(
+          meals => {
+            this.sharedMeals = meals;
+            this.foodService.getAllFoods().subscribe(
+              foods => {
+                this.allFoods = foods;
+                this.loading = false;
+              },
+              (error: Error) => {
+                this.loading = false;
+                this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            );
+          },
+          (error: Error) => {
             this.loading = false;
-          });
-        });
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

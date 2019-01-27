@@ -32,10 +32,19 @@ export class AddedFoodsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
-          this.userAddedFoods = foods;
-          this.loading = false;
-        });
+        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(
+          foods => {
+            this.userAddedFoods = foods;
+            this.loading = false;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Vote } from '../../../../../models/Vote';
 import { Answer } from 'src/app/models/Answer';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-answer-comment',
@@ -59,20 +60,30 @@ export class AnswerCommentComponent implements OnInit {
     private qaService: QaService,
     private voteService: VoteService,
     private modalService: NgbModal,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {}
 
   ngOnInit() {
-    this.voteService.getAllVotesWithPostId(this.comment._id).subscribe(votes => {
-      votes.forEach(v => {
-        this.pointsTotal += v.vote;
-        if (v.userId === this.user._id) {
-          v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-        }
-      });
-      this.votesFetched = true;
-      this.loading = false;
-    });
+    this.voteService.getAllVotesWithPostId(this.comment._id).subscribe(
+      votes => {
+        votes.forEach(v => {
+          this.pointsTotal += v.vote;
+          if (v.userId === this.user._id) {
+            v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
+          }
+        });
+        this.votesFetched = true;
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   openCommentModal(content) {

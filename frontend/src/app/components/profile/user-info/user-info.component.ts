@@ -29,10 +29,19 @@ export class UserInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.fetchUserInfo().subscribe(res => {
-      this.user = JSON.parse(JSON.stringify(res['user']));
-      this.calculateBaseExpenditure();
-    });
+    this.auth.fetchUserInfo().subscribe(
+      res => {
+        this.user = JSON.parse(JSON.stringify(res['user']));
+        this.calculateBaseExpenditure();
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   calculateBaseExpenditure() {

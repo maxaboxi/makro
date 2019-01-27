@@ -29,10 +29,19 @@ export class UserVotesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.voteService.getAllUserVotesWithId(this.user._id).subscribe(votes => {
-          this.votes = votes;
-          this.loading = false;
-        });
+        this.voteService.getAllUserVotesWithId(this.user._id).subscribe(
+          votes => {
+            this.votes = votes;
+            this.loading = false;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { ArticleService } from '../../services/article.service';
 import { User } from '../../models/User';
 import { Article } from '../../models/Article';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-articles',
@@ -16,7 +18,12 @@ export class ArticlesComponent implements OnInit {
   searchTerm = '';
   loading = true;
 
-  constructor(private auth: AuthService, private articleService: ArticleService) {}
+  constructor(
+    private auth: AuthService,
+    private articleService: ArticleService,
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
+  ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
@@ -24,10 +31,19 @@ export class ArticlesComponent implements OnInit {
   }
 
   getAllArticles() {
-    this.articleService.getAllArticles().subscribe(articles => {
-      this.articles = articles;
-      this.loading = false;
-    });
+    this.articleService.getAllArticles().subscribe(
+      articles => {
+        this.articles = articles;
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   searchArticles() {

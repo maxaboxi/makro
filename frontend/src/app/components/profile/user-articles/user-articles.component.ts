@@ -31,10 +31,19 @@ export class UserArticlesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.articleService.getArticlesByUser(user.username).subscribe(articles => {
-          this.articles = articles;
-          this.loading = false;
-        });
+        this.articleService.getArticlesByUser(user.username).subscribe(
+          articles => {
+            this.articles = articles;
+            this.loading = false;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        );
       }
     });
   }

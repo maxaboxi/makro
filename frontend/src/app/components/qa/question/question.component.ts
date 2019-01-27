@@ -9,6 +9,7 @@ import { Answer } from '../../../models/Answer';
 import { Comment } from '../../../models/Comment';
 import { Vote } from '../../../models/Vote';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-question',
@@ -31,7 +32,8 @@ export class QuestionComponent implements OnInit {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private translator: TranslateService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -43,13 +45,31 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
     if (Object.keys(this.queryParams).length > 0) {
-      this.qaService.getQuestionWithId(this.queryParams['id']).subscribe(q => {
-        this.question = q;
-      });
-      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(a => {
-        this.answers = a;
-        this.loading = false;
-      });
+      this.qaService.getQuestionWithId(this.queryParams['id']).subscribe(
+        q => {
+          this.question = q;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
+      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(
+        a => {
+          this.answers = a;
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
     } else {
       this.router.navigate(['/qa']);
     }

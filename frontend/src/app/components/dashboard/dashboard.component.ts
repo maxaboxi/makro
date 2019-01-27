@@ -7,6 +7,8 @@ import { User } from '../../models/User';
 import { AddedFoodsService } from '../../services/added-foods.service';
 import { ActivatedRoute } from '@angular/router';
 import { DayService } from '../../services/day.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +29,9 @@ export class DashboardComponent implements OnInit {
     private dayService: DayService,
     private auth: AuthService,
     private addedFoodService: AddedFoodsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private flashMessage: FlashMessagesService,
+    private translator: TranslateService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -63,14 +67,32 @@ export class DashboardComponent implements OnInit {
   fetchFoods() {
     this.loading = true;
     if (this.isLoggedIn) {
-      this.foodService.getFoodsByUserAndAdmin(this.user.username).subscribe(foods => {
-        this.foods = foods;
-        this.auth.checkAdmin();
-      });
+      this.foodService.getFoodsByUserAndAdmin(this.user.username).subscribe(
+        foods => {
+          this.foods = foods;
+          this.auth.checkAdmin();
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
     }
-    this.foodService.getAllFoods().subscribe(foods => {
-      this.allFoods = foods;
-      this.loading = false;
-    });
+    this.foodService.getAllFoods().subscribe(
+      foods => {
+        this.allFoods = foods;
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 }
