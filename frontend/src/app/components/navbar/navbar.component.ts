@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: Boolean;
   isAdmin: Boolean;
   lang: string;
-  online = true;
+  online;
 
   constructor(
     private auth: AuthService,

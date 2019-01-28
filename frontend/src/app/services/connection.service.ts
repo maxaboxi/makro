@@ -1,13 +1,15 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { Observable, fromEvent, merge, empty } from 'rxjs';
+import { Observable, fromEvent, merge, empty, BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { mapTo, defaultIfEmpty } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConnectionService {
   private connectionMonitor: Observable<boolean>;
+  private isLoggedin = new BehaviorSubject<boolean>(true);
 
   constructor(@Inject(PLATFORM_ID) platform) {
     if (isPlatformBrowser(platform)) {
@@ -17,9 +19,10 @@ export class ConnectionService {
     } else {
       this.connectionMonitor = empty();
     }
+    this.connectionMonitor.subscribe(res => this.isLoggedin.next(res));
   }
 
   monitor(): Observable<boolean> {
-    return this.connectionMonitor;
+    return this.isLoggedin;
   }
 }

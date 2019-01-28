@@ -7,7 +7,7 @@ import { ConnectionService } from '../../services/connection.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  online = true;
+  online;
   constructor(private connectionService: ConnectionService) {}
 
   ngOnInit() {

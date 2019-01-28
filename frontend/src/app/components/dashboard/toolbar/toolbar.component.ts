@@ -42,7 +42,7 @@ export class ToolbarComponent implements OnInit {
     username: ''
   };
   shareLink = '';
-  online = true;
+  online;
 
   @Input()
   set user(user) {

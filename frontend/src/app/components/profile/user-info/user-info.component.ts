@@ -20,7 +20,7 @@ export class UserInfoComponent implements OnInit {
   newUserPassword;
   newUserPasswordAgain;
   loading = true;
-  online = true;
+  online;
 
   constructor(
     private auth: AuthService,

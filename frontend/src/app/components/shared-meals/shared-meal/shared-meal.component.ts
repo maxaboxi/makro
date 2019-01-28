@@ -7,6 +7,7 @@ import { AddedFoodsService } from '../../../services/added-foods.service';
 import { Router } from '@angular/router';
 import { Vote } from '../../../models/Vote';
 import { VoteService } from '../../../services/vote.service';
+import { ConnectionService } from '../../../services/connection.service';
 
 @Component({
   selector: 'app-shared-meal',
@@ -28,6 +29,7 @@ export class SharedMealComponent implements OnInit {
   pointsTotal = 0;
   votesFetched = false;
   loading = true;
+  online;
 
   @Input()
   set meal(meal) {
@@ -51,10 +53,12 @@ export class SharedMealComponent implements OnInit {
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
     private voteService: VoteService,
-    private router: Router
+    private router: Router,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     if (this.user && this.user._id) {
       this.fetchVotes();
     } else {

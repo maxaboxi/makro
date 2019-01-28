@@ -21,7 +21,7 @@ export class FeedbackComponent implements OnInit {
     username: 'Nimetön'
   };
   loading = true;
-  online = true;
+  online;
 
   constructor(
     private feedbackService: FeedbackService,

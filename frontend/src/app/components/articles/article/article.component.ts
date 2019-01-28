@@ -11,6 +11,7 @@ import { Vote } from '../../../models/Vote';
 import { AuthService } from '../../../services/auth.service';
 import { Comment } from '../../../models/Comment';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../../services/connection.service';
 
 @Component({
   selector: 'app-article',
@@ -30,6 +31,7 @@ export class ArticleComponent implements OnInit {
   commentText = '';
   comments;
   loading = true;
+  online;
 
   @Input()
   set user(user) {
@@ -60,7 +62,8 @@ export class ArticleComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private voteService: VoteService,
     private route: ActivatedRoute,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -70,6 +73,7 @@ export class ArticleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     if (Object.keys(this.queryParams).length > 0) {
       this.singleArticle = true;
       this.auth.user.subscribe(user => {
