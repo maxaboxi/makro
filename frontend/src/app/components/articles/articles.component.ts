@@ -5,6 +5,7 @@ import { User } from '../../models/User';
 import { Article } from '../../models/Article';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-articles',
@@ -17,15 +18,18 @@ export class ArticlesComponent implements OnInit {
   results: Article[] = [];
   searchTerm = '';
   loading = true;
+  online;
 
   constructor(
     private auth: AuthService,
     private articleService: ArticleService,
     private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     this.auth.user.subscribe(user => (this.user = user));
     this.getAllArticles();
   }

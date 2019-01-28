@@ -1,4 +1,4 @@
-<div class="row justify-content-center mt-2">
+<div *ngIf="online" class="row justify-content-center mt-2">
   <a routerLink="/profile"> <i class="far fa-user"></i> {{ 'USER_INFORMATION' | translate }}</a>
   <a routerLink="/profile/days" class="ml-4"> <i class="far fa-calendar-alt"></i> {{ 'DAYS' | translate }}</a>
   <a routerLink="/profile/meals" class="ml-4"> <i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</a>

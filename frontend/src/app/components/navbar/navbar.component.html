@@ -19,7 +19,7 @@
       <li *ngIf="isLoggedIn">
         <a class="nav-link" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</a>
       </li>
-      <li *ngIf="isLoggedIn">
+      <li *ngIf="isLoggedIn && online">
         <a class="nav-link" routerLink="/qa"><i class="fas fa-question"></i> Q&A</a>
       </li>
       <li *ngIf="isLoggedIn">

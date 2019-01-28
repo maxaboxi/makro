@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-profile',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  constructor() {}
+  online = true;
+  constructor(private connectionService: ConnectionService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
+  }
 }

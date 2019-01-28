@@ -257,5 +257,6 @@
   "INFORMATION_SAVED": "Tiedot tallennettu",
   "GENERAL_ERROR_MSG": "Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan",
   "TARGETS": "Tavoitearvot",
-  "NETWORK_LOADING_ERROR": "Tietojen haku epäonnistui. Ole hyvä ja yritä myöhemmin uudelleen."
+  "NETWORK_LOADING_ERROR": "Tietojen haku epäonnistui. Ole hyvä ja yritä myöhemmin uudelleen.",
+  "NO_CONNECTION": "Ei internetyhteyttä."
 }

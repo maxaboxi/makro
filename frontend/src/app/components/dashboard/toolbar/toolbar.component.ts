@@ -11,6 +11,7 @@ import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
 import { Meal } from '../../../models/Meal';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../../services/connection.service';
 
 declare var jsPDF: any;
 
@@ -41,6 +42,7 @@ export class ToolbarComponent implements OnInit {
     username: ''
   };
   shareLink = '';
+  online = true;
 
   @Input()
   set user(user) {
@@ -64,10 +66,12 @@ export class ToolbarComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private addedFoodsService: AddedFoodsService,
     private auth: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     this.addedFoodsService._showTargets.subscribe(show => {
       this.showTargets = show;
       if (!this.user) {

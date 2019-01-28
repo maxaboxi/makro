@@ -5,6 +5,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../../services/connection.service';
 
 @Component({
   selector: 'app-user-info',
@@ -19,16 +20,19 @@ export class UserInfoComponent implements OnInit {
   newUserPassword;
   newUserPasswordAgain;
   loading = true;
+  online = true;
 
   constructor(
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     this.auth.fetchUserInfo().subscribe(
       res => {
         this.user = JSON.parse(JSON.stringify(res['user']));

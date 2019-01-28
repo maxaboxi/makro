@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { AddedFoodsService } from '../../services/added-foods.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,15 +16,18 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: Boolean;
   isAdmin: Boolean;
   lang: string;
+  online = true;
 
   constructor(
     private auth: AuthService,
     private router: Router,
     private addedFoodsService: AddedFoodsService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     this.lang = localStorage.getItem('makro_lang');
     this.auth.getUserInfo();
     this.auth.isLoggedIn.subscribe(res => {

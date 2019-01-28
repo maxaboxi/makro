@@ -257,5 +257,6 @@
   "INFORMATION_SAVED": "Information saved",
   "GENERAL_ERROR_MSG": "Something went wrong. Try updating page and/or try again later",
   "TARGETS": "Target values",
-  "NETWORK_LOADING_ERROR": "Error fetching data. Please try again later."
+  "NETWORK_LOADING_ERROR": "Error fetching data. Please try again later.",
+  "NO_CONNECTION": "No internet connection"
 }

@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/User';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../services/connection.service';
 
 @Component({
   selector: 'app-feedback',
@@ -20,16 +21,19 @@ export class FeedbackComponent implements OnInit {
     username: 'Nimetön'
   };
   loading = true;
+  online = true;
 
   constructor(
     private feedbackService: FeedbackService,
     private modalService: NgbModal,
     private auth: AuthService,
     private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
     this.getAllFeedbacks();
     this.auth.user.subscribe(user => (this.user = user));
   }

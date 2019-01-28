@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="online">
   <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}</span>
   <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</span>
   <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}</span>
@@ -6,6 +6,16 @@
     ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
+  <div class="ml-auto">
+    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
+      ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
+    >
+    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>
+    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
+  </div>
+</div>
+<div class="row" *ngIf="!online">
+  <span>{{ 'NO_CONNECTION' | translate }}</span>
   <div class="ml-auto">
     <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
