@@ -16,8 +16,9 @@
 </div>
 <div class="row" *ngIf="!online">
   <span>{{ 'NO_CONNECTION' | translate }}</span>
+  <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
   <div class="ml-auto">
-    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
+    <span *ngIf="showTargets && online" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
     >
     <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>

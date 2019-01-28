@@ -21,8 +21,6 @@ export class TargetsComponent implements OnInit {
     this.addedFoodsService._totals.subscribe(totals => {
       this.totals = totals;
     });
-    this.addedFoodsService._showTargets.subscribe(
-      show => (this.showTargets = show)
-    );
+    this.addedFoodsService._showTargets.subscribe(show => (this.showTargets = show));
   }
 }
