@@ -4,10 +4,11 @@
     {
       "name": "app",
       "installMode": "prefetch",
+      "updateMode": "prefetch",
       "resources": {
         "files": ["/favicon.ico", "/index.html", "/*.css", "/*.js", "/**/*.json"]
       },
-      "urls": ["https://fonts.googleapis.com/css?family=Roboto"]
+      "urls": ["https://fonts.googleapis.com/css?family=Roboto", "https://fonts.gstatic.com/**"]
     },
     {
       "name": "assets",
