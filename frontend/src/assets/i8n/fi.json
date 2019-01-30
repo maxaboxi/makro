@@ -264,5 +264,8 @@
   "FOUND_DUPLICATE_FOODS": "Löydetyt ruoat",
   "FOODS_TO_BE_SENT_TO_BE_APPROVED": "Muokatut ja/tai poistetut ruoat, jotka lähetetään hyväksyttäväksi",
   "NO_DELETED_OR_EDITED_FOODS": "Ei muokattuja tai poistettuja ruokia",
-  "SEND": "Lähetä"
+  "SEND": "Lähetä",
+  "ALL_FOODS": "Kaikki ruoat",
+  "EDIT_OR_DELETE_FOODS": "Muokkaa tai poista ruokia",
+  "FOODS_SENT_FOR_APPROVAL": "Ruoat lähetetty hyväksyttäväksi onnistuneesti"
 }

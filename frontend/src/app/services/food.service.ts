@@ -84,4 +84,14 @@ export class FoodService {
 
     return this.http.get(url, { headers: headers });
   }
+
+  sentForApproval(food: Food) {
+    const url = `${this.baseUrl}/sentforapproval`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, food, { headers: headers });
+  }
 }

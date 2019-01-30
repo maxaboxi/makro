@@ -3,6 +3,7 @@ import { FoodService } from '../../services/food.service';
 import { Food } from '../../models/Food';
 import { TranslateService } from '@ngx-translate/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dev',
@@ -17,10 +18,25 @@ export class DevComponent implements OnInit {
   editedAndDeletedFoods: Food[] = [];
   editedFoods: Food[] = [];
   deletedFoods: Food[] = [];
+  editedAndDeletedDuplicateFoods: Food[] = [];
+  editedDuplicateFoods: Food[] = [];
+  deletedDuplicateFoods: Food[] = [];
+  results = [];
+  searchTerm = '';
+  selectedFood: Food;
 
-  constructor(private foodService: FoodService, private translator: TranslateService, private flashMessage: FlashMessagesService) {}
+  constructor(
+    private foodService: FoodService,
+    private translator: TranslateService,
+    private flashMessage: FlashMessagesService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit() {
+    this.getAllFoods();
+  }
+
+  getAllFoods() {
     this.foodService.getAllFoods().subscribe(
       foods => {
         this.allFoods = foods;
@@ -54,5 +70,72 @@ export class DevComponent implements OnInit {
       }
     });
     this.findingDuplicates = false;
+  }
+
+  searchFoods() {
+    this.results = [];
+    const secondaryResults = [];
+    const st = this.searchTerm.toLowerCase();
+    this.allFoods.forEach(f => {
+      const fLc = f.name.toLowerCase();
+      if (fLc === st) {
+        this.results.push(f);
+      } else if (st === fLc.slice(0, st.length)) {
+        this.results.push(f);
+      } else {
+        const containsWhitespaces = fLc.indexOf(' ') > 1;
+        const containsBrackets = fLc.indexOf('(') > 1;
+        if (containsWhitespaces && !containsBrackets) {
+          for (let i = 0; i < fLc.length; i++) {
+            if (st.length > 1 && fLc[i] === ' ' && fLc.slice(i + 1, i + 1 + st.length) === st) {
+              secondaryResults.push(f);
+            }
+          }
+        }
+        if (containsWhitespaces && containsBrackets) {
+          for (let i = 0; i < fLc.length; i++) {
+            if (st.length > 1 && fLc[i] === '(' && fLc.slice(i + 1, i + 1 + st.length) === st) {
+              secondaryResults.push(f);
+            }
+          }
+        }
+      }
+    });
+
+    if (secondaryResults.length > 0) {
+      this.results = this.results.concat(secondaryResults);
+    }
+  }
+
+  openFoodModal(content, food) {
+    this.selectedFood = food;
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.foodService.sentForApproval(this.selectedFood).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show(this.translator.instant('FOODS_SENT_FOR_APPROVAL'), {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.getAllFoods();
+                this.selectedFood = null;
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        }
+        this.selectedFood = null;
+      },
+      dismissed => {
+        this.selectedFood = null;
+      }
+    );
   }
 }
