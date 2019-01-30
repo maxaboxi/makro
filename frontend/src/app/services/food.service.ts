@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Food } from '../models/Food';
 import { environment } from '../../environments/environment';
+import { EditedFood } from '../models/EditedFood';
 
 @Injectable({
   providedIn: 'root'
@@ -85,13 +86,13 @@ export class FoodService {
     return this.http.get(url, { headers: headers });
   }
 
-  sentForApproval(food: Food) {
+  sentForApproval(foods: EditedFood[]) {
     const url = `${this.baseUrl}/sentforapproval`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, food, { headers: headers });
+    return this.http.post(url, { foods: foods }, { headers: headers });
   }
 }

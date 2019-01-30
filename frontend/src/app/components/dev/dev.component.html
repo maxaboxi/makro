@@ -17,7 +17,7 @@
         />
         <ul *ngIf="!loading && results.length === 0" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS' | translate }}</li>
-          <li *ngFor="let food of allFoods" (click)="openFoodModal(foodModal, food)" class="list-group-item">{{ food.name }}</li>
+          <li *ngFor="let food of allFoods" (click)="openFoodModal(foodModal, food, false)" class="list-group-item">{{ food.name }}</li>
         </ul>
         <ul *ngIf="!loading && results.length > 0" class="list-group">
           <li *ngFor="let food of results" class="list-group-item">{{ food.name }}</li>
@@ -27,8 +27,14 @@
         <ul class="list-group">
           <li class="list-group-item disabled">{{ 'FOODS_TO_BE_SENT_TO_BE_APPROVED' | translate }}</li>
           <li *ngIf="editedAndDeletedFoods.length === 0" class="list-group-item">{{ 'NO_DELETED_OR_EDITED_FOODS' | translate }}</li>
+          <li *ngFor="let editedFood of editedAndDeletedFoods" class="list-group-item"> {{ editedFood.editedFood.name }}</li>
         </ul>
-        <button *ngIf="editedAndDeletedFoods.length > 0" class="btn btn-block btn-success">{{ 'SEND' | translate }}</button>
+        <button *ngIf="editedAndDeletedFoods.length > 0" class="btn btn-block btn-success" (click)="sentFoodsForApproval('notDuplicate')">{{
+          'SEND' | translate
+        }}</button>
+        <button *ngIf="editedAndDeletedFoods.length > 0" (click)="editedAndDeletedFoods = []" class="btn btn-block btn-warning">{{
+          'CANCEL' | translate
+        }}</button>
       </div>
     </div>
   </div>
@@ -39,9 +45,12 @@
         <app-loading-spinner *ngIf="findingDuplicates"></app-loading-spinner>
         <ul *ngIf="!findingDuplicates" class="list-group">
           <li class="list-group-item disabled">{{ 'FOUND_DUPLICATE_FOODS' | translate }}</li>
-          <li *ngFor="let duplicateFood of duplicateFoods" (click)="openFoodModal(foodModal, duplicateFoods)" class="list-group-item">{{
-            duplicateFood.name
-          }}</li>
+          <li
+            *ngFor="let duplicateFood of duplicateFoods"
+            (click)="openFoodModal(foodModal, duplicateFood, true)"
+            class="list-group-item"
+            >{{ duplicateFood.name }}</li
+          >
         </ul>
       </div>
       <div class="col">
@@ -50,8 +59,22 @@
           <li *ngIf="editedAndDeletedDuplicateFoods.length === 0" class="list-group-item">{{
             'NO_DELETED_OR_EDITED_FOODS' | translate
           }}</li>
+          <li *ngFor="let editedDuplicateFood of editedAndDeletedDuplicateFoods" class="list-group-item">
+            {{ editedDuplicateFood.editedFood.name }}</li
+          >
         </ul>
-        <button *ngIf="editedAndDeletedDuplicateFoods.length > 0" class="btn btn-block btn-success">{{ 'SEND' | translate }}</button>
+        <button
+          *ngIf="editedAndDeletedDuplicateFoods.length > 0"
+          class="btn btn-block btn-success"
+          (click)="sentFoodsForApproval('duplicate')"
+          >{{ 'SEND' | translate }}</button
+        >
+        <button
+          *ngIf="editedAndDeletedDuplicateFoods.length > 0"
+          (click)="editedAndDeletedDuplicateFoods = []"
+          class="btn btn-block btn-warning"
+          >{{ 'CANCEL' | translate }}</button
+        >
       </div>
     </div>
   </div>

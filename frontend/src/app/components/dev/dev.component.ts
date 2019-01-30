@@ -4,6 +4,7 @@ import { Food } from '../../models/Food';
 import { TranslateService } from '@ngx-translate/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EditedFood } from '../../models/EditedFood';
 
 @Component({
   selector: 'app-dev',
@@ -15,12 +16,8 @@ export class DevComponent implements OnInit {
   duplicateFoods: Food[] = [];
   loading = true;
   findingDuplicates = false;
-  editedAndDeletedFoods: Food[] = [];
-  editedFoods: Food[] = [];
-  deletedFoods: Food[] = [];
-  editedAndDeletedDuplicateFoods: Food[] = [];
-  editedDuplicateFoods: Food[] = [];
-  deletedDuplicateFoods: Food[] = [];
+  editedAndDeletedFoods: EditedFood[] = [];
+  editedAndDeletedDuplicateFoods: EditedFood[] = [];
   results = [];
   searchTerm = '';
   selectedFood: Food;
@@ -107,34 +104,47 @@ export class DevComponent implements OnInit {
     }
   }
 
-  openFoodModal(content, food) {
+  openFoodModal(content, food, duplicate: boolean) {
+    const originalFood = food;
     this.selectedFood = food;
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.foodService.sentForApproval(this.selectedFood).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('FOODS_SENT_FOR_APPROVAL'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.getAllFoods();
-                this.selectedFood = null;
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
+          const editedFood: EditedFood = {
+            originalFood: originalFood,
+            editedFood: this.selectedFood
+          };
+          if (duplicate) {
+            this.editedAndDeletedDuplicateFoods.push({ ...editedFood });
+          } else {
+            this.editedAndDeletedFoods.push({ ...editedFood });
+          }
         }
         this.selectedFood = null;
       },
       dismissed => {
         this.selectedFood = null;
+      }
+    );
+  }
+
+  sentFoodsForApproval(arrayToSent) {
+    const selectedArray = arrayToSent === 'duplicate' ? this.editedAndDeletedDuplicateFoods : this.editedAndDeletedFoods;
+    this.foodService.sentForApproval(selectedArray).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('FOODS_SENT_FOR_APPROVAL'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.getAllFoods();
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
       }
     );
   }
