@@ -258,5 +258,11 @@
   "GENERAL_ERROR_MSG": "Something went wrong. Try updating page and/or try again later",
   "TARGETS": "Target values",
   "NETWORK_LOADING_ERROR": "Error fetching data. Please try again later.",
-  "NO_CONNECTION": "No internet connection"
+  "NO_CONNECTION": "No internet connection",
+  "HELP_DEVELOPMENT": "Help to make Makro better",
+  "DUPLICATE_NAMES": "Foods that have identical name",
+  "FOUND_DUPLICATE_FOODS": "Found duplicate foods",
+  "FOODS_TO_BE_SENT_TO_BE_APPROVED": "Edited and/or deleted foods to be sent for approval",
+  "NO_DELETED_OR_EDITED_FOODS": "No edited or deleted foods",
+  "SEND": "Send"
 }

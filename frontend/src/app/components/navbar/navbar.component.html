@@ -31,6 +31,9 @@
       <li>
         <a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</a>
       </li>
+      <li *ngIf="isLoggedIn && online">
+        <a class="nav-link" routerLink="/dev"><i class="fas fa-code"></i> Dev</a>
+      </li>
       <li *ngIf="isAdmin">
         <a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</a>
       </li>

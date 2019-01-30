@@ -52,6 +52,7 @@ import { ArticleCommentComponent } from './components/articles/article/article-c
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { DevComponent } from './components/dev/dev.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -96,7 +97,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddArticleComponent,
     UserArticlesComponent,
     ArticleCommentComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    DevComponent
   ],
   imports: [
     BrowserModule,

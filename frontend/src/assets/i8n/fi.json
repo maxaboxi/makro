@@ -258,5 +258,11 @@
   "GENERAL_ERROR_MSG": "Jotain meni pieleen. Kokeile päivittää sivu ja/tai yritä myöhemmin uudestaan",
   "TARGETS": "Tavoitearvot",
   "NETWORK_LOADING_ERROR": "Tietojen haku epäonnistui. Ole hyvä ja yritä myöhemmin uudelleen.",
-  "NO_CONNECTION": "Ei internetyhteyttä."
+  "NO_CONNECTION": "Ei internetyhteyttä.",
+  "HELP_DEVELOPMENT": "Auta tekemään Makrosta entistä parempi",
+  "DUPLICATE_NAMES": "Ruoat, joilla on identtinen nimi",
+  "FOUND_DUPLICATE_FOODS": "Löydetyt ruoat",
+  "FOODS_TO_BE_SENT_TO_BE_APPROVED": "Muokatut ja/tai poistetut ruoat, jotka lähetetään hyväksyttäväksi",
+  "NO_DELETED_OR_EDITED_FOODS": "Ei muokattuja tai poistettuja ruokia",
+  "SEND": "Lähetä"
 }

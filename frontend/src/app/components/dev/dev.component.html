@@ -1,0 +1,23 @@
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="!loading" class="container mt-4">
+  <h2 class="h2 text-center mt-4">{{ 'HELP_DEVELOPMENT' | translate }}</h2> <hr />
+  <h2 class="h2 text-center mt-4">{{ 'DUPLICATE_NAMES' | translate }}</h2>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col">
+        <app-loading-spinner *ngIf="findingDuplicates"></app-loading-spinner>
+        <ul *ngIf="!findingDuplicates" class="list-group">
+          <li class="list-group-item disabled">{{ 'FOUND_DUPLICATE_FOODS' | translate }}</li>
+          <li *ngFor="let duplicateFood of duplicateFoods" class="list-group-item">{{ duplicateFood.name }}</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="list-group">
+          <li class="list-group-item disabled">{{ 'FOODS_TO_BE_SENT_TO_BE_APPROVED' | translate }}</li>
+          <li *ngIf="editedAndDeletedFoods.length === 0" class="list-group-item">{{ 'NO_DELETED_OR_EDITED_FOODS' | translate }}</li>
+        </ul>
+        <button *ngIf="editedAndDeletedFoods.length > 0" class="btn btn-block btn-success">{{ 'SEND' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

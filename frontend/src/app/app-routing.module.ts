@@ -27,6 +27,7 @@ import { ArticlesComponent } from './components/articles/articles.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
+import { DevComponent } from './components/dev/dev.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -69,6 +70,7 @@ const routes: Routes = [
     component: AddArticleComponent,
     canActivate: [AuthGuard]
   },
+  { path: 'dev', component: DevComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
   { path: '**', component: DashboardComponent }
