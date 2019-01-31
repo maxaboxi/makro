@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const foods = require('./routes/foods');
+const editedFoods = require('./routes/editedFoods');
 const config = require('./config/config.json');
 const options = {
   autoReconnect: true,
@@ -24,6 +25,7 @@ const port = 1338;
 server.use(cors());
 server.use(express.json());
 server.use('/api/v1/foods', foods);
+server.use('/api/v1/editedfoods', editedFoods);
 
 server.listen(port, () => {
   console.log(`Server started on port ${port}`);

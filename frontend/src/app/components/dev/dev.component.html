@@ -17,24 +17,28 @@
         />
         <ul *ngIf="!loading && results.length === 0" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS' | translate }}</li>
-          <li *ngFor="let food of allFoods" class="list-group-item food-li"
-            ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-            <i
-              (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
-              class="far fa-trash-alt float-right"
-              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-            ></i
-          ></li>
+          <ng-container *ngFor="let food of allFoods">
+              <li *ngIf="!food.waitingForApproval" class="list-group-item food-li"
+              ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+              <i
+                (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
+                class="far fa-trash-alt float-right"
+                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+              ></i
+            ></li>
+          </ng-container>
         </ul>
         <ul *ngIf="!loading && results.length > 0" class="list-group">
-          <li *ngFor="let food of results" class="list-group-item food-li"
-            ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-            <i
-              (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
-              class="far fa-trash-alt float-right"
-              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-            ></i
-          ></li>
+          <ng-container *ngFor="let food of results">
+              <li *ngIf="!food.waitingForApproval" class="list-group-item food-li"
+              ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+              <i
+                (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
+                class="far fa-trash-alt float-right"
+                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+              ></i
+            ></li>
+          </ng-container>
         </ul>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 stacked-cols">
@@ -59,14 +63,16 @@
         <app-loading-spinner *ngIf="findingDuplicates"></app-loading-spinner>
         <ul *ngIf="!findingDuplicates" class="list-group">
           <li class="list-group-item disabled">{{ 'FOUND_DUPLICATE_FOODS' | translate }}</li>
-          <li *ngFor="let duplicateFood of duplicateFoods" class="list-group-item food-li"
-            ><div (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
-            <i
-              (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
-              class="far fa-trash-alt float-right"
-              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-            ></i
-          ></li>
+          <ng-container *ngFor="let duplicateFood of duplicateFoods">
+              <li *ngIf="!duplicateFood.waitingForApproval" class="list-group-item food-li"
+              ><div (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
+              <i
+                (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
+                class="far fa-trash-alt float-right"
+                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+              ></i
+            ></li>
+          </ng-container>
         </ul>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 stacked-cols">
@@ -102,7 +108,7 @@
         <ul *ngIf="!loading" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS_THAT_HAVE_NO_TRANSLATION' | translate }}</li>
           <ng-container *ngFor="let food of allFoods">
-            <li *ngIf="!food.en" (click)="openTranslateFoodModal(addTranslationToFoodModal, food)" class="list-group-item food-li">
+            <li *ngIf="!food.en && !food.waitingForApproval" (click)="openTranslateFoodModal(addTranslationToFoodModal, food)" class="list-group-item food-li">
               {{ food.name }}</li
             >
           </ng-container>
@@ -276,7 +282,7 @@
               name="reasonForEdit"
               class="form-control"
               placeholder="{{ 'REASON_FOR_EDITING' | translate }}"
-              [(ngModel)]="selectedFood.reason"
+              [(ngModel)]="selectedFood.reasonForEditing"
               #reason="ngModel"
               required
             ></textarea>
@@ -314,7 +320,7 @@
               name="reasonForDelete"
               class="form-control"
               placeholder="{{ 'REASON_FOR_DELETE' | translate }}"
-              [(ngModel)]="selectedFood.reason"
+              [(ngModel)]="selectedFood.reasonForEditing"
               #reason="ngModel"
               required
             ></textarea>

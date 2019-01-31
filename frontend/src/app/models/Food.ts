@@ -12,6 +12,7 @@ export interface Food {
   servingSize?: number;
   packageSize?: number;
   editing?: boolean;
-  reason?: string;
+  reasonForEditing?: string;
   en?: string;
+  waitingForApproval?: boolean;
 }

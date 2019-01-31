@@ -34,12 +34,12 @@ const FoodSchema = mongoose.Schema(
     },
     packageSize: {
       type: Number,
-      required: true,
+      required: false,
       default: 0
     },
     servingSize: {
       type: Number,
-      required: true,
+      required: false,
       default: 0
     },
     editing: {
@@ -50,6 +50,21 @@ const FoodSchema = mongoose.Schema(
     username: {
       type: String,
       required: true
+    },
+    en: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    reasonForEditing: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    waitingForApproval: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   { timestamps: true }

@@ -9,6 +9,7 @@ import { EditedFood } from '../models/EditedFood';
 })
 export class FoodService {
   private baseUrl = `${environment.foods}/api/v1/foods`;
+  private baseUrlEditedFoods = `${environment.foods}/api/v1/editedfoods`;
 
   constructor(private http: HttpClient) {}
 
@@ -87,7 +88,7 @@ export class FoodService {
   }
 
   sentForApproval(foods: EditedFood[]) {
-    const url = `${this.baseUrl}/sentforapproval`;
+    const url = `${this.baseUrlEditedFoods}/sendforapproval`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

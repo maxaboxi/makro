@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditedFood } from '../../models/EditedFood';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/User';
 
 @Component({
   selector: 'app-dev',
@@ -12,6 +14,7 @@ import { EditedFood } from '../../models/EditedFood';
   styleUrls: ['./dev.component.css']
 })
 export class DevComponent implements OnInit {
+  user: User;
   allFoods: Food[];
   duplicateFoods: Food[] = [];
   loading = true;
@@ -27,14 +30,19 @@ export class DevComponent implements OnInit {
     private foodService: FoodService,
     private translator: TranslateService,
     private flashMessage: FlashMessagesService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
+    this.auth.user.subscribe(user => (this.user = user));
     this.getAllFoods();
   }
 
   getAllFoods() {
+    this.allFoods = [];
+    this.duplicateFoods = [];
+    this.loading = true;
     this.foodService.getAllFoods().subscribe(
       foods => {
         this.allFoods = foods;
@@ -107,9 +115,9 @@ export class DevComponent implements OnInit {
 
   markForDeletion(array: string) {
     if (array === 'duplicate') {
-      this.editedAndDeletedDuplicateFoods.push({ editedFood: { ...this.selectedFood }, deleted: true });
+      this.editedAndDeletedDuplicateFoods.push({ editedBy: this.user.username, editedFood: { ...this.selectedFood }, deleted: true });
     } else {
-      this.editedAndDeletedFoods.push({ editedFood: { ...this.selectedFood }, deleted: true });
+      this.editedAndDeletedFoods.push({ editedBy: this.user.username, editedFood: { ...this.selectedFood }, deleted: true });
     }
     this.selectedFood = null;
   }
@@ -119,6 +127,7 @@ export class DevComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
+          this.selectedFood.waitingForApproval = true;
           this.markForDeletion(array);
         }
       },
@@ -134,7 +143,9 @@ export class DevComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
+          this.selectedFood.waitingForApproval = true;
           const editedFood: EditedFood = {
+            editedBy: this.user.username,
             originalFood: originalFood,
             editedFood: this.selectedFood
           };
@@ -158,7 +169,9 @@ export class DevComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
+          this.selectedFood.waitingForApproval = true;
           const editedFood: EditedFood = {
+            editedBy: this.user.username,
             originalFood: originalFood,
             editedFood: this.selectedFood
           };
