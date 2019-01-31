@@ -147,12 +147,12 @@ export class DevComponent implements OnInit {
           const editedFood: EditedFood = {
             editedBy: this.user.username,
             originalFood: originalFood,
-            editedFood: this.selectedFood
+            editedFood: { ...this.selectedFood }
           };
           if (duplicate) {
-            this.editedAndDeletedDuplicateFoods.push({ ...editedFood });
+            this.editedAndDeletedDuplicateFoods.push(editedFood);
           } else {
-            this.editedAndDeletedFoods.push({ ...editedFood });
+            this.editedAndDeletedFoods.push(editedFood);
           }
         }
         this.selectedFood = null;
@@ -170,12 +170,13 @@ export class DevComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.selectedFood.waitingForApproval = true;
+          this.selectedFood.reasonForEditing = 'Translation added';
           const editedFood: EditedFood = {
             editedBy: this.user.username,
             originalFood: originalFood,
-            editedFood: this.selectedFood
+            editedFood: { ...this.selectedFood }
           };
-          this.translatedFoods.push({ ...editedFood });
+          this.translatedFoods.push(editedFood);
         }
         this.selectedFood = null;
       },
