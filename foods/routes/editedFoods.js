@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const EditedFood = require('../models/editedFood');
+const Food = require('../models/food');
 const winston = require('winston');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -41,7 +42,10 @@ router.use(checkAuthorization());
 
 router.post('/sendforapproval', (req, res) => {
   const foods = req.body.foods;
-  console.log(foods);
+  const foodIds = [];
+  foods.forEach(f => {
+    foodIds.push(f.editedFood._id);
+  });
 
   EditedFood.saveFoods(foods, (err, foods) => {
     if (err) {
@@ -53,6 +57,15 @@ router.post('/sendforapproval', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Something went wrong' });
     } else {
+      Food.updateWaitingForApproval(foodIds, true, (err, foods) => {
+        if (err) {
+          logger.log({
+            timestamp: tsFormat(),
+            level: 'error',
+            errorMsg: err
+          });
+        }
+      });
       res.status(200);
       res.json({ success: true, msg: 'Saved' });
     }

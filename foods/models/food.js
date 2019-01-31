@@ -103,3 +103,9 @@ module.exports.removeFoods = (deletedFoods, callback) => {
 module.exports.getAmountOfFoods = callback => {
   Food.countDocuments(callback);
 };
+
+module.exports.updateWaitingForApproval = (ids, value, callback) => {
+  const query = { _id: { $in: ids } };
+  const update = { $set: { waitingForApproval: value } };
+  Food.updateMany(query, update, callback);
+};
