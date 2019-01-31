@@ -1,4 +1,19 @@
+.food-li:hover {
+  background: #fcfcfc;
+}
+
 .all-foods-list {
   max-height: 400px;
   overflow-y: scroll;
+}
+
+.fa-trash-alt:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+  .stacked-cols {
+    margin-top: 3rem;
+  }
 }

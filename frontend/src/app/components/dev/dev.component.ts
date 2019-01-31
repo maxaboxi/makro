@@ -104,6 +104,29 @@ export class DevComponent implements OnInit {
     }
   }
 
+  markForDeletion(array: string) {
+    if (array === 'duplicate') {
+      this.editedAndDeletedDuplicateFoods.push({ editedFood: { ...this.selectedFood }, deleted: true });
+    } else {
+      this.editedAndDeletedFoods.push({ editedFood: { ...this.selectedFood }, deleted: true });
+    }
+    this.selectedFood = null;
+  }
+
+  openDeleteFoodModal(content, food: Food, array: string) {
+    this.selectedFood = food;
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          this.markForDeletion(array);
+        }
+      },
+      dismissed => {
+        this.selectedFood = null;
+      }
+    );
+  }
+
   openFoodModal(content, food, duplicate: boolean) {
     const originalFood = food;
     this.selectedFood = food;
@@ -137,6 +160,7 @@ export class DevComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
+          arrayToSent === 'duplicate' ? (this.editedAndDeletedDuplicateFoods = []) : (this.editedAndDeletedFoods = []);
           this.getAllFoods();
         }
       },

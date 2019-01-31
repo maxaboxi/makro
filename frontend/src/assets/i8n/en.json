@@ -267,5 +267,9 @@
   "SEND": "Send",
   "ALL_FOODS": "All foods",
   "EDIT_OR_DELETE_FOODS": "Edit or delete foods",
-  "FOODS_SENT_FOR_APPROVAL": "Foods successfully sent for approval"
+  "FOODS_SENT_FOR_APPROVAL": "Foods successfully sent for approval",
+  "REASON_FOR_EDITING": "Reason for editing",
+  "REASON_FOR_DELETE": "Reason for deleting",
+  "TRANSLATE_FOOD": "Translate food name to English",
+  "IN_ENGLISH": "In English"
 }

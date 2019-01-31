@@ -4,7 +4,7 @@
   <h2 class="h2 text-center mt-4">{{ 'EDIT_OR_DELETE_FOODS' | translate }}</h2>
   <div *ngIf="!loading" class="container mt-4">
     <div class="row">
-      <div class="col all-foods-list">
+      <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 all-foods-list">
         <app-loading-spinner *ngIf="loading"></app-loading-spinner>
         <input
           *ngIf="!loading"
@@ -17,13 +17,27 @@
         />
         <ul *ngIf="!loading && results.length === 0" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS' | translate }}</li>
-          <li *ngFor="let food of allFoods" (click)="openFoodModal(foodModal, food, false)" class="list-group-item">{{ food.name }}</li>
+          <li *ngFor="let food of allFoods" class="list-group-item food-li"
+            ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+            <i
+              (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
+              class="far fa-trash-alt float-right"
+              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+            ></i
+          ></li>
         </ul>
         <ul *ngIf="!loading && results.length > 0" class="list-group">
-          <li *ngFor="let food of results" class="list-group-item">{{ food.name }}</li>
+          <li *ngFor="let food of results" class="list-group-item food-li"
+            ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+            <i
+              (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
+              class="far fa-trash-alt float-right"
+              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+            ></i
+          ></li>
         </ul>
       </div>
-      <div class="col">
+      <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 stacked-cols">
         <ul class="list-group">
           <li class="list-group-item disabled">{{ 'FOODS_TO_BE_SENT_TO_BE_APPROVED' | translate }}</li>
           <li *ngIf="editedAndDeletedFoods.length === 0" class="list-group-item">{{ 'NO_DELETED_OR_EDITED_FOODS' | translate }}</li>
@@ -41,19 +55,21 @@
   <hr /> <h2 class="h2 text-center mt-4">{{ 'DUPLICATE_NAMES' | translate }}</h2>
   <div class="container mt-4 mb-5">
     <div class="row">
-      <div class="col">
+      <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
         <app-loading-spinner *ngIf="findingDuplicates"></app-loading-spinner>
         <ul *ngIf="!findingDuplicates" class="list-group">
           <li class="list-group-item disabled">{{ 'FOUND_DUPLICATE_FOODS' | translate }}</li>
-          <li
-            *ngFor="let duplicateFood of duplicateFoods"
-            (click)="openFoodModal(foodModal, duplicateFood, true)"
-            class="list-group-item"
-            >{{ duplicateFood.name }}</li
-          >
+          <li *ngFor="let duplicateFood of duplicateFoods" class="list-group-item food-li"
+            ><div (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
+            <i
+              (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
+              class="far fa-trash-alt float-right"
+              title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+            ></i
+          ></li>
         </ul>
       </div>
-      <div class="col">
+      <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 stacked-cols">
         <ul class="list-group">
           <li class="list-group-item disabled">{{ 'FOODS_TO_BE_SENT_TO_BE_APPROVED' | translate }}</li>
           <li *ngIf="editedAndDeletedDuplicateFoods.length === 0" class="list-group-item">{{
@@ -222,6 +238,19 @@
             />
           </div>
         </div>
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="reason">{{ 'REASON_FOR_EDITING' | translate }}</label>
+          <div class="col-sm-8">
+            <textarea
+              name="reasonForEdit"
+              class="form-control"
+              placeholder="{{ 'REASON_FOR_EDITING' | translate }}"
+              [(ngModel)]="selectedFood.reason"
+              #reason="ngModel"
+              required
+            ></textarea>
+          </div>
+        </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
@@ -229,6 +258,82 @@
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
+                {{ 'SAVE_CHANGES' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteFoodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'DELETE_FOOD' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #deleteFoodForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="reason">{{ 'REASON_FOR_DELETE' | translate }}</label>
+          <div class="col-sm-8">
+            <textarea
+              name="reasonForDelete"
+              class="form-control"
+              placeholder="{{ 'REASON_FOR_DELETE' | translate }}"
+              [(ngModel)]="selectedFood.reason"
+              #reason="ngModel"
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!deleteFoodForm.form.valid">
+                {{ 'SAVE_CHANGES' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addTranslationToFoodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'TRANSLATE_FOOD' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #translateFoodForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="foodInEnglish">{{ 'IN_ENGLISH' | translate }}</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              name="foodInEnglish"
+              class="form-control"
+              placeholder="{{ 'IN_ENGLISH' | translate }}"
+              [(ngModel)]="selectedFood.en"
+              #foodEnglish="ngModel"
+            />
+          </div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!translateFoodForm.form.valid">
                 {{ 'SAVE_CHANGES' | translate }}
               </button>
             </div>

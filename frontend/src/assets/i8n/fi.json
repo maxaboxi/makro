@@ -267,5 +267,9 @@
   "SEND": "Lähetä",
   "ALL_FOODS": "Kaikki ruoat",
   "EDIT_OR_DELETE_FOODS": "Muokkaa tai poista ruokia",
-  "FOODS_SENT_FOR_APPROVAL": "Ruoat lähetetty hyväksyttäväksi onnistuneesti"
+  "FOODS_SENT_FOR_APPROVAL": "Ruoat lähetetty hyväksyttäväksi onnistuneesti",
+  "REASON_FOR_EDITING": "Syy muokkaukselle",
+  "REASON_FOR_DELETE": "Syy poistolle",
+  "TRANSLATE_FOOD": "Lisää käännös ruoalle",
+  "IN_ENGLISH": "Englanniksi"
 }
