@@ -18,3 +18,14 @@ const EditedFood = (module.exports = mongoose.model('EditedFood', EditedFoodSche
 module.exports.saveFoods = (foods, callback) => {
   EditedFood.insertMany(foods, callback);
 };
+
+module.exports.getAllFoods = callback => {
+  EditedFood.find()
+    .sort({ createdAt: -1 })
+    .exec(callback);
+};
+
+module.exports.removeEditedFoods = (deletedFoods, callback) => {
+  const query = { _id: { $in: deletedFoods } };
+  EditedFood.remove(query, callback);
+};

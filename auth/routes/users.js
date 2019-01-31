@@ -40,7 +40,8 @@ function checkAuthorization() {
       (req.path === '/login' && req.method === 'POST') ||
       (req.path === '/register' && req.method === 'POST') ||
       (req.path === '/resetpassword' && req.method === 'POST') ||
-      (req.path === '/getamountofusers' && req.method === 'GET')
+      (req.path === '/getamountofusers' && req.method === 'GET') ||
+      (req.path === '/checkadmin' && req.method === 'POST')
     ) {
       next();
     } else {

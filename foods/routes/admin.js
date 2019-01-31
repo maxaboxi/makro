@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const Food = require('../models/food');
+const EditedFood = require('../models/editedFood');
 const winston = require('winston');
 const path = require('path');
-const bcrypt = require('bcryptjs');
 
 const tsFormat = () => new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString();
 
@@ -47,8 +48,8 @@ router.use((req, res, next) => {
   }
 });
 
-router.get('/getallusers', (req, res) => {
-  User.getAllUsers((err, users) => {
+router.get('/getallsentforapproval', (req, res) => {
+  EditedFood.getAllFoods((err, foods) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -59,29 +60,15 @@ router.get('/getallusers', (req, res) => {
       res.json({ success: false, msg: 'Something went wrong.' });
     } else {
       res.status(200);
-      res.json(users);
+      res.json(foods);
     }
   });
 });
 
-router.post('/updateuserinformation', (req, res) => {
-  const userId = req.body._id;
-  const userInfo = {
-    username: req.body.username,
-    email: req.body.email,
-    age: req.body.age,
-    height: req.body.height,
-    weight: req.body.weight,
-    activity: req.body.activity,
-    sex: req.body.sex,
-    dailyExpenditure: req.body.dailyExpenditure,
-    userAddedExpenditure: req.body.userAddedExpenditure,
-    userAddedProteinTarget: req.body.userAddedProteinTarget,
-    userAddedCarbTarget: req.body.userAddedCarbTarget,
-    userAddedFatTarget: req.body.userAddedFatTarget,
-    meals: req.body.meals
-  };
-  User.updateUserInformation(userInfo, userId, (err, user) => {
+router.post('/approveeditedfood', (req, res) => {
+  const editedFood = req.body.editedFood;
+
+  Food.editFood(editedFood, (err, food) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -89,54 +76,26 @@ router.post('/updateuserinformation', (req, res) => {
         errorMsg: err
       });
       res.status(500);
-      res.json({ success: false, msg: 'Something went wrong.' });
+      res.json({ success: false, msg: 'Tietojen tallennus epäonnistui.' });
     } else {
-      res.status(200);
-      res.json({
-        success: true,
-        msg: 'Käyttäjän tiedot päivitetty'
-      });
-    }
-  });
-});
-
-router.post('/updateuserpassword', (req, res) => {
-  const userId = req.body._id;
-  const user = {
-    password: req.body.password
-  };
-
-  bcrypt.genSalt(12, (err, salt) => {
-    bcrypt.hash(user.password, salt, (err, hash) => {
-      if (err) {
-        logger.log({
-          timestamp: tsFormat(),
-          level: 'error',
-          errorMsg: err
-        });
-      }
-      user.password = hash;
-      User.updateUserInformation(user, userId, (error, callback) => {
+      Food.updateWaitingForApproval([editedFood._id], false, (err, foods) => {
         if (err) {
           logger.log({
             timestamp: tsFormat(),
             level: 'error',
             errorMsg: err
           });
-          res.status(500);
-          res.json({ success: false, msg: 'Something went wrong.' });
-        } else {
-          res.status(200);
-          res.json({ success: true, msg: 'Salasana vaihdettu.' });
         }
       });
-    });
+      res.status(200);
+      res.json({ success: true, msg: 'Tietojen tallennus onnistui.' });
+    }
   });
 });
 
-router.delete('/removeusers', (req, res) => {
-  const deletedUsers = req.body;
-  User.removeUsers(deletedUsers, (err, users) => {
+router.delete('/disapproveeditedfood', (req, res) => {
+  const deletedFoods = req.body;
+  EditedFood.removeEditedFoods(deletedFoods, (err, foods) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -146,8 +105,17 @@ router.delete('/removeusers', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
+      Food.updateWaitingForApproval(deletedFoods, false, (err, foods) => {
+        if (err) {
+          logger.log({
+            timestamp: tsFormat(),
+            level: 'error',
+            errorMsg: err
+          });
+        }
+      });
       res.status(200);
-      res.json({ success: true, msg: 'Käyttäjät poistettu.' });
+      res.json({ success: true, msg: 'Ruoat poistettu.' });
     }
   });
 });

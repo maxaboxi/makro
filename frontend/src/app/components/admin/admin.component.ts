@@ -102,6 +102,7 @@ export class AdminComponent implements OnInit {
     this.adminService.getAllComments().subscribe(comments => (this.comments = comments));
     this.adminService.getAllVotes().subscribe(votes => (this.votes = votes));
     this.articleService.getAllArticles().subscribe(articles => (this.articles = articles));
+    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => console.log(editedFoods));
   }
 
   searchFoods() {

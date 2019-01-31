@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { Vote } from '../models/Vote';
 import { Answer } from '../models/Answer';
 import { Comment } from '../models/Comment';
+import { EditedFood } from '../models/EditedFood';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AdminService {
   private baseUrl = `${environment.baseUrl}/admin`;
   private baseUrlAuth = `${environment.auth}/admin`;
   private baseUrlVotes = `${environment.votes}/admin`;
+  private baseUrlFoods = `${environment.foods}/api/v1/admin`;
 
   constructor(private http: HttpClient) {}
 
@@ -129,5 +131,14 @@ export class AdminService {
     const url = `${this.baseUrl}/getallcomments`;
 
     return this.http.get<Comment[]>(url, { headers: headers });
+  }
+
+  getAllFoodsSentForApproval() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrlFoods}/getallsentforapproval`;
+
+    return this.http.get<EditedFood[]>(url, { headers: headers });
   }
 }
