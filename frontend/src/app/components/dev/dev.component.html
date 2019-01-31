@@ -101,16 +101,20 @@
         <app-loading-spinner *ngIf="loading"></app-loading-spinner>
         <ul *ngIf="!loading" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS_THAT_HAVE_NO_TRANSLATION' | translate }}</li>
-          <li *ngFor="let food of allFoods" class="list-group-item food-li"
-            ><div *ngIf="!food.en" (click)="openTranslateFoodModal(addTranslationToFoodModal, food)">{{ food.name }}</div></li
-          >
+          <ng-container *ngFor="let food of allFoods">
+            <li *ngIf="!food.en" (click)="openTranslateFoodModal(addTranslationToFoodModal, food)" class="list-group-item food-li">
+              {{ food.name }}</li
+            >
+          </ng-container>
         </ul>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 stacked-cols">
         <ul class="list-group">
           <li class="list-group-item disabled">{{ 'TRANSLATED_FOODS_TO_BE_SENT_TO_BE_APPROVED' | translate }}</li>
           <li *ngIf="translatedFoods.length === 0" class="list-group-item">{{ 'NO_TRANSLATED_FOODS' | translate }}</li>
-          <li *ngFor="let translatedFood of translatedFoods" class="list-group-item"> {{ translatedFood.editedFood.name }}</li>
+          <li *ngFor="let translatedFood of translatedFoods" class="list-group-item">
+            {{ translatedFood.editedFood.name }} | {{ translatedFood.editedFood.en }}</li
+          >
         </ul>
         <button *ngIf="translatedFoods.length > 0" class="btn btn-block btn-success" (click)="sentFoodsForApproval('translated')">{{
           'SEND' | translate
