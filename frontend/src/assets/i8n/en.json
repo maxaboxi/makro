@@ -271,5 +271,8 @@
   "REASON_FOR_EDITING": "Reason for editing",
   "REASON_FOR_DELETE": "Reason for deleting",
   "TRANSLATE_FOOD": "Translate food name to English",
-  "IN_ENGLISH": "In English"
+  "IN_ENGLISH": "In English",
+  "ALL_FOODS_THAT_HAVE_NO_TRANSLATION": "All foods that have not been translated into English",
+  "TRANSLATED_FOODS_TO_BE_SENT_TO_BE_APPROVED": "Foods that have been translated into English and are going to ben sent for approval",
+  "NO_TRANSLATED_FOODS": "No foods that have translation added"
 }

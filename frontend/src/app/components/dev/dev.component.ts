@@ -18,6 +18,7 @@ export class DevComponent implements OnInit {
   findingDuplicates = false;
   editedAndDeletedFoods: EditedFood[] = [];
   editedAndDeletedDuplicateFoods: EditedFood[] = [];
+  translatedFoods: EditedFood[] = [];
   results = [];
   searchTerm = '';
   selectedFood: Food;
@@ -151,8 +152,35 @@ export class DevComponent implements OnInit {
     );
   }
 
+  openTranslateFoodModal(content, food) {
+    const originalFood = food;
+    this.selectedFood = food;
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const editedFood: EditedFood = {
+            originalFood: originalFood,
+            editedFood: this.selectedFood
+          };
+          this.translatedFoods.push({ ...editedFood });
+        }
+        this.selectedFood = null;
+      },
+      dismissed => {
+        this.selectedFood = null;
+      }
+    );
+  }
+
   sentFoodsForApproval(arrayToSent) {
-    const selectedArray = arrayToSent === 'duplicate' ? this.editedAndDeletedDuplicateFoods : this.editedAndDeletedFoods;
+    let selectedArray;
+    if (arrayToSent === 'duplicate') {
+      selectedArray = this.editedAndDeletedDuplicateFoods;
+    } else if (arrayToSent === 'translated') {
+      selectedArray = this.translatedFoods;
+    } else {
+      selectedArray = this.editedAndDeletedFoods;
+    }
     this.foodService.sentForApproval(selectedArray).subscribe(
       res => {
         if (res['success']) {
@@ -160,7 +188,13 @@ export class DevComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          arrayToSent === 'duplicate' ? (this.editedAndDeletedDuplicateFoods = []) : (this.editedAndDeletedFoods = []);
+          if (arrayToSent === 'duplicate') {
+            this.editedAndDeletedDuplicateFoods = [];
+          } else if (arrayToSent === 'translated') {
+            this.translatedFoods = [];
+          } else {
+            this.editedAndDeletedFoods = [];
+          }
           this.getAllFoods();
         }
       },

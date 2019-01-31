@@ -271,5 +271,8 @@
   "REASON_FOR_EDITING": "Syy muokkaukselle",
   "REASON_FOR_DELETE": "Syy poistolle",
   "TRANSLATE_FOOD": "Lisää käännös ruoalle",
-  "IN_ENGLISH": "Englanniksi"
+  "IN_ENGLISH": "Englanniksi",
+  "ALL_FOODS_THAT_HAVE_NO_TRANSLATION": "Kaikki ruoat, joita ei ole käännetty englanniksi",
+  "TRANSLATED_FOODS_TO_BE_SENT_TO_BE_APPROVED": "Englanniksi käännetyt ruoat, jotka lähetetään hyväksyttäväksi",
+  "NO_TRANSLATED_FOODS": "Ei ruokia, joille olisi lisätty käännös"
 }
