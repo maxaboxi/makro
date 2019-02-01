@@ -28,6 +28,16 @@ import { AddArticleComponent } from './components/articles/add-article/add-artic
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
 import { DevComponent } from './components/dev/dev.component';
+import { AdminFoodsComponent } from './components/admin/admin-foods/admin-foods.component';
+import { AdminMealsComponent } from './components/admin/admin-meals/admin-meals.component';
+import { AdminDaysComponent } from './components/admin/admin-days/admin-days.component';
+import { AdminQuestionsComponent } from './components/admin/admin-questions/admin-questions.component';
+import { AdminAnswersComponent } from './components/admin/admin-answers/admin-answers.component';
+import { AdminCommentsComponent } from './components/admin/admin-comments/admin-comments.component';
+import { AdminVotesComponent } from './components/admin/admin-votes/admin-votes.component';
+import { AdminArticlesComponent } from './components/admin/admin-articles/admin-articles.component';
+import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
+import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -72,7 +82,23 @@ const routes: Routes = [
   },
   { path: 'dev', component: DevComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AdminGuard],
+    children: [
+      { path: '', component: AdminUsersComponent },
+      { path: 'foods', component: AdminFoodsComponent },
+      { path: 'meals', component: AdminMealsComponent },
+      { path: 'days', component: AdminDaysComponent },
+      { path: 'questions', component: AdminQuestionsComponent },
+      { path: 'answers', component: AdminAnswersComponent },
+      { path: 'comments', component: AdminCommentsComponent },
+      { path: 'votes', component: AdminVotesComponent },
+      { path: 'articles', component: AdminArticlesComponent },
+      { path: 'feedbacks', component: AdminFeedbacksComponent }
+    ]
+  },
   { path: '**', component: DashboardComponent }
 ];
 

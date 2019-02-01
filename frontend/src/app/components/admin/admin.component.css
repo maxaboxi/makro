@@ -1,34 +1,8 @@
-ul {
-  list-style: none;
-  padding: 0;
-  max-height: 500px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+a {
+  color: #000;
 }
-
-.big-list {
-  word-break: break-all;
-}
-
-.list-name:hover {
-  cursor: pointer;
-  font-size: 21px;
-}
-
-.food-name:hover {
-  cursor: pointer;
-  background: #ff3b3f;
-  color: white;
-  padding: 2px;
-  font-size: 18px;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-.fas:hover,
-.far:hover {
-  cursor: pointer;
+.far,
+.fas,
+.fab {
   color: #ff3b3f;
 }

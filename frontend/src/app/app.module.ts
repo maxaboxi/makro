@@ -53,6 +53,17 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { DevComponent } from './components/dev/dev.component';
+import { AdminFoodsComponent } from './components/admin/admin-foods/admin-foods.component';
+import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
+import { AdminDaysComponent } from './components/admin/admin-days/admin-days.component';
+import { AdminArticlesComponent } from './components/admin/admin-articles/admin-articles.component';
+import { AdminQuestionsComponent } from './components/admin/admin-questions/admin-questions.component';
+import { DataListComponent } from './components/admin/data-list/data-list.component';
+import { AdminAnswersComponent } from './components/admin/admin-answers/admin-answers.component';
+import { AdminCommentsComponent } from './components/admin/admin-comments/admin-comments.component';
+import { AdminVotesComponent } from './components/admin/admin-votes/admin-votes.component';
+import { AdminMealsComponent } from './components/admin/admin-meals/admin-meals.component';
+import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -98,7 +109,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserArticlesComponent,
     ArticleCommentComponent,
     LoadingSpinnerComponent,
-    DevComponent
+    DevComponent,
+    AdminFoodsComponent,
+    AdminUsersComponent,
+    AdminDaysComponent,
+    AdminArticlesComponent,
+    AdminQuestionsComponent,
+    DataListComponent,
+    AdminAnswersComponent,
+    AdminCommentsComponent,
+    AdminVotesComponent,
+    AdminMealsComponent,
+    AdminFeedbacksComponent
   ],
   imports: [
     BrowserModule,

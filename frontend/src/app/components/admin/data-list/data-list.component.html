@@ -1,0 +1,19 @@
+<div class="row mb-2" *ngIf="usersDeleted">
+  <div class="col-12">
+    <button type="button" class="btn btn-outline-success btn-block" (click)="delete()">{{ 'SAVE_CHANGES' | translate }} </button>
+  </div>
+</div>
+<ul>
+  <li *ngFor="let item of data; let i = index" class="big-list lead">
+    <div class="row">
+      <div class="col-10 list-name" (click)="openModal(item)">
+        <ng-container *ngFor="let property of propertiesToShow">
+          <a *ngIf="property.link" href="https://makro.diet/?id={{ item._id }}">https://makro.diet/?id={{ item._id }} | </a>
+          <span *ngIf="!property.date && !property.link">{{ item[property.name] }} | </span>
+          <span *ngIf="property.date" class="text-muted">{{ item[property.name] | date: 'dd.MM.yyyy HH:mm:ss' }} | </span>
+        </ng-container>
+      </div>
+      <div class="col-2"> <i class="far fa-minus-square float-right" (click)="deleteItem(i)" title="Poista"></i> </div>
+    </div>
+  </li>
+</ul>
