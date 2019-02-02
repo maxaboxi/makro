@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class DataListComponent implements OnInit {
   _data = new BehaviorSubject([]);
   _propertiesToShow = new BehaviorSubject([]);
+  itemsDeleted = false;
 
   @Input()
   set data(d) {
@@ -31,11 +32,27 @@ export class DataListComponent implements OnInit {
   @Output()
   open = new EventEmitter();
 
+  @Output()
+  delete = new EventEmitter();
+
+  @Output()
+  save = new EventEmitter();
+
   constructor() {}
 
   ngOnInit() {}
 
   openModal(item) {
     this.open.emit(item);
+  }
+
+  deleteItem(index) {
+    this.itemsDeleted = true;
+    this.delete.emit(index);
+  }
+
+  saveChanges() {
+    this.save.emit();
+    this.itemsDeleted = false;
   }
 }

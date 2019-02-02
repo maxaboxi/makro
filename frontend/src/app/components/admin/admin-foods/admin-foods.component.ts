@@ -20,6 +20,7 @@ export class AdminFoodsComponent implements OnInit {
   editedFoods: EditedFood[];
   disapprovedEditedFoods = [];
   selectedFood: Food = null;
+  selectedEditedFood: EditedFood = null;
   deletedFoods = [];
   foodsDeleted = false;
   editedFoodsDisapprovedOrApproved = false;
@@ -104,8 +105,13 @@ export class AdminFoodsComponent implements OnInit {
   }
 
   deleteFood(index) {
-    this.deletedFoods.push(this.foods[index]._id);
-    this.foods.splice(index, 1);
+    if (this.results.length === 0 && this.searchTerm.length === 0) {
+      this.deletedFoods.push(this.foods[index]._id);
+      this.foods.splice(index, 1);
+    } else {
+      this.deletedFoods.push(this.results[index]._id);
+      this.results.splice(index, 1);
+    }
     this.foodsDeleted = true;
   }
 
@@ -131,7 +137,9 @@ export class AdminFoodsComponent implements OnInit {
     );
   }
 
-  disapproveEditedFood(index: number, editedFood: EditedFood) {}
+  disapproveEditedFood(index: number, editedFood: EditedFood) {
+    this.selectedEditedFood = editedFood;
+  }
 
   deleteEditedFoodsFromDb() {
     this.adminService.disapproveEditedFoods(this.disapprovedEditedFoods).subscribe(
