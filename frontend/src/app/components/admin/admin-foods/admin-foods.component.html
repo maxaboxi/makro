@@ -22,7 +22,7 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
       <h2 class="h2 text-muted">{{ 'EDITED_FOODS' | translate }} ({{ editedFoods?.length }})</h2>
-      <div class="row mb-2" *ngIf="editedFoodsDisapproved">
+      <div class="row mb-2" *ngIf="editedFoodsDisapprovedOrApproved">
         <div class="col-12">
           <button type="button" class="btn btn-outline-success btn-block" (click)="deleteEditedFoodsFromDb()"
             >{{ 'SAVE_CHANGES' | translate }}
@@ -32,12 +32,9 @@
       <ul>
         <li *ngFor="let editedFood of editedFoods; let i = index" class="big-list lead">
           <div class="row">
-            <div class="col-10 list-name">
+            <div class="col-12 list-name">
               {{ editedFood.editedBy }} - {{ editedFood.editedFood.createdAt | date: 'dd.MM.yyyy' }} - {{ editedFood.editedFood.name }} -
               {{ editedFood.editedFood.reasonForEditing }}
-            </div>
-            <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="disapproveEditedFood(i, editedFood)" title="Poista ruoka"></i>
             </div>
           </div>
         </li>

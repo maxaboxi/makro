@@ -18,9 +18,11 @@ export class AdminFoodsComponent implements OnInit {
   searchTerm = '';
   results: Food[] = [];
   editedFoods: EditedFood[];
+  disapprovedEditedFoods = [];
   selectedFood: Food = null;
   deletedFoods = [];
   foodsDeleted = false;
+  editedFoodsDisapprovedOrApproved = false;
 
   constructor(
     private foodService: FoodService,
@@ -119,6 +121,30 @@ export class AdminFoodsComponent implements OnInit {
         this.deletedFoods = [];
         this.foodsDeleted = false;
         this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  disapproveEditedFood(index: number, editedFood: EditedFood) {}
+
+  deleteEditedFoodsFromDb() {
+    this.adminService.disapproveEditedFoods(this.disapprovedEditedFoods).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+        }
+        this.deletedFoods = [];
+        this.foodsDeleted = false;
+        this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {

@@ -141,4 +141,19 @@ export class AdminService {
 
     return this.http.get<EditedFood[]>(url, { headers: headers });
   }
+
+  disapproveEditedFoods(editedFoods) {
+    const url = `${this.baseUrlFoods}/disapprove`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: editedFoods
+    };
+
+    return this.http.delete(url, options);
+  }
 }
