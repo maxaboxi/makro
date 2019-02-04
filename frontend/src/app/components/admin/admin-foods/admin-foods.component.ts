@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Food } from '../../../models/Food';
 import { FoodService } from '../../../services/food.service';
 import { AdminService } from '../../../services/admin.service';
@@ -10,7 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-admin-foods',
   templateUrl: './admin-foods.component.html',
-  styleUrls: ['./admin-foods.component.css']
+  styleUrls: ['./admin-foods.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AdminFoodsComponent implements OnInit {
   foods: Food[];
@@ -133,6 +134,23 @@ export class AdminFoodsComponent implements OnInit {
           cssClass: 'alert-danger',
           timeout: 2000
         });
+      }
+    );
+  }
+
+  openEditedFoodModal(content, editedFood) {
+    console.log(editedFood);
+    this.selectedEditedFood = editedFood;
+    this.modalService.open(content, { centered: true, size: 'lg' }).result.then(
+      result => {
+        if (result === 'save') {
+          console.log(this.selectedEditedFood);
+          this.selectedEditedFood = null;
+        }
+        this.selectedEditedFood = null;
+      },
+      dismissed => {
+        this.selectedFood = null;
       }
     );
   }

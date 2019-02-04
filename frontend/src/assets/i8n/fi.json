@@ -276,5 +276,7 @@
   "TRANSLATED_FOODS_TO_BE_SENT_TO_BE_APPROVED": "Englanniksi käännetyt ruoat, jotka lähetetään hyväksyttäväksi",
   "NO_TRANSLATED_FOODS": "Ei ruokia, joille olisi lisätty käännös",
   "EDITED_FOODS": "Muokatut ruoat",
-  "ADMIN_DELETED_FOODS": "Poistetuksi merkatut ruoat"
+  "ADMIN_DELETED_FOODS": "Poistetuksi merkatut ruoat",
+  "APPROVE": "Hyväksy",
+  "DISAPPROVE": "Hylkää"
 }
