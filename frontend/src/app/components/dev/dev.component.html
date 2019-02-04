@@ -18,26 +18,34 @@
         <ul *ngIf="!loading && results.length === 0" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS' | translate }}</li>
           <ng-container *ngFor="let food of allFoods">
-              <li *ngIf="!food.waitingForApproval" class="list-group-item food-li"
-              ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-              <i
-                (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
-                class="far fa-trash-alt float-right"
-                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-              ></i
-            ></li>
+            <li *ngIf="!food.waitingForApproval" class="list-group-item food-li">
+              <div class="row">
+                <div class="col-11" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+                <div class="col-1">
+                  <i
+                    (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
+                    class="far fa-trash-alt float-right"
+                    title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+                  ></i>
+                </div>
+              </div>
+            </li>
           </ng-container>
         </ul>
         <ul *ngIf="!loading && results.length > 0" class="list-group">
           <ng-container *ngFor="let food of results">
-              <li *ngIf="!food.waitingForApproval" class="list-group-item food-li"
-              ><div (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-              <i
-                (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
-                class="far fa-trash-alt float-right"
-                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-              ></i
-            ></li>
+            <li *ngIf="!food.waitingForApproval" class="list-group-item food-li">
+              <div class="row">
+                <div class="col-11" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+                <div class="col-1">
+                  <i
+                    (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
+                    class="far fa-trash-alt float-right"
+                    title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+                  ></i>
+                </div>
+              </div>
+            </li>
           </ng-container>
         </ul>
       </div>
@@ -64,14 +72,18 @@
         <ul *ngIf="!findingDuplicates" class="list-group">
           <li class="list-group-item disabled">{{ 'FOUND_DUPLICATE_FOODS' | translate }}</li>
           <ng-container *ngFor="let duplicateFood of duplicateFoods">
-              <li *ngIf="!duplicateFood.waitingForApproval" class="list-group-item food-li"
-              ><div (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
-              <i
-                (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
-                class="far fa-trash-alt float-right"
-                title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
-              ></i
-            ></li>
+            <li *ngIf="!duplicateFood.waitingForApproval" class="list-group-item food-li">
+              <div class="row">
+                <div class="col-11" (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
+                <div class="col-1">
+                  <i
+                    (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
+                    class="far fa-trash-alt float-right"
+                    title="{{ 'REMOVE_FOODS_TEXT' | translate }}"
+                  ></i>
+                </div>
+              </div>
+            </li>
           </ng-container>
         </ul>
       </div>
@@ -108,7 +120,11 @@
         <ul *ngIf="!loading" class="list-group">
           <li class="list-group-item disabled">{{ 'ALL_FOODS_THAT_HAVE_NO_TRANSLATION' | translate }}</li>
           <ng-container *ngFor="let food of allFoods">
-            <li *ngIf="!food.en && !food.waitingForApproval" (click)="openTranslateFoodModal(addTranslationToFoodModal, food)" class="list-group-item food-li">
+            <li
+              *ngIf="!food.en && !food.waitingForApproval"
+              (click)="openTranslateFoodModal(addTranslationToFoodModal, food)"
+              class="list-group-item food-li"
+            >
               {{ food.name }}</li
             >
           </ng-container>

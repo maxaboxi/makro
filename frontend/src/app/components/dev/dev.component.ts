@@ -138,7 +138,7 @@ export class DevComponent implements OnInit {
   }
 
   openFoodModal(content, food, duplicate: boolean) {
-    const originalFood = food;
+    const originalFood = { ...food };
     this.selectedFood = food;
     this.modalService.open(content, { centered: true }).result.then(
       result => {

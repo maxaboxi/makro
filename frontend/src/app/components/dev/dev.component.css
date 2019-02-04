@@ -1,5 +1,6 @@
 .food-li:hover {
   background: #fcfcfc;
+  cursor: pointer;
 }
 
 .all-foods-list {
@@ -9,6 +10,10 @@
 
 .fa-trash-alt:hover {
   color: #ff3b3f;
+  cursor: pointer;
+}
+
+.col-11:hover {
   cursor: pointer;
 }
 
