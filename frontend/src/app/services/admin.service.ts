@@ -20,7 +20,7 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  removeUsers(users) {
+  removeUsers(users: String[]) {
     const url = `${this.baseUrlAuth}/removeusers`;
 
     const headers = new HttpHeaders({
@@ -35,7 +35,7 @@ export class AdminService {
     return this.http.delete(url, options);
   }
 
-  updateUserInformation(user) {
+  updateUserInformation(user: User) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -72,7 +72,7 @@ export class AdminService {
     return this.http.get(url, { headers: headers });
   }
 
-  removeFeedbacks(feedbacks) {
+  removeFeedbacks(feedbacks: String[]) {
     const url = `${this.baseUrl}/removefeedbacks`;
 
     const headers = new HttpHeaders({
@@ -142,7 +142,17 @@ export class AdminService {
     return this.http.get<EditedFood[]>(url, { headers: headers });
   }
 
-  disapproveEditedFoods(editedFoods) {
+  approveEditedFood(editedFood: EditedFood) {
+    const url = `${this.baseUrlFoods}/approve`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, editedFood, { headers: headers });
+  }
+
+  disapproveEditedFoods(editedFoods: String[]) {
     const url = `${this.baseUrlFoods}/disapprove`;
 
     const headers = new HttpHeaders({

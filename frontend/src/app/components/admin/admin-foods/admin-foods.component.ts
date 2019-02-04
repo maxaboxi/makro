@@ -24,7 +24,7 @@ export class AdminFoodsComponent implements OnInit {
   selectedEditedFood: EditedFood = null;
   deletedFoods = [];
   foodsDeleted = false;
-  editedFoodsDisapprovedOrApproved = false;
+  editedFoodsDisapproved = false;
 
   constructor(
     private foodService: FoodService,
@@ -36,7 +36,10 @@ export class AdminFoodsComponent implements OnInit {
 
   ngOnInit() {
     this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
-    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => (this.editedFoods = editedFoods));
+    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => {
+      this.editedFoods = editedFoods;
+      console.log(this.editedFoods);
+    });
   }
 
   searchFoods() {
@@ -144,8 +147,23 @@ export class AdminFoodsComponent implements OnInit {
     this.modalService.open(content, { centered: true, size: 'lg' }).result.then(
       result => {
         if (result === 'save') {
-          console.log(this.selectedEditedFood);
-          this.selectedEditedFood = null;
+          this.adminService.approveEditedFood(editedFood).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+              }
+              this.selectedEditedFood = null;
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
         }
         this.selectedEditedFood = null;
       },
@@ -156,7 +174,9 @@ export class AdminFoodsComponent implements OnInit {
   }
 
   disapproveEditedFood(index: number, editedFood: EditedFood) {
-    this.selectedEditedFood = editedFood;
+    this.disapprovedEditedFoods.push(editedFood._id);
+    this.editedFoods.splice(index, 1);
+    this.editedFoodsDisapproved = true;
   }
 
   deleteEditedFoodsFromDb() {
