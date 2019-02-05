@@ -67,7 +67,8 @@ router.get('/getallsentforapproval', (req, res) => {
 
 router.post('/approve', (req, res) => {
   const editedFood = req.body;
-
+  editedFood.editedFood.reasonForEditing = '';
+  editedFood.editedFood.waitingForApproval = false;
   Food.editFood(editedFood.editedFood, (err, food) => {
     if (err) {
       logger.log({
@@ -78,18 +79,6 @@ router.post('/approve', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Tietojen tallennus epäonnistui.' });
     } else {
-      Food.updateWaitingForApproval([editedFood.originalFood._id], false, (err, foods) => {
-        if (err) {
-          logger.log({
-            timestamp: tsFormat(),
-            level: 'error',
-            errorMsg: err
-          });
-          res.status(500);
-          res.json({ success: false, msg: 'Ruoan tietojen päivittäminen epäonnistui.' });
-          return;
-        }
-      });
       EditedFood.removeEditedFoods([editedFood._id], (err, foods) => {
         if (err) {
           logger.log({
@@ -110,7 +99,13 @@ router.post('/approve', (req, res) => {
 
 router.delete('/disapprove', (req, res) => {
   const deletedFoods = req.body;
-  EditedFood.removeEditedFoods(deletedFoods, (err, foods) => {
+  let editedFoodIds = [];
+  let originalFoodIds = [];
+  deletedFoods.forEach(f => {
+    editedFoodIds.push(f._id);
+    originalFoodIds.push(f.editedFood._id);
+  });
+  EditedFood.removeEditedFoods(editedFoodIds, (err, foods) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -120,13 +115,16 @@ router.delete('/disapprove', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Poisto epäonnistui.' });
     } else {
-      Food.updateWaitingForApproval(deletedFoods, false, (err, foods) => {
+      Food.updateWaitingForApproval(originalFoodIds, false, (err, foods) => {
         if (err) {
           logger.log({
             timestamp: tsFormat(),
             level: 'error',
             errorMsg: err
           });
+          res.status(500);
+          res.json({ success: false, msg: 'Ruoan tietojen päivittäminen epäonnistui.' });
+          return;
         }
       });
       res.status(200);

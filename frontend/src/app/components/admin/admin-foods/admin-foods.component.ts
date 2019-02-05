@@ -19,7 +19,7 @@ export class AdminFoodsComponent implements OnInit {
   searchTerm = '';
   results: Food[] = [];
   editedFoods: EditedFood[];
-  disapprovedEditedFoods = [];
+  disapprovedEditedFoods: EditedFood[] = [];
   selectedFood: Food = null;
   selectedEditedFood: EditedFood = null;
   deletedFoods = [];
@@ -171,7 +171,7 @@ export class AdminFoodsComponent implements OnInit {
   }
 
   disapproveEditedFood(index: number, editedFood: EditedFood) {
-    this.disapprovedEditedFoods.push(editedFood._id);
+    this.disapprovedEditedFoods.push(editedFood);
     this.editedFoods.splice(index, 1);
     this.editedFoodsDisapproved = true;
   }

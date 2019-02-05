@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 const FoodSchema = mongoose.Schema(
   {
@@ -105,8 +106,7 @@ module.exports.getAmountOfFoods = callback => {
 };
 
 module.exports.updateWaitingForApproval = (ids, value, callback) => {
-  console.log(ids);
   const query = { _id: { $in: ids } };
-  const update = { $set: { waitingForApproval: value } };
+  const update = { $set: { waitingForApproval: value, reasonForEditing: '' } };
   Food.updateMany(query, update, callback);
 };

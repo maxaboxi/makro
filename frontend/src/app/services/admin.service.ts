@@ -152,7 +152,7 @@ export class AdminService {
     return this.http.post(url, editedFood, { headers: headers });
   }
 
-  disapproveEditedFoods(editedFoods: String[]) {
+  disapproveEditedFoods(editedFoods: EditedFood[]) {
     const url = `${this.baseUrlFoods}/disapprove`;
 
     const headers = new HttpHeaders({
