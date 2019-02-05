@@ -20,8 +20,8 @@
           <ng-container *ngFor="let food of allFoods">
             <li *ngIf="!food.waitingForApproval" class="list-group-item food-li">
               <div class="row">
-                <div class="col-11" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-                <div class="col-1">
+                <div class="col-10" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+                <div class="col-2">
                   <i
                     (click)="openDeleteFoodModal(deleteFoodModal, food, 'all')"
                     class="far fa-trash-alt float-right"
@@ -36,8 +36,8 @@
           <ng-container *ngFor="let food of results">
             <li *ngIf="!food.waitingForApproval" class="list-group-item food-li">
               <div class="row">
-                <div class="col-11" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
-                <div class="col-1">
+                <div class="col-10" (click)="openFoodModal(foodModal, food, false)">{{ food.name }}</div>
+                <div class="col-2">
                   <i
                     (click)="openDeleteFoodModal(deleteFoodModal, food, 'results')"
                     class="far fa-trash-alt float-right"
@@ -74,8 +74,8 @@
           <ng-container *ngFor="let duplicateFood of duplicateFoods">
             <li *ngIf="!duplicateFood.waitingForApproval" class="list-group-item food-li">
               <div class="row">
-                <div class="col-11" (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
-                <div class="col-1">
+                <div class="col-10" (click)="openFoodModal(foodModal, duplicateFood, true)">{{ duplicateFood.name }}</div>
+                <div class="col-2">
                   <i
                     (click)="openDeleteFoodModal(deleteFoodModal, duplicateFood, 'duplicate')"
                     class="far fa-trash-alt float-right"

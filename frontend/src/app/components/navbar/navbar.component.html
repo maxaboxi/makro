@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"><i class="fas fa-home"></i> {{ 'MAKRO_TITLE' | translate }}</a>
+  <a class="navbar-brand" routerLink="/" (click)="ngOnInit()"><i class="fas fa-home"></i> Makro</a>
   <button
     class="navbar-toggler hidden-sm-up"
     type="button"
@@ -32,7 +32,7 @@
         <a class="nav-link" routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</a>
       </li>
       <li *ngIf="isLoggedIn && online">
-        <a class="nav-link" routerLink="/dev"><i class="fas fa-code"></i> Dev</a>
+        <a class="nav-link" routerLink="/dev"><i class="fas fa-code"></i> {{ 'HELP_DEVELOPMENT_NAV' | translate }}</a>
       </li>
       <li *ngIf="isAdmin">
         <a class="nav-link" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</a>
