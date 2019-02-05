@@ -65,10 +65,10 @@ router.get('/getallsentforapproval', (req, res) => {
   });
 });
 
-router.post('/approveeditedfood', (req, res) => {
-  const editedFood = req.body.editedFood;
+router.post('/approve', (req, res) => {
+  const editedFood = req.body;
 
-  Food.editFood(editedFood, (err, food) => {
+  Food.editFood(editedFood.editedFood, (err, food) => {
     if (err) {
       logger.log({
         timestamp: tsFormat(),
@@ -78,13 +78,28 @@ router.post('/approveeditedfood', (req, res) => {
       res.status(500);
       res.json({ success: false, msg: 'Tietojen tallennus epäonnistui.' });
     } else {
-      Food.updateWaitingForApproval([editedFood._id], false, (err, foods) => {
+      Food.updateWaitingForApproval([editedFood.originalFood._id], false, (err, foods) => {
         if (err) {
           logger.log({
             timestamp: tsFormat(),
             level: 'error',
             errorMsg: err
           });
+          res.status(500);
+          res.json({ success: false, msg: 'Ruoan tietojen päivittäminen epäonnistui.' });
+          return;
+        }
+      });
+      EditedFood.removeEditedFoods([editedFood._id], (err, foods) => {
+        if (err) {
+          logger.log({
+            timestamp: tsFormat(),
+            level: 'error',
+            errorMsg: err
+          });
+          res.status(500);
+          res.json({ success: false, msg: 'Muokatun ruoan poisto epäonnistui.' });
+          return;
         }
       });
       res.status(200);
@@ -93,7 +108,7 @@ router.post('/approveeditedfood', (req, res) => {
   });
 });
 
-router.delete('/disapproveeditedfood', (req, res) => {
+router.delete('/disapprove', (req, res) => {
   const deletedFoods = req.body;
   EditedFood.removeEditedFoods(deletedFoods, (err, foods) => {
     if (err) {

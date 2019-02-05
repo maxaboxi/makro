@@ -238,6 +238,16 @@
   <div class="modal-body">
     <div class="container">
       <div class="row">
+        <div class="col-12">
+            <h4 class="h4">{{ 'EDITED_BY' | translate }}: {{selectedEditedFood.editedBy}}</h4>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+              <h4 class="h4">{{ 'REASON_FOR_EDITING' | translate }}: {{selectedEditedFood.editedFood.reasonForEditing}}</h4>
+          </div>
+        </div>
+      <div class="row">
         <div class="col-6">
           <form #editFoodForm="ngForm" (ngSubmit)="modal.close('save')" *ngIf="!selectedEditedFood.deleted">
             <div class="form-group row">
@@ -522,7 +532,7 @@
           <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
         </div>
         <div class="col">
-          <button type="submit" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
+          <button type="button" (click)="modal.close('save')" class="btn btn-primary btn-block" [disabled]="!editFoodForm.form.valid">
             {{ 'APPROVE' | translate }}
           </button>
         </div>

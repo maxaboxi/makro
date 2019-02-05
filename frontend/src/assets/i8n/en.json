@@ -278,5 +278,6 @@
   "EDITED_FOODS": "Edited foods",
   "ADMIN_DELETED_FOODS": "Foods marked for deletion",
   "APPROVE": "Approve",
-  "DISAPPROVE": "Disapprove"
+  "DISAPPROVE": "Disapprove",
+  "EDITED_BY": "Edited by"
 }

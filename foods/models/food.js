@@ -105,6 +105,7 @@ module.exports.getAmountOfFoods = callback => {
 };
 
 module.exports.updateWaitingForApproval = (ids, value, callback) => {
+  console.log(ids);
   const query = { _id: { $in: ids } };
   const update = { $set: { waitingForApproval: value } };
   Food.updateMany(query, update, callback);

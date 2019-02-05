@@ -278,5 +278,6 @@
   "EDITED_FOODS": "Muokatut ruoat",
   "ADMIN_DELETED_FOODS": "Poistetuksi merkatut ruoat",
   "APPROVE": "Hyväksy",
-  "DISAPPROVE": "Hylkää"
+  "DISAPPROVE": "Hylkää",
+  "EDITED_BY": "Muokkaaja"
 }

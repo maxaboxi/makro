@@ -36,10 +36,7 @@ export class AdminFoodsComponent implements OnInit {
 
   ngOnInit() {
     this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
-    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => {
-      this.editedFoods = editedFoods;
-      console.log(this.editedFoods);
-    });
+    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => (this.editedFoods = editedFoods));
   }
 
   searchFoods() {
@@ -142,7 +139,6 @@ export class AdminFoodsComponent implements OnInit {
   }
 
   openEditedFoodModal(content, editedFood) {
-    console.log(editedFood);
     this.selectedEditedFood = editedFood;
     this.modalService.open(content, { centered: true, size: 'lg' }).result.then(
       result => {
@@ -154,8 +150,9 @@ export class AdminFoodsComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
+                this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
+                this.selectedEditedFood = null;
               }
-              this.selectedEditedFood = null;
             },
             (error: Error) => {
               this.flashMessage.show(error['error'].msg, {
@@ -187,10 +184,11 @@ export class AdminFoodsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
+          this.deletedFoods = [];
+          this.foodsDeleted = false;
+          this.editedFoodsDisapproved = false;
+          this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
         }
-        this.deletedFoods = [];
-        this.foodsDeleted = false;
-        this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {
