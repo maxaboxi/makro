@@ -34,8 +34,8 @@ export class AdminVotesComponent implements OnInit {
     this.adminService.getAllVotes().subscribe(votes => (this.votes = votes));
   }
 
-  deleteVote(index, vote) {
-    this.deletedVotes.push(vote);
+  deleteVote(index) {
+    this.deletedVotes.push({ ...this.votes[index] });
     this.votes.splice(index, 1);
     this.votesDeleted = true;
   }

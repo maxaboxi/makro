@@ -84,7 +84,7 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteSharedDaysFromDb() {
-    this.dayService.removeSharedDays(this.deletedDays).subscribe(
+    this.dayService.removeSharedDays(this.deletedSharedDays).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {

@@ -6,6 +6,8 @@
         [data]="feedbacks"
         [propertiesToShow]="propertiesToShow"
         (open)="openFeedbackModal(feedbackModal, $event)"
+        (delete)="deleteFeedback($event)"
+        (save)="deleteFeedbacksFromDb()"
       ></app-data-list>
     </div>
   </div>

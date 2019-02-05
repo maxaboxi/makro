@@ -2,7 +2,13 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
       <h2 class="h2 text-muted">{{ 'USERS' | translate }} ({{ users?.length }})</h2>
-      <app-data-list [data]="users" [propertiesToShow]="propertiesToShow" (open)="openUserModal(userModal, $event)"></app-data-list>
+      <app-data-list
+        [data]="users"
+        [propertiesToShow]="propertiesToShow"
+        (open)="openUserModal(userModal, $event)"
+        (delete)="deleteUser($event)"
+        (save)="deleteUsersFromDb()"
+      ></app-data-list>
     </div>
   </div>
 </div>
