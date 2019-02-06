@@ -300,8 +300,10 @@
               placeholder="{{ 'REASON_FOR_EDITING' | translate }}"
               [(ngModel)]="selectedFood.reasonForEditing"
               #reason="ngModel"
+              [ngClass]="{ 'is-invalid': reason.errors && reason.touched }"
               required
             ></textarea>
+            <div [hidden]="!reason.errors?.required" class="invalid-feedback"> {{ 'REASON_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="container text-center">
@@ -338,8 +340,10 @@
               placeholder="{{ 'REASON_FOR_DELETE' | translate }}"
               [(ngModel)]="selectedFood.reasonForEditing"
               #reason="ngModel"
+              [ngClass]="{ 'is-invalid': reason.errors && reason.touched }"
               required
             ></textarea>
+            <div [hidden]="!reason.errors?.required" class="invalid-feedback"> {{ 'REASON_REQUIRED' | translate }} </div>
           </div>
         </div>
         <div class="container text-center">
