@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Makro.Models;
 using Microsoft.EntityFrameworkCore;
 using Makro.Services;
+using AutoMapper;
 
 namespace Makro
 {
@@ -25,6 +26,8 @@ namespace Makro
             services.AddEntityFrameworkNpgsql().AddDbContext<MakroContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MakroDB")));
             services.AddScoped<UserService>();
             services.AddScoped<MealService>();
+            services.AddAutoMapper();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Makro.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,8 +17,9 @@ namespace Makro.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MongoId = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<byte[]>(nullable: true),
+                    Salt = table.Column<byte[]>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     Age = table.Column<int>(nullable: false),
                     Height = table.Column<decimal>(nullable: false),
                     Weight = table.Column<decimal>(nullable: false),
@@ -97,6 +98,12 @@ namespace Makro.Migrations
                 name: "IX_Meals_UserId",
                 table: "Meals",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username_Email",
+                table: "Users",
+                columns: new[] { "Username", "Email" },
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -10,5 +10,11 @@ namespace Makro.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Food> Foods { get; set; }
         public DbSet<Meal> Meals { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+            .HasIndex(u => new { u.Username, u.Email }).IsUnique();
+        }
     }
 }

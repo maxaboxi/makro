@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Makro.Services;
 using Makro.DTO;
+using AutoMapper;
 namespace Makro.Controllers
 {
     [Route("api/v2/user")]
@@ -11,12 +12,29 @@ namespace Makro.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        public UserController(UserService userService)
+        private readonly IMapper _mapper;
+        public UserController(UserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> RegisterUser(UserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            var result = await _userService.RegisterUser(user, userDto.Password);
+
+            return CreatedAtAction(nameof(_userService.GetUser), new { id = user.Id }, user);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<bool>> LoginUser(LoginDto login)
+        {
+            return await _userService.LoginUser(login);
+        }
+
+        [HttpGet("allusers")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
             return await _userService.GetUsers();
         }
@@ -32,14 +50,6 @@ namespace Makro.Controllers
             }
 
             return user;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<User>> RegisterUser(User user)
-        {
-            var result = await _userService.RegisterUser(user);
-
-            return CreatedAtAction(nameof(_userService.GetUser), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]

@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190207120417_Initial")]
-    partial class Initial
+    [Migration("20190208103432_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,8 +89,7 @@ namespace Makro.Migrations
 
                     b.Property<decimal>("DailyExpenditure");
 
-                    b.Property<string>("Email")
-                        .IsRequired();
+                    b.Property<string>("Email");
 
                     b.Property<decimal>("Height");
 
@@ -98,10 +97,11 @@ namespace Makro.Migrations
 
                     b.Property<string>("MongoId");
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<byte[]>("Password");
 
                     b.Property<List<string>>("Roles");
+
+                    b.Property<byte[]>("Salt");
 
                     b.Property<string>("Sex");
 
@@ -119,6 +119,9 @@ namespace Makro.Migrations
                     b.Property<decimal>("Weight");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username", "Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

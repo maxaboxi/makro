@@ -9,9 +9,8 @@ namespace Makro.Models
         public string MongoId { get; set; }
         [Required]
         public string Username { get; set; }
-        [Required]
-        public string Password { get; set; }
-        [Required]
+        public byte[] Password { get; set; }
+        public byte[] Salt { get; set; }
         public string Email { get; set; }
 
         public int Age { get; set; }

@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System.Linq;
+using System.Security.Cryptography;
+using System;
+using AutoMapper;
+using Makro.Exceptions;
 namespace Makro.Services
 {
     public class UserService
@@ -15,6 +19,40 @@ namespace Makro.Services
         {
             _context = context;
             _mealService = mealService;
+        }
+
+        public async Task<int> RegisterUser(User user, string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new AppException("Password is required");
+
+            if (_context.Users.Any(u => u.Username == user.Username))
+                throw new AppException("Username \"" + user.Username + "\" is already taken");
+
+            if (_context.Users.Any(u => u.Email == user.Email))
+                throw new AppException("Email \"" + user.Email + "\" is already taken");
+
+            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            user.Password = passwordHash;
+            user.Salt = passwordSalt;
+            _context.Add(user);
+            user.Meals = _mealService.GenerateDefaultMeals();
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> LoginUser(LoginDto login)
+        {
+            var foundUser = await _context.Users.Where(u => u.Username == login.usernameOrEmail || u.Email == login.usernameOrEmail).FirstOrDefaultAsync();
+            if (foundUser != null)
+            {
+                if (VerifyPasswordHash(login.password, foundUser.Password, foundUser.Salt))
+                {
+                    foundUser.LastLogin = DateTime.Now;
+                    await UpdateUserInformation(foundUser);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
@@ -37,13 +75,6 @@ namespace Makro.Services
         public Task<UserDto> GetUserDto(int id)
         {
             return ConvertToUserDto(id);
-        }
-
-        public async Task<int> RegisterUser(User user)
-        {
-            _context.Add(user);
-            user.Meals = _mealService.GenerateDefaultMeals();
-            return await _context.SaveChangesAsync();
         }
 
         public async Task<int> UpdateUserInformation(User user)
@@ -98,6 +129,37 @@ namespace Makro.Services
             };
 
             return userDto;
+        }
+
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException(nameof(password));
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+
+            using (var hmac = new HMACSHA512(storedSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != storedHash[i]) return false;
+                }
+            }
+            
+            return true;
         }
 
 
