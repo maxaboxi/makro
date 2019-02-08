@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Makro.Models;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Makro.Services;
 using Makro.DTO;
 using AutoMapper;
@@ -30,13 +29,12 @@ namespace Makro.Controllers
             _appSettings = appSettings.Value;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser(UserDto userDto)
+        public async Task<ResultDto> RegisterUser(UserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
-            var result = await _userService.RegisterUser(user, userDto.Password);
-
-            return CreatedAtAction(nameof(_userService.GetUser), new { id = user.Id }, user);
+            return await _userService.RegisterUser(user, userDto.Password);
         }
 
         [AllowAnonymous]
@@ -72,19 +70,14 @@ namespace Makro.Controllers
             });
         }
 
-        [HttpGet("allusers")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
-            return await _userService.GetUsers();
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserInformation(int id)
         {
-            var user = await _userService.GetUserDto(id);
+            var user = await _userService.GetUserInformation(id);
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found");
             }
 
             return user;
@@ -100,7 +93,7 @@ namespace Makro.Controllers
 
             var result = await _userService.UpdateUserInformation(user);
 
-            return NoContent();
+            return Ok(new ResultDto(true, "Information updated"));
         }
 
         [HttpDelete("{id}")]
@@ -108,7 +101,7 @@ namespace Makro.Controllers
         {
             await _userService.DeleteAccount(id);
 
-            return NoContent();
+            return Ok(new ResultDto(true, "Account deleted"));
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Makro
             services.AddEntityFrameworkNpgsql().AddDbContext<MakroContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MakroDB")));
             services.AddScoped<UserService>();
             services.AddScoped<MealService>();
+            services.AddScoped<AdminService>();
             services.AddAutoMapper();
             services.AddCors();
 
@@ -54,7 +55,7 @@ namespace Makro
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
                         var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetUser(userId);
+                        var user = userService.GetUserInformation(userId);
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists

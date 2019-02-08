@@ -1,42 +1,63 @@
 ﻿using Makro.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System.Linq;
 using System.Security.Cryptography;
 using System;
 using Makro.Exceptions;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Net;
 namespace Makro.Services
 {
     public class UserService
     {
         private readonly MakroContext _context;
         private readonly MealService _mealService;
-        public UserService(MakroContext context, MealService mealService)
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
+        public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger)
         {
             _context = context;
             _mealService = mealService;
+            _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<int> RegisterUser(User user, string password)
+        public async Task<ResultDto> RegisterUser(User user, string password)
         {
+
             if (string.IsNullOrWhiteSpace(password))
-                throw new AppException("Password is required");
+            {
+                return new ResultDto(false, "Password is required");
+            }
 
             if (_context.Users.Any(u => u.Username == user.Username))
-                throw new AppException("Username \"" + user.Username + "\" is already taken");
+            {
+                return new ResultDto(false, "Username is already taken");
+            }
 
             if (_context.Users.Any(u => u.Email == user.Email))
-                throw new AppException("Email \"" + user.Email + "\" is already taken");
-
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            user.Password = passwordHash;
-            user.Salt = passwordSalt;
-            _context.Add(user);
-            user.Meals = _mealService.GenerateDefaultMeals();
-            return await _context.SaveChangesAsync();
+            {
+                return new ResultDto(false, "Email is already taken");
+            }
+            try
+            {
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                user.Password = passwordHash;
+                user.Salt = passwordSalt;
+                _context.Add(user);
+                user.Meals = _mealService.GenerateDefaultMeals();
+                await _context.SaveChangesAsync();
+                return new ResultDto(true, "Registration succesful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+            }
+            return null;
         }
 
         public async Task<User> Authenticate(LoginDto login)
@@ -44,36 +65,34 @@ namespace Makro.Services
             var foundUser = await _context.Users.Where(u => u.Username == login.usernameOrEmail || u.Email == login.usernameOrEmail).FirstOrDefaultAsync();
             if (foundUser != null)
             {
-                if (VerifyPasswordHash(login.password, foundUser.Password, foundUser.Salt))
+                try
                 {
-                    foundUser.LastLogin = DateTime.Now;
-                    await UpdateUserInformation(foundUser);
-                    return foundUser;
+                    if (VerifyPasswordHash(login.password, foundUser.Password, foundUser.Salt))
+                    {
+                        foundUser.LastLogin = DateTime.Now;
+                        await UpdateUserInformation(foundUser);
+                        return foundUser;
+                    }
+                } catch (Exception e)
+                {
+                    _logger.LogError(e.ToString());
                 }
+
             }
             return null;
         }
 
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-        {
-
-            return await _context.Users.ToListAsync();
-        }
-
-        public async Task<ActionResult<User>> GetUser (int id)
+        public async Task<ActionResult<UserDto>> GetUserInformation (int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            if (user != null)
             {
-                return null;
+                var userDto = _mapper.Map<UserDto>(user);
+                userDto.Meals = _mealService.ConvertToMealDto(await _context.Meals.Where(m => m.User.Id == user.Id).ToListAsync());
+                return userDto;
             }
 
-            return user;
-        }
-
-        public Task<UserDto> GetUserDto(int id)
-        {
-            return ConvertToUserDto(id);
+            return null;
         }
 
         public async Task<int> UpdateUserInformation(User user)
@@ -98,42 +117,16 @@ namespace Makro.Services
             return true;
         }
 
-        public async Task<UserDto> ConvertToUserDto(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return null;
-            }
-            var meals = await _context.Meals.Where(m => m.User.Id == user.Id).ToListAsync();
-            var mealDtos = _mealService.ConvertToMealDto(meals);
-
-            var userDto = new UserDto
-            {
-                MongoId = user.MongoId,
-                Username = user.Username,
-                Email = user.Email,
-                Age = user.Age,
-                Height = user.Height,
-                Weight = user.Weight,
-                Activity = user.Activity,
-                Sex = user.Sex,
-                DailyExpenditure = user.DailyExpenditure,
-                UserAddedExpenditure = user.UserAddedExpenditure,
-                UserAddedProteinTarget = user.UserAddedProteinTarget,
-                UserAddedCarbTarget = user.UserAddedCarbTarget,
-                UserAddedFatTarget = user.UserAddedFatTarget,
-                Roles = user.Roles,
-                Meals = mealDtos
-            };
-
-            return userDto;
-        }
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            if (password == null) throw new ArgumentNullException(nameof(password));
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            }
 
             using (var hmac = new HMACSHA512())
             {
@@ -144,24 +137,40 @@ namespace Makro.Services
 
         private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            }
+
+            if (storedHash.Length != 64)
+            {
+                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", nameof(storedHash));
+            }
+
+            if (storedSalt.Length != 128)
+            {
+                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", nameof(storedSalt));
+            }
 
             using (var hmac = new HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
                 {
-                    if (computedHash[i] != storedHash[i]) return false;
+                    if (computedHash[i] != storedHash[i])
+                    {
+                        return false;
+                    }
                 }
             }
-            
+
             return true;
         }
-
-
 
     }
 }
