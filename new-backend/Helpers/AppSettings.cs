@@ -1,5 +1,4 @@
-﻿using System;
-namespace Makro.Helpsers
+﻿namespace Makro.Helpers
 {
     public class AppSettings
     {

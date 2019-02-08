@@ -5,6 +5,14 @@ using System.Collections.Generic;
 using Makro.Services;
 using Makro.DTO;
 using AutoMapper;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Makro.Helpers;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 namespace Makro.Controllers
 {
     [Route("api/v2/user")]
@@ -13,10 +21,13 @@ namespace Makro.Controllers
     {
         private readonly UserService _userService;
         private readonly IMapper _mapper;
-        public UserController(UserService userService, IMapper mapper)
+        private readonly AppSettings _appSettings;
+
+        public UserController(UserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("register")]
@@ -28,10 +39,37 @@ namespace Makro.Controllers
             return CreatedAtAction(nameof(_userService.GetUser), new { id = user.Id }, user);
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<bool>> LoginUser(LoginDto login)
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate(LoginDto login)
         {
-            return await _userService.LoginUser(login);
+            var user = await _userService.Authenticate(login);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.MongoId ??user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new
+            {
+                Id = user.MongoId,
+                user.Username,
+                Token = tokenString
+            });
         }
 
         [HttpGet("allusers")]

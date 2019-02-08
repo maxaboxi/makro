@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Makro.Models;
 using Makro.DTO;
-namespace Makro.Helpsers
+namespace Makro.Helpers
 {
     public class AutoMapperProfile : Profile
     {

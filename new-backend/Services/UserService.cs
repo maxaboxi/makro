@@ -7,7 +7,6 @@ using Makro.DTO;
 using System.Linq;
 using System.Security.Cryptography;
 using System;
-using AutoMapper;
 using Makro.Exceptions;
 namespace Makro.Services
 {
@@ -40,7 +39,7 @@ namespace Makro.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> LoginUser(LoginDto login)
+        public async Task<User> Authenticate(LoginDto login)
         {
             var foundUser = await _context.Users.Where(u => u.Username == login.usernameOrEmail || u.Email == login.usernameOrEmail).FirstOrDefaultAsync();
             if (foundUser != null)
@@ -49,10 +48,10 @@ namespace Makro.Services
                 {
                     foundUser.LastLogin = DateTime.Now;
                     await UpdateUserInformation(foundUser);
-                    return true;
+                    return foundUser;
                 }
             }
-            return false;
+            return null;
         }
 
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
