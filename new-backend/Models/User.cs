@@ -6,7 +6,8 @@ namespace Makro.Models
     public class User
     {
         public int Id { get; set; }
-        public string MongoId { get; set; }
+        [Required]
+        public string ObjectId { get; set; }
         [Required]
         public string Username { get; set; }
         public byte[] Password { get; set; }
@@ -25,6 +26,8 @@ namespace Makro.Models
         public decimal UserAddedFatTarget { get; set; }
         public DateTime LastLogin { get; set; }
         public List<string> Roles { get; set; }
-        public ICollection<Meal> Meals { get; set; }
+        public List<MealName> Meals { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

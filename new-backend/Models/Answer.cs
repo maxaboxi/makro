@@ -1,17 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using System;
 namespace Makro.Models
 {
-    public class Meal
+    public class Answer
     {
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        [Required]
         public User User { get; set; }
         [Required]
-        public ICollection<Food> Foods { get; set; }
+        public Question Question { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        [Required]
+        public string AnswerBody { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

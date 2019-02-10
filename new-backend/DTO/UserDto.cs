@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Makro.Models;
 namespace Makro.DTO
 {
     public class UserDto
     {
-        public string MongoId { get; set; }
+        public string ObjectID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -18,6 +19,6 @@ namespace Makro.DTO
         public decimal UserAddedCarbTarget { get; set; }
         public decimal UserAddedFatTarget { get; set; }
         public List<string> Roles { get; set; }
-        public List<MealDto> Meals { get; set; }
+        public List<MealName> Meals { get; set; }
     }
 }

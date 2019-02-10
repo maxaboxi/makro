@@ -1,29 +1,15 @@
 ﻿using Makro.Models;
 using System.Collections.Generic;
-using Makro.DTO;
 namespace Makro.Services
 {
     public class MealService
     {
-        private readonly MakroContext _context;
-        public MealService(MakroContext makroContext)
+        public List<MealName> GenerateDefaultMeals()
         {
-            _context = makroContext;
-        }
-
-        public List<Meal> GenerateDefaultMeals()
-        {
-            return new List<Meal>
+            return new List<MealName>
             {
-                new Meal("Aamupala"), new Meal("Lounas"), new Meal("Välipala 1"), new Meal("Sali"), new Meal("Välipala 2"), new Meal("Iltapala")
+                new MealName("Aamupala"), new MealName("Lounas"), new MealName("Välipala 1"), new MealName("Sali"), new MealName("Välipala 2"), new MealName("Iltapala")
             };
-        }
-
-        public List<MealDto> ConvertToMealDto(List<Meal> meals)
-        {
-            var mealDtos = new List<MealDto>();
-            meals.ForEach(m => mealDtos.Add(new MealDto(m.Name)));
-            return mealDtos;
         }
     }
 }

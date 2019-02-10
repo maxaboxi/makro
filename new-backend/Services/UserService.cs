@@ -6,10 +6,8 @@ using Makro.DTO;
 using System.Linq;
 using System.Security.Cryptography;
 using System;
-using Makro.Exceptions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using System.Net;
 namespace Makro.Services
 {
     public class UserService
@@ -48,8 +46,9 @@ namespace Makro.Services
                 CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.Password = passwordHash;
                 user.Salt = passwordSalt;
-                _context.Add(user);
                 user.Meals = _mealService.GenerateDefaultMeals();
+                user.ObjectId = RandomString();
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return new ResultDto(true, "Registration succesful");
             }
@@ -84,12 +83,12 @@ namespace Makro.Services
 
         public async Task<ActionResult<UserDto>> GetUserInformation (int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(u => u.Meals).Where(p => p.Id == id).FirstOrDefaultAsync();
+
             if (user != null)
             {
-                var userDto = _mapper.Map<UserDto>(user);
-                userDto.Meals = _mealService.ConvertToMealDto(await _context.Meals.Where(m => m.User.Id == user.Id).ToListAsync());
-                return userDto;
+                user.Password = null;
+                return _mapper.Map<UserDto>(user);
             }
 
             return null;
@@ -170,6 +169,14 @@ namespace Makro.Services
             }
 
             return true;
+        }
+
+        private static Random random = new Random();
+        public static string RandomString()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, 24)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
     }
