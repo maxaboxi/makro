@@ -95,6 +95,12 @@ namespace Makro.Services
             return null;
         }
 
+        public User GetUserInformationObjectIdForAuthorization(string id)
+        {
+
+            return _context.Users.Where(p => p.ObjectId == id).FirstOrDefault();
+        }
+
         public async Task<ResultDto> UpdateUserInformation(User user)
         {
             _context.Entry(user).State = EntityState.Modified;

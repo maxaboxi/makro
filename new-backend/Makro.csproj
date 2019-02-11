@@ -32,5 +32,6 @@
     <Compile Remove="Migrations\20190207090228_InitialMigration.cs" />
     <Compile Remove="Migrations\20190207090228_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20190207085040_UserChanges.cs" />
+    <Compile Remove="Helpers\CheckAuthentication.cs" />
   </ItemGroup>
 </Project>

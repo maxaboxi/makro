@@ -14,7 +14,7 @@ namespace Makro.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public MealService(MakroContext context, IMapper mapper, ILogger logger)
+        public MealService(MakroContext context, IMapper mapper, ILogger<MealService> logger)
         {
             _context = context;
             _mapper = mapper;

@@ -13,7 +13,7 @@ namespace Makro.Services
         private readonly MakroContext _context;
         private readonly ILogger _logger;
 
-        public FoodService(MakroContext context, ILogger logger)
+        public FoodService(MakroContext context, ILogger<FoodService> logger)
         {
             _logger = logger;
             _context = context;
@@ -24,9 +24,9 @@ namespace Makro.Services
             return await _context.Foods.ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoodsByUser(User user)
+        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoodsByUser(string id)
         {
-            return await _context.Foods.Where(f => f.User.Id == user.Id || f.User.Username == user.Username).ToListAsync();
+            return await _context.Foods.Where(f => f.User.ObjectId == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewFood(Food food)

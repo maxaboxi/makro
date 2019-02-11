@@ -310,7 +310,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    MongoId = table.Column<string>(nullable: true),
+                    ObjectId = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Energy = table.Column<decimal>(nullable: false),
@@ -320,16 +320,25 @@ namespace Makro.Migrations
                     Fiber = table.Column<decimal>(nullable: false),
                     PackageSize = table.Column<decimal>(nullable: false),
                     ServingSize = table.Column<decimal>(nullable: false),
-                    Username = table.Column<string>(nullable: true),
                     En = table.Column<string>(nullable: true),
-                    WaitingForApproval = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    MealId = table.Column<int>(nullable: true)
+                    Discriminator = table.Column<string>(nullable: false),
+                    MealId = table.Column<int>(nullable: true),
+                    WaitingForApproval = table.Column<bool>(nullable: true),
+                    ReasonForEditing = table.Column<string>(nullable: true),
+                    EditedById = table.Column<int>(nullable: true),
+                    EnglishTranslation = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Foods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Foods_Users_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Foods_Meals_MealId",
                         column: x => x.MealId,
@@ -472,6 +481,11 @@ namespace Makro.Migrations
                 name: "IX_Feedbacks_UserId",
                 table: "Feedbacks",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Foods_EditedById",
+                table: "Foods",
+                column: "EditedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Foods_MealId",

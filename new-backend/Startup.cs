@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace Makro
 {
@@ -32,6 +33,14 @@ namespace Makro
             services.AddScoped<UserService>();
             services.AddScoped<MealService>();
             services.AddScoped<AdminService>();
+            services.AddScoped<FoodService>();
+            services.AddScoped<AnswerService>();
+            services.AddScoped<ArticleService>();
+            services.AddScoped<CommentService>();
+            services.AddScoped<DayService>();
+            services.AddScoped<FeedbackService>();
+            services.AddScoped<LikeService>();
+            services.AddScoped<QuestionService>();
             services.AddAutoMapper();
             services.AddCors();
 
@@ -54,11 +63,12 @@ namespace Makro
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetUserInformation(userId);
+                        var userId = context.Principal.Identity.Name;
+                        var user = userService.GetUserInformationObjectIdForAuthorization(userId);
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists
+                            Console.WriteLine("ei user");
                             context.Fail("Unauthorized");
                         }
                         return Task.CompletedTask;
@@ -91,6 +101,7 @@ namespace Makro
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190210113729_InitialMigration")]
+    [Migration("20190211112916_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -176,6 +176,9 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("En");
 
                     b.Property<decimal>("Energy");
@@ -184,9 +187,10 @@ namespace Makro.Migrations
 
                     b.Property<int?>("MealId");
 
-                    b.Property<string>("MongoId");
-
                     b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("ObjectId")
                         .IsRequired();
 
                     b.Property<decimal>("PackageSize");
@@ -201,10 +205,6 @@ namespace Makro.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("Username");
-
-                    b.Property<bool>("WaitingForApproval");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MealId");
@@ -212,6 +212,8 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Foods");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Food");
                 });
 
             modelBuilder.Entity("Makro.Models.Like", b =>
@@ -425,6 +427,24 @@ namespace Makro.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Makro.Models.EditedFood", b =>
+                {
+                    b.HasBaseType("Makro.Models.Food");
+
+                    b.Property<int>("EditedById");
+
+                    b.Property<string>("EnglishTranslation");
+
+                    b.Property<string>("ReasonForEditing")
+                        .IsRequired();
+
+                    b.Property<bool>("WaitingForApproval");
+
+                    b.HasIndex("EditedById");
+
+                    b.HasDiscriminator().HasValue("EditedFood");
+                });
+
             modelBuilder.Entity("Makro.Models.Answer", b =>
                 {
                     b.HasOne("Makro.Models.Question", "Question")
@@ -576,6 +596,14 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Makro.Models.EditedFood", b =>
+                {
+                    b.HasOne("Makro.Models.User", "EditedBy")
+                        .WithMany()
+                        .HasForeignKey("EditedById")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

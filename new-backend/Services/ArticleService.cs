@@ -13,7 +13,7 @@ namespace Makro.Services
         private readonly MakroContext _context;
         private readonly ILogger _logger;
 
-        public ArticleService(MakroContext context, ILogger logger)
+        public ArticleService(MakroContext context, ILogger<ArticleService> logger)
         {
             _logger = logger;
             _context = context;
