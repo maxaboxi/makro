@@ -91,9 +91,7 @@ namespace Makro.Controllers
                 return BadRequest();
             }
 
-            var result = await _userService.UpdateUserInformation(user);
-
-            return Ok(new ResultDto(true, "Information updated"));
+            return Ok(await _userService.UpdateUserInformation(user));
         }
 
         [HttpDelete("{id}")]

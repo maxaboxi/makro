@@ -5,7 +5,8 @@ namespace Makro.Models
     public class Food
     {
         public int Id { get; set; }
-        public string MongoId { get; set; }
+        [Required]
+        public string ObjectId { get; set; }
         [Required]
         public User User { get; set; }
         [Required]
@@ -20,9 +21,7 @@ namespace Makro.Models
         public decimal Fiber { get; set; }
         public decimal PackageSize { get; set; }
         public decimal ServingSize { get; set; }
-        public string Username { get; set; }
         public string En { get; set; }
-        public Boolean WaitingForApproval { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

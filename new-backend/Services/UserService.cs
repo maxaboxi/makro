@@ -16,6 +16,7 @@ namespace Makro.Services
         private readonly MealService _mealService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+
         public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger)
         {
             _context = context;
@@ -46,7 +47,7 @@ namespace Makro.Services
                 CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.Password = passwordHash;
                 user.Salt = passwordSalt;
-                user.Meals = _mealService.GenerateDefaultMeals();
+                user.Meals = _mealService.GenerateDefaultMealNamesForUser();
                 user.ObjectId = RandomString();
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -94,26 +95,32 @@ namespace Makro.Services
             return null;
         }
 
-        public async Task<int> UpdateUserInformation(User user)
+        public async Task<ResultDto> UpdateUserInformation(User user)
         {
             _context.Entry(user).State = EntityState.Modified;
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Information updated succesfully");
 
-       }
+        }
 
-        public async Task<bool> DeleteAccount(int id)
+        public async Task<ResultDto> DeleteAccount(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {
-                return false;
+                return new ResultDto(false, "User not found");
             }
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return true;
+            return new ResultDto(true, "User deleted succesfully");
+        }
+
+        public async Task<AmountDto> GetAmountOfUsers()
+        {
+            return new AmountDto(await _context.Users.CountAsync());
         }
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

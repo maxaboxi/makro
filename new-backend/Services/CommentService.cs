@@ -1,0 +1,66 @@
+﻿using Makro.Models;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Makro.DTO;
+namespace Makro.Services
+{
+    public class CommentService
+    {
+        private readonly MakroContext _context;
+        private readonly ILogger _logger;
+
+        public CommentService(MakroContext context, ILogger logger)
+        {
+            _logger = logger;
+            _context = context;
+        }
+
+        public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsForAnswer(int id)
+        {
+            return await _context.Comments.Where(c => c.Answer.Id == id).ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsForArticle(int id)
+        {
+            return await _context.Comments.Where(c => c.Article.Id == id).ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsByUser(User user)
+        {
+            return await _context.Comments.Where(c => c.User.Id == user.Id || c.User.Username == user.Username).ToListAsync();
+        }
+
+        public async Task<ResultDto> AddNewComment(Comment comment)
+        {
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Comment added succesfully");
+        }
+
+        public async Task<ResultDto> UpdateComment(Comment comment)
+        {
+            _context.Entry(comment).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Comment updated succesfully");
+        }
+
+        public async Task<ResultDto> DeleteComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null)
+            {
+                _logger.LogDebug("Comment not found with id: ", id);
+                return new ResultDto(false, "Comment not found");
+            }
+
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Comment deleted succesfully");
+        }
+    }
+}
