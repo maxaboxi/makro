@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 namespace Makro.Models
 {
     public class MakroContext : DbContext
@@ -30,14 +31,14 @@ namespace Makro.Models
                 .HasMany(u => u.Meals)
                 .WithOne(e => e.User);
             modelBuilder.Entity<User>()
-                .HasIndex(u => new { u.Username }).IsUnique();
+                .HasIndex(u => u.Username).IsUnique();
             modelBuilder.Entity<User>()
-                .HasIndex(u => new { u.Email }).IsUnique();
+                .HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>()
-                .HasIndex(u => new { u.UUID }).IsUnique();
+                .HasIndex(u => u.UUID).IsUnique();
 
             modelBuilder.Entity<Food>()
-                .HasIndex(f => new { f.UUID }).IsUnique();
+                .HasIndex(f => f.UUID).IsUnique();
 
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Images)
@@ -45,6 +46,11 @@ namespace Makro.Models
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Comments)
                 .WithOne(e => e.Article);
+            modelBuilder.Entity<Article>()
+                .HasIndex(a => a.UUID).IsUnique();
+
+            modelBuilder.Entity<ArticleImage>()
+                .HasIndex(e => e.UUID).IsUnique();
 
             modelBuilder.Entity<Answer>()
                 .HasOne(e => e.Question)
@@ -52,6 +58,35 @@ namespace Makro.Models
             modelBuilder.Entity<Answer>()
                 .HasMany(a => a.Comments)
                 .WithOne(e => e.Answer);
+            modelBuilder.Entity<Answer>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<Meal>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<MealName>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<EditedFood>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<Comment>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<Question>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<SharedDay>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<SharedMeal>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<Like>()
+                .HasIndex(e => e.UUID).IsUnique();
+
+            modelBuilder.Entity<Feedback>()
+                .HasIndex(e => e.UUID).IsUnique();
 
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class QuestionService
@@ -31,6 +32,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewQuestion(Question question)
         {
+            question.UUID = Guid.NewGuid().ToString();
             _context.Add(question);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Question added succesfully");

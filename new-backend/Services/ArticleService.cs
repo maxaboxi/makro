@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class ArticleService
@@ -31,6 +32,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewArticle(Article article)
         {
+            article.UUID = Guid.NewGuid().ToString();
             _context.Add(article);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article added succesfully");

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class DayService
@@ -26,6 +27,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewDay(Day day)
         {
+            day.UUID = Guid.NewGuid().ToString();
             _context.Add(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day added succesfully");

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class MealService
@@ -28,6 +29,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewSharedMeal(SharedMeal sharedMeal)
         {
+            sharedMeal.UUID = Guid.NewGuid().ToString();
             _context.Add(sharedMeal);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal shared succesfully");

@@ -6,6 +6,8 @@ namespace Makro.Models
     {
         public int Id { get; set; }
         [Required]
+        public string UUID { get; set; }
+        [Required]
         public User User { get; set; }
         public Answer Answer { get; set; }
         public Article Article { get; set; }

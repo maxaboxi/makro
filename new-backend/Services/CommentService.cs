@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class CommentService
@@ -36,6 +37,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewComment(Comment comment)
         {
+            comment.UUID = Guid.NewGuid().ToString();
             _context.Add(comment);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Comment added succesfully");

@@ -15,7 +15,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    ObjectId = table.Column<string>(nullable: false),
+                    UUID = table.Column<string>(nullable: false),
                     Username = table.Column<string>(nullable: false),
                     Password = table.Column<byte[]>(nullable: true),
                     Salt = table.Column<byte[]>(nullable: true),
@@ -46,6 +46,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Body = table.Column<string>(nullable: false),
@@ -70,6 +71,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -92,6 +94,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     FeedbackBody = table.Column<string>(nullable: false),
                     Answer = table.Column<string>(nullable: true),
@@ -123,6 +126,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -145,6 +149,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     QuestionBody = table.Column<string>(nullable: false),
                     QuestionInformation = table.Column<string>(nullable: true),
@@ -169,6 +174,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
@@ -190,6 +196,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     ArticleId = table.Column<int>(nullable: false),
                     Image = table.Column<byte[]>(nullable: false)
                 },
@@ -210,6 +217,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     QuestionId = table.Column<int>(nullable: false),
                     AnswerBody = table.Column<string>(nullable: false),
@@ -239,6 +247,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -275,6 +284,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     AnswerId = table.Column<int>(nullable: true),
                     ArticleId = table.Column<int>(nullable: true),
@@ -310,7 +320,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    ObjectId = table.Column<string>(nullable: false),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Energy = table.Column<decimal>(nullable: false),
@@ -359,6 +369,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     MealId = table.Column<int>(nullable: false),
                     Tags = table.Column<List<string>>(nullable: false),
@@ -388,6 +399,7 @@ namespace Makro.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Value = table.Column<int>(nullable: false),
                     ArticleId = table.Column<int>(nullable: true),
@@ -438,6 +450,12 @@ namespace Makro.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Answers_UUID",
+                table: "Answers",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Answers_UserId",
                 table: "Answers",
                 column: "UserId");
@@ -446,6 +464,18 @@ namespace Makro.Migrations
                 name: "IX_ArticleImages_ArticleId",
                 table: "ArticleImages",
                 column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArticleImages_UUID",
+                table: "ArticleImages",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_UUID",
+                table: "Articles",
+                column: "UUID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_UserId",
@@ -463,6 +493,12 @@ namespace Makro.Migrations
                 column: "ArticleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_UUID",
+                table: "Comments",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
                 table: "Comments",
                 column: "UserId");
@@ -478,6 +514,12 @@ namespace Makro.Migrations
                 column: "AnsweredById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_UUID",
+                table: "Feedbacks",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_UserId",
                 table: "Feedbacks",
                 column: "UserId");
@@ -491,6 +533,12 @@ namespace Makro.Migrations
                 name: "IX_Foods_MealId",
                 table: "Foods",
                 column: "MealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Foods_UUID",
+                table: "Foods",
+                column: "UUID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Foods_UserId",
@@ -518,9 +566,21 @@ namespace Makro.Migrations
                 column: "SharedMealId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Likes_UUID",
+                table: "Likes",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Likes_UserId",
                 table: "Likes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MealNames_UUID",
+                table: "MealNames",
+                column: "UUID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MealNames_UserId",
@@ -538,14 +598,32 @@ namespace Makro.Migrations
                 column: "SharedDayId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Meals_UUID",
+                table: "Meals",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Meals_UserId",
                 table: "Meals",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Questions_UUID",
+                table: "Questions",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_UserId",
                 table: "Questions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SharedDays_UUID",
+                table: "SharedDays",
+                column: "UUID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SharedDays_UserId",
@@ -558,6 +636,12 @@ namespace Makro.Migrations
                 column: "MealId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SharedMeals_UUID",
+                table: "SharedMeals",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SharedMeals_UserId",
                 table: "SharedMeals",
                 column: "UserId");
@@ -566,6 +650,12 @@ namespace Makro.Migrations
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UUID",
+                table: "Users",
+                column: "UUID",
                 unique: true);
 
             migrationBuilder.CreateIndex(

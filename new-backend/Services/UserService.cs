@@ -50,6 +50,7 @@ namespace Makro.Services
                 user.Meals = _mealService.GenerateDefaultMealNamesForUser();
                 user.UUID = Guid.NewGuid().ToString();
                 _context.Add(user);
+
                 await _context.SaveChangesAsync();
                 return new ResultDto(true, "Registration succesful");
             }

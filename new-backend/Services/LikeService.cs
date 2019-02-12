@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class LikeService
@@ -46,6 +47,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewLike(Like like)
         {
+            like.UUID = Guid.NewGuid().ToString();
             _context.Add(like);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Like added succesfully");

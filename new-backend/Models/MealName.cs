@@ -5,7 +5,10 @@ namespace Makro.Models
 {
     public class MealName
     {
+        [JsonIgnore]
         public int Id { get; set; }
+        [Required]
+        public string UUID { get; set; }
         [Required]
         [JsonIgnore]
         public User User { get; set; }
@@ -17,6 +20,7 @@ namespace Makro.Models
         public MealName(string name)
         {
             Name = name;
+            UUID = Guid.NewGuid().ToString();
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
         }

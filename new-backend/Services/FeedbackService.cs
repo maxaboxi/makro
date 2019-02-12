@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class FeedbackService
@@ -31,6 +32,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewFeedback(Feedback feedback)
         {
+            feedback.UUID = Guid.NewGuid().ToString();
             _context.Add(feedback);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Feedback added succesfully");

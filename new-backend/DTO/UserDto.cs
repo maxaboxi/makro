@@ -4,7 +4,7 @@ namespace Makro.DTO
 {
     public class UserDto
     {
-        public string ObjectID { get; set; }
+        public string UUID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190211112916_InitialMigration")]
+    [Migration("20190212122837_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace Makro.Migrations
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -41,6 +44,9 @@ namespace Makro.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -63,11 +69,17 @@ namespace Makro.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -84,9 +96,15 @@ namespace Makro.Migrations
                     b.Property<byte[]>("Image")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasIndex("ArticleId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.ToTable("ArticleImages");
                 });
@@ -102,6 +120,9 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -111,6 +132,9 @@ namespace Makro.Migrations
                     b.HasIndex("AnswerId");
 
                     b.HasIndex("ArticleId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -125,6 +149,9 @@ namespace Makro.Migrations
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("UUID")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedAt");
@@ -154,6 +181,9 @@ namespace Makro.Migrations
                     b.Property<string>("FeedbackBody")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -161,6 +191,9 @@ namespace Makro.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AnsweredById");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -190,9 +223,6 @@ namespace Makro.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("ObjectId")
-                        .IsRequired();
-
                     b.Property<decimal>("PackageSize");
 
                     b.Property<decimal>("Protein");
@@ -201,6 +231,9 @@ namespace Makro.Migrations
 
                     b.Property<decimal>("Sugar");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -208,6 +241,9 @@ namespace Makro.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MealId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -231,6 +267,9 @@ namespace Makro.Migrations
 
                     b.Property<int?>("SharedMealId");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -246,6 +285,9 @@ namespace Makro.Migrations
                     b.HasIndex("CommentId");
 
                     b.HasIndex("SharedMealId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -266,6 +308,9 @@ namespace Makro.Migrations
 
                     b.Property<int?>("SharedDayId");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -275,6 +320,9 @@ namespace Makro.Migrations
                     b.HasIndex("DayId");
 
                     b.HasIndex("SharedDayId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -291,11 +339,17 @@ namespace Makro.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -317,11 +371,17 @@ namespace Makro.Migrations
                     b.Property<List<string>>("Tags")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -335,11 +395,17 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -358,6 +424,9 @@ namespace Makro.Migrations
                     b.Property<List<string>>("Tags")
                         .IsRequired();
 
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int>("UserId");
@@ -365,6 +434,9 @@ namespace Makro.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MealId");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -390,9 +462,6 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("LastLogin");
 
-                    b.Property<string>("ObjectId")
-                        .IsRequired();
-
                     b.Property<byte[]>("Password");
 
                     b.Property<List<string>>("Roles");
@@ -400,6 +469,9 @@ namespace Makro.Migrations
                     b.Property<byte[]>("Salt");
 
                     b.Property<string>("Sex");
+
+                    b.Property<string>("UUID")
+                        .IsRequired();
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -419,6 +491,9 @@ namespace Makro.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UUID")
                         .IsUnique();
 
                     b.HasIndex("Username")
