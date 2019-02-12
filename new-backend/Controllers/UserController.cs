@@ -12,6 +12,8 @@ using Makro.Helpers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
+using System.Linq;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -22,12 +24,20 @@ namespace Makro.Controllers
         private readonly UserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly JwtSecurityTokenHandler _tokenHandler = new JwtSecurityTokenHandler();
 
         public UserController(UserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("amount")]
+        public async Task<AmountDto> GetAmountOfUsers()
+        {
+            return await _userService.GetAmountOfUsers();
         }
 
         [AllowAnonymous]
@@ -49,32 +59,36 @@ namespace Makro.Controllers
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.ObjectId )
+                    new Claim(ClaimTypes.Name, user.UUID )
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            var token = _tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = _tokenHandler.WriteToken(token);
 
             return Ok(new
             {
-                Id = user.ObjectId,
+                Id = user.UUID,
                 user.Username,
                 Token = tokenString
             });
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUserInformation(int id)
+        public async Task<ActionResult<UserDto>> GetUserInformation(string id)
         {
             var user = await _userService.GetUserInformation(id);
+
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
 
             if (user == null)
             {
@@ -85,9 +99,14 @@ namespace Makro.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserInformation(int id, User user)
+        public async Task<IActionResult> UpdateUserInformation(string id, User user)
         {
-            if (id != user.Id)
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
+            if (id != user.UUID)
             {
                 return BadRequest();
             }
@@ -96,8 +115,13 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id)
+        public async Task<IActionResult> DeleteAccount(string id)
         {
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
             await _userService.DeleteAccount(id);
 
             return Ok(new ResultDto(true, "Account deleted"));

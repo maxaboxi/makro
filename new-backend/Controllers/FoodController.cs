@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Makro.Models;
 using System.Collections.Generic;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -13,12 +14,17 @@ namespace Makro.Controllers
     {
 
         private readonly FoodService _foodService;
-        private readonly UserService _userService;
 
-        public FoodController(FoodService foodService, UserService userService)
+        public FoodController(FoodService foodService)
         {
             _foodService = foodService;
-            _userService = userService;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("amount")]
+        public async Task<AmountDto> GetAmountOFoods()
+        {
+            return await _foodService.GetAmountOfFoods();
         }
 
         [AllowAnonymous]

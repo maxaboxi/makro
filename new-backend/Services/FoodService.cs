@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class FoodService
@@ -26,11 +27,12 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Food>>> GetAllFoodsByUser(string id)
         {
-            return await _context.Foods.Where(f => f.User.ObjectId == id).ToListAsync();
+            return await _context.Foods.Where(f => f.User.UUID == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewFood(Food food)
         {
+            food.UUID = Guid.NewGuid().ToString();
             _context.Add(food);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food added succesfully");
@@ -38,6 +40,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewEditedFood(EditedFood editedFood)
         {
+            editedFood.UUID = Guid.NewGuid().ToString();
             _context.Add(editedFood);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food added succesfully");
@@ -65,7 +68,7 @@ namespace Makro.Services
             return new ResultDto(true, "Food deleted succesfully");
         }
 
-        public async Task<AmountDto> GetAmountOfUsers()
+        public async Task<AmountDto> GetAmountOfFoods()
         {
             return new AmountDto(await _context.Foods.CountAsync());
         }

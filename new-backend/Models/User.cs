@@ -7,7 +7,7 @@ namespace Makro.Models
     {
         public int Id { get; set; }
         [Required]
-        public string ObjectId { get; set; }
+        public string UUID { get; set; }
         [Required]
         public string Username { get; set; }
         public byte[] Password { get; set; }

@@ -16,6 +16,7 @@ namespace Makro.Controllers
             _articleService = articleService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticles()
         {

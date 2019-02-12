@@ -48,7 +48,7 @@ namespace Makro.Services
                 user.Password = passwordHash;
                 user.Salt = passwordSalt;
                 user.Meals = _mealService.GenerateDefaultMealNamesForUser();
-                user.ObjectId = RandomString();
+                user.UUID = Guid.NewGuid().ToString();
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return new ResultDto(true, "Registration succesful");
@@ -82,9 +82,9 @@ namespace Makro.Services
             return null;
         }
 
-        public async Task<ActionResult<UserDto>> GetUserInformation (int id)
+        public async Task<ActionResult<UserDto>> GetUserInformation (string id)
         {
-            var user = await _context.Users.Include(u => u.Meals).Where(p => p.Id == id).FirstOrDefaultAsync();
+            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -98,7 +98,7 @@ namespace Makro.Services
         public User GetUserInformationObjectIdForAuthorization(string id)
         {
 
-            return _context.Users.Where(p => p.ObjectId == id).FirstOrDefault();
+            return _context.Users.Where(p => p.UUID == id).FirstOrDefault();
         }
 
         public async Task<ResultDto> UpdateUserInformation(User user)
@@ -109,9 +109,9 @@ namespace Makro.Services
 
         }
 
-        public async Task<ResultDto> DeleteAccount(int id)
+        public async Task<ResultDto> DeleteAccount(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Where(u => u.UUID == id).FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -182,14 +182,6 @@ namespace Makro.Services
             }
 
             return true;
-        }
-
-        private static Random random = new Random();
-        public static string RandomString()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, 24)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
     }

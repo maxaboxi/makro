@@ -22,6 +22,12 @@ namespace Makro.Controllers
             return await _feedbackService.GetAllFeedbacks();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
+        {
+            return await _feedbackService.GetAllFeedbacksByUser(id);
+        }
+
         [HttpPost("addfeedback")]
         public async Task<IActionResult> AddNewFeedback(Feedback feedback)
         {

@@ -22,6 +22,7 @@ namespace Makro.Controllers
             return await _likeService.GetAllLikesForAnswer(id);
         }
 
+        [AllowAnonymous]
         [HttpGet("article/{id}")]
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForArticle(int id)
         {

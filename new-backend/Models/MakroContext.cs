@@ -33,6 +33,11 @@ namespace Makro.Models
                 .HasIndex(u => new { u.Username }).IsUnique();
             modelBuilder.Entity<User>()
                 .HasIndex(u => new { u.Email }).IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => new { u.UUID }).IsUnique();
+
+            modelBuilder.Entity<Food>()
+                .HasIndex(f => new { f.UUID }).IsUnique();
 
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Images)

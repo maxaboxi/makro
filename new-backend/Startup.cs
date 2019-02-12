@@ -68,7 +68,6 @@ namespace Makro
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists
-                            Console.WriteLine("ei user");
                             context.Fail("Unauthorized");
                         }
                         return Task.CompletedTask;

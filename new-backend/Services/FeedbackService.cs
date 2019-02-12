@@ -24,9 +24,9 @@ namespace Makro.Services
             return await _context.Feedbacks.ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(User user)
+        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
         {
-            return await _context.Feedbacks.Where(f => f.User.Id == user.Id || f.User.Username == user.Username).ToListAsync();
+            return await _context.Feedbacks.Where(f => f.User.UUID == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewFeedback(Feedback feedback)

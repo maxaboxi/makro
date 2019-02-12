@@ -21,7 +21,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Day>>> GetAllDaysByUser(string id)
         {
-            return await _context.Days.Where(d => d.User.ObjectId == id).ToListAsync();
+            return await _context.Days.Where(d => d.User.UUID == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewDay(Day day)
