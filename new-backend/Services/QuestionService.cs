@@ -24,9 +24,9 @@ namespace Makro.Services
             return await _context.Questions.ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestionsByUser(User user)
+        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestionsByUser(string userId)
         {
-            return await _context.Questions.Where(q => q.User.Id == user.Id || q.User.Username == user.Username).ToListAsync();
+            return await _context.Questions.Where(q => q.User.ObjectId == userId).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewQuestion(Question question)

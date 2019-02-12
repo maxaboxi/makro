@@ -39,9 +39,9 @@ namespace Makro.Services
             return await _context.Likes.Where(l => l.SharedMeal.Id == id).ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesByUser(User user)
+        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesByUser(string id)
         {
-            return await _context.Likes.Where(l => l.User.Id == user.Id || l.User.Username == user.Username).ToListAsync();
+            return await _context.Likes.Where(l => l.User.ObjectId == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewLike(Like like)

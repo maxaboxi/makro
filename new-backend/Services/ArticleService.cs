@@ -19,14 +19,14 @@ namespace Makro.Services
             _context = context;
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticles(int id)
+        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticles()
         {
             return await _context.Articles.ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(User user)
+        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)
         {
-            return await _context.Articles.Where(a => a.User.Id == user.Id || a.User.Username == user.Username).ToListAsync();
+            return await _context.Articles.Where(a => a.User.ObjectId == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewArticle(Article article)
