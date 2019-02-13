@@ -59,6 +59,11 @@ namespace Makro.Controllers
         [HttpPut("updatefood/{id}")]
         public async Task<IActionResult> UpdateFood(string id, Food food)
         {
+            if (HttpContext.User.Identity.Name != food.UUID)
+            {
+                return Unauthorized();
+            }
+
             if (id != food.UUID)
             {
                 return BadRequest();
@@ -68,9 +73,9 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("deletefood/{id}")]
-        public async Task<IActionResult> DeleteFood(int id)
+        public async Task<IActionResult> DeleteFood(string id)
         {
-            return Ok(await _foodService.DeleteFood(id));
+            return Ok(await _foodService.DeleteFood(id, HttpContext.User.Identity.Name));
         }
 
     }

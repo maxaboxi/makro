@@ -73,14 +73,20 @@ namespace Makro.Services
             return new ResultDto(true, "Food updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteFood(int id)
+        public async Task<ResultDto> DeleteFood(string id, string userId)
         {
-            var food = await _context.Foods.FindAsync(id);
+            var food = await _context.Foods.Include(f => f.User).Where(f => f.UUID == id).FirstOrDefaultAsync();
 
             if (food == null)
             {
                 _logger.LogDebug("Food not found with id: ", id);
                 return new ResultDto(false, "Food not found");
+            }
+
+            if (food.User.UUID != userId)
+            {
+                _logger.LogError("User with id ", userId + " tried to delete food which belogs to " + food.User.Id);
+                return new ResultDto(false, "Unauthorized");
             }
 
             _context.Foods.Remove(food);
