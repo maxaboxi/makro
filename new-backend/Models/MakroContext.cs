@@ -32,8 +32,8 @@ namespace Makro.Models
                 .WithOne(e => e.User);
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username).IsUnique();
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email).IsUnique();
+            //modelBuilder.Entity<User>()
+                //.HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.UUID).IsUnique();
 

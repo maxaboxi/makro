@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190212122837_InitialMigration")]
+    [Migration("20190213073042_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -470,6 +470,8 @@ namespace Makro.Migrations
 
                     b.Property<string>("Sex");
 
+                    b.Property<bool>("ShowTargets");
+
                     b.Property<string>("UUID")
                         .IsRequired();
 
@@ -489,9 +491,6 @@ namespace Makro.Migrations
                     b.Property<decimal>("Weight");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.HasIndex("UUID")
                         .IsUnique();

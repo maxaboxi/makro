@@ -32,6 +32,7 @@ namespace Makro.Migrations
                     UserAddedFatTarget = table.Column<decimal>(nullable: false),
                     LastLogin = table.Column<DateTime>(nullable: false),
                     Roles = table.Column<List<string>>(nullable: true),
+                    ShowTargets = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
@@ -645,12 +646,6 @@ namespace Makro.Migrations
                 name: "IX_SharedMeals_UserId",
                 table: "SharedMeals",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                table: "Users",
-                column: "Email",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_UUID",

@@ -26,6 +26,7 @@ namespace Makro.Models
         public decimal UserAddedFatTarget { get; set; }
         public DateTime LastLogin { get; set; }
         public List<string> Roles { get; set; }
+        public bool ShowTargets { get; set; }
         public List<MealName> Meals { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

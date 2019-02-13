@@ -468,6 +468,8 @@ namespace Makro.Migrations
 
                     b.Property<string>("Sex");
 
+                    b.Property<bool>("ShowTargets");
+
                     b.Property<string>("UUID")
                         .IsRequired();
 
@@ -487,9 +489,6 @@ namespace Makro.Migrations
                     b.Property<decimal>("Weight");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.HasIndex("UUID")
                         .IsUnique();
