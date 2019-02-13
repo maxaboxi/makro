@@ -89,6 +89,48 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EditedFoods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Energy = table.Column<decimal>(nullable: false),
+                    Protein = table.Column<decimal>(nullable: false),
+                    Carbs = table.Column<decimal>(nullable: false),
+                    Fat = table.Column<decimal>(nullable: false),
+                    Sugar = table.Column<decimal>(nullable: false),
+                    Fiber = table.Column<decimal>(nullable: false),
+                    PackageSize = table.Column<decimal>(nullable: false),
+                    ServingSize = table.Column<decimal>(nullable: false),
+                    En = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    WaitingForApproval = table.Column<bool>(nullable: false),
+                    ReasonForEditing = table.Column<string>(nullable: false),
+                    EditedById = table.Column<int>(nullable: false),
+                    EnglishTranslation = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EditedFoods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EditedFoods_Users_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EditedFoods_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Feedbacks",
                 columns: table => new
                 {
@@ -326,6 +368,7 @@ namespace Makro.Migrations
                     Energy = table.Column<decimal>(nullable: false),
                     Protein = table.Column<decimal>(nullable: false),
                     Carbs = table.Column<decimal>(nullable: false),
+                    Fat = table.Column<decimal>(nullable: false),
                     Sugar = table.Column<decimal>(nullable: false),
                     Fiber = table.Column<decimal>(nullable: false),
                     PackageSize = table.Column<decimal>(nullable: false),
@@ -333,22 +376,11 @@ namespace Makro.Migrations
                     En = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    MealId = table.Column<int>(nullable: true),
-                    WaitingForApproval = table.Column<bool>(nullable: true),
-                    ReasonForEditing = table.Column<string>(nullable: true),
-                    EditedById = table.Column<int>(nullable: true),
-                    EnglishTranslation = table.Column<string>(nullable: true)
+                    MealId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Foods", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Foods_Users_EditedById",
-                        column: x => x.EditedById,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Foods_Meals_MealId",
                         column: x => x.MealId,
@@ -509,6 +541,22 @@ namespace Makro.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EditedFoods_EditedById",
+                table: "EditedFoods",
+                column: "EditedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EditedFoods_UUID",
+                table: "EditedFoods",
+                column: "UUID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EditedFoods_UserId",
+                table: "EditedFoods",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_AnsweredById",
                 table: "Feedbacks",
                 column: "AnsweredById");
@@ -523,11 +571,6 @@ namespace Makro.Migrations
                 name: "IX_Feedbacks_UserId",
                 table: "Feedbacks",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Foods_EditedById",
-                table: "Foods",
-                column: "EditedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Foods_MealId",
@@ -669,6 +712,9 @@ namespace Makro.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ArticleImages");
+
+            migrationBuilder.DropTable(
+                name: "EditedFoods");
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");

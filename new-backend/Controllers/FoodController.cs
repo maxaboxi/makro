@@ -57,9 +57,9 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updatefood/{id}")]
-        public async Task<IActionResult> UpdateFood(int id, Food food)
+        public async Task<IActionResult> UpdateFood(string id, Food food)
         {
-            if (id != food.Id)
+            if (id != food.UUID)
             {
                 return BadRequest();
             }

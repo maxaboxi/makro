@@ -11,7 +11,7 @@ const pg = new Client({
 
 pg.connect()
   .then(() => {
-    m.connect('mongodb://localhost:27017/makro', (err, db) => {
+    m.connect('mongodb://localhost:27017/makro', { useNewUrlParser: true }, (err, db) => {
       if (err) {
         console.log(err);
         process.exit(1);
@@ -31,79 +31,14 @@ pg.connect()
       const shareddaysCollection = database.collection('shareddays');
       const sharedmealsCollection = database.collection('sharedmeals');
       const votesCollection = database.collection('votes');
+
       let cursor = userCollection.find({});
+      addUsers(cursor);
 
-      cursor.forEach(u => {
-        console.log(u);
-        u.showTargets = true;
-        if (!u.createdAt) {
-          u.createdAt = new Date();
-        }
-
-        if (!u.updatedAt) {
-          u.updatedAt = new Date();
-        }
-
-        if (!u.lastLogin) {
-          u.lastLogin = new Date();
-        }
-
-        if (!u.userAddedExpenditure) {
-          u.userAddedExpenditure = 0;
-        }
-
-        if (!u.userAddedProteinTarget) {
-          u.userAddedProteinTarget = 0;
-        }
-
-        if (!u.userAddedFatTarget) {
-          u.userAddedFatTarget = 0;
-        }
-
-        if (!u.userAddedCarbTarget) {
-          u.userAddedCarbTarget = 0;
-        }
-        const text =
-          'INSERT INTO "Users"("UUID", "Username", "Email", "Age", "Height", "Weight", "Activity", "Sex", "DailyExpenditure", "UserAddedExpenditure", "UserAddedProteinTarget", "UserAddedCarbTarget", "UserAddedFatTarget", "LastLogin", "Roles", "ShowTargets", "CreatedAt", "UpdatedAt", "Password") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *';
-        const values = [
-          u._id.toString(),
-          u.username,
-          u.email,
-          u.age,
-          u.height,
-          u.weight,
-          u.activity,
-          u.sex,
-          u.dailyExpenditure,
-          u.userAddedExpenditure,
-          u.userAddedProteinTarget,
-          u.userAddedCarbTarget,
-          u.userAddedFatTarget,
-          u.lastLogin,
-          [u.role],
-          u.showTargets,
-          u.createdAt,
-          u.updatedAt,
-          u.password
-        ];
-        pg.query(text, values)
-          .then(res => {
-            u.meals.forEach(m => {
-              const uuid = uuidv4();
-              const d = new Date();
-              const q = 'INSERT INTO "MealNames"("UUID", "UserId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5)';
-              const v = [uuid, res.rows[0].Id, m.name, d, d];
-              pg.query(q, v).catch(error => {
-                console.log(error);
-                process.exit(1);
-              });
-            });
-          })
-          .catch(e => {
-            console.log(e);
-            process.exit(1);
-          });
-      });
+      cursor = foodsCollection.find({});
+      setTimeout(() => {
+        addFoods(cursor);
+      }, 2000);
 
       // cursor = articleCollection.find({});
       // cursor.forEach(e => articles.push(e));
@@ -119,9 +54,6 @@ pg.connect()
 
       // cursor = feedbacksCollection.find({});
       // cursor.forEach(e => feedbacks.push(e));
-
-      // cursor = foodsCollection.find({});
-      // cursor.forEach(e => foods.push(e));
 
       // cursor = questionsCollection.find({});
       // cursor.forEach(e => questions.push(e));
@@ -140,3 +72,135 @@ pg.connect()
     console.log(pgerror);
     process.exit(1);
   });
+
+function addUsers(cursor) {
+  cursor.forEach(u => {
+    u.showTargets = true;
+    if (!u.createdAt) {
+      u.createdAt = new Date();
+    }
+
+    if (!u.updatedAt) {
+      u.updatedAt = new Date();
+    }
+
+    if (!u.lastLogin) {
+      u.lastLogin = new Date();
+    }
+
+    if (!u.userAddedExpenditure) {
+      u.userAddedExpenditure = 0;
+    }
+
+    if (!u.userAddedProteinTarget) {
+      u.userAddedProteinTarget = 0;
+    }
+
+    if (!u.userAddedFatTarget) {
+      u.userAddedFatTarget = 0;
+    }
+
+    if (!u.userAddedCarbTarget) {
+      u.userAddedCarbTarget = 0;
+    }
+    const text =
+      'INSERT INTO "Users"("UUID", "Username", "Email", "Age", "Height", "Weight", "Activity", "Sex", "DailyExpenditure", "UserAddedExpenditure", "UserAddedProteinTarget", "UserAddedCarbTarget", "UserAddedFatTarget", "LastLogin", "Roles", "ShowTargets", "CreatedAt", "UpdatedAt", "Password") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *';
+    const values = [
+      u._id.toString(),
+      u.username,
+      u.email,
+      u.age,
+      u.height,
+      u.weight,
+      u.activity,
+      u.sex,
+      u.dailyExpenditure,
+      u.userAddedExpenditure,
+      u.userAddedProteinTarget,
+      u.userAddedCarbTarget,
+      u.userAddedFatTarget,
+      u.lastLogin,
+      [u.role],
+      u.showTargets,
+      u.createdAt,
+      u.updatedAt,
+      u.password
+    ];
+    pg.query(text, values)
+      .then(res => {
+        u.meals.forEach(m => {
+          const uuid = uuidv4();
+          const d = new Date();
+          const q = 'INSERT INTO "MealNames"("UUID", "UserId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5)';
+          const v = [uuid, res.rows[0].Id, m.name, d, d];
+          pg.query(q, v).catch(error => {
+            console.log(error);
+            process.exit(1);
+          });
+        });
+      })
+      .catch(e => {
+        console.log(e);
+        process.exit(1);
+      });
+  });
+  console.log('Users added');
+}
+
+function addFoods(cursor) {
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    if (!e.kuitu) {
+      e.kuitu = 0;
+    }
+
+    if (!e.sokeri) {
+      e.sokeri = 0;
+    }
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const text =
+          'INSERT INTO "Foods"("UUID", "UserId", "Name", "Energy", "Protein", "Carbs", "Fat", "Sugar", "Fiber", "PackageSize", "ServingSize", "En", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *';
+        const values = [
+          e._id.toString(),
+          userId,
+          e.name,
+          e.energia,
+          e.proteiini,
+          e.hh,
+          e.rasva,
+          e.sokeri,
+          e.kuitu,
+          e.packageSize,
+          e.servingSize,
+          e.en,
+          e.createdAt,
+          e.updatedAt
+        ];
+        pg.query(text, values).catch(error => {
+          console.log(error);
+          process.exit(0);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
+  });
+  console.log('Foods added');
+}

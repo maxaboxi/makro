@@ -13,6 +13,8 @@ namespace Makro.DTO
         public decimal Protein { get; set; }
         [Required]
         public decimal Carbs { get; set; }
+        [Required]
+        public decimal Fat { get; set; }
         public decimal Sugar { get; set; }
         public decimal Fiber { get; set; }
         public decimal PackageSize { get; set; }

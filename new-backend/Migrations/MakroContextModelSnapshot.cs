@@ -163,6 +163,62 @@ namespace Makro.Migrations
                     b.ToTable("Days");
                 });
 
+            modelBuilder.Entity("Makro.Models.EditedFood", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Carbs");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("EditedById");
+
+                    b.Property<string>("En");
+
+                    b.Property<decimal>("Energy");
+
+                    b.Property<string>("EnglishTranslation");
+
+                    b.Property<decimal>("Fat");
+
+                    b.Property<decimal>("Fiber");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<decimal>("PackageSize");
+
+                    b.Property<decimal>("Protein");
+
+                    b.Property<string>("ReasonForEditing")
+                        .IsRequired();
+
+                    b.Property<decimal>("ServingSize");
+
+                    b.Property<decimal>("Sugar");
+
+                    b.Property<string>("UUID")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<bool>("WaitingForApproval");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EditedById");
+
+                    b.HasIndex("UUID")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EditedFoods");
+                });
+
             modelBuilder.Entity("Makro.Models.Feedback", b =>
                 {
                     b.Property<int>("Id")
@@ -207,12 +263,11 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("En");
 
                     b.Property<decimal>("Energy");
+
+                    b.Property<decimal>("Fat");
 
                     b.Property<decimal>("Fiber");
 
@@ -246,8 +301,6 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Foods");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Food");
                 });
 
             modelBuilder.Entity("Makro.Models.Like", b =>
@@ -500,24 +553,6 @@ namespace Makro.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Makro.Models.EditedFood", b =>
-                {
-                    b.HasBaseType("Makro.Models.Food");
-
-                    b.Property<int>("EditedById");
-
-                    b.Property<string>("EnglishTranslation");
-
-                    b.Property<string>("ReasonForEditing")
-                        .IsRequired();
-
-                    b.Property<bool>("WaitingForApproval");
-
-                    b.HasIndex("EditedById");
-
-                    b.HasDiscriminator().HasValue("EditedFood");
-                });
-
             modelBuilder.Entity("Makro.Models.Answer", b =>
                 {
                     b.HasOne("Makro.Models.Question", "Question")
@@ -565,6 +600,19 @@ namespace Makro.Migrations
 
             modelBuilder.Entity("Makro.Models.Day", b =>
                 {
+                    b.HasOne("Makro.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Makro.Models.EditedFood", b =>
+                {
+                    b.HasOne("Makro.Models.User", "EditedBy")
+                        .WithMany()
+                        .HasForeignKey("EditedById")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -669,14 +717,6 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.EditedFood", b =>
-                {
-                    b.HasOne("Makro.Models.User", "EditedBy")
-                        .WithMany()
-                        .HasForeignKey("EditedById")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
