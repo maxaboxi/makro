@@ -10,12 +10,13 @@ const pg = new Client({
 });
 
 pg.connect();
-let mdb;
 m.connect('mongodb://localhost:27017/makro', (err, db) => {
   if (err) {
     console.log(err);
   }
   console.log('Connected');
+
+  const database = db.db('makro');
 
   const userCollection = database.collection('users');
   const articleCollection = database.collection('articles');
@@ -29,9 +30,7 @@ m.connect('mongodb://localhost:27017/makro', (err, db) => {
   const sharedmealsCollection = database.collection('sharedmeals');
   const votesCollection = database.collection('votes');
   let cursor = userCollection.find({});
-  // pg.query('SELECT * FROM "Users"', (err, res) => {
-  //   console.log(res);
-  // });
+
   cursor.forEach(u => {
     u.showTargets = true;
     if (!u.createdAt) {
@@ -62,7 +61,7 @@ m.connect('mongodb://localhost:27017/makro', (err, db) => {
       u.userAddedCarbTarget = 0;
     }
     const text =
-      'INSERT INTO "Users"("UUID", "Username", "Email", "Age", "Height", "Weight", "Activity", "Sex", "DailyExpenditure", "UserAddedExpenditure", "UserAddedProteinTarget", "UserAddedCarbTarget", "UserAddedFatTarget", "LastLogin", "Roles", "ShowTargets", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *';
+      'INSERT INTO "Users"("UUID", "Username", "Email", "Age", "Height", "Weight", "Activity", "Sex", "DailyExpenditure", "UserAddedExpenditure", "UserAddedProteinTarget", "UserAddedCarbTarget", "UserAddedFatTarget", "LastLogin", "Roles", "ShowTargets", "CreatedAt", "UpdatedAt", "Password") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *';
     const values = [
       u._id.toString(),
       u.username,
@@ -81,7 +80,8 @@ m.connect('mongodb://localhost:27017/makro', (err, db) => {
       [u.role],
       u.showTargets,
       u.createdAt,
-      u.updatedAt
+      u.updatedAt,
+      u.password
     ];
     pg.query(text, values)
       .then(res => {

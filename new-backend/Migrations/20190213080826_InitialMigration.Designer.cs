@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190213073042_InitialMigration")]
+    [Migration("20190213080826_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -462,11 +462,9 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("LastLogin");
 
-                    b.Property<byte[]>("Password");
+                    b.Property<string>("Password");
 
                     b.Property<List<string>>("Roles");
-
-                    b.Property<byte[]>("Salt");
 
                     b.Property<string>("Sex");
 

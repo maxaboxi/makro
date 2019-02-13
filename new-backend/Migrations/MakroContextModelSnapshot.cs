@@ -460,11 +460,9 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("LastLogin");
 
-                    b.Property<byte[]>("Password");
+                    b.Property<string>("Password");
 
                     b.Property<List<string>>("Roles");
-
-                    b.Property<byte[]>("Salt");
 
                     b.Property<string>("Sex");
 

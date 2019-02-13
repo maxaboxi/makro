@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System.Linq;
-using System.Security.Cryptography;
 using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -44,9 +43,7 @@ namespace Makro.Services
             }
             try
             {
-                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-                user.Password = passwordHash;
-                user.Salt = passwordSalt;
+                user.Password = HashPassword(password);
                 user.Meals = _mealService.GenerateDefaultMealNamesForUser();
                 user.UUID = Guid.NewGuid().ToString();
                 _context.Add(user);
@@ -66,19 +63,10 @@ namespace Makro.Services
             var foundUser = await _context.Users.Where(u => u.Username == login.usernameOrEmail || u.Email == login.usernameOrEmail).FirstOrDefaultAsync();
             if (foundUser != null)
             {
-                try
+                if (ValidatePassword(login.password, foundUser.Password))
                 {
-                    if (VerifyPasswordHash(login.password, foundUser.Password, foundUser.Salt))
-                    {
-                        foundUser.LastLogin = DateTime.Now;
-                        await UpdateUserInformation(foundUser);
-                        return foundUser;
-                    }
-                } catch (Exception e)
-                {
-                    _logger.LogError(e.ToString());
+                    return foundUser;
                 }
-
             }
             return null;
         }
@@ -130,59 +118,19 @@ namespace Makro.Services
             return new AmountDto(await _context.Users.CountAsync());
         }
 
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private static string GetRandomSalt()
         {
-            if (password == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
-            }
-
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            return BCrypt.Net.BCrypt.GenerateSalt(12);
         }
 
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        private static string HashPassword(string password)
         {
-            if (password == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
+            return BCrypt.Net.BCrypt.HashPassword(password, GetRandomSalt());
+        }
 
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
-            }
-
-            if (storedHash.Length != 64)
-            {
-                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", nameof(storedHash));
-            }
-
-            if (storedSalt.Length != 128)
-            {
-                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", nameof(storedSalt));
-            }
-
-            using (var hmac = new HMACSHA512(storedSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i])
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+        private static bool ValidatePassword(string password, string correctHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, correctHash);
         }
 
     }

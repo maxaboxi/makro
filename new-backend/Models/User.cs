@@ -10,8 +10,7 @@ namespace Makro.Models
         public string UUID { get; set; }
         [Required]
         public string Username { get; set; }
-        public byte[] Password { get; set; }
-        public byte[] Salt { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
 
         public int Age { get; set; }
