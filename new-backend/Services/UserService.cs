@@ -46,6 +46,8 @@ namespace Makro.Services
                 user.Password = HashPassword(password);
                 user.Meals = _mealService.GenerateDefaultMealNamesForUser();
                 user.UUID = Guid.NewGuid().ToString();
+                user.CreatedAt = DateTime.Now;
+                user.UpdatedAt = DateTime.Now;
                 _context.Add(user);
 
                 await _context.SaveChangesAsync();
@@ -65,26 +67,29 @@ namespace Makro.Services
             {
                 if (ValidatePassword(login.password, foundUser.Password))
                 {
+                    foundUser.LastLogin = DateTime.Now;
+                    await UpdateUserInformation(foundUser);
                     return foundUser;
                 }
             }
             return null;
         }
 
-        public async Task<ActionResult<UserDto>> GetUserInformation (string id)
+        public async Task<ActionResult<UserDto>> GetUserDto (string id)
         {
             var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).FirstOrDefaultAsync();
 
             if (user != null)
             {
                 user.Password = null;
+                user.Meals.Reverse(0, user.Meals.Count);
                 return _mapper.Map<UserDto>(user);
             }
 
             return null;
         }
 
-        public User GetUserInformationObjectIdForAuthorization(string id)
+        public User GetUser(string id)
         {
 
             return _context.Users.Where(p => p.UUID == id).FirstOrDefault();
@@ -92,6 +97,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateUserInformation(User user)
         {
+            user.UpdatedAt = DateTime.Now;
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Information updated succesfully");

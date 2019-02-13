@@ -647,6 +647,12 @@ namespace Makro.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_UUID",
                 table: "Users",
                 column: "UUID",

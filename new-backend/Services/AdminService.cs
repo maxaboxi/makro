@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Makro.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 namespace Makro.Services
 {
     public class AdminService
@@ -16,6 +17,20 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             return await _context.Users.ToListAsync();
+        }
+
+        public async Task<ActionResult<User>> GetUserInformation(string id)
+        {
+            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.Password = null;
+                user.Meals.Reverse(0, user.Meals.Count);
+                return user;
+            }
+
+            return null;
         }
 
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
@@ -57,5 +72,6 @@ namespace Makro.Services
         {
             return await _context.SharedDays.ToListAsync();
         }
+
     }
 }

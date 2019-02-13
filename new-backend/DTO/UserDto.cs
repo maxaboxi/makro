@@ -18,7 +18,6 @@ namespace Makro.DTO
         public decimal UserAddedProteinTarget { get; set; }
         public decimal UserAddedCarbTarget { get; set; }
         public decimal UserAddedFatTarget { get; set; }
-        public List<string> Roles { get; set; }
         public List<MealName> Meals { get; set; }
     }
 }

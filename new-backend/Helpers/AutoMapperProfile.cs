@@ -9,6 +9,8 @@ namespace Makro.Helpers
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            CreateMap<Food, FoodDto>().AfterMap((src, dest) => dest.AddedBy = src.User.UUID);
+            CreateMap<FoodDto, Food>();
         }
     }
 }

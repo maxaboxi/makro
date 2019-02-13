@@ -64,7 +64,7 @@ namespace Makro
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
                         var userId = context.Principal.Identity.Name;
-                        var user = userService.GetUserInformationObjectIdForAuthorization(userId);
+                        var user = userService.GetUser(userId);
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists

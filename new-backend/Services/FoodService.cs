@@ -7,32 +7,51 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
 using System;
+using AutoMapper;
 namespace Makro.Services
 {
     public class FoodService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly UserService _userService;
+        private readonly IMapper _mapper;
 
-        public FoodService(MakroContext context, ILogger<FoodService> logger)
+        public FoodService(MakroContext context, ILogger<FoodService> logger, UserService userService, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _userService = userService;
+            _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoods()
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
         {
-            return await _context.Foods.ToListAsync();
+            var foods = await _context.Foods.ToListAsync();
+            var foodDtos = new List<FoodDto>();
+            foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
+            return foodDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoodsByUser(string id)
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser(string id)
         {
-            return await _context.Foods.Where(f => f.User.UUID == id).ToListAsync();
+            var foods = await _context.Foods.Where(f => f.User.UUID == id).ToListAsync();
+            var foodDtos = new List<FoodDto>();
+            foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
+            return foodDtos;
         }
 
-        public async Task<ResultDto> AddNewFood(Food food)
+        public async Task<ResultDto> AddNewFood(Food food, string userId)
         {
+            var user = _userService.GetUser(userId);
+            if (user == null)
+            {
+                return new ResultDto(false, "Unauthorized");
+            }
+            food.User = user;
             food.UUID = Guid.NewGuid().ToString();
+            food.CreatedAt = DateTime.Now;
+            food.UpdatedAt = DateTime.Now;
             _context.Add(food);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food added succesfully");
@@ -48,6 +67,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateFoodInformation(Food food)
         {
+            food.UpdatedAt = DateTime.Now;
             _context.Entry(food).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food updated succesfully");

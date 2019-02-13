@@ -12,8 +12,6 @@ using Makro.Helpers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication;
-using System.Linq;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -83,7 +81,7 @@ namespace Makro.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserInformation(string id)
         {
-            var user = await _userService.GetUserInformation(id);
+            var user = await _userService.GetUserDto(id);
 
             if (HttpContext.User.Identity.Name != id)
             {

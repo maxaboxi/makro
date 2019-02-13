@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Makro.Models;
 using System.Collections.Generic;
 using Makro.DTO;
+using AutoMapper;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -14,10 +15,12 @@ namespace Makro.Controllers
     {
 
         private readonly FoodService _foodService;
+        private readonly IMapper _mapper;
 
-        public FoodController(FoodService foodService)
+        public FoodController(FoodService foodService, IMapper mapper)
         {
             _foodService = foodService;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -29,21 +32,22 @@ namespace Makro.Controllers
 
         [AllowAnonymous]
         [HttpGet("allfoods")]
-        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoods()
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
         {
             return await _foodService.GetAllFoods();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Food>>> GetAllFoodsByUser(string id)
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser(string id)
         {
             return await _foodService.GetAllFoodsByUser(id);
         }
 
         [HttpPost("addfood")]
-        public async Task<IActionResult> AddNewFood(Food food)
+        public async Task<IActionResult> AddNewFood(FoodDto foodDto)
         {
-            return Ok(await _foodService.AddNewFood(food));
+            var food = _mapper.Map<Food>(foodDto);
+            return Ok(await _foodService.AddNewFood(food, HttpContext.User.Identity.Name));
         }
 
         [HttpPost("addeditedfood")]
