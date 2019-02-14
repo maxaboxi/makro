@@ -45,8 +45,15 @@ pg.connect()
         addDays(cursor);
       }, 4000);
 
+      setTimeout(() => {
+        cursor = shareddaysCollection.find({});
+        addSharedDays(cursor);
+      }, 6000);
+
+      // setTimeout(() => {
       // cursor = articleCollection.find({});
-      // cursor.forEach(e => articles.push(e));
+      // addArticles(cursor);
+      // }, 6000);
 
       // cursor = commentsCollection.find({});
       // cursor.forEach(e => comments.push(e));
@@ -276,6 +283,85 @@ function addDays(cursor) {
       })
       .catch(error => {
         console.log(error);
+        process.exit(1);
+      });
+  });
+}
+
+function addArticles(cursor) {}
+
+function addSharedDays(cursor) {
+  console.log('Starting to migrate shared days');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const text = 'INSERT INTO "SharedDays"("UUID", "UserId", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4) RETURNING *';
+        const values = [e._id.toString(), userId, e.createdAt, e.updatedAt];
+        pg.query(text, values)
+          .then(res => {
+            const dayId = res.rows[0].Id;
+            e.meals.forEach(meal => {
+              if (meal.foods && meal.foods.length > 0) {
+                const uuid = uuidv4();
+                const d = new Date();
+                const q =
+                  'INSERT INTO "Meals"("UUID", "UserId", "SharedDayId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+                const v = [uuid, userId, dayId, meal.name, e.createdAt, e.updatedAt];
+                pg.query(q, v)
+                  .then(re => {
+                    const mealId = re.rows[0].Id;
+                    meal.foods.forEach(f => {
+                      const q = 'SELECT "Id" FROM "Foods" WHERE "Name" = $1';
+                      const v = [f.name];
+                      pg.query(q, v)
+                        .then(r => {
+                          if (r.rows.length !== 0) {
+                            const foodId = r.rows[0].Id;
+                            const q = 'INSERT INTO "MealFoods"("MealId", "FoodId") VALUES($1, $2)';
+                            const v = [mealId, foodId];
+                            pg.query(q, v).catch(error => {
+                              console.log(error);
+                              process.exit(1);
+                            });
+                          }
+                        })
+                        .catch(e => {
+                          console.log(e);
+                          process.exit(1);
+                        });
+                    });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    process.exit(1);
+                  });
+              }
+            });
+          })
+          .catch(error => {
+            console.log(e);
+            console.log(error);
+            process.exit(1);
+          });
+      })
+      .catch(e => {
+        console.log(e);
         process.exit(1);
       });
   });
