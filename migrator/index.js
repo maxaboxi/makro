@@ -238,7 +238,7 @@ function addDays(cursor) {
               const d = new Date();
               const q =
                 'INSERT INTO "Meals"("UUID", "UserId", "DayId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
-              const v = [uuid, userId, dayId, meal, e.createdAt, e.updatedAt];
+              const v = [uuid, userId, dayId, meal.name, e.createdAt, e.updatedAt];
               pg.query(q, v)
                 .then(re => {
                   const mealId = re.rows[0].Id;
