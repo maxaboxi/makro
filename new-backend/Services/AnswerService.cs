@@ -22,12 +22,12 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersForQuestion(int id)
         {
-            return await _context.Answers.Where(a => a.Question.Id == id).ToListAsync();
+            return await _context.Answers.AsNoTracking().Where(a => a.Question.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersByUser(string userId)
         {
-            return await _context.Answers.Where(a => a.User.UUID == userId).ToListAsync();
+            return await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewAnswer(Answer answer)

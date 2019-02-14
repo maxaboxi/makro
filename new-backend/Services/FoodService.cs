@@ -27,7 +27,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
         {
-            var foods = await _context.Foods.Include(f => f.User).ToListAsync();
+            var foods = await _context.Foods.Include(f => f.User).AsNoTracking().ToListAsync();
             var foodDtos = new List<FoodDto>();
             foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
             return foodDtos;
@@ -35,7 +35,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser(string id)
         {
-            var foods = await _context.Foods.Include(f => f.User).Where(f => f.User.UUID == id).ToListAsync();
+            var foods = await _context.Foods.Include(f => f.User).Where(f => f.User.UUID == id).AsNoTracking().ToListAsync();
             var foodDtos = new List<FoodDto>();
             foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
             return foodDtos;

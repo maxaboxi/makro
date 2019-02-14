@@ -16,7 +16,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<User>> GetUserInformation(string id)
@@ -35,42 +35,42 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
         {
-            return await _context.EditedFoods.ToListAsync();
+            return await _context.EditedFoods.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Article>>> GetAllAritcles()
         {
-            return await _context.Articles.ToListAsync();
+            return await _context.Articles.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Answer>>> GetAllEAnswers()
         {
-            return await _context.Answers.ToListAsync();
+            return await _context.Answers.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
         {
-            return await _context.Questions.ToListAsync();
+            return await _context.Questions.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllComments()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikes()
         {
-            return await _context.Likes.ToListAsync();
+            return await _context.Likes.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Day>>> GetAllDays()
         {
-            return await _context.Days.ToListAsync();
+            return await _context.Days.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
         {
-            return await _context.SharedDays.ToListAsync();
+            return await _context.SharedDays.AsNoTracking().ToListAsync();
         }
 
     }

@@ -22,12 +22,12 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacks()
         {
-            return await _context.Feedbacks.ToListAsync();
+            return await _context.Feedbacks.AsNoTracking().ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
         {
-            return await _context.Feedbacks.Where(f => f.User.UUID == id).ToListAsync();
+            return await _context.Feedbacks.AsNoTracking().Where(f => f.User.UUID == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewFeedback(Feedback feedback)

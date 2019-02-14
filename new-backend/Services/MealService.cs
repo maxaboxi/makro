@@ -24,7 +24,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<SharedMeal>>> GetAllSharedMeals()
         {
-            return await _context.SharedMeals.ToListAsync();
+            return await _context.SharedMeals.AsNoTracking().ToListAsync();
         }
 
         public async Task<ResultDto> AddNewSharedMeal(SharedMeal sharedMeal)

@@ -22,27 +22,27 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForAnswer(int id)
         {
-            return await _context.Likes.Where(l => l.Answer.Id == id).ToListAsync();
+            return await _context.Likes.AsNoTracking().Where(l => l.Answer.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForArticle(int id)
         {
-            return await _context.Likes.Where(l => l.Article.Id == id).ToListAsync();
+            return await _context.Likes.AsNoTracking().Where(l => l.Article.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForComment(int id)
         {
-            return await _context.Likes.Where(l => l.Comment.Id == id).ToListAsync();
+            return await _context.Likes.AsNoTracking().Where(l => l.Comment.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForSharedMeal(int id)
         {
-            return await _context.Likes.Where(l => l.SharedMeal.Id == id).ToListAsync();
+            return await _context.Likes.AsNoTracking().Where(l => l.SharedMeal.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesByUser(string id)
         {
-            return await _context.Likes.Where(l => l.User.UUID == id).ToListAsync();
+            return await _context.Likes.AsNoTracking().Where(l => l.User.UUID == id).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewLike(Like like)

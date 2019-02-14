@@ -22,17 +22,17 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsForAnswer(int id)
         {
-            return await _context.Comments.Where(c => c.Answer.Id == id).ToListAsync();
+            return await _context.Comments.AsNoTracking().Where(c => c.Answer.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsForArticle(int id)
         {
-            return await _context.Comments.Where(c => c.Article.Id == id).ToListAsync();
+            return await _context.Comments.AsNoTracking().Where(c => c.Article.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsByUser(User user)
         {
-            return await _context.Comments.Where(c => c.User.Id == user.Id || c.User.Username == user.Username).ToListAsync();
+            return await _context.Comments.AsNoTracking().Where(c => c.User.Id == user.Id || c.User.Username == user.Username).ToListAsync();
         }
 
         public async Task<ResultDto> AddNewComment(Comment comment)
