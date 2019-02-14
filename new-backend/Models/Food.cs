@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace Makro.Models
 {
     public class Food
@@ -28,6 +29,8 @@ namespace Makro.Models
         public string En { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public IList<MealFood> MealFoods { get; set; }
 
     }
 }

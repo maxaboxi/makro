@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190213162904_InitialMigration")]
+    [Migration("20190214100600_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,8 +273,6 @@ namespace Makro.Migrations
 
                     b.Property<decimal>("Fiber");
 
-                    b.Property<int?>("MealId");
-
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -294,8 +292,6 @@ namespace Makro.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MealId");
 
                     b.HasIndex("UUID")
                         .IsUnique();
@@ -380,6 +376,24 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("Makro.Models.MealFood", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("FoodId");
+
+                    b.Property<int>("MealId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodId");
+
+                    b.HasIndex("MealId");
+
+                    b.ToTable("MealFoods");
                 });
 
             modelBuilder.Entity("Makro.Models.MealName", b =>
@@ -635,10 +649,6 @@ namespace Makro.Migrations
 
             modelBuilder.Entity("Makro.Models.Food", b =>
                 {
-                    b.HasOne("Makro.Models.Meal")
-                        .WithMany("Foods")
-                        .HasForeignKey("MealId");
-
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -682,6 +692,19 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Makro.Models.MealFood", b =>
+                {
+                    b.HasOne("Makro.Models.Food", "Food")
+                        .WithMany("MealFoods")
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Makro.Models.Meal", "Meal")
+                        .WithMany("MealFoods")
+                        .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

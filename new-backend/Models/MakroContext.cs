@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 namespace Makro.Models
 {
     public class MakroContext : DbContext
@@ -23,13 +22,11 @@ namespace Makro.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<SharedDay> SharedDays { get; set; }
         public DbSet<SharedMeal> SharedMeals { get; set; }
+        public DbSet<MealFood> MealFoods { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Meals)
-                .WithOne(e => e.User);
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username).IsUnique();
             modelBuilder.Entity<User>()
@@ -39,6 +36,9 @@ namespace Makro.Models
 
             modelBuilder.Entity<Food>()
                 .HasIndex(f => f.UUID).IsUnique();
+
+            modelBuilder.Entity<Meal>()
+                .HasIndex(e => e.UUID).IsUnique();
 
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Images)
@@ -61,8 +61,8 @@ namespace Makro.Models
             modelBuilder.Entity<Answer>()
                 .HasIndex(e => e.UUID).IsUnique();
 
-            modelBuilder.Entity<Meal>()
-                .HasIndex(e => e.UUID).IsUnique();
+            modelBuilder.Entity<Day>()
+                .HasMany(d => d.Meals);
 
             modelBuilder.Entity<MealName>()
                 .HasIndex(e => e.UUID).IsUnique();
@@ -81,6 +81,7 @@ namespace Makro.Models
 
             modelBuilder.Entity<SharedMeal>()
                 .HasIndex(e => e.UUID).IsUnique();
+
 
             modelBuilder.Entity<Like>()
                 .HasIndex(e => e.UUID).IsUnique();

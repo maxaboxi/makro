@@ -1,4 +1,4 @@
-const m = require('mongodb');
+const mongodb = require('mongodb');
 const uuidv4 = require('uuid/v4');
 const { Client } = require('pg');
 const pg = new Client({
@@ -11,7 +11,7 @@ const pg = new Client({
 
 pg.connect()
   .then(() => {
-    m.connect('mongodb://localhost:27017/makro', { useNewUrlParser: true }, (err, db) => {
+    mongodb.connect('mongodb://localhost:27017/makro', { useNewUrlParser: true }, (err, db) => {
       if (err) {
         console.log(err);
         process.exit(1);
@@ -35,19 +35,21 @@ pg.connect()
       let cursor = userCollection.find({});
       addUsers(cursor);
 
-      cursor = foodsCollection.find({});
       setTimeout(() => {
+        cursor = foodsCollection.find({});
         addFoods(cursor);
       }, 2000);
+
+      setTimeout(() => {
+        cursor = daysCollection.find({});
+        addDays(cursor);
+      }, 4000);
 
       // cursor = articleCollection.find({});
       // cursor.forEach(e => articles.push(e));
 
       // cursor = commentsCollection.find({});
       // cursor.forEach(e => comments.push(e));
-
-      // cursor = daysCollection.find({});
-      // cursor.forEach(e => days.push(e));
 
       // cursor = editedfoodsCollection.find({});
       // cursor.forEach(e => editedfoods.push(e));
@@ -74,6 +76,7 @@ pg.connect()
   });
 
 function addUsers(cursor) {
+  console.log('Starting to migrate users');
   cursor.forEach(u => {
     u.showTargets = true;
     if (!u.createdAt) {
@@ -144,10 +147,10 @@ function addUsers(cursor) {
         process.exit(1);
       });
   });
-  console.log('Users added');
 }
 
 function addFoods(cursor) {
+  console.log('Starting to migrate foods');
   cursor.forEach(e => {
     if (!e.createdAt) {
       e.createdAt = new Date();
@@ -202,5 +205,78 @@ function addFoods(cursor) {
         process.exit(1);
       });
   });
-  console.log('Foods added');
+}
+
+function addDays(cursor) {
+  console.log('Starting to migrate days');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const text = 'INSERT INTO "Days"("UUID", "UserId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5) RETURNING *';
+        const values = [e._id.toString(), userId, e.name, e.createdAt, e.updatedAt];
+        pg.query(text, values)
+          .then(resp => {
+            const dayId = resp.rows[0].Id;
+            e.meals.forEach(meal => {
+              const uuid = uuidv4();
+              const d = new Date();
+              const q =
+                'INSERT INTO "Meals"("UUID", "UserId", "DayId", "Name", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+              const v = [uuid, userId, dayId, meal, e.createdAt, e.updatedAt];
+              pg.query(q, v)
+                .then(re => {
+                  const mealId = re.rows[0].Id;
+                  meal.foods.forEach(f => {
+                    const q = 'SELECT "Id" FROM "Foods" WHERE "Name" = $1';
+                    const v = [f.name];
+                    pg.query(q, v)
+                      .then(r => {
+                        if (r.rows.length !== 0) {
+                          const foodId = r.rows[0].Id;
+                          const q = 'INSERT INTO "MealFoods"("MealId", "FoodId") VALUES($1, $2)';
+                          const v = [mealId, foodId];
+                          pg.query(q, v).catch(error => {
+                            console.log(error);
+                            process.exit(1);
+                          });
+                        }
+                      })
+                      .catch(e => {
+                        console.log(e);
+                        process.exit(1);
+                      });
+                  });
+                })
+                .catch(error => {
+                  console.log(error);
+                  process.exit(1);
+                });
+            });
+          })
+          .catch(error => {
+            console.log(error);
+            process.exit(1);
+          });
+      })
+      .catch(error => {
+        console.log(error);
+        process.exit(1);
+      });
+  });
 }
