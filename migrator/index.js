@@ -34,50 +34,50 @@ pg.connect()
       const votesCollection = database.collection('votes');
 
       let cursor = userCollection.find({});
-      addUsers(cursor);
-
-      setTimeout(() => {
-        cursor = foodsCollection.find({});
-        addFoods(cursor);
-      }, 1000);
-
-      setTimeout(() => {
-        cursor = daysCollection.find({});
-        addDays(cursor);
-      }, 2000);
-
-      setTimeout(() => {
-        cursor = shareddaysCollection.find({});
-        addSharedDays(cursor);
-      }, 3000);
-
-      setTimeout(() => {
-        cursor = sharedmealsCollection.find({});
-        addSharedMeals(cursor);
-      }, 4000);
-
-      setTimeout(() => {
-        cursor = articleCollection.find({});
-        addArticles(cursor);
-      }, 5000);
-
-      setTimeout(() => {
-        cursor = questionsCollection.find({});
-        addQuestions(cursor);
-      }, 6000);
-
-      setTimeout(() => {
-        cursor = answersCollection.find({});
-        addAnswers(cursor);
-      }, 7000);
+      // addUsers(cursor);
 
       // setTimeout(() => {
-      // cursor = articleCollection.find({});
-      // addArticles(cursor);
+      //   cursor = foodsCollection.find({});
+      //   addFoods(cursor);
+      // }, 1000);
+
+      // setTimeout(() => {
+      //   cursor = daysCollection.find({});
+      //   addDays(cursor);
+      // }, 2000);
+
+      // setTimeout(() => {
+      //   cursor = shareddaysCollection.find({});
+      //   addSharedDays(cursor);
+      // }, 3000);
+
+      // setTimeout(() => {
+      //   cursor = sharedmealsCollection.find({});
+      //   addSharedMeals(cursor);
+      // }, 4000);
+
+      // setTimeout(() => {
+      //   cursor = articleCollection.find({});
+      //   addArticles(cursor);
+      // }, 5000);
+
+      // setTimeout(() => {
+      //   cursor = questionsCollection.find({});
+      //   addQuestions(cursor);
       // }, 6000);
 
-      // cursor = commentsCollection.find({});
-      // cursor.forEach(e => comments.push(e));
+      // setTimeout(() => {
+      //   cursor = answersCollection.find({});
+      //   addAnswers(cursor);
+      // }, 7000);
+
+      // setTimeout(() => {
+      //   cursor = commentsCollection.find({});
+      //   addComments(cursor);
+      // }, 8000);
+
+      cursor = commentsCollection.find({});
+      addComments(cursor);
 
       // cursor = editedfoodsCollection.find({});
       // cursor.forEach(e => editedfoods.push(e));
@@ -544,6 +544,75 @@ function addAnswers(cursor) {
               console.log(error);
               process.exit(1);
             });
+          })
+          .catch(error => {
+            console.log(error);
+            process.exit(1);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
+  });
+}
+
+function addComments(cursor) {
+  console.log('Starting to migrate comments');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        let postId;
+        let text;
+        let values;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+
+        let q = 'SELECT "Id" FROM "Answers" WHERE "UUID" = $1';
+        const v = [e.postId];
+        pg.query(q, v)
+          .then(re => {
+            if (re.rows.length === 0) {
+              q = 'SELECT "Id" FROM "Articles" WHERE "UUID" = $1';
+              pg.query(q, v)
+                .then(res => {
+                  postId = res.rows[0].Id;
+                  text =
+                    'INSERT INTO "Comments"("UUID", "UserId", "ArticleId", "Body", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+                  values = [e._id.toString(), userId, postId, e.comment, e.createdAt, e.updatedAt];
+                  pg.query(text, values).catch(error => {
+                    console.log(error);
+                    process.exit(1);
+                  });
+                })
+                .catch(error => {
+                  console.log(error);
+                  process.exit(1);
+                });
+            } else {
+              postId = re.rows[0].Id;
+              text =
+                'INSERT INTO "Comments"("UUID", "UserId", "AnswerId", "Body", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+              values = [e._id.toString(), userId, postId, e.comment, e.createdAt, e.updatedAt];
+              pg.query(text, values).catch(error => {
+                console.log(error);
+                process.exit(1);
+              });
+            }
           })
           .catch(error => {
             console.log(error);

@@ -116,6 +116,9 @@ namespace Makro.Migrations
 
                     b.Property<int?>("ArticleId");
 
+                    b.Property<string>("Body")
+                        .IsRequired();
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("UUID")

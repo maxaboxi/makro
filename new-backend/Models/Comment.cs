@@ -11,6 +11,8 @@ namespace Makro.Models
         public string UUID { get; set; }
         [Required]
         public User User { get; set; }
+        [Required]
+        public string Body { get; set; }
         public Answer Answer { get; set; }
         public Article Article { get; set; }
         public DateTime CreatedAt { get; set; }

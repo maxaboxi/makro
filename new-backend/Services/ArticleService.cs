@@ -22,7 +22,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticles()
         {
-            return await _context.Articles.AsNoTracking().ToListAsync();
+            return await _context.Articles.AsNoTracking().Include(a => a.Comments).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)

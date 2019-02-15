@@ -22,7 +22,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersForQuestion(int id)
         {
-            return await _context.Answers.AsNoTracking().Where(a => a.Question.Id == id).ToListAsync();
+            return await _context.Answers.AsNoTracking().Include(a => a.Comments).Where(a => a.Question.Id == id).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersByUser(string userId)

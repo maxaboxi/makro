@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190215035241_InitialMigration")]
+    [Migration("20190215055319_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,6 +117,9 @@ namespace Makro.Migrations
                     b.Property<int?>("AnswerId");
 
                     b.Property<int?>("ArticleId");
+
+                    b.Property<string>("Body")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedAt");
 

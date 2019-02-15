@@ -386,6 +386,7 @@ namespace Makro.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
+                    Body = table.Column<string>(nullable: false),
                     AnswerId = table.Column<int>(nullable: true),
                     ArticleId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
