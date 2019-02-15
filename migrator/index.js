@@ -28,6 +28,7 @@ pg.connect()
       const feedbacksCollection = database.collection('feedbacks');
       const foodsCollection = database.collection('foods');
       const questionsCollection = database.collection('questions');
+      const answersCollection = database.collection('answers');
       const shareddaysCollection = database.collection('shareddays');
       const sharedmealsCollection = database.collection('sharedmeals');
       const votesCollection = database.collection('votes');
@@ -55,6 +56,21 @@ pg.connect()
         addSharedMeals(cursor);
       }, 4000);
 
+      setTimeout(() => {
+        cursor = articleCollection.find({});
+        addArticles(cursor);
+      }, 5000);
+
+      setTimeout(() => {
+        cursor = questionsCollection.find({});
+        addQuestions(cursor);
+      }, 6000);
+
+      setTimeout(() => {
+        cursor = answersCollection.find({});
+        addAnswers(cursor);
+      }, 7000);
+
       // setTimeout(() => {
       // cursor = articleCollection.find({});
       // addArticles(cursor);
@@ -68,12 +84,6 @@ pg.connect()
 
       // cursor = feedbacksCollection.find({});
       // cursor.forEach(e => feedbacks.push(e));
-
-      // cursor = questionsCollection.find({});
-      // cursor.forEach(e => questions.push(e));
-
-      // cursor = shareddaysCollection.find({});
-      // cursor.forEach(e => shareddays.push(e));
 
       // cursor = votesCollection.find({});
       // cursor.forEach(e => votes.push(e));
@@ -290,8 +300,6 @@ function addDays(cursor) {
   });
 }
 
-function addArticles(cursor) {}
-
 function addSharedDays(cursor) {
   console.log('Starting to migrate shared days');
   cursor.forEach(e => {
@@ -426,6 +434,124 @@ function addSharedMeals(cursor) {
       })
       .catch(error => {
         console.log(error);
+        process.exit(1);
+      });
+  });
+}
+
+function addArticles(cursor) {
+  console.log('Starting to migrate articles');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const text =
+          'INSERT INTO "Articles"("UUID", "UserId", "Title", "Body", "Tags", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+        const values = [e._id.toString(), userId, e.title, e.body, e.tags, e.createdAt, e.updatedAt];
+        pg.query(text, values).catch(error => {
+          console.log(error);
+          process.exit(1);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
+  });
+}
+
+function addQuestions(cursor) {
+  console.log('Starting to migrate questions');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const text =
+          'INSERT INTO "Questions"("UUID", "UserId", "QuestionInformation", "QuestionBody", "Tags", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+        const values = [e._id.toString(), userId, e.info, e.question, e.tags, e.createdAt, e.updatedAt];
+        pg.query(text, values).catch(error => {
+          console.log(error);
+          process.exit(1);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
+  });
+}
+
+function addAnswers(cursor) {
+  console.log('Starting to migrate answers');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+        const q = 'SELECT "Id" FROM "Questions" WHERE "UUID" = $1';
+        const v = [e.questionId];
+        pg.query(q, v)
+          .then(re => {
+            const questionId = re.rows[0].Id;
+            const text =
+              'INSERT INTO "Answers"("UUID", "UserId", "QuestionId", "AnswerBody", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+            const values = [e._id.toString(), userId, questionId, e.answer, e.createdAt, e.updatedAt];
+            pg.query(text, values).catch(error => {
+              console.log(error);
+              process.exit(1);
+            });
+          })
+          .catch(error => {
+            console.log(error);
+            process.exit(1);
+          });
+      })
+      .catch(err => {
+        console.log(err);
         process.exit(1);
       });
   });
