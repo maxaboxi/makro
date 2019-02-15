@@ -13,10 +13,13 @@ namespace Makro.Models
         [Required]
         public User User { get; set; }
         [Required]
-        public Meal Meal { get; set; }
+        public string Name { get; set; }
+        public string Info { get; set; }
+        public string Recipe { get; set; }
         [Required]
         public List<string> Tags { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public IList<MealFood> MealFoods { get; set; }
     }
 }
