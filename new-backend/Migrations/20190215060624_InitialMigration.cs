@@ -137,7 +137,7 @@ namespace Makro.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: true),
                     FeedbackBody = table.Column<string>(nullable: false),
                     Answer = table.Column<string>(nullable: true),
                     AnsweredById = table.Column<int>(nullable: true),
@@ -159,7 +159,7 @@ namespace Makro.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

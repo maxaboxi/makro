@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190215055319_InitialMigration")]
+    [Migration("20190215060624_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,7 +245,7 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -653,8 +653,7 @@ namespace Makro.Migrations
 
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Makro.Models.Food", b =>

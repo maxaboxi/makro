@@ -34,56 +34,55 @@ pg.connect()
       const votesCollection = database.collection('votes');
 
       let cursor = userCollection.find({});
-      // addUsers(cursor);
+      addUsers(cursor);
 
-      // setTimeout(() => {
-      //   cursor = foodsCollection.find({});
-      //   addFoods(cursor);
-      // }, 1000);
+      setTimeout(() => {
+        cursor = foodsCollection.find({});
+        addFoods(cursor);
+      }, 1000);
 
-      // setTimeout(() => {
-      //   cursor = daysCollection.find({});
-      //   addDays(cursor);
-      // }, 2000);
+      setTimeout(() => {
+        cursor = daysCollection.find({});
+        addDays(cursor);
+      }, 2000);
 
-      // setTimeout(() => {
-      //   cursor = shareddaysCollection.find({});
-      //   addSharedDays(cursor);
-      // }, 3000);
+      setTimeout(() => {
+        cursor = shareddaysCollection.find({});
+        addSharedDays(cursor);
+      }, 3000);
 
-      // setTimeout(() => {
-      //   cursor = sharedmealsCollection.find({});
-      //   addSharedMeals(cursor);
-      // }, 4000);
+      setTimeout(() => {
+        cursor = sharedmealsCollection.find({});
+        addSharedMeals(cursor);
+      }, 4000);
 
-      // setTimeout(() => {
-      //   cursor = articleCollection.find({});
-      //   addArticles(cursor);
-      // }, 5000);
+      setTimeout(() => {
+        cursor = articleCollection.find({});
+        addArticles(cursor);
+      }, 5000);
 
-      // setTimeout(() => {
-      //   cursor = questionsCollection.find({});
-      //   addQuestions(cursor);
-      // }, 6000);
+      setTimeout(() => {
+        cursor = questionsCollection.find({});
+        addQuestions(cursor);
+      }, 6000);
 
-      // setTimeout(() => {
-      //   cursor = answersCollection.find({});
-      //   addAnswers(cursor);
-      // }, 7000);
+      setTimeout(() => {
+        cursor = answersCollection.find({});
+        addAnswers(cursor);
+      }, 7000);
 
-      // setTimeout(() => {
-      //   cursor = commentsCollection.find({});
-      //   addComments(cursor);
-      // }, 8000);
+      setTimeout(() => {
+        cursor = commentsCollection.find({});
+        addComments(cursor);
+      }, 8000);
 
-      cursor = commentsCollection.find({});
-      addComments(cursor);
+      setTimeout(() => {
+        cursor = feedbacksCollection.find({});
+        addFeedbacks(cursor);
+      }, 9000);
 
       // cursor = editedfoodsCollection.find({});
       // cursor.forEach(e => editedfoods.push(e));
-
-      // cursor = feedbacksCollection.find({});
-      // cursor.forEach(e => feedbacks.push(e));
 
       // cursor = votesCollection.find({});
       // cursor.forEach(e => votes.push(e));
@@ -623,5 +622,92 @@ function addComments(cursor) {
         console.log(err);
         process.exit(1);
       });
+  });
+}
+
+function addFeedbacks(cursor) {
+  console.log('Starting to migrate feedbacks');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    let text;
+    let values;
+    let aQuery;
+    let aValues;
+    let answererId;
+    if (e.username !== 'Nimetön') {
+      const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+      const userValues = [e.username];
+      pg.query(userQuery, userValues)
+        .then(res => {
+          const userId = res.rows[0].Id;
+          answererId = null;
+          if (e.answerUsername) {
+            aQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+            aValues = [e.answerUsername];
+            pg.query(aQuery, aValues)
+              .then(re => {
+                answererId = re.rows[0].Id;
+                text =
+                  'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "Answer", "AnsweredById", "CreatedAt", "UpdatedAt", "AnsweredAt") VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
+                values = [e._id.toString(), userId, e.feedback, e.answer, answererId, e.createdAt, e.updatedAt, e.answerDate];
+                pg.query(text, values).catch(errr => {
+                  console.log(err);
+                  process.exit(1);
+                });
+              })
+              .catch(r => {
+                console.log(r);
+                process.exit(1);
+              });
+          } else {
+            text =
+              'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5) RETURNING *';
+            values = [e._id.toString(), userId, e.feedback, e.createdAt, e.updatedAt];
+            pg.query(text, values).catch(error => {
+              console.log(error);
+              process.exit(1);
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          process.exit(1);
+        });
+    } else {
+      answererId = null;
+      if (e.answerUsername) {
+        aQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+        aValues = [e.answerUsername];
+        pg.query(aQuery, aValues)
+          .then(re => {
+            answererId = re.rows[0].Id;
+            text =
+              'INSERT INTO "Feedbacks"("UUID", "FeedbackBody", "Answer", "AnsweredById", "CreatedAt", "UpdatedAt", "AnsweredAt") VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+            values = [e._id.toString(), e.feedback, e.answer, answererId, e.createdAt, e.updatedAt, e.answerDate];
+            pg.query(text, values).catch(errr => {
+              console.log(err);
+              process.exit(1);
+            });
+          })
+          .catch(r => {
+            console.log(r);
+            process.exit(1);
+          });
+      } else {
+        text = 'INSERT INTO "Feedbacks"("UUID", "FeedbackBody", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4) RETURNING *';
+        values = [e._id.toString(), e.feedback, e.createdAt, e.updatedAt];
+        pg.query(text, values).catch(error => {
+          console.log(error);
+          process.exit(1);
+        });
+      }
+    }
   });
 }
