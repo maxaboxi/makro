@@ -6,6 +6,7 @@ namespace Makro.DTO
     {
         [Required]
         public string Name { get; set; }
+        public string UUID { get; set; }
         public string AddedBy { get; set; }
         [Required]
         public decimal Energy { get; set; }

@@ -85,7 +85,7 @@ namespace Makro.Services
 
             if (food.User.UUID != userId)
             {
-                _logger.LogError("User with id ", userId + " tried to delete food which belogs to " + food.User.Id);
+                _logger.LogError("User with id ", userId + " tried to delete food which belogs to " + food.User.UUID);
                 return new ResultDto(false, "Unauthorized");
             }
 

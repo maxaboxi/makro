@@ -46,29 +46,52 @@ namespace Makro.Services
             return sharedMealDtos;
         }
 
-        public async Task<ResultDto> AddNewSharedMeal(SharedMeal sharedMeal)
+        public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
         {
+            List<Food> foods = new List<Food>();
+            sharedMealDto.Foods.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
+            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
+            var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
             sharedMeal.UUID = Guid.NewGuid().ToString();
-            _context.Add(sharedMeal);
+            sharedMeal.User = user;
+            sharedMeal.CreatedAt = DateTime.Now;
+            sharedMeal.UpdatedAt = DateTime.Now;
+            await _context.AddAsync(sharedMeal);
+            foods.ForEach(f => {
+                var smf = new SharedMealFood
+                {
+                    Food = f,
+                    SharedMeal = sharedMeal
+                };
+                _context.Add(smf);
+            });
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal shared succesfully");
         }
 
         public async Task<ResultDto> UpdateSharedMeal(SharedMeal sharedMeal)
         {
+            sharedMeal.UpdatedAt = DateTime.Now;
             _context.Entry(sharedMeal).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteSharedMeal(int id)
+        public async Task<ResultDto> DeleteSharedMeal(string id, string userId)
         {
-            var sharedMeal = await _context.SharedMeals.FindAsync(id);
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id).FirstOrDefaultAsync();
+
 
             if (sharedMeal == null)
             {
                 _logger.LogDebug("SharedMeal not found with id: ", id);
-                return new ResultDto(false, "Shared meal was not found");
+                return new ResultDto(false, "Not found");
+            }
+
+            if (sharedMeal.User.UUID != userId)
+            {
+                _logger.LogError("User with id ", userId + " tried to delete food which belogs to " + sharedMeal.User.UUID);
+                return new ResultDto(false, "Unauthorized");
             }
 
             _context.SharedMeals.Remove(sharedMeal);
