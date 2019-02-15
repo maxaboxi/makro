@@ -410,7 +410,7 @@ function addSharedMeals(cursor) {
                 .then(r => {
                   if (r.rows.length !== 0) {
                     const foodId = r.rows[0].Id;
-                    const q = 'INSERT INTO "MealFoods"("MealId", "FoodId") VALUES($1, $2)';
+                    const q = 'INSERT INTO "SharedMealFoods"("SharedMealId", "FoodId") VALUES($1, $2)';
                     const v = [mealId, foodId];
                     pg.query(q, v).catch(error => {
                       console.log(error);

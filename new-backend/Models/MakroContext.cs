@@ -23,6 +23,7 @@ namespace Makro.Models
         public DbSet<SharedDay> SharedDays { get; set; }
         public DbSet<SharedMeal> SharedMeals { get; set; }
         public DbSet<MealFood> MealFoods { get; set; }
+        public DbSet<SharedMealFood> SharedMealFoods { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

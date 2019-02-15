@@ -379,6 +379,32 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SharedMealFoods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    FoodId = table.Column<int>(nullable: false),
+                    SharedMealId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SharedMealFoods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SharedMealFoods_Foods_FoodId",
+                        column: x => x.FoodId,
+                        principalTable: "Foods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedMealFoods_SharedMeals_SharedMealId",
+                        column: x => x.SharedMealId,
+                        principalTable: "SharedMeals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -422,8 +448,7 @@ namespace Makro.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MealId = table.Column<int>(nullable: false),
-                    FoodId = table.Column<int>(nullable: false),
-                    SharedMealId = table.Column<int>(nullable: true)
+                    FoodId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -440,12 +465,6 @@ namespace Makro.Migrations
                         principalTable: "Meals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MealFoods_SharedMeals_SharedMealId",
-                        column: x => x.SharedMealId,
-                        principalTable: "SharedMeals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -648,11 +667,6 @@ namespace Makro.Migrations
                 column: "MealId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MealFoods_SharedMealId",
-                table: "MealFoods",
-                column: "SharedMealId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MealNames_UUID",
                 table: "MealNames",
                 column: "UUID",
@@ -707,6 +721,16 @@ namespace Makro.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SharedMealFoods_FoodId",
+                table: "SharedMealFoods",
+                column: "FoodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SharedMealFoods_SharedMealId",
+                table: "SharedMealFoods",
+                column: "SharedMealId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SharedMeals_UUID",
                 table: "SharedMeals",
                 column: "UUID",
@@ -757,13 +781,16 @@ namespace Makro.Migrations
                 name: "MealNames");
 
             migrationBuilder.DropTable(
+                name: "SharedMealFoods");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Foods");
+                name: "Meals");
 
             migrationBuilder.DropTable(
-                name: "Meals");
+                name: "Foods");
 
             migrationBuilder.DropTable(
                 name: "SharedMeals");

@@ -20,6 +20,6 @@ namespace Makro.Models
         public List<string> Tags { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public IList<MealFood> MealFoods { get; set; }
+        public ICollection<SharedMealFood> SharedMealFoods { get; set; }
     }
 }

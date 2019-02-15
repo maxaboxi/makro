@@ -16,6 +16,6 @@ namespace Makro.Models
         public User User { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public IList<MealFood> MealFoods { get; set; }
+        public ICollection<MealFood> MealFoods { get; set; }
     }
 }

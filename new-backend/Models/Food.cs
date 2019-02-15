@@ -29,8 +29,10 @@ namespace Makro.Models
         public string En { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        public IList<MealFood> MealFoods { get; set; }
+        [JsonIgnore]
+        public ICollection<MealFood> MealFoods { get; set; }
+        [JsonIgnore]
+        public ICollection<SharedMealFood> SharedMealFoods { get; set; }
 
     }
 }

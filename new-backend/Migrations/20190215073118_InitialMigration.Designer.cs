@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190215060624_InitialMigration")]
+    [Migration("20190215073118_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -390,15 +390,11 @@ namespace Makro.Migrations
 
                     b.Property<int>("MealId");
 
-                    b.Property<int?>("SharedMealId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FoodId");
 
                     b.HasIndex("MealId");
-
-                    b.HasIndex("SharedMealId");
 
                     b.ToTable("MealFoods");
                 });
@@ -518,6 +514,24 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SharedMeals");
+                });
+
+            modelBuilder.Entity("Makro.Models.SharedMealFood", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("FoodId");
+
+                    b.Property<int>("SharedMealId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodId");
+
+                    b.HasIndex("SharedMealId");
+
+                    b.ToTable("SharedMealFoods");
                 });
 
             modelBuilder.Entity("Makro.Models.User", b =>
@@ -715,10 +729,6 @@ namespace Makro.Migrations
                         .WithMany("MealFoods")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Makro.Models.SharedMeal")
-                        .WithMany("MealFoods")
-                        .HasForeignKey("SharedMealId");
                 });
 
             modelBuilder.Entity("Makro.Models.MealName", b =>
@@ -750,6 +760,19 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Makro.Models.SharedMealFood", b =>
+                {
+                    b.HasOne("Makro.Models.Food", "Food")
+                        .WithMany("SharedMealFoods")
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Makro.Models.SharedMeal", "SharedMeal")
+                        .WithMany("SharedMealFoods")
+                        .HasForeignKey("SharedMealId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

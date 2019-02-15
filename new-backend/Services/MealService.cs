@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Makro.DTO;
 using System;
+using System.Linq;
 namespace Makro.Services
 {
     public class MealService
@@ -22,9 +23,27 @@ namespace Makro.Services
             _logger = logger;
         }
 
-        public async Task<ActionResult<IEnumerable<SharedMeal>>> GetAllSharedMeals()
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals()
         {
-            return await _context.SharedMeals.AsNoTracking().ToListAsync();
+            List<SharedMeal> sharedMeals = await _context.SharedMeals
+                .Include(m => m.User)
+                .Include(m => m.SharedMealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var sharedMealDtos = new List<SharedMealDto>();
+           sharedMeals.ForEach(sm =>
+            {
+                var foodDtos = new List<FoodDto>();
+                sm.SharedMealFoods.ToList().ForEach(e => foodDtos.Add(_mapper.Map<FoodDto>(e.Food)));
+                var sharedMealDto = _mapper.Map<SharedMealDto>(sm);
+                sharedMealDto.Foods = foodDtos;
+                sharedMealDtos.Add(sharedMealDto);
+            });
+
+            return sharedMealDtos;
         }
 
         public async Task<ResultDto> AddNewSharedMeal(SharedMeal sharedMeal)

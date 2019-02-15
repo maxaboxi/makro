@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,8 +17,8 @@ namespace Makro.Controllers
             _mealService = mealService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<SharedMeal>>> GetAllSharedMeals()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals()
         {
             return await _mealService.GetAllSharedMeals();
         }
