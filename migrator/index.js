@@ -24,7 +24,6 @@ pg.connect()
       const articleCollection = database.collection('articles');
       const commentsCollection = database.collection('comments');
       const daysCollection = database.collection('days');
-      const editedfoodsCollection = database.collection('editedfoods');
       const feedbacksCollection = database.collection('feedbacks');
       const foodsCollection = database.collection('foods');
       const questionsCollection = database.collection('questions');
@@ -81,11 +80,10 @@ pg.connect()
         addFeedbacks(cursor);
       }, 9000);
 
-      // cursor = editedfoodsCollection.find({});
-      // cursor.forEach(e => editedfoods.push(e));
-
-      // cursor = votesCollection.find({});
-      // cursor.forEach(e => votes.push(e));
+      setTimeout(() => {
+        cursor = votesCollection.find({});
+        addVotes(cursor);
+      }, 10000);
     });
   })
   .catch(pgerror => {
@@ -709,5 +707,112 @@ function addFeedbacks(cursor) {
         });
       }
     }
+  });
+}
+
+function addVotes(cursor) {
+  console.log('Starting to migrate votes');
+  cursor.forEach(e => {
+    if (!e.createdAt) {
+      e.createdAt = new Date();
+    }
+
+    if (!e.updatedAt) {
+      e.updatedAt = new Date();
+    }
+
+    const userQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
+    const userValues = [e.username];
+    pg.query(userQuery, userValues)
+      .then(res => {
+        let userId;
+        let postId;
+        let text;
+        let values;
+        if (res.rows.length == 0) {
+          userId = 1;
+        } else {
+          userId = res.rows[0].Id;
+        }
+
+        let q = 'SELECT "Id" FROM "Answers" WHERE "UUID" = $1';
+        const v = [e.postId];
+        pg.query(q, v)
+          .then(re => {
+            if (re.rows.length === 0) {
+              q = 'SELECT "Id" FROM "Articles" WHERE "UUID" = $1';
+              pg.query(q, v)
+                .then(res => {
+                  if (res.rows.length === 0) {
+                    q = 'SELECT "Id" FROM "Comments" WHERE "UUID" = $1';
+                    pg.query(q, v)
+                      .then(res => {
+                        if (res.rows.length === 0) {
+                          q = 'SELECT "Id" FROM "SharedMeals" WHERE "UUID" = $1';
+                          pg.query(q, v)
+                            .then(res => {
+                              postId = res.rows[0].Id;
+                              text =
+                                'INSERT INTO "Likes"("UUID", "UserId", "SharedMealId", "Value", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+                              values = [e._id.toString(), userId, postId, e.vote, e.createdAt, e.updatedAt];
+                              pg.query(text, values).catch(error => {
+                                console.log(error);
+                                process.exit(1);
+                              });
+                            })
+                            .catch(er => {
+                              console.log(er);
+                              process.exit(1);
+                            });
+                        } else {
+                          postId = res.rows[0].Id;
+                          text =
+                            'INSERT INTO "Likes"("UUID", "UserId", "CommentId", "Value", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+                          values = [e._id.toString(), userId, postId, e.vote, e.createdAt, e.updatedAt];
+                          pg.query(text, values).catch(error => {
+                            console.log(error);
+                            process.exit(1);
+                          });
+                        }
+                      })
+                      .catch(er => {
+                        console.log(er);
+                        process.exit(1);
+                      });
+                  } else {
+                    postId = res.rows[0].Id;
+                    text =
+                      'INSERT INTO "Likes"("UUID", "UserId", "ArticleId", "Value", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+                    values = [e._id.toString(), userId, postId, e.vote, e.createdAt, e.updatedAt];
+                    pg.query(text, values).catch(error => {
+                      console.log(error);
+                      process.exit(1);
+                    });
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                  process.exit(1);
+                });
+            } else {
+              postId = re.rows[0].Id;
+              text =
+                'INSERT INTO "Likes"("UUID", "UserId", "AnswerId", "Value", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+              values = [e._id.toString(), userId, postId, e.vote, e.createdAt, e.updatedAt];
+              pg.query(text, values).catch(error => {
+                console.log(error);
+                process.exit(1);
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            process.exit(1);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
   });
 }
