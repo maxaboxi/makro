@@ -97,19 +97,19 @@ namespace Makro.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserInformation(string id, User user)
+        public async Task<IActionResult> UpdateUserInformation(string id, UserDto userDto)
         {
             if (HttpContext.User.Identity.Name != id)
             {
                 return Unauthorized();
             }
 
-            if (id != user.UUID)
+            if (id != userDto.UUID)
             {
                 return BadRequest();
             }
 
-            return Ok(await _userService.UpdateUserInformation(user));
+            return Ok(await _userService.UpdateUserInformation(userDto));
         }
 
         [HttpDelete("{id}")]

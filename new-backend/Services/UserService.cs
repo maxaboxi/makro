@@ -68,7 +68,7 @@ namespace Makro.Services
                 if (ValidatePassword(login.password, foundUser.Password))
                 {
                     foundUser.LastLogin = DateTime.Now;
-                    await UpdateUserInformation(foundUser);
+                    await UpdateLastLogin(foundUser);
                     return foundUser;
                 }
             }
@@ -77,7 +77,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<UserDto>> GetUserDto (string id)
         {
-            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).FirstOrDefaultAsync();
+            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).AsNoTracking().FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -92,11 +92,16 @@ namespace Makro.Services
         public User GetUser(string id)
         {
 
-            return _context.Users.Where(p => p.UUID == id).FirstOrDefault();
+            return _context.Users.Where(p => p.UUID == id).AsNoTracking().FirstOrDefault();
         }
 
-        public async Task<ResultDto> UpdateUserInformation(User user)
+        public async Task<ResultDto> UpdateUserInformation(UserDto userDto)
         {
+            var user = _mapper.Map<User>(userDto);
+            var origInfo = _context.Users.Where(u => u.UUID == user.UUID).AsNoTracking().FirstOrDefault();
+            user.Id = origInfo.Id;
+            user.Password = origInfo.Password;
+            user.Roles = origInfo.Roles;
             user.UpdatedAt = DateTime.Now;
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -139,5 +144,10 @@ namespace Makro.Services
             return BCrypt.Net.BCrypt.Verify(password, correctHash);
         }
 
+        private async Task<int> UpdateLastLogin(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            return await _context.SaveChangesAsync();
+        }
     }
 }

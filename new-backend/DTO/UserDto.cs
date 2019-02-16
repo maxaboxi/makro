@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Makro.Models;
+using System;
 namespace Makro.DTO
 {
     public class UserDto
@@ -19,5 +20,9 @@ namespace Makro.DTO
         public decimal UserAddedCarbTarget { get; set; }
         public decimal UserAddedFatTarget { get; set; }
         public List<MealName> Meals { get; set; }
+        public DateTime LastLogin { get; set; }
+        public bool ShowTargets { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
