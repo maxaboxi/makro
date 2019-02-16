@@ -67,6 +67,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateFoodInformation(Food food)
         {
+            food.Id = _context.Foods.Where(f => f.UUID == food.UUID).AsNoTracking().FirstOrDefault().Id;
             food.UpdatedAt = DateTime.Now;
             _context.Entry(food).State = EntityState.Modified;
             await _context.SaveChangesAsync();

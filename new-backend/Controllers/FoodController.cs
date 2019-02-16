@@ -57,18 +57,19 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updatefood/{id}")]
-        public async Task<IActionResult> UpdateFood(string id, Food food)
+        public async Task<IActionResult> UpdateFood(string id, FoodDto foodDto)
         {
-            if (HttpContext.User.Identity.Name != food.UUID)
+            if (HttpContext.User.Identity.Name != foodDto.AddedBy)
             {
                 return Unauthorized();
             }
 
-            if (id != food.UUID)
+            if (id != foodDto.UUID)
             {
                 return BadRequest();
             }
 
+            var food = _mapper.Map<Food>(foodDto);
             return Ok(await _foodService.UpdateFoodInformation(food));
         }
 
