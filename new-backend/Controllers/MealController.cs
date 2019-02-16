@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Makro.Services;
 using Microsoft.AspNetCore.Authorization;
-using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Makro.DTO;
-using AutoMapper;
-using System;
 using System.Linq;
 namespace Makro.Controllers
 {
@@ -15,13 +12,11 @@ namespace Makro.Controllers
     public class MealController : ControllerBase
     {
         private readonly MealService _mealService;
-        private readonly IMapper _mapper;
         private readonly UserService _userService;
 
-        public MealController(MealService mealService, IMapper mapper, UserService userService)
+        public MealController(MealService mealService, UserService userService)
         {
             _mealService = mealService;
-            _mapper = mapper;
             _userService = userService;
         }
 
@@ -62,9 +57,7 @@ namespace Makro.Controllers
                 return BadRequest();
             }
 
-            var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
-
-            return Ok(await _mealService.UpdateSharedMeal(sharedMeal));
+            return Ok(await _mealService.UpdateSharedMeal(sharedMealDto));
         }
 
         [HttpDelete("deletesharedmeal/{id}")]

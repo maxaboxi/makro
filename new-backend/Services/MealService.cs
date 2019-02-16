@@ -48,9 +48,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
         {
-            List<Food> foods = new List<Food>();
-            sharedMealDto.Foods.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
-            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
+            List<Food> foods = MapFoodDtoListToFoodList(sharedMealDto.Foods);
             var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
             sharedMeal.UUID = Guid.NewGuid().ToString();
             sharedMeal.User = user;
@@ -69,9 +67,33 @@ namespace Makro.Services
             return new ResultDto(true, "Meal shared succesfully");
         }
 
-        public async Task<ResultDto> UpdateSharedMeal(SharedMeal sharedMeal)
+        public async Task<ResultDto> UpdateSharedMeal(SharedMealDto sharedMealDto)
         {
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == sharedMealDto.UUID).FirstOrDefaultAsync();
+
+            if (sharedMeal == null)
+            {
+                _logger.LogDebug("SharedMeal not found with UUID: ", sharedMealDto.UUID);
+                return new ResultDto(false, "Meal not found");
+            }
+
+            sharedMeal.Info = sharedMealDto.Info;
+            sharedMeal.Name = sharedMealDto.Name;
+            sharedMeal.Recipe = sharedMealDto.Recipe;
+            sharedMeal.Tags = sharedMealDto.Tags;
             sharedMeal.UpdatedAt = DateTime.Now;
+
+            List<Food> foods = MapFoodDtoListToFoodList(sharedMealDto.Foods);
+            _context.SharedMealFoods.RemoveRange(_context.SharedMealFoods.Where(smf => smf.SharedMealId == sharedMeal.Id));
+            foods.ForEach(f => {
+                var smf = new SharedMealFood
+                {
+                    Food = f,
+                    SharedMeal = sharedMeal
+                };
+                _context.Add(smf);
+            });
+
             _context.Entry(sharedMeal).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal updated succesfully");
@@ -84,13 +106,13 @@ namespace Makro.Services
 
             if (sharedMeal == null)
             {
-                _logger.LogDebug("SharedMeal not found with id: ", id);
+                _logger.LogDebug("SharedMeal not found with UUID: ", id);
                 return new ResultDto(false, "Not found");
             }
 
             if (sharedMeal.User.UUID != userId)
             {
-                _logger.LogError("User with id ", userId + " tried to delete food which belogs to " + sharedMeal.User.UUID);
+                _logger.LogError("User with UUID ", userId + " tried to delete food which belogs to " + sharedMeal.User.UUID);
                 return new ResultDto(false, "Unauthorized");
             }
 
@@ -106,6 +128,14 @@ namespace Makro.Services
             {
                 new MealName("Aamupala"), new MealName("Lounas"), new MealName("Välipala 1"), new MealName("Sali"), new MealName("Välipala 2"), new MealName("Iltapala")
             };
+        }
+
+        private List<Food> MapFoodDtoListToFoodList(List<FoodDto> foodDtos)
+        {
+            List<Food> foods = new List<Food>();
+            foodDtos.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
+            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
+            return foods;
         }
     }
 }
