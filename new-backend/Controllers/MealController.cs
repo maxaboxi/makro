@@ -50,7 +50,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updatesharedmeal/{id}")]
-        public async Task<IActionResult> UpdateSharedMeal(string id, SharedMealDto sharedMealDto)
+        public async Task<IActionResult> UpdateSharedMeal(string id, [FromBody]SharedMealDto sharedMealDto)
         {
             if (HttpContext.User.Identity.Name != sharedMealDto.AddedBy)
             {
