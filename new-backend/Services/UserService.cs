@@ -106,7 +106,16 @@ namespace Makro.Services
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Information updated succesfully");
+        }
 
+        public async Task<ResultDto> UpdateUserShowTargets(string id, bool show)
+        {
+            var user = _context.Users.Where(u => u.UUID == id).FirstOrDefault();
+            user.ShowTargets = show;
+            user.UpdatedAt = DateTime.Now;
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Information updated succesfully");
         }
 
         public async Task<ResultDto> DeleteAccount(string id)
