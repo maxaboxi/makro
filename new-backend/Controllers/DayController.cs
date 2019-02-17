@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Makro.Models;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,10 +17,21 @@ namespace Makro.Controllers
             _dayService = dayService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Day>>> GetAllDaysByUser(string id)
+        [HttpGet("all/{id}")]
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser(string id)
         {
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
             return await _dayService.GetAllDaysByUser(id);
+        }
+
+        [HttpGet("single/{dayId}")]
+        public async Task<ActionResult<DayDto>> GetSingleDay(string dayId)
+        {
+            return await _dayService.GetDay(dayId, HttpContext.User.Identity.Name);
         }
 
         [HttpPost("addday")]

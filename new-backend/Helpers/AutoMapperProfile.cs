@@ -15,6 +15,8 @@ namespace Makro.Helpers
             CreateMap<DayDto, Day>();
             CreateMap<SharedMeal, SharedMealDto>().AfterMap((src, dest) => dest.AddedBy = src.User.UUID);
             CreateMap<SharedMealDto, SharedMeal>();
+            CreateMap<Meal, MealDto>().AfterMap((src, dest) => dest.User = src.User.UUID);
+            CreateMap<MealDto, Meal>();
         }
     }
 }

@@ -12,7 +12,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
-using System;
 
 namespace Makro
 {

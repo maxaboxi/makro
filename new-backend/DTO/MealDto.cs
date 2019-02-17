@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 namespace Makro.DTO
 {
-    public class DayDto
+    public class MealDto
     {
         public string UUID { get; set; }
-        public string UserId { get; set; }
-        [Required]
         public string Name { get; set; }
-        public List<MealDto> AllMeals { get; set; }
+        public string User { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public List<FoodDto> Foods { get; set; }
     }
 }
