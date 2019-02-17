@@ -10,5 +10,6 @@ namespace Makro.Models
         public int FoodId { get; set; }
         public Food Food { get; set; }
         public int Id { get; set; }
+        public decimal FoodAmount { get; set; }
     }
 }

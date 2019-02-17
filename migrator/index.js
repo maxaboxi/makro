@@ -265,8 +265,8 @@ function addDays(cursor) {
                       .then(r => {
                         if (r.rows.length !== 0) {
                           const foodId = r.rows[0].Id;
-                          const q = 'INSERT INTO "MealFoods"("MealId", "FoodId") VALUES($1, $2)';
-                          const v = [mealId, foodId];
+                          const q = 'INSERT INTO "MealFoods"("MealId", "FoodId", "FoodAmount") VALUES($1, $2, $3)';
+                          const v = [mealId, foodId, f.amount];
                           pg.query(q, v).catch(error => {
                             console.log(error);
                             process.exit(1);
@@ -340,8 +340,8 @@ function addSharedDays(cursor) {
                         .then(r => {
                           if (r.rows.length !== 0) {
                             const foodId = r.rows[0].Id;
-                            const q = 'INSERT INTO "MealFoods"("MealId", "FoodId") VALUES($1, $2)';
-                            const v = [mealId, foodId];
+                            const q = 'INSERT INTO "MealFoods"("MealId", "FoodId", "FoodAmount") VALUES($1, $2, $3)';
+                            const v = [mealId, foodId, f.amount];
                             pg.query(q, v).catch(error => {
                               console.log(error);
                               process.exit(1);
@@ -410,8 +410,8 @@ function addSharedMeals(cursor) {
                 .then(r => {
                   if (r.rows.length !== 0) {
                     const foodId = r.rows[0].Id;
-                    const q = 'INSERT INTO "SharedMealFoods"("SharedMealId", "FoodId") VALUES($1, $2)';
-                    const v = [mealId, foodId];
+                    const q = 'INSERT INTO "SharedMealFoods"("SharedMealId", "FoodId", "FoodAmount") VALUES($1, $2, $3)';
+                    const v = [mealId, foodId, f.amount];
                     pg.query(q, v).catch(error => {
                       console.log(error);
                       process.exit(1);

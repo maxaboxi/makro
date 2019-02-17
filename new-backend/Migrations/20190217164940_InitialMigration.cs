@@ -385,7 +385,8 @@ namespace Makro.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     FoodId = table.Column<int>(nullable: false),
-                    SharedMealId = table.Column<int>(nullable: false)
+                    SharedMealId = table.Column<int>(nullable: false),
+                    FoodAmount = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -448,7 +449,8 @@ namespace Makro.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MealId = table.Column<int>(nullable: false),
-                    FoodId = table.Column<int>(nullable: false)
+                    FoodId = table.Column<int>(nullable: false),
+                    FoodAmount = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {

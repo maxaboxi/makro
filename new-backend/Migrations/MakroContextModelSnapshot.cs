@@ -384,6 +384,8 @@ namespace Makro.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<decimal>("FoodAmount");
+
                     b.Property<int>("FoodId");
 
                     b.Property<int>("MealId");
@@ -518,6 +520,8 @@ namespace Makro.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("FoodAmount");
 
                     b.Property<int>("FoodId");
 

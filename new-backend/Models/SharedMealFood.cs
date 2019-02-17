@@ -10,5 +10,6 @@ namespace Makro.Models
         public int SharedMealId { get; set; }
         [JsonIgnore]
         public SharedMeal SharedMeal { get; set; }
+        public decimal FoodAmount { get; set; }
     }
 }
