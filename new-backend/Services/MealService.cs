@@ -107,13 +107,13 @@ namespace Makro.Services
             return new ResultDto(true, "Meal updated succesfully");
         }
 
-        public ICollection<Meal> UpdateMeals(List<MealDto> mealDtos)
+        public ICollection<Meal> AddMeals(List<MealDto> mealDtos, string userId)
         {
             ICollection<Meal> meals = new List<Meal>();
             mealDtos.ForEach(m =>
             {
                 var meal = _mapper.Map<Meal>(m);
-                meal.User = _context.Users.Where(u => u.UUID == m.UserId).FirstOrDefault();
+                meal.User = _context.Users.Where(u => u.UUID == userId).FirstOrDefault();
                 meals.Add(meal);
                 _context.Meals.Add(meal);
                 m.Foods.ForEach(f =>

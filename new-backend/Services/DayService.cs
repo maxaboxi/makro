@@ -70,9 +70,15 @@ namespace Makro.Services
             return dayDto;
         }
 
-        public async Task<ResultDto> AddNewDay(Day day)
+        public async Task<ResultDto> AddNewDay(DayDto dayDto, string userId)
         {
+            var day = _mapper.Map<Day>(dayDto);
+            day.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            day.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
             day.UUID = Guid.NewGuid().ToString();
+            day.CreatedAt = DateTime.Now;
+            day.UpdatedAt = DateTime.Now;
+
             _context.Add(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day added succesfully");
@@ -98,7 +104,7 @@ namespace Makro.Services
             }
 
             day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
-            day.Meals = _mealService.UpdateMeals(dayDto.AllMeals);
+            day.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
             day.UpdatedAt = DateTime.Now;
 
             _context.Entry(day).State = EntityState.Modified;
@@ -109,7 +115,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteDay(string id, string userId)
         {
-            var day = await _context.Days.Where(d => d.UUID == id).Include(d => d.User).FirstOrDefaultAsync();
+            var day = await _context.Days.Where(d => d.UUID == id).Include(d => d.User).Include(d => d.Meals).FirstOrDefaultAsync();
 
             if (day == null)
             {
@@ -123,6 +129,7 @@ namespace Makro.Services
                 return new ResultDto(false, "Unauthorized");
             }
 
+            day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
             _context.Days.Remove(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day deleted succesfully");
