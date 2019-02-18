@@ -109,10 +109,11 @@ namespace Makro.Services
                 return new ResultDto(false, "Feedback not found");
             }
 
-            if (feedback.User == null)
+            if (feedback.Anonymous == true)
             {
                 var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
-                if (user.Roles.IndexOf("admin") == -1)
+
+                if (user.Roles == null)
                 {
                     return new ResultDto(false, "Unauthorized");
                 }
