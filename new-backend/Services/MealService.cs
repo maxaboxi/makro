@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Makro.DTO;
 using System;
 using System.Linq;
+using Makro.Dto;
 namespace Makro.Services
 {
     public class MealService
@@ -151,6 +152,23 @@ namespace Makro.Services
             await _context.SaveChangesAsync();
 
             return new ResultDto(true, "Shared meal deleted succesfully");
+        }
+
+        public async Task<ResultDto> UpdateMealNamesForUser(User user, List<MealNameDto> mealNameDtos)
+        {
+            var originalMealNames = await _context.MealNames.Where(mn => mn.User == user).ToListAsync();
+            originalMealNames.ForEach(m =>
+            {
+                mealNameDtos.ForEach(mnd => {
+                    if (m.UUID == mnd.UUID)
+                    {
+                        m.Name = mnd.Name;
+                        _context.Entry(m).State = EntityState.Modified;
+                    }
+                });
+            });
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Names updated succesfully");
         }
 
         public List<MealName> GenerateDefaultMealNamesForUser()

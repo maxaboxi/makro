@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Makro.DTO;
 using System.Linq;
+using Makro.Dto;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -26,7 +27,7 @@ namespace Makro.Controllers
             return await _mealService.GetAllSharedMeals();
         }
 
-        [HttpPost("addsharedmeal")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewSharedMeal([FromBody]SharedMealDto sharedMealDto)
         {
 
@@ -44,7 +45,7 @@ namespace Makro.Controllers
             return Ok(await _mealService.AddNewSharedMeal(sharedMealDto, user));
         }
 
-        [HttpPut("updatesharedmeal/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateSharedMeal(string id, [FromBody]SharedMealDto sharedMealDto)
         {
             if (HttpContext.User.Identity.Name != sharedMealDto.AddedBy)
@@ -60,10 +61,23 @@ namespace Makro.Controllers
             return Ok(await _mealService.UpdateSharedMeal(sharedMealDto));
         }
 
-        [HttpDelete("deletesharedmeal/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteSharedMeal(string id)
         {
             return Ok(await _mealService.DeleteSharedMeal(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpPut("updatemealnames/{userid}")]
+        public async Task<IActionResult> UpdateMealNames(string userId, [FromBody]List<MealNameDto> mealNames)
+        {
+            if (HttpContext.User.Identity.Name != userId)
+            {
+                return Unauthorized();
+            }
+
+            var user = _userService.GetUser(userId);
+
+            return Ok(await _mealService.UpdateMealNamesForUser(user, mealNames));
         }
     }
 }

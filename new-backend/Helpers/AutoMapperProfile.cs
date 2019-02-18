@@ -2,6 +2,7 @@
 using Makro.Models;
 using Makro.DTO;
 using System;
+using Makro.Dto;
 namespace Makro.Helpers
 {
     public class AutoMapperProfile : Profile
@@ -18,6 +19,8 @@ namespace Makro.Helpers
             CreateMap<SharedMealDto, SharedMeal>();
             CreateMap<Meal, MealDto>().AfterMap((src, dest) => dest.UserId = src.User.UUID);
             CreateMap<MealDto, Meal>().AfterMap((src, dest) => dest.UUID = Guid.NewGuid().ToString());
+            CreateMap<MealName, MealNameDto>();
+            CreateMap<MealNameDto, MealName>();
         }
     }
 }

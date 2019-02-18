@@ -96,7 +96,7 @@ namespace Makro.Controllers
             return user;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateUserInformation(string id, UserDto userDto)
         {
             if (HttpContext.User.Identity.Name != id)
@@ -112,7 +112,7 @@ namespace Makro.Controllers
             return Ok(await _userService.UpdateUserInformation(userDto));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
             if (HttpContext.User.Identity.Name != id)
