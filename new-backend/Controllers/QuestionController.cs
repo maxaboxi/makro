@@ -24,15 +24,25 @@ namespace Makro.Controllers
         }
 
         [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestionsByUser(string id)
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser(string id)
         {
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
             return await _questionService.GetAllQuestionsByUser(id);
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewQuestion(Question question)
+        public async Task<IActionResult> AddNewQuestion([FromBody]QuestionDto questionDto)
         {
-            return Ok(await _questionService.AddNewQuestion(question));
+            if (questionDto.QuestionBody == null || questionDto.Tags == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _questionService.AddNewQuestion(questionDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPut("update/{id}")]

@@ -28,9 +28,9 @@ namespace Makro.Services
             List<QuestionDto> questionDtos = new List<QuestionDto>();
 
             var questions = await _context.Questions.Include(q => q.User)
-            .Include(q => q.Answers)
-                .ThenInclude(a => a.User)
-            .AsNoTracking().ToListAsync();
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.User)
+                .AsNoTracking().ToListAsync();
 
             questions.ForEach(q =>
             {
@@ -43,14 +43,23 @@ namespace Makro.Services
             return questionDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestionsByUser(string userId)
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser(string userId)
         {
-            return await _context.Questions.AsNoTracking().Where(q => q.User.UUID == userId).ToListAsync();
+            List<QuestionDto> questionDtos = new List<QuestionDto>();
+            var questions = await _context.Questions.Where(q => q.User.UUID == userId)
+                .Include(q => q.User)
+                .AsNoTracking().ToListAsync();
+            questions.ForEach(q => questionDtos.Add(_mapper.Map<QuestionDto>(q)));
+            return questionDtos;
         }
 
-        public async Task<ResultDto> AddNewQuestion(Question question)
+        public async Task<ResultDto> AddNewQuestion(QuestionDto questionDto, string userId)
         {
+            var question = _mapper.Map<Question>(questionDto);
             question.UUID = Guid.NewGuid().ToString();
+            question.CreatedAt = DateTime.Now;
+            question.UpdatedAt = DateTime.Now;
+            question.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             _context.Add(question);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Question added succesfully");
