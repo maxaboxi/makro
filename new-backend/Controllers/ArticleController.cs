@@ -29,13 +29,13 @@ namespace Makro.Controllers
             return await _articleService.GetAllArticlesByUser(id);
         }
 
-        [HttpPost("addarticle")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewArticle(Article article)
         {
             return Ok(await _articleService.AddNewArticle(article));
         }
 
-        [HttpPut("updatearticle/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateArticle(int id, Article article)
         {
             if (id != article.Id)
@@ -46,7 +46,7 @@ namespace Makro.Controllers
             return Ok(await _articleService.UpdateArticle(article));
         }
 
-        [HttpDelete("deletarticle/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
             return Ok(await _articleService.DeleteArticle(id));

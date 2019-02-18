@@ -33,7 +33,7 @@ namespace Makro.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allfoods")]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
         {
             return await _foodService.GetAllFoods();
@@ -45,7 +45,7 @@ namespace Makro.Controllers
             return await _foodService.GetAllFoodsByUser(id);
         }
 
-        [HttpPost("addfood")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewFood(FoodDto foodDto)
         {
             var user = _userService.GetUser(HttpContext.User.Identity.Name);
@@ -59,13 +59,13 @@ namespace Makro.Controllers
             return Ok(await _foodService.AddNewFood(food, user));
         }
 
-        [HttpPost("addeditedfood")]
+        [HttpPost("newedited")]
         public async Task<IActionResult> AddNewEditedFood(EditedFood editedFood)
         {
             return Ok(await _foodService.AddNewEditedFood(editedFood));
         }
 
-        [HttpPut("updatefood/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateFood(string id, FoodDto foodDto)
         {
             if (HttpContext.User.Identity.Name != foodDto.AddedBy)
@@ -82,7 +82,7 @@ namespace Makro.Controllers
             return Ok(await _foodService.UpdateFoodInformation(food));
         }
 
-        [HttpDelete("deletefood/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteFood(string id)
         {
             return Ok(await _foodService.DeleteFood(id, HttpContext.User.Identity.Name));

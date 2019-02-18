@@ -23,13 +23,13 @@ namespace Makro.Controllers
         }
 
 
-        [HttpPost("addcomment")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewComment(Comment comment)
         {
             return Ok(await _commentService.AddNewComment(comment));
         }
 
-        [HttpPut("updatecomment/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateComment(int id, Comment comment)
         {
             if (id != comment.Id)
@@ -40,7 +40,7 @@ namespace Makro.Controllers
             return Ok(await _commentService.UpdateComment(comment));
         }
 
-        [HttpDelete("deletecomment/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             return Ok(await _commentService.DeleteComment(id));

@@ -47,13 +47,13 @@ namespace Makro.Controllers
             return await _likeService.GetAllLikesByUser(id);
         }
 
-        [HttpPost("addlike")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewLike(Like like)
         {
             return Ok(await _likeService.AddNewLike(like));
         }
 
-        [HttpPut("updatelike/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateLike(int id, Like like)
         {
             if (id != like.Id)
@@ -64,7 +64,7 @@ namespace Makro.Controllers
             return Ok(await _likeService.UpdateLike(like));
         }
 
-        [HttpDelete("deletelike/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteLike(int id)
         {
             return Ok(await _likeService.DeleteLike(id));

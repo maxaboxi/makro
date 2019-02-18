@@ -28,13 +28,13 @@ namespace Makro.Controllers
             return await _questionService.GetAllQuestionsByUser(id);
         }
 
-        [HttpPost("addquestion")]
+        [HttpPost("new")]
         public async Task<IActionResult> AddNewQuestion(Question question)
         {
             return Ok(await _questionService.AddNewQuestion(question));
         }
 
-        [HttpPut("updatequestion/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateQuestion(int id, Question question)
         {
             if (id != question.Id)
@@ -45,7 +45,7 @@ namespace Makro.Controllers
             return Ok(await _questionService.UpdateQuestion(question));
         }
 
-        [HttpDelete("deletequestion/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAnswer(int id)
         {
             return Ok(await _questionService.DeleteQuestion(id));
