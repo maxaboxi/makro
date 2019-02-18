@@ -65,9 +65,22 @@ namespace Makro.Services
             return new ResultDto(true, "Question added succesfully");
         }
 
-        public async Task<ResultDto> UpdateQuestion(Question question)
+        public async Task<ResultDto> UpdateQuestion(QuestionDto questionDto, string userId)
         {
-            _context.Entry(question).State = EntityState.Modified;
+            var originalQuestion = await _context.Questions
+                .Where(q => q.UUID == questionDto.UUID && q.User.UUID == userId).FirstOrDefaultAsync();
+
+            if (originalQuestion == null)
+            {
+                return new ResultDto(false, "Question not found");
+            }
+
+            originalQuestion.UpdatedAt = DateTime.Now;
+            originalQuestion.QuestionBody = questionDto.QuestionBody ?? originalQuestion.QuestionBody;
+            originalQuestion.QuestionInformation = questionDto.QuestionInformation ?? originalQuestion.QuestionInformation;
+            originalQuestion.Tags = questionDto.Tags ?? originalQuestion.Tags;
+
+            _context.Entry(originalQuestion).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Question updated succesfully");
         }
