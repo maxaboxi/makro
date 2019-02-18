@@ -7,27 +7,28 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System;
+using AutoMapper;
 namespace Makro.Services
 {
     public class AnswerService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public AnswerService(MakroContext context, ILogger<AnswerService> logger)
+        public AnswerService(MakroContext context, ILogger<AnswerService> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersForQuestion(int id)
+        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswersByUser(string userId)
         {
-            return await _context.Answers.AsNoTracking().Include(a => a.Comments).Where(a => a.Question.Id == id).ToListAsync();
-        }
-
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersByUser(string userId)
-        {
-            return await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId).ToListAsync();
+            List<AnswerDto> answerDtos = new List<AnswerDto>();
+            var answers = await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId).Include(a => a.User).ToListAsync();
+            answers.ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
+            return answerDtos;
         }
 
         public async Task<ResultDto> AddNewAnswer(Answer answer)

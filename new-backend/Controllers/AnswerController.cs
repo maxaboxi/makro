@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,15 +17,14 @@ namespace Makro.Controllers
             _answerService = answerService;
         }
 
-        [HttpGet("question/{id}")]
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswersForQuestion(int id)
-        {
-            return await _answerService.GetAllAnswersForQuestion(id);
-        }
-
         [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswerByUser(string id)
+        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswerByUser(string id)
         {
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
             return await _answerService.GetAllAnswersByUser(id);
         }
 

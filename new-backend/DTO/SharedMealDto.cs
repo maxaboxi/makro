@@ -9,6 +9,7 @@ namespace Makro.DTO
         public string Info { get; set; }
         public string Recipe { get; set; }
         public string AddedBy { get; set; }
+        public string AddedByName { get; set; }
         public List<string> Tags { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

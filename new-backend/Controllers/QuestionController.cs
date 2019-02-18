@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Makro.Services;
 using Microsoft.AspNetCore.Authorization;
-using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Makro.DTO;
