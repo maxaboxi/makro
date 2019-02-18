@@ -7,6 +7,7 @@ namespace Makro.DTO
         public string UUID { get; set; }
         public string UserId { get; set; }
         public string Username { get; set; }
+        public string QuestionUUID { get; set; }
         public List<CommentDto> Comments { get; set; }
         public string AnswerBody { get; set; }
         public DateTime CreatedAt { get; set; }

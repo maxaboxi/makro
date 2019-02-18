@@ -29,9 +29,14 @@ namespace Makro.Controllers
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewAnswer(Answer answer)
+        public async Task<IActionResult> AddNewAnswer([FromBody]AnswerDto answerDto)
         {
-            return Ok(await _answerService.AddNewAnswer(answer));
+            if (answerDto.QuestionUUID == null || answerDto.AnswerBody == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _answerService.AddNewAnswer(answerDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPut("update/{id}")]

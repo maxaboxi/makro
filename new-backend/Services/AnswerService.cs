@@ -31,9 +31,14 @@ namespace Makro.Services
             return answerDtos;
         }
 
-        public async Task<ResultDto> AddNewAnswer(Answer answer)
+        public async Task<ResultDto> AddNewAnswer(AnswerDto answerDto, string userId)
         {
+            var answer = _mapper.Map<Answer>(answerDto);
             answer.UUID = Guid.NewGuid().ToString();
+            answer.CreatedAt = DateTime.Now;
+            answer.UpdatedAt = DateTime.Now;
+            answer.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            answer.Question = await _context.Questions.Where(q => q.UUID == answerDto.QuestionUUID).FirstOrDefaultAsync();
             _context.Add(answer);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Answer added succesfully");
