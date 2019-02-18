@@ -21,6 +21,21 @@ namespace Makro.Helpers
             CreateMap<MealDto, Meal>().AfterMap((src, dest) => dest.UUID = Guid.NewGuid().ToString());
             CreateMap<MealName, MealNameDto>();
             CreateMap<MealNameDto, MealName>();
+            CreateMap<Question, QuestionDto>().AfterMap((src, dest) => {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
+            CreateMap<QuestionDto, Question>();
+            CreateMap<Answer, AnswerDto>().AfterMap((src, dest) => {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
+            CreateMap<AnswerDto, Answer>();
+            CreateMap<Comment, CommentDto>().AfterMap((src, dest) => {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
+            CreateMap<CommentDto, Comment>();
         }
     }
 }

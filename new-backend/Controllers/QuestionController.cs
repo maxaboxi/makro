@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -17,7 +18,7 @@ namespace Makro.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestions()
         {
             return await _questionService.GetAllQuestions();
         }

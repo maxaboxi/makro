@@ -7,22 +7,40 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
 using System;
+using AutoMapper;
 namespace Makro.Services
 {
     public class QuestionService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public QuestionService(MakroContext context, ILogger<QuestionService> logger)
+        public QuestionService(MakroContext context, ILogger<QuestionService> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestions()
         {
-            return await _context.Questions.AsNoTracking().ToListAsync();
+            List<QuestionDto> questionDtos = new List<QuestionDto>();
+
+            var questions = await _context.Questions.Include(q => q.User)
+            .Include(q => q.Answers)
+                .ThenInclude(a => a.User)
+            .AsNoTracking().ToListAsync();
+
+            questions.ForEach(q =>
+            {
+                List<AnswerDto> answerDtos = new List<AnswerDto>();
+                q.Answers.ToList().ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
+                var questionDto = _mapper.Map<QuestionDto>(q);
+                questionDto.Answers = answerDtos;
+                questionDtos.Add(questionDto);
+            });
+            return questionDtos;
         }
 
         public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestionsByUser(string userId)
