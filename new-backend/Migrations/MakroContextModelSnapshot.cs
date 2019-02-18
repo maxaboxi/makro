@@ -227,6 +227,8 @@ namespace Makro.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Anonymous");
+
                     b.Property<string>("Answer");
 
                     b.Property<DateTime>("AnsweredAt");
@@ -243,7 +245,7 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -363,7 +365,7 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -669,7 +671,8 @@ namespace Makro.Migrations
 
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Makro.Models.Food", b =>
@@ -716,8 +719,7 @@ namespace Makro.Migrations
 
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Makro.Models.MealFood", b =>

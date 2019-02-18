@@ -653,8 +653,8 @@ function addFeedbacks(cursor) {
               .then(re => {
                 answererId = re.rows[0].Id;
                 text =
-                  'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "Answer", "AnsweredById", "CreatedAt", "UpdatedAt", "AnsweredAt") VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
-                values = [e._id.toString(), userId, e.feedback, e.answer, answererId, e.createdAt, e.updatedAt, e.answerDate];
+                  'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "Answer", "AnsweredById", "CreatedAt", "UpdatedAt", "AnsweredAt", "Anonymous") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+                values = [e._id.toString(), userId, e.feedback, e.answer, answererId, e.createdAt, e.updatedAt, e.answerDate, false];
                 pg.query(text, values).catch(errr => {
                   console.log(err);
                   process.exit(1);
@@ -666,46 +666,19 @@ function addFeedbacks(cursor) {
               });
           } else {
             text =
-              'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5) RETURNING *';
-            values = [e._id.toString(), userId, e.feedback, e.createdAt, e.updatedAt];
+              'INSERT INTO "Feedbacks"("UUID", "UserId", "FeedbackBody", "CreatedAt", "UpdatedAt" "Anonymous") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+            values = [e._id.toString(), userId, e.feedback, e.createdAt, e.updatedAt, false];
             pg.query(text, values).catch(error => {
               console.log(error);
               process.exit(1);
             });
+            S;
           }
         })
         .catch(err => {
           console.log(err);
           process.exit(1);
         });
-    } else {
-      answererId = null;
-      if (e.answerUsername) {
-        aQuery = 'SELECT "Id" FROM "Users" WHERE "Username" = $1';
-        aValues = [e.answerUsername];
-        pg.query(aQuery, aValues)
-          .then(re => {
-            answererId = re.rows[0].Id;
-            text =
-              'INSERT INTO "Feedbacks"("UUID", "FeedbackBody", "Answer", "AnsweredById", "CreatedAt", "UpdatedAt", "AnsweredAt") VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
-            values = [e._id.toString(), e.feedback, e.answer, answererId, e.createdAt, e.updatedAt, e.answerDate];
-            pg.query(text, values).catch(errr => {
-              console.log(err);
-              process.exit(1);
-            });
-          })
-          .catch(r => {
-            console.log(r);
-            process.exit(1);
-          });
-      } else {
-        text = 'INSERT INTO "Feedbacks"("UUID", "FeedbackBody", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4) RETURNING *';
-        values = [e._id.toString(), e.feedback, e.createdAt, e.updatedAt];
-        pg.query(text, values).catch(error => {
-          console.log(error);
-          process.exit(1);
-        });
-      }
     }
   });
 }

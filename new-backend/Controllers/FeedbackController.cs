@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Makro.Models;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -17,7 +18,7 @@ namespace Makro.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacks()
+        public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacks()
         {
             return await _feedbackService.GetAllFeedbacks();
         }
@@ -25,30 +26,35 @@ namespace Makro.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
         {
+            if (HttpContext.User.Identity.Name != id)
+            {
+                return Unauthorized();
+            }
+
             return await _feedbackService.GetAllFeedbacksByUser(id);
         }
 
-        [HttpPost("addfeedback")]
-        public async Task<IActionResult> AddNewFeedback(Feedback feedback)
+        [HttpPost("new")]
+        public async Task<IActionResult> AddNewFeedback([FromBody]FeedbackDto feedbackDto)
         {
-            return Ok(await _feedbackService.AddNewFeedback(feedback));
+            return Ok(await _feedbackService.AddNewFeedback(feedbackDto, HttpContext.User.Identity.Name));
         }
 
-        [HttpPut("updatefeedback/{id}")]
-        public async Task<IActionResult> UpdateFeedbackl(int id, Feedback feedback)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateFeedback(string id, FeedbackDto feedbackDto)
         {
-            if (id != feedback.Id)
+            if (id != feedbackDto.UUID)
             {
                 return BadRequest();
             }
 
-            return Ok(await _feedbackService.UpdateFeedback(feedback));
+            return Ok(await _feedbackService.UpdateFeedback(feedbackDto, HttpContext.User.Identity.Name));
         }
 
-        [HttpDelete("deletefeedbackl/{id}")]
-        public async Task<IActionResult> DeleteFeedback(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteFeedback(string id)
         {
-            return Ok(await _feedbackService.DeleteFeedback(id));
+            return Ok(await _feedbackService.DeleteFeedback(id, HttpContext.User.Identity.Name));
         }
     }
 }

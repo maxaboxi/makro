@@ -22,7 +22,6 @@ namespace Makro.Controllers
         private readonly UserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-        private readonly JwtSecurityTokenHandler _tokenHandler = new JwtSecurityTokenHandler();
 
         public UserController(UserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
@@ -67,8 +66,9 @@ namespace Makro.Controllers
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = _tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = _tokenHandler.WriteToken(token);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
             return Ok(new
             {
