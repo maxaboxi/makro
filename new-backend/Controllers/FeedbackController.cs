@@ -24,7 +24,7 @@ namespace Makro.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
+        public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacksByUser(string id)
         {
             if (HttpContext.User.Identity.Name != id)
             {
@@ -41,7 +41,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateFeedback(string id, FeedbackDto feedbackDto)
+        public async Task<IActionResult> UpdateFeedback(string id, [FromBody]FeedbackDto feedbackDto)
         {
             if (id != feedbackDto.UUID)
             {

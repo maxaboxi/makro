@@ -29,6 +29,7 @@ namespace Makro.Services
                 {
                     UUID = f.UUID,
                     UserId = f.Anonymous ? null : f.User.UUID,
+                    Username = f.Anonymous ? null : f.User.Username,
                     FeedbackBody = f.FeedbackBody,
                     Answer = f.Answer,
                     AnsweredBy = f.AnsweredBy?.UUID,
@@ -41,9 +42,26 @@ namespace Makro.Services
             return feedbackDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacksByUser(string id)
+        public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacksByUser(string id)
         {
-            return await _context.Feedbacks.AsNoTracking().Where(f => f.User.UUID == id).ToListAsync();
+            var feedbacks = await _context.Feedbacks.Where(f => f.User.UUID == id && f.Anonymous != true).Include(f => f.User).Include(f => f.AnsweredBy).AsNoTracking().ToListAsync();
+            var feedbackDtos = new List<FeedbackDto>();
+            feedbacks.ForEach(f => {
+                var feedbackDto = new FeedbackDto
+                {
+                    UUID = f.UUID,
+                    UserId = f.Anonymous ? null : f.User.UUID,
+                    Username = f.Anonymous ? null : f.User.Username,
+                    FeedbackBody = f.FeedbackBody,
+                    Answer = f.Answer,
+                    AnsweredBy = f.AnsweredBy?.UUID,
+                    CreatedAt = f.CreatedAt,
+                    UpdatedAt = f.UpdatedAt,
+                    AnsweredAt = f.AnsweredAt
+                };
+                feedbackDtos.Add(feedbackDto);
+            });
+            return feedbackDtos;
         }
 
         public async Task<ResultDto> AddNewFeedback(FeedbackDto feedbackDto, string userId)
@@ -64,7 +82,8 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateFeedback(FeedbackDto feedbackDto, string userId)
         {
-            var originalFeedback = await _context.Feedbacks.Where(f => f.UUID == feedbackDto.UUID)
+            var originalFeedback = await _context.Feedbacks
+                .Where(f => f.UUID == feedbackDto.UUID && f.User.UUID == userId && f.Anonymous != true)
                 .Include(f => f.User)
                 .FirstOrDefaultAsync();
 
