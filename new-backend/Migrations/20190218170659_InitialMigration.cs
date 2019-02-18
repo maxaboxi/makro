@@ -320,7 +320,7 @@ namespace Makro.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UUID = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    QuestionId = table.Column<int>(nullable: false),
+                    QuestionId = table.Column<int>(nullable: true),
                     AnswerBody = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
@@ -333,7 +333,7 @@ namespace Makro.Migrations
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Answers_Users_UserId",
                         column: x => x.UserId,
@@ -428,7 +428,7 @@ namespace Makro.Migrations
                         column: x => x.AnswerId,
                         principalTable: "Answers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Comments_Articles_ArticleId",
                         column: x => x.ArticleId,

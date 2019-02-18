@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190218151142_InitialMigration")]
+    [Migration("20190218170659_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("QuestionId");
+                    b.Property<int?>("QuestionId");
 
                     b.Property<string>("UUID")
                         .IsRequired();
@@ -604,7 +604,7 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
@@ -632,7 +632,8 @@ namespace Makro.Migrations
                 {
                     b.HasOne("Makro.Models.Answer", "Answer")
                         .WithMany("Comments")
-                        .HasForeignKey("AnswerId");
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Makro.Models.Article", "Article")
                         .WithMany("Comments")

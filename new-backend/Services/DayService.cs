@@ -125,7 +125,7 @@ namespace Makro.Services
 
             if (day.User.UUID != userId)
             {
-                _logger.LogError("User with UUID ", userId + " tried to delete day which belnogs to " + day.User.UUID);
+                _logger.LogError("User with UUID " + userId + " tried to delete day which belnogs to " + day.User.UUID);
                 return new ResultDto(false, "Unauthorized");
             }
 

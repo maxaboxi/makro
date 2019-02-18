@@ -12,7 +12,6 @@ namespace Makro.Models
         public string UUID { get; set; }
         [Required]
         public User User { get; set; }
-        [Required]
         public Question Question { get; set; }
         public ICollection<Comment> Comments { get; set; }
         [Required]

@@ -85,14 +85,20 @@ namespace Makro.Services
             return new ResultDto(true, "Question updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteQuestion(int id)
+        public async Task<ResultDto> DeleteQuestion(string id, string userId)
         {
-            var question = await _context.Questions.FindAsync(id);
+            var question = await _context.Questions.Where(q => q.UUID == id).Include(q => q.User).FirstOrDefaultAsync();
 
             if (question == null)
             {
                 _logger.LogDebug("Question not found with id: ", id);
                 return new ResultDto(false, "Question not found");
+            }
+
+            if (question.User.UUID != userId)
+            {
+                _logger.LogError("User with UUID " + userId + " tried to delete question which belnogs to " + question.User.UUID);
+                return new ResultDto(false, "Unauthorized");
             }
 
             _context.Questions.Remove(question);

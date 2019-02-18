@@ -53,13 +53,11 @@ namespace Makro.Models
 
             modelBuilder.Entity<ArticleImage>()
                 .HasIndex(e => e.UUID).IsUnique();
-
-            modelBuilder.Entity<Answer>()
-                .HasOne(e => e.Question)
-                .WithMany(q => q.Answers);
+                
             modelBuilder.Entity<Answer>()
                 .HasMany(a => a.Comments)
-                .WithOne(e => e.Answer);
+                .WithOne(e => e.Answer)
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Answer>()
                 .HasIndex(e => e.UUID).IsUnique();
 
@@ -77,6 +75,10 @@ namespace Makro.Models
 
             modelBuilder.Entity<Question>()
                 .HasIndex(e => e.UUID).IsUnique();
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Answers)
+                .WithOne(e => e.Question)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<SharedDay>()
                 .HasIndex(e => e.UUID).IsUnique();

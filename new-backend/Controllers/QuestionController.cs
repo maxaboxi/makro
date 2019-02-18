@@ -57,9 +57,9 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteAnswer(int id)
+        public async Task<IActionResult> DeleteQuestion(string id)
         {
-            return Ok(await _questionService.DeleteQuestion(id));
+            return Ok(await _questionService.DeleteQuestion(id, HttpContext.User.Identity.Name));
         }
     }
 }
