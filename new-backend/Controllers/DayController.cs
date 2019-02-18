@@ -41,20 +41,20 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updateday/{id}")]
-        public async Task<IActionResult> UpdateSharedMeal(int id, Day day)
+        public async Task<IActionResult> UpdateDay(string id, [FromBody]DayDto dayDto)
         {
-            if (id != day.Id)
+            if (id != dayDto.UUID)
             {
                 return BadRequest();
             }
 
-            return Ok(await _dayService.UpdateDay(day));
+            return Ok(await _dayService.UpdateDay(dayDto, HttpContext.User.Identity.Name));
         }
 
         [HttpDelete("deleteday/{id}")]
-        public async Task<IActionResult> DeleteFood(int id)
+        public async Task<IActionResult> DeleteDay(string id)
         {
-            return Ok(await _dayService.DeleteDay(id));
+            return Ok(await _dayService.DeleteDay(id, HttpContext.User.Identity.Name));
         }
     }
 }

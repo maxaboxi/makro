@@ -14,14 +14,12 @@ namespace Makro.Services
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
-        private readonly UserService _userService;
         private readonly IMapper _mapper;
 
-        public FoodService(MakroContext context, ILogger<FoodService> logger, UserService userService, IMapper mapper)
+        public FoodService(MakroContext context, ILogger<FoodService> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
-            _userService = userService;
             _mapper = mapper;
         }
 
@@ -41,13 +39,8 @@ namespace Makro.Services
             return foodDtos;
         }
 
-        public async Task<ResultDto> AddNewFood(Food food, string userId)
+        public async Task<ResultDto> AddNewFood(Food food, User user)
         {
-            var user = _userService.GetUser(userId);
-            if (user == null)
-            {
-                return new ResultDto(false, "Unauthorized");
-            }
             food.User = user;
             food.UUID = Guid.NewGuid().ToString();
             food.CreatedAt = DateTime.Now;
@@ -98,6 +91,14 @@ namespace Makro.Services
         public async Task<AmountDto> GetAmountOfFoods()
         {
             return new AmountDto(await _context.Foods.CountAsync());
+        }
+
+        public List<Food> MapFoodDtoListToFoodList(List<FoodDto> foodDtos)
+        {
+            List<Food> foods = new List<Food>();
+            foodDtos.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
+            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
+            return foods;
         }
     }
 }

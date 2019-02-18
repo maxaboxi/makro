@@ -6,7 +6,7 @@ namespace Makro.DTO
     {
         public string UUID { get; set; }
         public string Name { get; set; }
-        public string User { get; set; }
+        public string UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<FoodDto> Foods { get; set; }

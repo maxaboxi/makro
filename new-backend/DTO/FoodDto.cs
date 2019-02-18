@@ -21,6 +21,7 @@ namespace Makro.DTO
         public decimal PackageSize { get; set; }
         public decimal ServingSize { get; set; }
         public string En { get; set; }
+        public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

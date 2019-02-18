@@ -15,12 +15,14 @@ namespace Makro.Services
         private readonly MakroContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly FoodService _foodService;
 
-        public MealService(MakroContext context, IMapper mapper, ILogger<MealService> logger)
+        public MealService(MakroContext context, IMapper mapper, ILogger<MealService> logger, FoodService foodService)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _foodService = foodService;
         }
 
         public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals()
@@ -37,7 +39,11 @@ namespace Makro.Services
            sharedMeals.ForEach(sm =>
             {
                 var foodDtos = new List<FoodDto>();
-                sm.SharedMealFoods.ToList().ForEach(e => foodDtos.Add(_mapper.Map<FoodDto>(e.Food)));
+                sm.SharedMealFoods.ToList().ForEach(e => {
+                    var foodDto = _mapper.Map<FoodDto>(e.Food);
+                    foodDto.Amount = e.FoodAmount;
+                    foodDtos.Add(foodDto);
+                 });
                 var sharedMealDto = _mapper.Map<SharedMealDto>(sm);
                 sharedMealDto.Foods = foodDtos;
                 sharedMealDtos.Add(sharedMealDto);
@@ -48,7 +54,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
         {
-            List<Food> foods = MapFoodDtoListToFoodList(sharedMealDto.Foods);
+            List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);
             var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
             sharedMeal.UUID = Guid.NewGuid().ToString();
             sharedMeal.User = user;
@@ -59,7 +65,8 @@ namespace Makro.Services
                 var smf = new SharedMealFood
                 {
                     Food = f,
-                    SharedMeal = sharedMeal
+                    SharedMeal = sharedMeal,
+                    FoodAmount = sharedMealDto.Foods.FindLast(food => food.UUID == f.UUID).Amount
                 };
                 _context.Add(smf);
             });
@@ -83,13 +90,14 @@ namespace Makro.Services
             sharedMeal.Tags = sharedMealDto.Tags;
             sharedMeal.UpdatedAt = DateTime.Now;
 
-            List<Food> foods = MapFoodDtoListToFoodList(sharedMealDto.Foods);
+            List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);
             _context.SharedMealFoods.RemoveRange(_context.SharedMealFoods.Where(smf => smf.SharedMealId == sharedMeal.Id));
             foods.ForEach(f => {
                 var smf = new SharedMealFood
                 {
                     Food = f,
-                    SharedMeal = sharedMeal
+                    SharedMeal = sharedMeal,
+                    FoodAmount = sharedMealDto.Foods.FindLast(food => food.UUID == f.UUID).Amount
                 };
                 _context.Add(smf);
             });
@@ -99,9 +107,32 @@ namespace Makro.Services
             return new ResultDto(true, "Meal updated succesfully");
         }
 
+        public ICollection<Meal> UpdateMeals(List<MealDto> mealDtos)
+        {
+            ICollection<Meal> meals = new List<Meal>();
+            mealDtos.ForEach(m =>
+            {
+                var meal = _mapper.Map<Meal>(m);
+                meal.User = _context.Users.Where(u => u.UUID == m.UserId).FirstOrDefault();
+                meals.Add(meal);
+                _context.Meals.Add(meal);
+                m.Foods.ForEach(f =>
+                {
+                    var food = _mapper.Map<Food>(f);
+                    food.Id = _context.Foods.Where(fd => fd.UUID == f.UUID).FirstOrDefault().Id;
+                    _context.Add(new MealFood { 
+                        Food = food,
+                        Meal = meal,
+                        FoodAmount = f.Amount
+                    });
+                });
+            });
+            return meals;
+        }
+
         public async Task<ResultDto> DeleteSharedMeal(string id, string userId)
         {
-            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id).FirstOrDefaultAsync();
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id).Include(sm => sm.User).FirstOrDefaultAsync();
 
 
             if (sharedMeal == null)
@@ -112,7 +143,7 @@ namespace Makro.Services
 
             if (sharedMeal.User.UUID != userId)
             {
-                _logger.LogError("User with UUID ", userId + " tried to delete food which belogs to " + sharedMeal.User.UUID);
+                _logger.LogError("User with UUID ", userId + " tried to delete shared meal which belongs to " + sharedMeal.User.UUID);
                 return new ResultDto(false, "Unauthorized");
             }
 
@@ -130,12 +161,5 @@ namespace Makro.Services
             };
         }
 
-        private List<Food> MapFoodDtoListToFoodList(List<FoodDto> foodDtos)
-        {
-            List<Food> foods = new List<Food>();
-            foodDtos.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
-            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
-            return foods;
-        }
     }
 }

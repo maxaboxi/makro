@@ -16,11 +16,13 @@ namespace Makro.Controllers
 
         private readonly FoodService _foodService;
         private readonly IMapper _mapper;
+        private readonly UserService _userService;
 
-        public FoodController(FoodService foodService, IMapper mapper)
+        public FoodController(FoodService foodService, IMapper mapper, UserService userService)
         {
             _foodService = foodService;
             _mapper = mapper;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -46,8 +48,15 @@ namespace Makro.Controllers
         [HttpPost("addfood")]
         public async Task<IActionResult> AddNewFood(FoodDto foodDto)
         {
+            var user = _userService.GetUser(HttpContext.User.Identity.Name);
+
+            if (user == null)
+            {
+                return Ok( new ResultDto(false, "Unauthorized"));
+            }
+
             var food = _mapper.Map<Food>(foodDto);
-            return Ok(await _foodService.AddNewFood(food, HttpContext.User.Identity.Name));
+            return Ok(await _foodService.AddNewFood(food, user));
         }
 
         [HttpPost("addeditedfood")]
