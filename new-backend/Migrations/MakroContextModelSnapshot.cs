@@ -635,7 +635,8 @@ namespace Makro.Migrations
 
                     b.HasOne("Makro.Models.Article", "Article")
                         .WithMany("Comments")
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()

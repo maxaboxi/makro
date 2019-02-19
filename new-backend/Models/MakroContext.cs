@@ -47,7 +47,8 @@ namespace Makro.Models
                 .WithOne(e => e.Article);
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Comments)
-                .WithOne(e => e.Article);
+                .WithOne(e => e.Article)
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Article>()
                 .HasIndex(a => a.UUID).IsUnique();
 
