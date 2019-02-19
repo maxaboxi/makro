@@ -44,16 +44,26 @@ namespace Makro.Services
             return new ResultDto(true, "Answer added succesfully");
         }
 
-        public async Task<ResultDto> UpdateAnswer(Answer answer)
+        public async Task<ResultDto> UpdateAnswer(AnswerDto answerDto, string userId)
         {
-            _context.Entry(answer).State = EntityState.Modified;
+            var originalAnswer = await _context.Answers.Where(a => a.UUID == answerDto.UUID && a.User.UUID == userId).FirstOrDefaultAsync();
+
+            if (originalAnswer == null)
+            {
+                return new ResultDto(true, "Answer not found");
+            }
+
+            originalAnswer.UpdatedAt = DateTime.Now;
+            originalAnswer.AnswerBody = answerDto.AnswerBody ?? originalAnswer.AnswerBody;
+
+            _context.Entry(originalAnswer).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Answer updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteAnswer(int id)
+        public async Task<ResultDto> DeleteAnswer(string id, string userId)
         {
-            var answer = await _context.Answers.FindAsync(id);
+            var answer = await _context.Answers.Where(a => a.UUID == id && a.User.UUID == userId).FirstOrDefaultAsync();
 
             if (answer == null)
             {
