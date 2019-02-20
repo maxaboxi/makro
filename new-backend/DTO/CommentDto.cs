@@ -7,8 +7,9 @@ namespace Makro.DTO
         public string UserId { get; set; }
         public string Username { get; set; }
         public string Body { get; set; }
-        public string AnswerId { get; set; }
-        public string ArticleId { get; set; }
+        public string AnswerUUID { get; set; }
+        public string ArticleUUID { get; set; }
+        public string ReplyToUUID { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

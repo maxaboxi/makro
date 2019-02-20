@@ -23,15 +23,10 @@ namespace Makro.Controllers
             return await _feedbackService.GetAllFeedbacks();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacksByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacksByUser()
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            return await _feedbackService.GetAllFeedbacksByUser(id);
+            return await _feedbackService.GetAllFeedbacksByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

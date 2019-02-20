@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Makro.Services;
 using Microsoft.AspNetCore.Authorization;
-using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Makro.DTO;
@@ -17,15 +16,10 @@ namespace Makro.Controllers
             _answerService = answerService;
         }
 
-        [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswerByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswerByUser()
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            return await _answerService.GetAllAnswersByUser(id);
+            return await _answerService.GetAllAnswersByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

@@ -417,6 +417,7 @@ namespace Makro.Migrations
                     Body = table.Column<string>(nullable: false),
                     AnswerId = table.Column<int>(nullable: true),
                     ArticleId = table.Column<int>(nullable: true),
+                    ReplyToId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
@@ -435,6 +436,12 @@ namespace Makro.Migrations
                         principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Comments_Comments_ReplyToId",
+                        column: x => x.ReplyToId,
+                        principalTable: "Comments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
@@ -568,6 +575,11 @@ namespace Makro.Migrations
                 name: "IX_Comments_ArticleId",
                 table: "Comments",
                 column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ReplyToId",
+                table: "Comments",
+                column: "ReplyToId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UUID",

@@ -39,10 +39,10 @@ namespace Makro.Controllers
             return await _foodService.GetAllFoods();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser()
         {
-            return await _foodService.GetAllFoodsByUser(id);
+            return await _foodService.GetAllFoodsByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

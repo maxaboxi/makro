@@ -16,15 +16,10 @@ namespace Makro.Controllers
             _dayService = dayService;
         }
 
-        [HttpGet("all/{id}")]
-        public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser()
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            return await _dayService.GetAllDaysByUser(id);
+            return await _dayService.GetAllDaysByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpGet("single/{dayId}")]

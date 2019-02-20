@@ -22,15 +22,10 @@ namespace Makro.Controllers
             return await _questionService.GetAllQuestions();
         }
 
-        [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser()
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            return await _questionService.GetAllQuestionsByUser(id);
+            return await _questionService.GetAllQuestionsByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

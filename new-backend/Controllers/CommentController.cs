@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,17 +17,32 @@ namespace Makro.Controllers
             _commentService = commentService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsByUser(string id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsByUser()
         {
-            return await _commentService.GetAllCommentsByUser(id);
+            return await _commentService.GetAllCommentsByUser(HttpContext.User.Identity.Name);
         }
 
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewComment(Comment comment)
+        public async Task<IActionResult> AddNewComment([FromBody]CommentDto commentDto)
         {
-            return Ok(await _commentService.AddNewComment(comment));
+            if (commentDto.AnswerUUID == null && commentDto.ArticleUUID == null && commentDto.ReplyToUUID == null)
+            {
+                return BadRequest();
+            }
+
+            if (commentDto.AnswerUUID != null && commentDto.ArticleUUID != null)
+            {
+                return BadRequest();
+            }
+
+            if (commentDto.Body == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _commentService.AddNewComment(commentDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPut("update/{id}")]
