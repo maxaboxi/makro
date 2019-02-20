@@ -54,7 +54,7 @@ namespace Makro.Models
 
             modelBuilder.Entity<ArticleImage>()
                 .HasIndex(e => e.UUID).IsUnique();
-                
+
             modelBuilder.Entity<Answer>()
                 .HasMany(a => a.Comments)
                 .WithOne(e => e.Answer)

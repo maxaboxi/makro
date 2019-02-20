@@ -50,32 +50,44 @@ namespace Makro.Services
             like.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             like.CreatedAt = DateTime.Now;
             like.UpdatedAt = DateTime.Now;
+            var unique = CheckUnique(userId, likeDto.AnswerUUID ?? likeDto.ArticleUUID ?? likeDto.CommentUUID ?? likeDto.SharedMealUUID);
 
-            if (likeDto.AnswerUUID != null)
+            if (unique)
             {
-                like.Answer = await _context.Answers.Where(a => a.UUID == likeDto.AnswerUUID)
-                    .FirstOrDefaultAsync();
-            }
-            else if (likeDto.ArticleUUID != null)
-            {
-                like.Article = await _context.Articles.Where(a => a.UUID == likeDto.ArticleUUID)
-                    .FirstOrDefaultAsync();
-            }
-            else if (likeDto.CommentUUID != null)
-            {
-                like.Comment = await _context.Comments.Where(c => c.UUID == likeDto.CommentUUID)
-                    .FirstOrDefaultAsync();
-            }
-            else
-            {
-                like.SharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == likeDto.SharedMealUUID)
-                    .FirstOrDefaultAsync();
+                if (likeDto.AnswerUUID != null)
+                {
+                    like.Answer = await _context.Answers.Where(a => a.UUID == likeDto.AnswerUUID)
+                        .FirstOrDefaultAsync();
+                }
+                else if (likeDto.ArticleUUID != null)
+                {
+                    like.Article = await _context.Articles.Where(a => a.UUID == likeDto.ArticleUUID)
+                        .FirstOrDefaultAsync();
+                }
+                else if (likeDto.CommentUUID != null)
+                {
+                    like.Comment = await _context.Comments.Where(c => c.UUID == likeDto.CommentUUID)
+                        .FirstOrDefaultAsync();
+                }
+                else
+                {
+                    like.SharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == likeDto.SharedMealUUID)
+                        .FirstOrDefaultAsync();
+                }
+
+                if ( like.Answer == null && like.Article == null && like.Comment == null && like.SharedMeal == null)
+                {
+                    return new ResultDto(false, "Content not found");
+                }
+
+                _context.Add(like);
+                await _context.SaveChangesAsync();
+
+                return new ResultDto(true, "Like added succesfully");
             }
 
-            _context.Add(like);
-            await _context.SaveChangesAsync();
+            return new ResultDto(false, "Already liked");
 
-            return new ResultDto(true, "Like added succesfully");
         }
 
         public async Task<ResultDto> UpdateLike(LikeDto likeDto, string userId)
@@ -126,6 +138,23 @@ namespace Makro.Services
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Like deleted succesfully");
+        }
+
+        private bool CheckUnique(string userId, string uuidToCheck)
+        {
+            var likes = _context.Likes.Where(l => l.User.UUID == userId)
+                .Include(l => l.Answer)
+                .Include(l => l.Article)
+                .Include(l => l.Comment)
+                .Include(l => l.SharedMeal).ToList();
+            var unique = true;
+            likes.ForEach(l =>
+            {
+                unique &= l.Answer?.UUID != uuidToCheck && l.Article?.UUID != uuidToCheck
+                            && l.Comment?.UUID != uuidToCheck && l.SharedMeal?.UUID != uuidToCheck;
+            });
+
+            return unique;
         }
     }
 }
