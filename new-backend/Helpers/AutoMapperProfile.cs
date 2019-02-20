@@ -39,6 +39,8 @@ namespace Makro.Helpers
                 dest.Username = src.User.Username;
             });
             CreateMap<CommentDto, Comment>();
+            CreateMap<Like, LikeDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
+            CreateMap<LikeDto, Like>();
         }
     }
 }

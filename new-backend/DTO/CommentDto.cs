@@ -11,6 +11,7 @@ namespace Makro.DTO
         public string ArticleUUID { get; set; }
         public string ReplyToUUID { get; set; }
         public int CommentReplyCount { get; set; }
+        public int TotalPoints { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

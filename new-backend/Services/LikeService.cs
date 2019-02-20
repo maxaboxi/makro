@@ -7,42 +7,40 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System;
+using AutoMapper;
 namespace Makro.Services
 {
     public class LikeService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public LikeService(MakroContext context, ILogger<LikeService> logger)
+        public LikeService(MakroContext context, ILogger<LikeService> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForAnswer(int id)
+        public async Task<ActionResult<IEnumerable<LikeDto>>> GetAllLikesByUser(string id)
         {
-            return await _context.Likes.AsNoTracking().Where(l => l.Answer.Id == id).ToListAsync();
-        }
+            var likes = await _context.Likes.AsNoTracking().Where(l => l.User.UUID == id)
+                .Include(l => l.User)
+                .Include(l => l.Answer)
+                .Include(l => l.Article)
+                .Include(l => l.Comment)
+                .Include(l => l.SharedMeal)
+                .ToListAsync();
+            List<LikeDto> likeDtos = new List<LikeDto>();
 
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForArticle(int id)
-        {
-            return await _context.Likes.AsNoTracking().Where(l => l.Article.Id == id).ToListAsync();
-        }
+            likes.ForEach(l => {
+                var likeDto = _mapper.Map<LikeDto>(l);
+                likeDto.LikedContent = l.Article?.Title ?? l.Answer?.AnswerBody ?? l.Comment?.Body ?? l.SharedMeal?.Name;
+                likeDtos.Add(likeDto);
+            });
 
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForComment(int id)
-        {
-            return await _context.Likes.AsNoTracking().Where(l => l.Comment.Id == id).ToListAsync();
-        }
-
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForSharedMeal(int id)
-        {
-            return await _context.Likes.AsNoTracking().Where(l => l.SharedMeal.Id == id).ToListAsync();
-        }
-
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesByUser(string id)
-        {
-            return await _context.Likes.AsNoTracking().Where(l => l.User.UUID == id).ToListAsync();
+            return likeDtos;
         }
 
         public async Task<ResultDto> AddNewLike(Like like)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,35 +17,10 @@ namespace Makro.Controllers
             _likeService = likeService;
         }
 
-        [HttpGet("answer/{id}")]
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForAnswer(int id)
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<LikeDto>>> GetAllLikesByUser()
         {
-            return await _likeService.GetAllLikesForAnswer(id);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("article/{id}")]
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForArticle(int id)
-        {
-            return await _likeService.GetAllLikesForArticle(id);
-        }
-
-        [HttpGet("comment/{id}")]
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForComment(int id)
-        {
-            return await _likeService.GetAllLikesForComment(id);
-        }
-
-        [HttpGet("sharedmeal/{id}")]
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesForSharedMeal(int id)
-        {
-            return await _likeService.GetAllLikesForSharedMeal(id);
-        }
-
-        [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikesByUser(string id)
-        {
-            return await _likeService.GetAllLikesByUser(id);
+            return await _likeService.GetAllLikesByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

@@ -35,7 +35,14 @@ namespace Makro.Services
             questions.ForEach(q =>
             {
                 List<AnswerDto> answerDtos = new List<AnswerDto>();
-                q.Answers.ToList().ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
+                q.Answers.ToList().ForEach(a => {
+                    var answerDto = _mapper.Map<AnswerDto>(a);
+                    var totalPoints = 0;
+                    var likes = _context.Likes.Where(l => l.Answer == a).ToList();
+                    likes.ForEach(like => totalPoints += like.Value);
+                    answerDto.TotalPoints = totalPoints;
+                    answerDtos.Add(answerDto);
+                     });
                 var questionDto = _mapper.Map<QuestionDto>(q);
                 questionDto.Answers = answerDtos;
                 questionDtos.Add(questionDto);
@@ -58,13 +65,21 @@ namespace Makro.Services
             question.Answers.ToList().ForEach(a =>
             {
                 var answerDto = _mapper.Map<AnswerDto>(a);
+                var totalPoints = 0;
+                var likes = _context.Likes.Where(l => l.Answer == a).ToList();
+                likes.ForEach(like => totalPoints += like.Value);
                 List<CommentDto> commentDtos = new List<CommentDto>();
                 a.Comments.ToList().ForEach(c => {
                     var commentDto = _mapper.Map<CommentDto>(c);
+                    var totalPointsComment = 0;
+                    var likesComment = _context.Likes.Where(l => l.Comment == c).ToList();
+                    likesComment.ForEach(like => totalPointsComment += like.Value);
                     commentDto.CommentReplyCount = _context.Comments.Where(com => com.ReplyTo == c).Count();
+                    commentDto.TotalPoints = totalPointsComment;
                     commentDtos.Add(commentDto);
                  });
                 answerDto.Comments = commentDtos;
+                answerDto.TotalPoints = totalPoints;
                 answerDtos.Add(answerDto);
             });
 

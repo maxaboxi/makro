@@ -10,6 +10,7 @@ namespace Makro.DTO
         public string QuestionUUID { get; set; }
         public List<CommentDto> Comments { get; set; }
         public string AnswerBody { get; set; }
+        public int TotalPoints { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
