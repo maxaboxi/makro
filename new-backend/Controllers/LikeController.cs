@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Makro.Services;
 using Microsoft.AspNetCore.Authorization;
-using Makro.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Makro.DTO;
@@ -24,26 +23,46 @@ namespace Makro.Controllers
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewLike(Like like)
+        public async Task<IActionResult> AddNewLike([FromBody]LikeDto likeDto)
         {
-            return Ok(await _likeService.AddNewLike(like));
-        }
-
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateLike(int id, Like like)
-        {
-            if (id != like.Id)
+            if (likeDto.AnswerUUID == null && likeDto.ArticleUUID == null && likeDto.CommentUUID == null && likeDto.SharedMealUUID == null)
             {
                 return BadRequest();
             }
 
-            return Ok(await _likeService.UpdateLike(like));
+            if (likeDto.Value == 0 || likeDto.Value > 1 || likeDto.Value < -1)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _likeService.AddNewLike(likeDto, HttpContext.User.Identity.Name));
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateLike(string id, [FromBody]LikeDto likeDto)
+        {
+            if (id != likeDto.UUID)
+            {
+                return BadRequest();
+            }
+
+            if (likeDto.Value == 0 || likeDto.Value > 1 || likeDto.Value < -1)
+            {
+                return BadRequest();
+            }
+
+            if (likeDto.AnswerUUID == null && likeDto.ArticleUUID == null && likeDto.CommentUUID == null && likeDto.SharedMealUUID == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _likeService.UpdateLike(likeDto, HttpContext.User.Identity.Name));
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteLike(int id)
+        public async Task<IActionResult> DeleteLike(string id)
         {
-            return Ok(await _likeService.DeleteLike(id));
+            return Ok(await _likeService.DeleteLike(id, HttpContext.User.Identity.Name));
         }
     }
 }
