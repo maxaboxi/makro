@@ -57,9 +57,9 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteComment(int id)
+        public async Task<IActionResult> DeleteComment(string id)
         {
-            return Ok(await _commentService.DeleteComment(id));
+            return Ok(await _commentService.DeleteComment(id, HttpContext.User.Identity.Name));
         }
     }
 }

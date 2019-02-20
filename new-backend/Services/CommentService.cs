@@ -63,6 +63,7 @@ namespace Makro.Services
             var originalComment = await _context.Comments.Where(c => c.UUID == commentDto.UUID && c.User.UUID == userId).FirstOrDefaultAsync();
             if (originalComment == null)
             {
+                _logger.LogDebug("Comment not found with id: " + commentDto.UUID + " and with userId " + userId);
                 return new ResultDto(false, "Comment not found");
             }
 
@@ -73,13 +74,13 @@ namespace Makro.Services
             return new ResultDto(true, "Comment updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteComment(int id)
+        public async Task<ResultDto> DeleteComment(string id, string userId)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.Where(c => c.UUID == id && c.User.UUID == userId).FirstOrDefaultAsync();
 
             if (comment == null)
             {
-                _logger.LogDebug("Comment not found with id: ", id);
+                _logger.LogDebug("Comment not found with id: " + id + " and with userId " + userId);
                 return new ResultDto(false, "Comment not found");
             }
 

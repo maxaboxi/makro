@@ -43,6 +43,37 @@ namespace Makro.Services
             return questionDtos;
         }
 
+        public async Task<ActionResult<QuestionDto>> GetOneQuestion(string id)
+        {
+            var question = await _context.Questions.Where(q => q.UUID == id).Include(q => q.User)
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.User)
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.Comments)
+                        .ThenInclude(c => c.User)
+                .AsNoTracking().FirstOrDefaultAsync();
+
+            List<AnswerDto> answerDtos = new List<AnswerDto>();
+
+            question.Answers.ToList().ForEach(a =>
+            {
+                var answerDto = _mapper.Map<AnswerDto>(a);
+                List<CommentDto> commentDtos = new List<CommentDto>();
+                a.Comments.ToList().ForEach(c => {
+                    var commentDto = _mapper.Map<CommentDto>(c);
+                    commentDto.CommentReplyCount = _context.Comments.Where(com => com.ReplyTo == c).Count();
+                    commentDtos.Add(commentDto);
+                 });
+                answerDto.Comments = commentDtos;
+                answerDtos.Add(answerDto);
+            });
+
+            var questionDto = _mapper.Map<QuestionDto>(question);
+            questionDto.Answers = answerDtos;
+
+            return questionDto;
+        }
+
         public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser(string userId)
         {
             List<QuestionDto> questionDtos = new List<QuestionDto>();
@@ -72,6 +103,7 @@ namespace Makro.Services
 
             if (originalQuestion == null)
             {
+                _logger.LogDebug("Question not found with id: " + questionDto.UUID + " and with userId " + userId);
                 return new ResultDto(false, "Question not found");
             }
 
@@ -91,7 +123,7 @@ namespace Makro.Services
 
             if (question == null)
             {
-                _logger.LogDebug("Question not found with id: ", id);
+                _logger.LogDebug("Question not found with id: " + id);
                 return new ResultDto(false, "Question not found");
             }
 

@@ -50,6 +50,7 @@ namespace Makro.Services
 
             if (originalAnswer == null)
             {
+                _logger.LogDebug("Answer not found with id: " + answerDto.UUID + " and with userId " + userId);
                 return new ResultDto(true, "Answer not found");
             }
 
@@ -67,7 +68,7 @@ namespace Makro.Services
 
             if (answer == null)
             {
-                _logger.LogDebug("Answer not found with id: ", id);
+                _logger.LogDebug("Answer not found with id: " + id + " and with userId " + userId);
                 return new ResultDto(false, "Answer not found");
             }
 

@@ -22,6 +22,12 @@ namespace Makro.Controllers
             return await _questionService.GetAllQuestions();
         }
 
+        [HttpGet("single/{id}")]
+        public async Task<ActionResult<QuestionDto>> GetOneQuestion(string id)
+        {
+            return await _questionService.GetOneQuestion(id);
+        }
+
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestionsByUser()
         {
