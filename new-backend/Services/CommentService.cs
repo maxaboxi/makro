@@ -58,9 +58,17 @@ namespace Makro.Services
             return new ResultDto(true, "Comment added succesfully");
         }
 
-        public async Task<ResultDto> UpdateComment(Comment comment)
+        public async Task<ResultDto> UpdateComment(CommentDto commentDto, string userId)
         {
-            _context.Entry(comment).State = EntityState.Modified;
+            var originalComment = await _context.Comments.Where(c => c.UUID == commentDto.UUID && c.User.UUID == userId).FirstOrDefaultAsync();
+            if (originalComment == null)
+            {
+                return new ResultDto(false, "Comment not found");
+            }
+
+            originalComment.Body = commentDto.Body ?? originalComment.Body;
+            originalComment.UpdatedAt = DateTime.Now;
+            _context.Entry(originalComment).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Comment updated succesfully");
         }

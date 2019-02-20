@@ -46,14 +46,14 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateComment(int id, Comment comment)
+        public async Task<IActionResult> UpdateComment(string id, [FromBody]CommentDto commentDto)
         {
-            if (id != comment.Id)
+            if (id != commentDto.UUID || commentDto.Body == null)
             {
                 return BadRequest();
             }
 
-            return Ok(await _commentService.UpdateComment(comment));
+            return Ok(await _commentService.UpdateComment(commentDto, HttpContext.User.Identity.Name));
         }
 
         [HttpDelete("delete/{id}")]
