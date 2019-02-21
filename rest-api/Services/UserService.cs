@@ -115,6 +115,16 @@ namespace Makro.Services
             return new ResultDto(true, "Information updated succesfully");
         }
 
+        public async Task<ResultDto> CheckAdminRights(string userId)
+        {
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            if (user.Roles.Contains("admin")) {
+                return new ResultDto(true, "Ok");
+            }
+
+            return new ResultDto(false, "Unauthorized");
+        }
+
         public async Task<ResultDto> UpdateUserShowTargets(string id, bool show)
         {
             var user = _context.Users.Where(u => u.UUID == id).FirstOrDefault();

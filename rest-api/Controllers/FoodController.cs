@@ -40,6 +40,12 @@ namespace Makro.Controllers
             return await _foodService.GetAllFoods();
         }
 
+        [HttpGet("exclude")]
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsExcludeOtherUsers()
+        {
+            return await _foodService.GetAllFoodsExcludeOtherUsers(HttpContext.User.Identity.Name);
+        }
+
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser()
         {

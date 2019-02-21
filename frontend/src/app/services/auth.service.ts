@@ -187,9 +187,9 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/checkadmin`;
+    const url = `${this.baseUrl}/admin`;
 
-    this.http.post<boolean>(url, { headers: headers }).subscribe(success => this.isAdmin.next(success), (error: Error) => {});
+    this.http.get<boolean>(url, { headers: headers }).subscribe(res => this.isAdmin.next(res['success']), (error: Error) => {});
   }
 
   validateToken() {

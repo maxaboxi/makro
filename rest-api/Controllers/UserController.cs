@@ -120,5 +120,11 @@ namespace Makro.Controllers
 
             return Ok(new ResultDto(true, "Account deleted"));
         }
+
+        [HttpGet("admin")]
+        public async Task<ResultDto> CheckAdmin()
+        {
+            return await _userService.CheckAdminRights(HttpContext.User.Identity.Name);
+        }
     }
 }

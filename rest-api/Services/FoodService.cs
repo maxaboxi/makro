@@ -31,6 +31,14 @@ namespace Makro.Services
             return foodDtos;
         }
 
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsExcludeOtherUsers(string userId)
+        {
+            var foods = await _context.Foods.Include(f => f.User).Where(f => f.User.UUID == userId || f.User.Username == "admin").AsNoTracking().ToListAsync();
+            var foodDtos = new List<FoodDto>();
+            foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
+            return foodDtos;
+        }
+
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoodsByUser(string id)
         {
             var foods = await _context.Foods.Include(f => f.User).Where(f => f.User.UUID == id).AsNoTracking().ToListAsync();

@@ -1,12 +1,12 @@
 export interface Food {
-  _id?: String;
+  uuid?: String;
   name: String;
-  energia: number;
-  hh: number;
-  proteiini: number;
-  rasva: number;
-  kuitu?: number;
-  sokeri?: number;
+  energy: number;
+  carbs: number;
+  protein: number;
+  fat: number;
+  fiber?: number;
+  sugar?: number;
   username?: String;
   amount?: number;
   servingSize?: number;

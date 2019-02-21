@@ -22,8 +22,8 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoodsExcludeOtherUsers(uuid) {
-    const url = `${this.baseUrl}/user`;
+  getFoodsExcludeOtherUsers() {
+    const url = `${this.baseUrl}/exclude`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -32,8 +32,8 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoodsAddedByUser(user) {
-    const url = `${this.baseUrl}/getfoodsbyuser/${user}`;
+  getFoodsAddedByUser() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
