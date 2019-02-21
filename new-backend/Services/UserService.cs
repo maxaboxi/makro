@@ -7,6 +7,8 @@ using System.Linq;
 using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using Makro.Dto;
 namespace Makro.Services
 {
     public class UserService
@@ -44,7 +46,7 @@ namespace Makro.Services
             try
             {
                 user.Password = HashPassword(password);
-                user.Meals = _mealService.GenerateDefaultMealNamesForUser();
+                user.MealNames = _mealService.GenerateDefaultMealNamesForUser();
                 user.UUID = Guid.NewGuid().ToString();
                 user.CreatedAt = DateTime.Now;
                 user.UpdatedAt = DateTime.Now;
@@ -62,10 +64,11 @@ namespace Makro.Services
 
         public async Task<User> Authenticate(LoginDto login)
         {
-            var foundUser = await _context.Users.Where(u => u.Username == login.usernameOrEmail || u.Email == login.usernameOrEmail).FirstOrDefaultAsync();
+            var foundUser = await _context.Users.Where(u => u.Username == login.UsernameOrEmail || u.Email == login.UsernameOrEmail)
+            .Include(u => u.MealNames).FirstOrDefaultAsync();
             if (foundUser != null)
             {
-                if (ValidatePassword(login.password, foundUser.Password))
+                if (ValidatePassword(login.Password, foundUser.Password))
                 {
                     foundUser.LastLogin = DateTime.Now;
                     await UpdateLastLogin(foundUser);
@@ -77,13 +80,17 @@ namespace Makro.Services
 
         public async Task<ActionResult<UserDto>> GetUserDto (string id)
         {
-            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).AsNoTracking().FirstOrDefaultAsync();
+            var user = await _context.Users.Include(u => u.MealNames).Where(p => p.UUID == id).AsNoTracking().FirstOrDefaultAsync();
 
             if (user != null)
             {
                 user.Password = null;
-                user.Meals.Reverse(0, user.Meals.Count);
-                return _mapper.Map<UserDto>(user);
+                user.MealNames.Reverse(0, user.MealNames.Count);
+                List<MealNameDto> mealNameDtos = new List<MealNameDto>();
+                user.MealNames.ForEach(m => mealNameDtos.Add(_mapper.Map<MealNameDto>(m)));
+                var userDto = _mapper.Map<UserDto>(user);
+                userDto.Meals = mealNameDtos;
+                return userDto;
             }
 
             return null;

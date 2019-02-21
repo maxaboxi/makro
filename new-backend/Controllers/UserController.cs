@@ -70,12 +70,12 @@ namespace Makro.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
+            var userDto = await _userService.GetUserDto(user.UUID);
 
             return Ok(new
             {
-                Id = user.UUID,
-                user.Username,
-                Token = tokenString
+                Token = tokenString,
+                user = userDto.Value
             });
         }
 

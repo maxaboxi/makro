@@ -11,18 +11,19 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${environment.auth}/auth`;
+  private baseUrl = `${environment.baseUrl}/user`;
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient, private router: Router, private translator: TranslateService) {}
 
-  login(user: User) {
+  login(user) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/login`;
+    const url = `${this.baseUrl}/authenticate`;
+    console.log(url);
 
     return this.http.post(url, user, { headers: headers });
   }

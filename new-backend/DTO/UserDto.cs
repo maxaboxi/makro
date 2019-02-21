@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Makro.Models;
 using System;
+using Makro.Dto;
 namespace Makro.DTO
 {
     public class UserDto
@@ -19,10 +19,11 @@ namespace Makro.DTO
         public decimal UserAddedProteinTarget { get; set; }
         public decimal UserAddedCarbTarget { get; set; }
         public decimal UserAddedFatTarget { get; set; }
-        public List<MealName> Meals { get; set; }
+        public List<MealNameDto> Meals { get; set; }
         public DateTime LastLogin { get; set; }
         public bool ShowTargets { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string Lang { get; set; }
     }
 }

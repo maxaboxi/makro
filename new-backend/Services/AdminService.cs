@@ -21,12 +21,12 @@ namespace Makro.Services
 
         public async Task<ActionResult<User>> GetUserInformation(string id)
         {
-            var user = await _context.Users.Include(u => u.Meals).Where(p => p.UUID == id).FirstOrDefaultAsync();
+            var user = await _context.Users.Include(u => u.MealNames).Where(p => p.UUID == id).FirstOrDefaultAsync();
 
             if (user != null)
             {
                 user.Password = null;
-                user.Meals.Reverse(0, user.Meals.Count);
+                user.MealNames.Reverse(0, user.MealNames.Count);
                 return user;
             }
 

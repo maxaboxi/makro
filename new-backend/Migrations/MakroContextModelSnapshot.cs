@@ -559,6 +559,8 @@ namespace Makro.Migrations
 
                     b.Property<decimal>("Height");
 
+                    b.Property<string>("Lang");
+
                     b.Property<DateTime>("LastLogin");
 
                     b.Property<string>("Password");
@@ -748,7 +750,7 @@ namespace Makro.Migrations
             modelBuilder.Entity("Makro.Models.MealName", b =>
                 {
                     b.HasOne("Makro.Models.User", "User")
-                        .WithMany("Meals")
+                        .WithMany("MealNames")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

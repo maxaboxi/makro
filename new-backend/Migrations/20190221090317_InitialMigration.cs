@@ -32,6 +32,7 @@ namespace Makro.Migrations
                     LastLogin = table.Column<DateTime>(nullable: false),
                     Roles = table.Column<List<string>>(nullable: true),
                     ShowTargets = table.Column<bool>(nullable: false),
+                    Lang = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
                 },

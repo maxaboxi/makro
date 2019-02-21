@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     }
 
     const data = {
-      username: this.user.username,
+      usernameOrEmail: this.user.username,
       password: this.user.password
     };
 
