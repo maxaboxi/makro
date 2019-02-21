@@ -67,7 +67,8 @@ export class DashboardComponent implements OnInit {
   fetchFoods() {
     this.loading = true;
     if (this.isLoggedIn) {
-      this.foodService.getFoodsByUserAndAdmin(this.user.username).subscribe(
+      console.log(this.user)
+      this.foodService.getFoodsExcludeOtherUsers(this.user.uuid).subscribe(
         foods => {
           this.foods = foods;
           this.auth.checkAdmin();

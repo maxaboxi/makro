@@ -8,13 +8,12 @@ import { EditedFood } from '../models/EditedFood';
   providedIn: 'root'
 })
 export class FoodService {
-  private baseUrl = `${environment.foods}/api/v1/foods`;
-  private baseUrlEditedFoods = `${environment.foods}/api/v1/editedfoods`;
+  private baseUrl = `${environment.baseUrl}/food`;
 
   constructor(private http: HttpClient) {}
 
   getAllFoods() {
-    const url = `${this.baseUrl}/getallfoods`;
+    const url = `${this.baseUrl}/all`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -23,8 +22,8 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoodsByUserAndAdmin(user) {
-    const url = `${this.baseUrl}/getfoods/${user}`;
+  getFoodsExcludeOtherUsers(uuid) {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -88,7 +87,7 @@ export class FoodService {
   }
 
   sentForApproval(foods: EditedFood[]) {
-    const url = `${this.baseUrlEditedFoods}/sendforapproval`;
+    const url = `${this.baseUrl}/sendforapproval`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

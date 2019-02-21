@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace Makro
 {
@@ -44,10 +45,11 @@ namespace Makro
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
+                    builder => builder
+                    .AllowCredentials()
                     .AllowAnyHeader()
-                    .AllowCredentials());
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:4200"));
             });
 
             // configure strongly typed settings objects

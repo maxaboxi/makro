@@ -69,6 +69,7 @@ export class AuthService {
 
   setDefaultUserInfo() {
     this.user.next({
+      uuid: '',
       username: '',
       age: 0,
       height: 0,
@@ -102,33 +103,23 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getuserinfo`;
+    const url = `${this.baseUrl}/`;
 
-    return this.http.get(url, { headers: headers });
+    return this.http.get<User>(url, { headers: headers });
   }
 
   getUserInfo() {
     if (!this.user.getValue()) {
       this.setDefaultUserInfo();
-      if (localStorage.getItem('token')) {
-        this.validateToken().subscribe(
-          res => {
-            if (res['success']) {
-              this.fetchUserInfo().subscribe(result => {
-                if (result['success']) {
-                  this.user.next(result['user']);
-                  this.isLoggedIn.next(true);
-                }
-              });
-            } else {
-              localStorage.removeItem('token');
-              this.router.navigate(['/login']);
-            }
-          },
-          (error: Error) => {
-            this.isLoggedIn.next(true);
-          }
-        );
+      if(localStorage.getItem('token')) {
+        this.fetchUserInfo().subscribe(user => {
+          this.user.next(user);
+          this.isLoggedIn.next(true);
+        }, (error: Error)=> {
+          this.isLoggedIn.next(false);
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+        });
       }
     }
     return this.user.getValue();

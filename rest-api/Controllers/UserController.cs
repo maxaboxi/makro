@@ -79,15 +79,10 @@ namespace Makro.Controllers
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUserInformation(string id)
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetUserInformation()
         {
-            var user = await _userService.GetUserDto(id);
-
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
+            var user = await _userService.GetUserDto(HttpContext.User.Identity.Name);
 
             if (user == null)
             {

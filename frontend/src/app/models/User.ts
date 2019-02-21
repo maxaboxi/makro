@@ -1,7 +1,7 @@
 import { Meal } from './Meal';
 
 export interface User {
-  _id?: String;
+  uuid?: String;
   username: String;
   password?: String;
   email?: String;
