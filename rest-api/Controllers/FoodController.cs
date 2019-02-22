@@ -55,15 +55,7 @@ namespace Makro.Controllers
         [HttpPost("new")]
         public async Task<IActionResult> AddNewFood(FoodDto foodDto)
         {
-            var user = _userService.GetUser(HttpContext.User.Identity.Name);
-
-            if (user == null)
-            {
-                return Ok( new ResultDto(false, "Unauthorized"));
-            }
-
-            var food = _mapper.Map<Food>(foodDto);
-            return Ok(await _foodService.AddNewFood(food, user));
+            return Ok(await _foodService.AddNewFood(foodDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPost("newedited")]

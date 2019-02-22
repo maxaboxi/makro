@@ -47,9 +47,10 @@ namespace Makro.Services
             return foodDtos;
         }
 
-        public async Task<ResultDto> AddNewFood(Food food, User user)
+        public async Task<ResultDto> AddNewFood(FoodDto foodDto,string userId)
         {
-            food.User = user;
+            var food = _mapper.Map<Food>(foodDto);
+            food.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             food.UUID = Guid.NewGuid().ToString();
             food.CreatedAt = DateTime.Now;
             food.UpdatedAt = DateTime.Now;

@@ -43,7 +43,7 @@ export class FoodService {
   }
 
   saveNewFood(food: Food) {
-    const url = `${this.baseUrl}/addnewfood`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
