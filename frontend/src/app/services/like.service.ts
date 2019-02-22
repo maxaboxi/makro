@@ -1,38 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Vote } from '../models/Vote';
+import { Like } from '../models/Like';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VoteService {
-  private baseUrl = `${environment.votes}/api/v1/votes`;
+export class LikeService {
+  private baseUrl = `${environment.baseUrl}/like`;
 
   constructor(private http: HttpClient) {}
 
-  votePost(vote: Vote) {
-    const url = `${this.baseUrl}/votepost`;
+  likePost(like: Like) {
+    const url = `${this.baseUrl}/likepost`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, vote, { headers: headers });
+    return this.http.post(url, like, { headers: headers });
   }
 
-  replacePreviousVote(vote: Vote) {
-    const url = `${this.baseUrl}/replacepreviousvote`;
+  replacePreviousLike(like: Like) {
+    const url = `${this.baseUrl}/replacepreviouslike`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, vote, { headers: headers });
+    return this.http.post(url, like, { headers: headers });
   }
 
-  getUserVoteWithId(userId, postId) {
-    const url = `${this.baseUrl}/getuservotewithpostid`;
+  getUserLikeWithId(userId, postId) {
+    const url = `${this.baseUrl}/getuserlikewithpostid`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -43,31 +43,31 @@ export class VoteService {
       postId: postId
     };
 
-    return this.http.post<Vote>(url, data, { headers: headers });
+    return this.http.post<Like>(url, data, { headers: headers });
   }
 
-  getAllUserVotesWithId(id) {
-    const url = `${this.baseUrl}/getallvoteswithuserid/${id}`;
+  getAllUserLikesWithId(id) {
+    const url = `${this.baseUrl}/getalllikeswithuserid/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Vote[]>(url, { headers: headers });
+    return this.http.get<Like[]>(url, { headers: headers });
   }
 
-  getAllVotesWithPostId(id) {
-    const url = `${this.baseUrl}/getallvoteswithpostid/${id}`;
+  getAllLikesWithPostId(id) {
+    const url = `${this.baseUrl}/getalllikeswithpostid/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Vote[]>(url, { headers: headers });
+    return this.http.get<Like[]>(url, { headers: headers });
   }
 
-  removeVotes(voteIds) {
-    const url = `${this.baseUrl}/removevotes`;
+  removeLikes(likeIds) {
+    const url = `${this.baseUrl}/removelikes`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ export class VoteService {
 
     const options = {
       headers: headers,
-      body: voteIds
+      body: likeIds
     };
 
     return this.http.delete(url, options);

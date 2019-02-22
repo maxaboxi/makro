@@ -107,10 +107,10 @@ export class AdminFoodsComponent implements OnInit {
 
   deleteFood(index) {
     if (this.results.length === 0 && this.searchTerm.length === 0) {
-      this.deletedFoods.push(this.foods[index]._id);
+      this.deletedFoods.push(this.foods[index].uuid);
       this.foods.splice(index, 1);
     } else {
-      this.deletedFoods.push(this.results[index]._id);
+      this.deletedFoods.push(this.results[index].uuid);
       this.results.splice(index, 1);
     }
     this.foodsDeleted = true;

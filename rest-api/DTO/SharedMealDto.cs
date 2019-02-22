@@ -13,6 +13,8 @@ namespace Makro.DTO
         public List<string> Tags { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public int TotalPoints { get; set; }
+        public int UserLike { get; set; }
         public List<FoodDto> Foods { get; set; }
 
     }

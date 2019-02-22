@@ -1,7 +1,7 @@
 import { Comment } from './Comment';
 
 export interface Answer {
-  _id?: String;
+  uuid?: String;
   questionId: String;
   username: String;
   answer: String;

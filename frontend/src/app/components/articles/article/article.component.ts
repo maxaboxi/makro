@@ -6,8 +6,8 @@ import { ArticleService } from '../../../services/article.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { VoteService } from '../../../services/vote.service';
-import { Vote } from '../../../models/Vote';
+import { LikeService } from '../../../services/like.service';
+import { Like } from '../../../models/Like';
 import { AuthService } from '../../../services/auth.service';
 import { Comment } from '../../../models/Comment';
 import { TranslateService } from '@ngx-translate/core';
@@ -22,9 +22,9 @@ export class ArticleComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _article = new BehaviorSubject<Article>(null);
   image;
-  votesFetched = false;
-  votes: Vote[];
-  userVote;
+  likesFetched = false;
+  likes: Like[];
+  userLike = 0;
   pointsTotal = 0;
   queryParams = {};
   singleArticle = false;
@@ -60,7 +60,7 @@ export class ArticleComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private route: ActivatedRoute,
     private translator: TranslateService,
     private connectionService: ConnectionService
@@ -81,7 +81,7 @@ export class ArticleComponent implements OnInit {
         this.articleService.getArticleById(this.queryParams['id']).subscribe(a => {
           this._article.next(a[0]);
           this.initializeArticle();
-          this.articleService.getCommentsToArticleWithId(this.article._id).subscribe(comments => (this.comments = comments));
+          this.articleService.getCommentsToArticleWithId(this.article.uuid).subscribe(comments => (this.comments = comments));
         });
       });
     } else {
@@ -97,17 +97,6 @@ export class ArticleComponent implements OnInit {
         }
       });
     }
-    this.voteService.getAllVotesWithPostId(this.article._id).subscribe(votes => {
-      this.votes = votes;
-      this.votes.forEach(v => {
-        this.pointsTotal += v.vote;
-        if (v.userId === this.user._id) {
-          v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-        }
-      });
-      this.votesFetched = true;
-      this.loading = false;
-    });
   }
 
   createImageFromBlob(image: Blob) {
@@ -126,24 +115,24 @@ export class ArticleComponent implements OnInit {
   }
 
   openArticle() {
-    this.router.navigate(['/article'], { queryParams: { id: this.article._id } });
+    this.router.navigate(['/article'], { queryParams: { id: this.article.uuid } });
   }
 
   editArticle() {
     this.router.navigate(['/articles/addarticle'], {
-      queryParams: { _id: this.article._id }
+      queryParams: { uuid: this.article.uuid }
     });
   }
 
   fetchComments() {
-    this.articleService.getCommentsToArticleWithId(this.article._id).subscribe(comments => (this.comments = comments));
+    this.articleService.getCommentsToArticleWithId(this.article.uuid).subscribe(comments => (this.comments = comments));
   }
 
   openDeleteArticleModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.articleService.deleteArticle(this.article._id).subscribe(res => {
+          this.articleService.deleteArticle(this.article.uuid).subscribe(res => {
             this.flashMessage.show(res['msg'], {
               cssClass: res['success'] ? 'alert-success' : 'alert-danger',
               timeout: 2000
@@ -163,10 +152,10 @@ export class ArticleComponent implements OnInit {
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.article._id,
-            articleId: this.article._id,
+            postId: this.article.uuid,
+            articleId: this.article.uuid,
             username: this.user.username,
-            userId: this.user._id,
+            userId: this.user.uuid,
             comment: this.commentText,
             origPost: this.article.body
           };
@@ -198,39 +187,37 @@ export class ArticleComponent implements OnInit {
     );
   }
 
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.article._id,
-      content: this.article.title,
-      vote: 0
+  like(c) {
+    let like: Like = {
+      userUUID: this.user.uuid,
+      articleUUID: this.article.uuid,
+      value: 0
     };
-    if (!this.userVote) {
+    if (!this.userLike) {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
     } else {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += 2;
           }
@@ -238,9 +225,9 @@ export class ArticleComponent implements OnInit {
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += -2;
           }

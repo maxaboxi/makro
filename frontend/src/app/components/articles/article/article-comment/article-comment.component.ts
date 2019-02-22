@@ -5,9 +5,9 @@ import { User } from '../../../../models/User';
 import { ArticleService } from '../../../../services/article.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { VoteService } from '../../../../services/vote.service';
+import { LikeService } from '../../../../services/like.service';
 import { Article } from '../../../../models/Article';
-import { Vote } from '../../../../models/Vote';
+import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -20,8 +20,7 @@ export class ArticleCommentComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _article = new BehaviorSubject<Article>(null);
   commentText = '';
-  userVote;
-  votesFetched = false;
+  userLike = 0;
   pointsTotal = 0;
 
   @Input()
@@ -58,33 +57,21 @@ export class ArticleCommentComponent implements OnInit {
     private articleService: ArticleService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private translator: TranslateService
   ) {}
 
-  ngOnInit() {
-    if (this.article) {
-      this.voteService.getAllVotesWithPostId(this.article._id).subscribe(votes => {
-        votes.forEach(v => {
-          if (v.userId === this.user._id) {
-            v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-          }
-          this.pointsTotal += v.vote;
-        });
-        this.votesFetched = true;
-      });
-    }
-  }
+  ngOnInit() {}
 
   openCommentModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.article._id,
-            articleId: this.article._id,
+            postId: this.article.uuid,
+            articleId: this.article.uuid,
             username: this.user.username,
-            userId: this.user._id,
+            userId: this.user.uuid,
             comment: this.commentText,
             origPost: this.comment.comment,
             replyTo: this.comment.username
@@ -117,51 +104,49 @@ export class ArticleCommentComponent implements OnInit {
     );
   }
 
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.comment._id,
-      content: this.comment.comment,
-      vote: 0
+  like(c) {
+    let like: Like = {
+      userUUID: this.user.uuid,
+      commentUUID: this.comment.uuid,
+      value: 0
     };
-    if (!this.userVote) {
+    if (!this.userLike) {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
     } else {
       if (c === '+') {
-        vote.vote = 2;
-        this.userVote = 'up';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += 2;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -2;
-        this.userVote = 'down';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += -2;
           }
         });
       }

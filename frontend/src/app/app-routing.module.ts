@@ -22,7 +22,6 @@ import { UserQaComponent } from './components/profile/user-qa/user-qa.component'
 import { UserQuestionsComponent } from './components/profile/user-qa/user-questions/user-questions.component';
 import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
 import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
-import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
 import { ArticlesComponent } from './components/articles/articles.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
 import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
@@ -34,10 +33,11 @@ import { AdminDaysComponent } from './components/admin/admin-days/admin-days.com
 import { AdminQuestionsComponent } from './components/admin/admin-questions/admin-questions.component';
 import { AdminAnswersComponent } from './components/admin/admin-answers/admin-answers.component';
 import { AdminCommentsComponent } from './components/admin/admin-comments/admin-comments.component';
-import { AdminVotesComponent } from './components/admin/admin-votes/admin-votes.component';
+import { AdminLikesComponent } from './components/admin/admin-likes/admin-likes.component';
 import { AdminArticlesComponent } from './components/admin/admin-articles/admin-articles.component';
 import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
+import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -61,7 +61,7 @@ const routes: Routes = [
           { path: 'comments', component: UserCommentsComponent }
         ]
       },
-      { path: 'votes', component: UserVotesComponent },
+      { path: 'likes', component: UserLikesComponent },
       { path: 'articles', component: UserArticlesComponent }
     ]
   },
@@ -94,7 +94,7 @@ const routes: Routes = [
       { path: 'questions', component: AdminQuestionsComponent },
       { path: 'answers', component: AdminAnswersComponent },
       { path: 'comments', component: AdminCommentsComponent },
-      { path: 'votes', component: AdminVotesComponent },
+      { path: 'likes', component: AdminLikesComponent },
       { path: 'articles', component: AdminArticlesComponent },
       { path: 'feedbacks', component: AdminFeedbacksComponent }
     ]

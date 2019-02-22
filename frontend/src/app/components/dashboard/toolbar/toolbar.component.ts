@@ -31,12 +31,12 @@ export class ToolbarComponent implements OnInit {
   dayName = '';
   food: Food = {
     name: '',
-    energia: null,
-    proteiini: null,
-    hh: null,
-    rasva: null,
-    kuitu: null,
-    sokeri: null,
+    energy: null,
+    protein: null,
+    carbs: null,
+    fat: null,
+    fiber: null,
+    sugar: null,
     servingSize: null,
     packageSize: null,
     username: ''
@@ -92,12 +92,12 @@ export class ToolbarComponent implements OnInit {
         if (result === 'save') {
           const addedFood: Food = {
             name: this.food.name,
-            energia: this.food.energia,
-            proteiini: this.food.proteiini,
-            hh: this.food.hh,
-            rasva: this.food.rasva,
-            kuitu: this.food.kuitu ? this.food.kuitu : 0,
-            sokeri: this.food.sokeri ? this.food.sokeri : 0,
+            energy: this.food.energy,
+            protein: this.food.protein,
+            carbs: this.food.carbs,
+            fat: this.food.fat,
+            fiber: this.food.fiber ? this.food.fiber : 0,
+            sugar: this.food.sugar ? this.food.sugar : 0,
             packageSize: this.food.packageSize ? this.food.packageSize : 0,
             servingSize: this.food.servingSize ? this.food.servingSize : 0,
             username: this.user.username
@@ -241,7 +241,7 @@ export class ToolbarComponent implements OnInit {
 
   generateLink(content) {
     const data = {
-      user: this.user._id,
+      user: this.user.uuid,
       meals: this.addedFoodsService.getMeals()
     };
     this.dayService.saveDayForSharing(data).subscribe(

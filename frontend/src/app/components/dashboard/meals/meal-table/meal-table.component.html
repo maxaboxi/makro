@@ -44,9 +44,9 @@
       >
         <div class="name">{{ food.name }}</div>
       </th>
-      <td class="table-success align-middle d-none d-sm-table-cell">{{ food.proteiini ? food.proteiini.toFixed(1) : 0 }} g</td>
-      <td class="table-primary align-middle d-none d-sm-table-cell">{{ food.hh ? food.hh.toFixed(1) : 0 }} g</td>
-      <td class="table-danger align-middle d-none d-sm-table-cell">{{ food.rasva ? food.rasva.toFixed(1) : 0 }} g</td>
+      <td class="table-success align-middle d-none d-sm-table-cell">{{ food.protein ? food.protein.toFixed(1) : 0 }} g</td>
+      <td class="table-primary align-middle d-none d-sm-table-cell">{{ food.carbs ? food.carbs.toFixed(1) : 0 }} g</td>
+      <td class="table-danger align-middle d-none d-sm-table-cell">{{ food.fat ? food.fat.toFixed(1) : 0 }} g</td>
       <td class="table-warning align-middle">{{ food.energia.toFixed(1) }} {{ 'KCAL' | translate }}</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
         <span class="food-amount" (click)="food.editing = true" title="{{ 'EDIT_FOOD_AMOUNT_TEXT' | translate }}"

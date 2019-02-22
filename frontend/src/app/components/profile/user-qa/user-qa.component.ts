@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { QaService } from '../../../services/qa.service';
-import { VoteService } from '../../../services/vote.service';
+import { LikeService } from '../../../services/like.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/User';
 import { Answer } from '../../../models/Answer';
 import { Question } from '../../../models/Question';
-import { Vote } from '../../../models/Vote';
+import { Like } from '../../../models/Like';
 import { Comment } from '../../../models/Comment';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,13 +18,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class UserQaComponent implements OnInit {
   user: User;
   answers: Answer[];
-  votes: Vote[];
+  likes: Like[];
   comments: Comment[];
 
   constructor(
     private auth: AuthService,
     private qaService: QaService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
@@ -44,9 +44,9 @@ export class UserQaComponent implements OnInit {
             });
           }
         );
-        this.voteService.getAllUserVotesWithId(this.user._id).subscribe(
-          votes => {
-            this.votes = votes;
+        this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(
+          likes => {
+            this.likes = likes;
           },
           (error: Error) => {
             this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
@@ -55,7 +55,7 @@ export class UserQaComponent implements OnInit {
             });
           }
         );
-        this.qaService.getAllUserCommentsWithId(this.user._id).subscribe(
+        this.qaService.getAllUserCommentsWithId(this.user.uuid).subscribe(
           comments => {
             this.comments = comments;
           },

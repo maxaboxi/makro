@@ -3,10 +3,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Comment } from '../../../../../models/Comment';
 import { User } from '../../../../../models/User';
 import { QaService } from '../../../../../services/qa.service';
-import { VoteService } from '../../../../../services/vote.service';
+import { LikeService } from '../../../../../services/like.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { Vote } from '../../../../../models/Vote';
+import { Like } from '../../../../../models/Like';
 import { Answer } from 'src/app/models/Answer';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -20,10 +20,10 @@ export class AnswerCommentComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _answer = new BehaviorSubject<Answer>(null);
   commentText = '';
-  commentVotes: Vote[];
+  commentLikes: Like[];
   pointsTotal = 0;
-  userVote;
-  votesFetched = false;
+  userLike = 0;
+  likesFetched = false;
   loading = true;
 
   @Input()
@@ -58,33 +58,13 @@ export class AnswerCommentComponent implements OnInit {
 
   constructor(
     private qaService: QaService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
 
-  ngOnInit() {
-    this.voteService.getAllVotesWithPostId(this.comment._id).subscribe(
-      votes => {
-        votes.forEach(v => {
-          this.pointsTotal += v.vote;
-          if (v.userId === this.user._id) {
-            v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-          }
-        });
-        this.votesFetched = true;
-        this.loading = false;
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
-    );
-  }
+  ngOnInit() {}
 
   openCommentModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
@@ -94,7 +74,7 @@ export class AnswerCommentComponent implements OnInit {
             postId: this.comment.postId,
             replyTo: this.comment.username,
             username: this.user.username,
-            userId: this.user._id,
+            userId: this.user.uuid,
             comment: this.commentText,
             origPost: this.comment.comment,
             questionId: this.answer.questionId
@@ -123,39 +103,37 @@ export class AnswerCommentComponent implements OnInit {
     );
   }
 
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.comment._id,
-      content: this.comment.comment,
-      vote: 0
+  like(c) {
+    let like: Like = {
+      userUUID: this.user.uuid,
+      answerUUID: this.answer.uuid,
+      value: 0
     };
-    if (!this.userVote) {
+    if (!this.userLike) {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
     } else {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += 2;
           }
@@ -163,11 +141,11 @@ export class AnswerCommentComponent implements OnInit {
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += 2;
+            this.pointsTotal += -2;
           }
         });
       }

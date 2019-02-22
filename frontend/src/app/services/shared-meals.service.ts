@@ -7,7 +7,7 @@ import { Meal } from '../models/Meal';
   providedIn: 'root'
 })
 export class SharedMealsService {
-  private baseUrl = `${environment.baseUrl}/api/v1/sharedmeals`;
+  private baseUrl = `${environment.baseUrl}/meal`;
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +15,7 @@ export class SharedMealsService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallsharedmeals`;
+    const url = `${this.baseUrl}`;
 
     return this.http.get<Meal[]>(url, { headers: headers });
   }

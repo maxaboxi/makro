@@ -49,7 +49,7 @@ export class UserArticlesComponent implements OnInit {
   }
 
   deleteArticle(index) {
-    this.deletedArticles.push(this.articles[index]._id);
+    this.deletedArticles.push(this.articles[index].uuid);
     this.articles.splice(index, 1);
     this.articlesDeleted = true;
   }
@@ -79,7 +79,7 @@ export class UserArticlesComponent implements OnInit {
 
   editArticle(index) {
     this.router.navigate(['/articles/addarticle'], {
-      queryParams: { _id: this.articles[index]._id }
+      queryParams: { uuid: this.articles[index].uuid }
     });
   }
 }

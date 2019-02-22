@@ -33,7 +33,7 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   deleteQuestion(index) {
-    this.deletedQuestions.push(this.questions[index]._id);
+    this.deletedQuestions.push(this.questions[index].uuid);
     this.questions.splice(index, 1);
     this.questionsDeleted = true;
   }

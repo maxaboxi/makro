@@ -45,7 +45,7 @@ export class AdminUsersComponent implements OnInit {
               this.newUserPasswordAgain = null;
             } else {
               const user = {
-                _id: this.selectedUser._id,
+                uuid: this.selectedUser.uuid,
                 password: this.newUserPassword
               };
               this.adminService.updateUserPassword(user).subscribe(
@@ -94,7 +94,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   deleteUser(index) {
-    this.deletedUsers.push(this.users[index]._id);
+    this.deletedUsers.push(this.users[index].uuid);
     this.users.splice(index, 1);
     this.usersDeleted = true;
   }

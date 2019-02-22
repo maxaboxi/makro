@@ -28,7 +28,7 @@ export class AdminMealsComponent implements OnInit {
   }
 
   deleteSharedMeal(index) {
-    this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+    this.deletedSharedMeals.push(this.sharedMeals[index].uuid);
     this.sharedMeals.splice(index, 1);
 
     this.sharedMealsDeleted = true;

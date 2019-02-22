@@ -1,5 +1,5 @@
 export interface Comment {
-  _id?: String;
+  uuid?: String;
   username: String;
   userId: String;
   comment: String;

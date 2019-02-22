@@ -49,11 +49,11 @@ export class AddArticleComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
-    if (this.queryParams['_id']) {
+    if (this.queryParams['uuid']) {
       this.editing = true;
-      this.articleService.getArticleById(this.queryParams['_id']).subscribe(
+      this.articleService.getArticleById(this.queryParams['uuid']).subscribe(
         article => {
-          this.article._id = this.queryParams['_id'];
+          this.article.uuid = this.queryParams['uuid'];
           this.article.title = article[0].title;
           this.article.origTitle = article[0].title;
           this.article.body = article[0].body;

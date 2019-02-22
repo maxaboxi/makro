@@ -40,7 +40,7 @@ export class UserAnswersComponent implements OnInit {
   }
 
   deleteAnswer(index) {
-    this.deletedAnswers.push(this.answers[index]._id);
+    this.deletedAnswers.push(this.answers[index].uuid);
     this.answers.splice(index, 1);
     this.answersDeleted = true;
   }

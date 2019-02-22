@@ -35,7 +35,7 @@ export class AdminCommentsComponent implements OnInit {
   }
 
   deleteComment(index) {
-    this.deletedComments.push(this.comments[index]._id);
+    this.deletedComments.push(this.comments[index].uuid);
     this.comments.splice(index, 1);
     this.commentsDeleted = true;
   }

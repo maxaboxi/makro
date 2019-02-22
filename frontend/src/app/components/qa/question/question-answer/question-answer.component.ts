@@ -3,11 +3,11 @@ import { Answer } from '../../../../models/Answer';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../../../../models/User';
 import { QaService } from '../../../../services/qa.service';
-import { VoteService } from '../../../../services/vote.service';
+import { LikeService } from '../../../../services/like.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Comment } from '../../../../models/Comment';
-import { Vote } from '../../../../models/Vote';
+import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -21,10 +21,9 @@ export class QuestionAnswerComponent implements OnInit {
   private _showComment = new BehaviorSubject<boolean>(true);
   commentText = '';
   showOnlyFirstComment = true;
-  answerVotes: Vote[];
+  answerLikes: Like[];
   pointsTotal = 0;
-  userVote;
-  votesFetched = false;
+  userLike = 0;
   loading = true;
 
   @Input()
@@ -56,7 +55,7 @@ export class QuestionAnswerComponent implements OnInit {
 
   constructor(
     private qaService: QaService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
@@ -64,27 +63,8 @@ export class QuestionAnswerComponent implements OnInit {
 
   ngOnInit() {
     if (this.answer) {
-      this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(
+      this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(
         comments => (this.answer.comments = comments),
-        (error: Error) => {
-          this.loading = false;
-          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-        }
-      );
-      this.voteService.getAllVotesWithPostId(this.answer._id).subscribe(
-        votes => {
-          votes.forEach(v => {
-            this.pointsTotal += v.vote;
-            if (v.userId === this.user._id) {
-              v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-            }
-          });
-          this.votesFetched = true;
-          this.loading = false;
-        },
         (error: Error) => {
           this.loading = false;
           this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
@@ -101,18 +81,18 @@ export class QuestionAnswerComponent implements OnInit {
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.answer._id,
+            postId: this.answer.uuid,
             username: this.user.username,
-            userId: this.user._id,
+            userId: this.user.uuid,
             comment: this.commentText,
-            replyTo: this.answer._id,
+            replyTo: this.answer.uuid,
             origPost: this.answer.answer,
             questionId: this.answer.questionId
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
-                this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => (this.answer.comments = comments));
+                this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => (this.answer.comments = comments));
                 this.flashMessage.show(this.translator.instant('COMMENT_ADDED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
@@ -137,39 +117,37 @@ export class QuestionAnswerComponent implements OnInit {
     );
   }
 
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.answer._id,
-      content: this.answer.answer,
-      vote: 0
+  like(c) {
+    let like: Like = {
+      userUUID: this.user.uuid,
+      answerUUID: this.answer.uuid,
+      value: 0
     };
-    if (!this.userVote) {
+    if (!this.userLike) {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
     } else {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += 2;
           }
@@ -177,9 +155,9 @@ export class QuestionAnswerComponent implements OnInit {
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += -2;
           }
@@ -189,7 +167,7 @@ export class QuestionAnswerComponent implements OnInit {
   }
 
   fetchComments(e) {
-    this.qaService.getCommentsToAnswerWithId(this.answer._id).subscribe(comments => {
+    this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => {
       this.answer.comments = comments;
     });
   }

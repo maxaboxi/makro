@@ -7,7 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Question } from '../../../models/Question';
 import { Answer } from '../../../models/Answer';
 import { Comment } from '../../../models/Comment';
-import { Vote } from '../../../models/Vote';
+import { Like } from '../../../models/Like';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -82,13 +82,13 @@ export class QuestionComponent implements OnInit {
           const answer: Answer = {
             username: this.user.username,
             answer: this.answerText,
-            questionId: this.question._id,
+            questionId: this.question.uuid,
             origPost: this.question.question
           };
           this.qaService.addAnswerToQuestion(answer).subscribe(
             res => {
               if (res['success']) {
-                this.qaService.getAllResponsesToQuestion(this.question._id).subscribe(answers => (this.answers = answers));
+                this.qaService.getAllResponsesToQuestion(this.question.uuid).subscribe(answers => (this.answers = answers));
                 this.flashMessage.show('Vastaus lisätty', {
                   cssClass: 'alert-success',
                   timeout: 2000

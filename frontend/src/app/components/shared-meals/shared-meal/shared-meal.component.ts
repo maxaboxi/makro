@@ -5,8 +5,8 @@ import { User } from '../../../models/User';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { Router } from '@angular/router';
-import { Vote } from '../../../models/Vote';
-import { VoteService } from '../../../services/vote.service';
+import { Like } from '../../../models/Like';
+import { LikeService } from '../../../services/like.service';
 import { ConnectionService } from '../../../services/connection.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class SharedMealComponent implements OnInit {
   selectedMeal: Meal;
   addToMeal = '';
   showRecipe = false;
-  userVote;
+  userLike = 0;
   pointsTotal = 0;
   votesFetched = false;
   loading = true;
@@ -52,47 +52,23 @@ export class SharedMealComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private router: Router,
     private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
     this.connectionService.monitor().subscribe(res => (this.online = res));
-    if (this.user && this.user._id) {
-      this.fetchVotes();
-    } else {
-      // Wait a bit to get user.
-      setTimeout(() => {
-        this.fetchVotes();
-      }, 500);
-    }
-
+    this.userLike = this.meal.userLike;
     this.meal.foods.forEach(f => {
       this.amountTotal += f.amount;
-      this.kcalTotal += f.energia;
-      this.proteinTotal += f.proteiini;
-      this.carbTotal += f.hh;
-      this.fatTotal += f.rasva;
+      this.kcalTotal += f.energy;
+      this.proteinTotal += f.protein;
+      this.carbTotal += f.carbs;
+      this.fatTotal += f.fat;
     });
-    if (this.meal.pointsTotal) {
-      this.pointsTotal = this.meal.pointsTotal;
-    } else {
-      this.pointsTotal = 0;
-    }
-  }
-
-  fetchVotes() {
-    this.voteService.getAllVotesWithPostId(this.meal._id).subscribe(votes => {
-      votes.forEach(v => {
-        this.pointsTotal += v.vote;
-        if (v.userId === this.user._id) {
-          v.vote > 0 ? (this.userVote = 'up') : (this.userVote = 'down');
-        }
-      });
-      this.votesFetched = true;
-      this.loading = false;
-    });
+    this.pointsTotal = this.meal.totalPoints;
+    this.loading = false;
   }
 
   openAddMealModal(content, meal) {
@@ -126,39 +102,37 @@ export class SharedMealComponent implements OnInit {
     this.showRecipe = !this.showRecipe;
   }
 
-  vote(c) {
-    let vote: Vote = {
-      userId: this.user._id,
-      username: this.user.username,
-      postId: this.meal._id,
-      content: this.meal.name,
-      vote: 0
+  like(c) {
+    let like: Like = {
+      userUUID: this.user.uuid,
+      sharedMealUUID: this.meal.uuid,
+      value: 0
     };
-    if (!this.userVote) {
+    if (!this.userLike) {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.votePost(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.likePost(like).subscribe(res => {
           if (res['success']) {
-            this.pointsTotal += vote.vote;
+            this.pointsTotal += like.value;
           }
         });
       }
     } else {
       if (c === '+') {
-        vote.vote = 1;
-        this.userVote = 'up';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = 1;
+        this.userLike = 1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += 2;
           }
@@ -166,9 +140,9 @@ export class SharedMealComponent implements OnInit {
       }
 
       if (c === '-') {
-        vote.vote = -1;
-        this.userVote = 'down';
-        this.voteService.replacePreviousVote(vote).subscribe(res => {
+        like.value = -1;
+        this.userLike = -1;
+        this.likeService.replacePreviousLike(like).subscribe(res => {
           if (res['success']) {
             this.pointsTotal += -2;
           }

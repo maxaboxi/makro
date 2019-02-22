@@ -1,5 +1,5 @@
 export interface Article {
-  _id?: String;
+  uuid?: String;
   username?: String;
   title: String;
   origTitle?: String;

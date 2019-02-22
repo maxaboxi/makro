@@ -26,7 +26,7 @@ namespace Makro.Services
             _foodService = foodService;
         }
 
-        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals()
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals(string userId)
         {
             List<SharedMeal> sharedMeals = await _context.SharedMeals
                 .Include(m => m.User)
@@ -46,6 +46,16 @@ namespace Makro.Services
                     foodDtos.Add(foodDto);
                  });
                 var sharedMealDto = _mapper.Map<SharedMealDto>(sm);
+                var totalPoints = 0;
+                var likes = _context.Likes.Where(l => l.SharedMeal == sm).Include(l => l.User).ToList();
+                likes.ForEach(like => {
+                    totalPoints += like.Value;
+                    if (like.User.UUID == userId)
+                    {
+                        sharedMealDto.UserLike = like.Value;
+                    }
+                });
+                sharedMealDto.TotalPoints = totalPoints;
                 sharedMealDto.Foods = foodDtos;
                 sharedMealDtos.Add(sharedMealDto);
             });

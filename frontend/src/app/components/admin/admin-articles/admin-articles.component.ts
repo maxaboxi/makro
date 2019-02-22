@@ -33,7 +33,7 @@ export class AdminArticlesComponent implements OnInit {
   }
 
   deleteArticle(index) {
-    this.deletedArticles.push(this.articles[index]._id);
+    this.deletedArticles.push(this.articles[index].uuid);
     this.articles.splice(index, 1);
     this.articlesDeleted = true;
   }

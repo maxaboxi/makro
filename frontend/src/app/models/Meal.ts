@@ -1,14 +1,15 @@
 import { Food } from './Food';
 
 export interface Meal {
-  _id?: String;
+  uuid?: String;
   username?: String;
   name: String;
   info?: String;
   recipe?: String;
   foods: Food[];
   tags?: String[];
-  pointsTotal?: number;
+  totalPoints?: number;
+  userLike?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

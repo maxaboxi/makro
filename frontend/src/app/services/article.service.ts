@@ -9,9 +9,7 @@ import { Comment } from '../models/Comment';
   providedIn: 'root'
 })
 export class ArticleService {
-  private baseUrl = `${environment.articles}/api/v1/articles`;
-  private commentUrl = `${environment.articles}/api/v1/comments`;
-  private scannerUrl = environment.scanner;
+  private baseUrl = `${environment.baseUrl}/api/v1/articles`;
 
   constructor(private http: HttpClient) {}
 
@@ -74,12 +72,6 @@ export class ArticleService {
     return this.http.post(url, formData, { headers: new HttpHeaders() });
   }
 
-  scanFile(image: File) {
-    const formData = new FormData();
-    formData.append('img', image);
-    return this.http.post(this.scannerUrl, formData);
-  }
-
   editArticle(article: Article) {
     const url = `${this.baseUrl}/editarticle`;
 
@@ -131,7 +123,7 @@ export class ArticleService {
   }
 
   postNewComment(comment: Comment) {
-    const url = `${this.commentUrl}/addcomment`;
+    const url = `${this.baseUrl}/addcomment`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -141,7 +133,7 @@ export class ArticleService {
   }
 
   getCommentsToArticleWithId(id) {
-    const url = `${this.commentUrl}/getallcomments/${id}`;
+    const url = `${this.baseUrl}/getallcomments/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

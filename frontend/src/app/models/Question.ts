@@ -1,5 +1,5 @@
 export interface Question {
-  _id?: String;
+  uuid?: String;
   username: String;
   question: String;
   info?: String;

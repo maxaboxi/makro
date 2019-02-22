@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { VoteService } from '../../../services/vote.service';
+import { LikeService } from '../../../services/like.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
-import { Vote } from '../../../models/Vote';
+import { Like } from '../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-user-votes',
-  templateUrl: './user-votes.component.html',
-  styleUrls: ['./user-votes.component.css']
+  selector: 'app-user-likes',
+  templateUrl: './user-likes.component.html',
+  styleUrls: ['./user-likes.component.css']
 })
-export class UserVotesComponent implements OnInit {
+export class UserLikesComponent implements OnInit {
   user: User;
-  votes: Vote[] = [];
-  deletedVotes = [];
-  votesDeleted = false;
+  likes: Like[] = [];
+  deletedLikes = [];
+  likesDeleted = false;
   loading = true;
 
   constructor(
     private auth: AuthService,
-    private voteService: VoteService,
+    private likeService: LikeService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
@@ -29,9 +29,9 @@ export class UserVotesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.voteService.getAllUserVotesWithId(this.user._id).subscribe(
-          votes => {
-            this.votes = votes;
+        this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(
+          likes => {
+            this.likes = likes;
             this.loading = false;
           },
           (error: Error) => {
@@ -46,24 +46,24 @@ export class UserVotesComponent implements OnInit {
     });
   }
 
-  deleteVote(index, vote) {
-    this.deletedVotes.push(vote);
-    this.votes.splice(index, 1);
-    this.votesDeleted = true;
+  deleteLike(index, like) {
+    this.deletedLikes.push(like);
+    this.likes.splice(index, 1);
+    this.likesDeleted = true;
   }
 
-  deleteVotesFromDb() {
-    this.voteService.removeVotes(this.deletedVotes).subscribe(
+  deleteLikesFromDb() {
+    this.likeService.removeLikes(this.deletedLikes).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.voteService.getAllUserVotesWithId(this.user._id).subscribe(votes => {
-            this.votes = votes;
+          this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(likes => {
+            this.likes = likes;
           });
-          this.votesDeleted = false;
+          this.likesDeleted = false;
         }
       },
       (error: Error) => {

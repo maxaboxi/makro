@@ -24,7 +24,7 @@ namespace Makro.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals()
         {
-            return await _mealService.GetAllSharedMeals();
+            return await _mealService.GetAllSharedMeals(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]

@@ -43,7 +43,7 @@ import { UserQaComponent } from './components/profile/user-qa/user-qa.component'
 import { UserQuestionsComponent } from './components/profile/user-qa/user-questions/user-questions.component';
 import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
 import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
-import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
+import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
 import { ArticlesComponent } from './components/articles/articles.component';
 import { ArticleComponent } from './components/articles/article/article.component';
 import { AddArticleComponent } from './components/articles/add-article/add-article.component';
@@ -61,7 +61,7 @@ import { AdminQuestionsComponent } from './components/admin/admin-questions/admi
 import { DataListComponent } from './components/admin/data-list/data-list.component';
 import { AdminAnswersComponent } from './components/admin/admin-answers/admin-answers.component';
 import { AdminCommentsComponent } from './components/admin/admin-comments/admin-comments.component';
-import { AdminVotesComponent } from './components/admin/admin-votes/admin-votes.component';
+import { AdminLikesComponent } from './components/admin/admin-likes/admin-likes.component';
 import { AdminMealsComponent } from './components/admin/admin-meals/admin-meals.component';
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
 
@@ -102,7 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserQuestionsComponent,
     UserCommentsComponent,
     UserAnswersComponent,
-    UserVotesComponent,
+    UserLikesComponent,
     ArticlesComponent,
     ArticleComponent,
     AddArticleComponent,
@@ -118,7 +118,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataListComponent,
     AdminAnswersComponent,
     AdminCommentsComponent,
-    AdminVotesComponent,
+    AdminLikesComponent,
     AdminMealsComponent,
     AdminFeedbacksComponent
   ],

@@ -150,7 +150,7 @@ export class UserInfoComponent implements OnInit {
             });
           } else {
             const user = {
-              _id: this.user._id,
+              uuid: this.user.uuid,
               password: this.newUserPassword
             };
             this.auth.changePassword(user).subscribe(

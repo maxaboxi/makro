@@ -69,7 +69,7 @@ export class UserSharedMealsComponent implements OnInit {
   }
 
   deleteSharedMeal(index) {
-    this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+    this.deletedSharedMeals.push(this.sharedMeals[index].uuid);
     this.sharedMeals.splice(index, 1);
     this.sharedMealsDeleted = true;
   }
@@ -115,13 +115,13 @@ export class UserSharedMealsComponent implements OnInit {
             }
             if (f.amount !== 100) {
               const a = f.amount / 100;
-              const origFood = this.returnOriginalFoodValues(f._id, f.name);
-              f.energia = origFood[0].energia * a;
-              f.proteiini = origFood[0].proteiini * a;
-              f.hh = origFood[0].hh * a;
-              f.rasva = origFood[0].rasva * a;
-              f.kuitu = origFood[0].kuitu * a;
-              f.sokeri = origFood[0].sokeri * a;
+              const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+              f.energy = origFood[0].energy * a;
+              f.protein = origFood[0].protein * a;
+              f.carbs = origFood[0].carbs * a;
+              f.fat = origFood[0].fat * a;
+              f.fiber = origFood[0].fiber * a;
+              f.sugar = origFood[0].sugar * a;
             }
           });
           this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
@@ -164,7 +164,7 @@ export class UserSharedMealsComponent implements OnInit {
   returnOriginalFoodValues(id, name) {
     if (id) {
       return this.allFoods.filter(f => {
-        if (f._id === id) {
+        if (f.uuid === id) {
           return f;
         }
       });

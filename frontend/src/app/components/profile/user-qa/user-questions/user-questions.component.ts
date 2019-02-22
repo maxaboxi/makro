@@ -41,7 +41,7 @@ export class UserQuestionsComponent implements OnInit {
   }
 
   deleteQuestion(index) {
-    this.deletedQuestions.push(this.questions[index]._id);
+    this.deletedQuestions.push(this.questions[index].uuid);
     this.questions.splice(index, 1);
     this.questionsDeleted = true;
   }
@@ -70,6 +70,6 @@ export class UserQuestionsComponent implements OnInit {
   }
 
   navigate(question: Question) {
-    this.router.navigate(['/question'], { queryParams: { id: question._id } });
+    this.router.navigate(['/question'], { queryParams: { id: question.uuid } });
   }
 }
