@@ -33,7 +33,7 @@
             name="question"
             class="form-control"
             #q="ngModel"
-            [(ngModel)]="question.question"
+            [(ngModel)]="question.questionBody"
             [ngClass]="{ 'is-invalid': q.errors && q.touched }"
             minlength="10"
             required
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group">
           <label for="description">{{ 'MORE_INFO_ABOUT_QUESTION' | translate }}</label>
-          <app-tinymce [(ngModel)]="question.info" name="description"></app-tinymce>
+          <app-tinymce [(ngModel)]="question.questionInformation" name="description"></app-tinymce>
         </div>
         <div class="form-group">
           <label for="hashtags">{{ 'TAGS_SEPARATED_BY_COMMA' | translate }}</label>

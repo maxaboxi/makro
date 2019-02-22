@@ -21,8 +21,6 @@ export class QuestionComponent implements OnInit {
   answerText = '';
   commentText = '';
   question: Question;
-  answer: Answer;
-  answers: Answer[];
   queryParams = {};
   loading = true;
 
@@ -57,19 +55,7 @@ export class QuestionComponent implements OnInit {
           });
         }
       );
-      this.qaService.getAllResponsesToQuestion(this.queryParams['id']).subscribe(
-        a => {
-          this.answers = a;
-          this.loading = false;
-        },
-        (error: Error) => {
-          this.loading = false;
-          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-        }
-      );
+      this.loading = false;
     } else {
       this.router.navigate(['/qa']);
     }
@@ -81,14 +67,14 @@ export class QuestionComponent implements OnInit {
         if (result === 'save') {
           const answer: Answer = {
             username: this.user.username,
-            answer: this.answerText,
-            questionId: this.question.uuid,
-            origPost: this.question.question
+            answerBody: this.answerText,
+            questionUUID: this.question.uuid,
+            userId: this.user.uuid
           };
           this.qaService.addAnswerToQuestion(answer).subscribe(
             res => {
               if (res['success']) {
-                this.qaService.getAllResponsesToQuestion(this.question.uuid).subscribe(answers => (this.answers = answers));
+                this.qaService.getQuestionWithId(this.question.uuid).subscribe(q => (this.question = q));
                 this.flashMessage.show('Vastaus lisätty', {
                   cssClass: 'alert-success',
                   timeout: 2000

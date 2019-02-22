@@ -1,9 +1,13 @@
+import { Answer } from './Answer';
+
 export interface Question {
-  uuid?: String;
-  username: String;
-  question: String;
-  info?: String;
-  tags: String[];
+  uuid?: string;
+  userId?: string;
+  username: string;
+  questionBody: string;
+  questionInformation?: string;
+  tags: string[];
   updatedAt?: Date;
   createdAt?: Date;
+  answers?: Answer[];
 }

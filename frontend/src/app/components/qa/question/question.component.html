@@ -3,12 +3,12 @@
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ng-container *ngIf="question">
-        <h5 class="card-title text-muted"> {{ question.question }} </h5>
-        <p class="text-muted lead" *ngIf="question.info" [innerHTML]="question.info"></p>
+        <h5 class="card-title text-muted"> {{ question.questionBody }} </h5>
+        <p class="text-muted lead" *ngIf="question.questionInformation" [innerHTML]="question.questionInformation"></p>
         <p class="answer-button text-right text-muted" (click)="openAnswerModal(answerModal)">{{ 'ANSWER_TO_QUESTION' | translate }}</p>
       </ng-container>
-      <ng-container *ngIf="answers && answers.length > 0">
-        <ng-container *ngFor="let answer of answers">
+      <ng-container *ngIf="question && question.answers && question.answers.length > 0">
+        <ng-container *ngFor="let answer of question.answers">
           <app-question-answer [user]="user" [answer]="answer"></app-question-answer>
         </ng-container>
       </ng-container>

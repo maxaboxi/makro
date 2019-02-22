@@ -17,8 +17,8 @@ export class QaComponent implements OnInit {
   questions: Question[];
   question: Question = {
     username: '',
-    question: '',
-    info: '',
+    questionBody: '',
+    questionInformation: '',
     tags: []
   };
   questionTag = '';
@@ -52,9 +52,9 @@ export class QaComponent implements OnInit {
   }
 
   resetForm() {
-    this.question.question = '';
+    this.question.questionBody = '';
     this.question.tags = [];
-    this.question.info = '';
+    this.question.questionInformation = '';
   }
 
   openModal(content) {
@@ -62,6 +62,7 @@ export class QaComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.question.username = this.user.username;
+          this.question.userId = this.user.uuid;
           this.qaService.postNewQuestion(this.question).subscribe(
             res => {
               if (res['success']) {

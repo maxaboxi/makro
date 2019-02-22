@@ -9,12 +9,14 @@ import { Comment } from '../models/Comment';
   providedIn: 'root'
 })
 export class QaService {
-  private baseUrl = `${environment.baseUrl}/api/v1/qa`;
+  private baseUrlQuestion = `${environment.baseUrl}/question`;
+  private baseUrlAnswer = `${environment.baseUrl}/answer`;
+  private baseUrlComment = `${environment.baseUrl}/comment`;
 
   constructor(private http: HttpClient) {}
 
   getAllQuestions() {
-    const url = `${this.baseUrl}/questions/getallquestions`;
+    const url = `${this.baseUrlQuestion}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -24,7 +26,7 @@ export class QaService {
   }
 
   getQuestionWithId(id) {
-    const url = `${this.baseUrl}/questions/getquestion/${id}`;
+    const url = `${this.baseUrlQuestion}/single/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -33,28 +35,8 @@ export class QaService {
     return this.http.get<Question>(url, { headers: headers });
   }
 
-  getCommentsToAnswerWithId(id) {
-    const url = `${this.baseUrl}/comments/getallcomments/${id}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Comment[]>(url, { headers: headers });
-  }
-
-  getAllResponsesToQuestion(questionId) {
-    const url = `${this.baseUrl}/answers/getallresponsestoquestion`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post<Answer[]>(url, { questionId: questionId }, { headers: headers });
-  }
-
   postNewQuestion(question: Question) {
-    const url = `${this.baseUrl}/questions/postnewquestion`;
+    const url = `${this.baseUrlQuestion}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -64,7 +46,7 @@ export class QaService {
   }
 
   postNewComment(comment: Comment) {
-    const url = `${this.baseUrl}/comments/addcomment`;
+    const url = `${this.baseUrlComment}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -74,7 +56,7 @@ export class QaService {
   }
 
   addAnswerToQuestion(answer: Answer) {
-    const url = `${this.baseUrl}/answers/addanswertoquestion`;
+    const url = `${this.baseUrlAnswer}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -83,8 +65,8 @@ export class QaService {
     return this.http.post(url, answer, { headers: headers });
   }
 
-  getAllUserQuestionsWithUsername(username) {
-    const url = `${this.baseUrl}/questions/getallquestionswithusername/${username}`;
+  getAllUserQuestionsByUser() {
+    const url = `${this.baseUrlQuestion}/user/`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -93,8 +75,8 @@ export class QaService {
     return this.http.get<Question[]>(url, { headers: headers });
   }
 
-  getAllUserAnswersWithUsername(username) {
-    const url = `${this.baseUrl}/answers/getallanswerswithusername/${username}`;
+  getAllUserAnswersByUser() {
+    const url = `${this.baseUrlAnswer}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -103,8 +85,8 @@ export class QaService {
     return this.http.get<Answer[]>(url, { headers: headers });
   }
 
-  getAllUserCommentsWithId(id) {
-    const url = `${this.baseUrl}/comments/getallcommentswithuserid/${id}`;
+  getAllUserCommentsByUser() {
+    const url = `${this.baseUrlComment}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -114,7 +96,7 @@ export class QaService {
   }
 
   editQuestion(question: Question) {
-    const url = `${this.baseUrl}/questions/editquestion`;
+    const url = `${this.baseUrlQuestion}/update/${question.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -124,7 +106,7 @@ export class QaService {
   }
 
   editAnswer(answer: Answer) {
-    const url = `${this.baseUrl}/answers/editanswer`;
+    const url = `${this.baseUrlAnswer}/update/${answer.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -134,7 +116,7 @@ export class QaService {
   }
 
   removeQuestions(questionIds) {
-    const url = `${this.baseUrl}/questions/removequestions`;
+    const url = `${this.baseUrlQuestion}/delete`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -149,7 +131,7 @@ export class QaService {
   }
 
   removeAnswers(answerIds) {
-    const url = `${this.baseUrl}/answers/removeanswers`;
+    const url = `${this.baseUrlAnswer}/delete`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -164,7 +146,7 @@ export class QaService {
   }
 
   removeComments(commentIds) {
-    const url = `${this.baseUrl}/comments/removecomments`;
+    const url = `${this.baseUrlComment}/delete`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

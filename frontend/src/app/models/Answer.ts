@@ -1,12 +1,12 @@
 import { Comment } from './Comment';
 
 export interface Answer {
-  uuid?: String;
-  questionId: String;
-  username: String;
-  answer: String;
-  origPost: String;
-  pointsTotal?: Number;
+  uuid?: string;
+  questionUUID: string;
+  username: string;
+  userId: string;
+  answerBody: string;
+  totalPoints?: number;
   comments?: Comment[];
   updatedAt?: Date;
   createdAt?: Date;

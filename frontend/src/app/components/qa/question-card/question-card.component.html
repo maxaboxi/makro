@@ -1,13 +1,15 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="card mt-3">
   <div class="card-body">
-    <h5 class="card-title text-muted answer-button" (click)="openQuestion(question._id)"> {{ question.question }} </h5>
-    <ng-container *ngIf="answer">
-      <app-question-answer [user]="user" [answer]="answer" [showComment]="false"></app-question-answer>
+    <h5 class="card-title text-muted answer-button" (click)="openQuestion(question.uuid)"> {{ question.questionBody }} </h5>
+    <ng-container *ngIf="question.answers.length > 0">
+      <ng-container *ngFor="let answer of question.answers">
+        <app-question-answer [user]="user" [answer]="answer" [showComment]="false"></app-question-answer>
+      </ng-container>
     </ng-container>
     <span
       class="answer-button float-right text-muted"
-      (click)="openQuestion(question._id)"
+      (click)="openQuestion(question.uuid)"
       title="{{ 'QUESTION_OPEN_TITLE_TEXT' | translate }}"
       >{{ 'OPEN' | translate }}</span
     >

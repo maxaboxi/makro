@@ -1,14 +1,14 @@
 export interface Comment {
-  uuid?: String;
-  username: String;
-  userId: String;
-  comment: String;
-  postId: String;
-  questionId?: String;
-  articleId?: String;
-  replyTo?: String;
-  origPost: String;
-  pointsTotal?: Number;
+  uuid?: string;
+  username: string;
+  userId: string;
+  body: string;
+  answerUUID?: string;
+  articleUUID?: string;
+  replyToUUID?: string;
+  replyToUsername?: string;
+  totalPoints?: number;
+  commentReplyCount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

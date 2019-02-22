@@ -24,7 +24,6 @@ export class AnswerCommentComponent implements OnInit {
   pointsTotal = 0;
   userLike = 0;
   likesFetched = false;
-  loading = true;
 
   @Input()
   set comment(comment) {
@@ -71,13 +70,10 @@ export class AnswerCommentComponent implements OnInit {
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.comment.postId,
-            replyTo: this.comment.username,
+            replyToUUID: this.comment.uuid,
             username: this.user.username,
             userId: this.user.uuid,
-            comment: this.commentText,
-            origPost: this.comment.comment,
-            questionId: this.answer.questionId
+            body: this.commentText
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {

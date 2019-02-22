@@ -16,7 +16,7 @@ export class QuestionCardComponent implements OnInit {
   private _question = new BehaviorSubject<Question>(null);
   answers: Answer[];
   answer: Answer;
-  loading = true;
+  loading = false;
 
   @Input()
   set user(user) {
@@ -38,12 +38,7 @@ export class QuestionCardComponent implements OnInit {
 
   constructor(private qaService: QaService, private router: Router) {}
 
-  ngOnInit() {
-    this.qaService.getAllResponsesToQuestion(this.question.uuid).subscribe(answer => {
-      this.answer = answer[0];
-      this.loading = false;
-    });
-  }
+  ngOnInit() {}
 
   openQuestion(qId) {
     this.router.navigate(['/question'], { queryParams: { id: qId } });

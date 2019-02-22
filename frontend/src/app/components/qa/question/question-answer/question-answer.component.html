@@ -2,7 +2,7 @@
 <div *ngIf="!loading">
   <hr /> <h5 class="text-muted">{{ 'ANSWER' | translate }}</h5> <p class="lead">{{ answer.username }}</p>
   <p class="text-muted answer-text"> {{ 'ANSWERED' | translate }}: {{ answer.createdAt | date: 'dd.MM.yyyy klo HH:mm' }} </p>
-  <p class="lead" [innerHTML]="answer.answer"></p>
+  <p class="lead" [innerHTML]="answer.answerBody"></p>
   <div class="d-flex">
     <div *ngIf="online">
       <ng-container *ngIf="userLike === 0">
@@ -18,27 +18,13 @@
         <i class="ml-3 far fa-thumbs-down" (click)="vote('-')"></i>
       </ng-container>
     </div>
-    <span class="ml-3 text-muted">{{ pointsTotal }} {{ 'POINTS' | translate }}</span>
+    <span class="ml-3 text-muted">{{ answer.totalPoints }} {{ 'POINTS' | translate }}</span>
     <span *ngIf="showComment" class="answer-button ml-auto text-muted" (click)="openCommentModal(commentModal, answer)">{{
       'ADD_COMMENT' | translate
     }}</span>
   </div>
-  <p (click)="showOnlyFirstComment = false" class="text-muted comment-button" *ngIf="showOnlyFirstComment && answer.comments?.length > 1">
-    {{ 'SHOW_ALL_COMMENTS' | translate }} ({{ answer.comments.length }})
-  </p>
-  <p (click)="showOnlyFirstComment = true" class="text-muted comment-button" *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">
-    {{ 'HIDE' | translate }}
-  </p>
   <div class="bg-light margin-left">
-    <app-answer-comment
-      *ngIf="showOnlyFirstComment && answer.comments?.length > 0"
-      [comment]="answer.comments[0]"
-      [user]="user"
-      [answer]="answer"
-      (commented)="fetchComments($event)"
-    ></app-answer-comment>
-
-    <div *ngIf="!showOnlyFirstComment && answer.comments?.length > 1">
+    <div *ngIf="answer.comments?.length > 1">
       <ng-container *ngFor="let comment of answer.comments">
         <app-answer-comment [comment]="comment" [user]="user" [answer]="answer" (commented)="fetchComments($event)"></app-answer-comment>
       </ng-container>

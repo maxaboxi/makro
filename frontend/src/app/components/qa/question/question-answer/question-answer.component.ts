@@ -20,11 +20,10 @@ export class QuestionAnswerComponent implements OnInit {
   private _answer = new BehaviorSubject<Answer>(null);
   private _showComment = new BehaviorSubject<boolean>(true);
   commentText = '';
-  showOnlyFirstComment = true;
   answerLikes: Like[];
   pointsTotal = 0;
   userLike = 0;
-  loading = true;
+  loading = false;
 
   @Input()
   set user(user) {
@@ -62,18 +61,7 @@ export class QuestionAnswerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.answer) {
-      this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(
-        comments => (this.answer.comments = comments),
-        (error: Error) => {
-          this.loading = false;
-          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-        }
-      );
-    }
+    this.pointsTotal = this.answer.totalPoints;
   }
 
   openCommentModal(content) {
@@ -81,18 +69,15 @@ export class QuestionAnswerComponent implements OnInit {
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.answer.uuid,
+            answerUUID: this.answer.uuid,
             username: this.user.username,
             userId: this.user.uuid,
-            comment: this.commentText,
-            replyTo: this.answer.uuid,
-            origPost: this.answer.answer,
-            questionId: this.answer.questionId
+            body: this.commentText
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
-                this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => (this.answer.comments = comments));
+                this.fetchComments();
                 this.flashMessage.show(this.translator.instant('COMMENT_ADDED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
@@ -166,9 +151,9 @@ export class QuestionAnswerComponent implements OnInit {
     }
   }
 
-  fetchComments(e) {
-    this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => {
-      this.answer.comments = comments;
-    });
+  fetchComments() {
+    // this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => {
+    //   this.answer.comments = comments;
+    // });
   }
 }
