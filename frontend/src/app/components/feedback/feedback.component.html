@@ -26,7 +26,8 @@
       <ng-container *ngFor="let feedback of feedbacks; let i = index">
         <div class="card mt-3">
           <div class="card-body">
-            <h5 class="card-title text-muted">{{ 'FEEDBACK' | translate }}</h5> <p class="card-text" [innerHTML]="feedback.feedback"></p>
+            <h5 class="card-title text-muted">{{ 'FEEDBACK' | translate }}</h5>
+            <p class="card-text" [innerHTML]="feedback.feedbackBody"></p>
             <p class="text-muted">
               <span *ngIf="feedback.username === 'Nimetön'">{{ 'ANONYMOUS' | translate }}</span>
               <span *ngIf="feedback.username !== 'Nimetön'">{{ feedback.username }}</span>
@@ -36,8 +37,8 @@
           <div class="card-footer" *ngIf="feedback.answer">
             <h5 class="card-title text-muted">{{ 'ANSWER' | translate }}</h5> <p class="card-text" [innerHTML]="feedback.answer"></p>
             <p class="text-muted">
-              <span>{{ feedback.answerUsername }}</span>
-              <span *ngIf="feedback.answerDate"> @ {{ feedback.answerDate | date: 'dd.MM.yyyy' }}</span>
+              <span>{{ feedback.answeredBy }}</span>
+              <span *ngIf="feedback.answerDate"> @ {{ feedback.answeredAt | date: 'dd.MM.yyyy' }}</span>
             </p>
           </div>
         </div>
@@ -64,7 +65,7 @@
         </div>
         <div class="form-group">
           <label for="feedback">{{ 'FEEDBACK' | translate }}</label>
-          <app-tinymce name="feedbackAnswer" [(ngModel)]="feedback.feedback" minlength="18" required></app-tinymce>
+          <app-tinymce name="feedbackbody" [(ngModel)]="feedback.feedbackBody" minlength="18" required></app-tinymce>
         </div>
         <div class="container text-center">
           <div class="row">

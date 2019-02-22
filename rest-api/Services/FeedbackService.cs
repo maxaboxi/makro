@@ -29,7 +29,7 @@ namespace Makro.Services
                 {
                     UUID = f.UUID,
                     UserId = f.Anonymous ? null : f.User.UUID,
-                    Username = f.Anonymous ? null : f.User.Username,
+                    Username = f.Anonymous ? "Nimetön" : f.User.Username,
                     FeedbackBody = f.FeedbackBody,
                     Answer = f.Answer,
                     AnsweredBy = f.AnsweredBy?.UUID,
@@ -50,8 +50,8 @@ namespace Makro.Services
                 var feedbackDto = new FeedbackDto
                 {
                     UUID = f.UUID,
-                    UserId = f.Anonymous ? null : f.User.UUID,
-                    Username = f.Anonymous ? null : f.User.Username,
+                    UserId = f.User.UUID,
+                    Username = f.User.Username,
                     FeedbackBody = f.FeedbackBody,
                     Answer = f.Answer,
                     AnsweredBy = f.AnsweredBy?.UUID,

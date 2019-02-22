@@ -3,7 +3,6 @@ using Makro.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Makro.Models;
 using Makro.DTO;
 namespace Makro.Controllers
 {
@@ -32,6 +31,11 @@ namespace Makro.Controllers
         [HttpPost("new")]
         public async Task<IActionResult> AddNewFeedback([FromBody]FeedbackDto feedbackDto)
         {
+            if ( feedbackDto.FeedbackBody == null)
+            {
+                return BadRequest();
+            }
+
             return Ok(await _feedbackService.AddNewFeedback(feedbackDto, HttpContext.User.Identity.Name));
         }
 
