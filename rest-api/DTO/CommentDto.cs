@@ -10,6 +10,7 @@ namespace Makro.DTO
         public string AnswerUUID { get; set; }
         public string ArticleUUID { get; set; }
         public string ReplyToUUID { get; set; }
+        public string ReplyToUser { get; set; }
         public int CommentReplyCount { get; set; }
         public int TotalPoints { get; set; }
         public DateTime CreatedAt { get; set; }

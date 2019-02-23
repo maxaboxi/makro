@@ -1,9 +1,7 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div class="padding">
   <p class="lead">{{ comment.username }}</p> <p class="text-muted answer-text"> {{ comment.createdAt | date: 'dd.MM.yyyy klo HH:mm' }} </p>
-  <p class="text-muted answer-text" *ngIf="comment.replyTo !== comment.postId">
-    {{ 'REPLY_TO' | translate }}: {{ comment.replyToUsername }}
-  </p>
+  <p class="text-muted answer-text" *ngIf="comment.replyToUser"> {{ 'REPLY_TO' | translate }}: {{ comment.replyToUser }} </p>
   <p class="lead" [innerHTML]="comment.body"></p>
   <div class="d-flex">
     <div *ngIf="online">

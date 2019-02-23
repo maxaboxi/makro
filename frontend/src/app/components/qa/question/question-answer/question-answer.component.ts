@@ -152,8 +152,8 @@ export class QuestionAnswerComponent implements OnInit {
   }
 
   fetchComments() {
-    // this.qaService.getCommentsToAnswerWithId(this.answer.uuid).subscribe(comments => {
-    //   this.answer.comments = comments;
-    // });
+    this.qaService.getAllCommentsForAnswer(this.answer.uuid).subscribe(comments => {
+      this.answer.comments = comments;
+    });
   }
 }

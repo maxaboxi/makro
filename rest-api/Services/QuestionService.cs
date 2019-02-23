@@ -58,6 +58,10 @@ namespace Makro.Services
                 .Include(q => q.Answers)
                     .ThenInclude(a => a.Comments)
                         .ThenInclude(c => c.User)
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.Comments)
+                        .ThenInclude(c => c.ReplyTo)
+                            .ThenInclude(r => r.User)
                 .AsNoTracking().FirstOrDefaultAsync();
 
             List<AnswerDto> answerDtos = new List<AnswerDto>();
@@ -76,6 +80,8 @@ namespace Makro.Services
                     likesComment.ForEach(like => totalPointsComment += like.Value);
                     commentDto.CommentReplyCount = _context.Comments.Where(com => com.ReplyTo == c).Count();
                     commentDto.TotalPoints = totalPointsComment;
+                    commentDto.ReplyToUUID = c.ReplyTo?.UUID;
+                    commentDto.ReplyToUser = c.ReplyTo?.User.Username;
                     commentDtos.Add(commentDto);
                  });
                 answerDto.Comments = commentDtos;

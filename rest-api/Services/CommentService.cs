@@ -23,6 +23,44 @@ namespace Makro.Services
             _mapper = mapper;
         }
 
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForAnswer(string id)
+        {
+            var comments = await _context.Comments.AsNoTracking().Where(c => c.Answer.UUID == id)
+                .Include(c => c.User)
+                .Include(c => c.Answer)
+                .Include(c => c.ReplyTo)
+                    .ThenInclude(r => r.User)
+                .ToListAsync();
+            List<CommentDto> commentDtos = new List<CommentDto>();
+            comments.ForEach(c => {
+                var dto = _mapper.Map<CommentDto>(c);
+                dto.AnswerUUID = c.Answer?.UUID;
+                dto.ReplyToUUID = c.ReplyTo?.UUID;
+                dto.ReplyToUser = c.ReplyTo?.User.Username;
+                commentDtos.Add(dto);
+            });
+            return commentDtos;
+        }
+
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForArticle(string id)
+        {
+            var comments = await _context.Comments.AsNoTracking().Where(c => c.Article.UUID == id)
+                .Include(c => c.User)
+                .Include(c => c.Article)
+                .Include(c => c.ReplyTo)
+                    .ThenInclude(r => r.User)
+                .ToListAsync();
+            List<CommentDto> commentDtos = new List<CommentDto>();
+            comments.ForEach(c => {
+                var dto = _mapper.Map<CommentDto>(c);
+                dto.AnswerUUID = c.Answer?.UUID;
+                dto.ReplyToUUID = c.ReplyTo?.UUID;
+                dto.ReplyToUser = c.ReplyTo?.User.Username;
+                commentDtos.Add(dto);
+            });
+            return commentDtos;
+        }
+
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsByUser(string id)
         {
             var comments = await _context.Comments.AsNoTracking().Where(c => c.User.UUID == id).Include(c => c.User).ToListAsync();

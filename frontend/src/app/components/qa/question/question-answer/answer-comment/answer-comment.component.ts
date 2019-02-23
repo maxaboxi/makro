@@ -73,7 +73,8 @@ export class AnswerCommentComponent implements OnInit {
             replyToUUID: this.comment.uuid,
             username: this.user.username,
             userId: this.user.uuid,
-            body: this.commentText
+            body: this.commentText,
+            answerUUID: this.answer.uuid
           };
           this.qaService.postNewComment(comment).subscribe(
             res => {

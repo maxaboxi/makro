@@ -85,8 +85,28 @@ export class QaService {
     return this.http.get<Answer[]>(url, { headers: headers });
   }
 
-  getAllUserCommentsByUser() {
+  getAllCommentsByUser() {
     const url = `${this.baseUrlComment}/user`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Comment[]>(url, { headers: headers });
+  }
+
+  getAllCommentsForAnswer(uuid: string) {
+    const url = `${this.baseUrlComment}/answer/${uuid}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Comment[]>(url, { headers: headers });
+  }
+
+  getAllCommentsForArticle(uuid: string) {
+    const url = `${this.baseUrlComment}/article/${uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

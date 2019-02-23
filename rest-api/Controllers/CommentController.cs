@@ -16,6 +16,18 @@ namespace Makro.Controllers
             _commentService = commentService;
         }
 
+        [HttpGet("answer/{id}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForAnswer(string id)
+        {
+            return await _commentService.GetAllCommentsForAnswer(id);
+        }
+
+        [HttpGet("article/{id}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForArticle(string id)
+        {
+            return await _commentService.GetAllCommentsForArticle(id);
+        }
+
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsByUser()
         {
