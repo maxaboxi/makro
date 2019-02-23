@@ -8,6 +8,7 @@ export interface Comment {
   replyToUUID?: string;
   replyToUser?: string;
   totalPoints?: number;
+  userLike?: number;
   commentReplyCount?: number;
   createdAt?: Date;
   updatedAt?: Date;

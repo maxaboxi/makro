@@ -23,7 +23,7 @@ namespace Makro.Services
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForAnswer(string id)
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForAnswer(string id, string userId)
         {
             var comments = await _context.Comments.AsNoTracking().Where(c => c.Answer.UUID == id)
                 .Include(c => c.User)
@@ -34,15 +34,25 @@ namespace Makro.Services
             List<CommentDto> commentDtos = new List<CommentDto>();
             comments.ForEach(c => {
                 var dto = _mapper.Map<CommentDto>(c);
+                var likes = _context.Likes.AsNoTracking().Where(l => l.Comment == c).Include(l => l.User).ToList();
+                var totalPoints = 0;
+                likes.ForEach(like => {
+                    totalPoints += like.Value;
+                    if (like.User.UUID == userId)
+                    {
+                        dto.UserLike = like.Value;
+                    }
+                });
                 dto.AnswerUUID = c.Answer?.UUID;
                 dto.ReplyToUUID = c.ReplyTo?.UUID;
                 dto.ReplyToUser = c.ReplyTo?.User.Username;
+                dto.TotalPoints = totalPoints;
                 commentDtos.Add(dto);
             });
             return commentDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForArticle(string id)
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForArticle(string id, string userId)
         {
             var comments = await _context.Comments.AsNoTracking().Where(c => c.Article.UUID == id)
                 .Include(c => c.User)
@@ -53,9 +63,19 @@ namespace Makro.Services
             List<CommentDto> commentDtos = new List<CommentDto>();
             comments.ForEach(c => {
                 var dto = _mapper.Map<CommentDto>(c);
+                var likes = _context.Likes.AsNoTracking().Where(l => l.Comment == c).Include(l => l.User).ToList();
+                var totalPoints = 0;
+                likes.ForEach(like => {
+                    totalPoints += like.Value;
+                    if (like.User.UUID == userId)
+                    {
+                        dto.UserLike = like.Value;
+                    }
+                });
                 dto.AnswerUUID = c.Answer?.UUID;
                 dto.ReplyToUUID = c.ReplyTo?.UUID;
                 dto.ReplyToUser = c.ReplyTo?.User.Username;
+                dto.TotalPoints = totalPoints;
                 commentDtos.Add(dto);
             });
             return commentDtos;

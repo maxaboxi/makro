@@ -41,11 +41,6 @@ namespace Makro.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateLike(string id, [FromBody]LikeDto likeDto)
         {
-            if (id != likeDto.UUID)
-            {
-                return BadRequest();
-            }
-
             if (likeDto.Value == 0 || likeDto.Value > 1 || likeDto.Value < -1)
             {
                 return BadRequest();

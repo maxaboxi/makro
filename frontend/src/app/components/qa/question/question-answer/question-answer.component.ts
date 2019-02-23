@@ -9,6 +9,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { Comment } from '../../../../models/Comment';
 import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from '../../../../services/connection.service';
 
 @Component({
   selector: 'app-question-answer',
@@ -24,6 +25,7 @@ export class QuestionAnswerComponent implements OnInit {
   pointsTotal = 0;
   userLike = 0;
   loading = false;
+  online;
 
   @Input()
   set user(user) {
@@ -57,11 +59,14 @@ export class QuestionAnswerComponent implements OnInit {
     private likeService: LikeService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
     this.pointsTotal = this.answer.totalPoints;
+    this.userLike = this.answer.userLike;
+    this.connectionService.monitor().subscribe(res => (this.online = res));
   }
 
   openCommentModal(content) {
@@ -106,48 +111,23 @@ export class QuestionAnswerComponent implements OnInit {
     let like: Like = {
       userUUID: this.user.uuid,
       answerUUID: this.answer.uuid,
-      value: 0
+      value: c
     };
-    if (!this.userLike) {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
+    if (this.userLike === 0) {
+      this.likeService.likePost(like).subscribe(res => {
+        if (res['success']) {
+          this.answer.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     } else {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += 2;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += -2;
-          }
-        });
-      }
+      this.likeService.replacePreviousLike(like, like.answerUUID).subscribe(res => {
+        if (res['success']) {
+          this.answer.totalPoints += like.value;
+          this.answer.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     }
   }
 

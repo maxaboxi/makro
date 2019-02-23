@@ -23,7 +23,7 @@ namespace Makro.Services
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestions()
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestions(string userId)
         {
             List<QuestionDto> questionDtos = new List<QuestionDto>();
 
@@ -38,8 +38,14 @@ namespace Makro.Services
                 q.Answers.ToList().ForEach(a => {
                     var answerDto = _mapper.Map<AnswerDto>(a);
                     var totalPoints = 0;
-                    var likes = _context.Likes.Where(l => l.Answer == a).ToList();
-                    likes.ForEach(like => totalPoints += like.Value);
+                    var likes = _context.Likes.AsNoTracking().Where(l => l.Answer == a).Include(l => l.User).ToList();
+                    likes.ForEach(like => {
+                        totalPoints += like.Value;
+                        if (like.User.UUID == userId)
+                        {
+                            answerDto.UserLike = like.Value;
+                        }
+                    });
                     answerDto.TotalPoints = totalPoints;
                     answerDtos.Add(answerDto);
                      });
@@ -50,7 +56,7 @@ namespace Makro.Services
             return questionDtos;
         }
 
-        public async Task<ActionResult<QuestionDto>> GetOneQuestion(string id)
+        public async Task<ActionResult<QuestionDto>> GetOneQuestion(string id, string userId)
         {
             var question = await _context.Questions.Where(q => q.UUID == id).Include(q => q.User)
                 .Include(q => q.Answers)
@@ -70,14 +76,26 @@ namespace Makro.Services
             {
                 var answerDto = _mapper.Map<AnswerDto>(a);
                 var totalPoints = 0;
-                var likes = _context.Likes.Where(l => l.Answer == a).ToList();
-                likes.ForEach(like => totalPoints += like.Value);
+                var likes = _context.Likes.Where(l => l.Answer == a).Include(l => l.User).ToList();
+                likes.ForEach(like => {
+                    totalPoints += like.Value;
+                    if (like.User.UUID == userId)
+                    {
+                        answerDto.UserLike = like.Value;
+                    }
+                });
                 List<CommentDto> commentDtos = new List<CommentDto>();
                 a.Comments.ToList().ForEach(c => {
                     var commentDto = _mapper.Map<CommentDto>(c);
                     var totalPointsComment = 0;
-                    var likesComment = _context.Likes.Where(l => l.Comment == c).ToList();
-                    likesComment.ForEach(like => totalPointsComment += like.Value);
+                    var likesComment = _context.Likes.Where(l => l.Comment == c).Include(l => l.User).ToList();
+                    likesComment.ForEach(like => {
+                        totalPointsComment += like.Value;
+                        if (like.User.UUID == userId)
+                        {
+                            commentDto.UserLike = like.Value;
+                        }
+                    });
                     commentDto.CommentReplyCount = _context.Comments.Where(com => com.ReplyTo == c).Count();
                     commentDto.TotalPoints = totalPointsComment;
                     commentDto.ReplyToUUID = c.ReplyTo?.UUID;

@@ -1,10 +1,10 @@
 export interface Like {
-  uuid?: String;
-  userUUID: String;
+  uuid?: string;
+  userUUID: string;
   value: number;
-  articleUUID?: String;
-  answerUUID?: String;
-  commentUUID?: String;
-  sharedMealUUID?: String;
-  likedContent?: String;
+  articleUUID?: string;
+  answerUUID?: string;
+  commentUUID?: string;
+  sharedMealUUID?: string;
+  likedContent?: string;
 }

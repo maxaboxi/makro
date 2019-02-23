@@ -7,6 +7,7 @@ export interface Answer {
   userId: string;
   answerBody: string;
   totalPoints?: number;
+  userLike?: number;
   comments?: Comment[];
   updatedAt?: Date;
   createdAt?: Date;

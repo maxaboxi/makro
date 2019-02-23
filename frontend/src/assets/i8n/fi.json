@@ -282,5 +282,6 @@
   "EDITED_BY": "Muokkaaja",
   "TRANSLATION": "Käännös",
   "HELP_DEVELOPMENT_NAV": "Osallistu kehitykseen",
-  "REASON_REQUIRED": "Syy vaaditaan"
+  "REASON_REQUIRED": "Syy vaaditaan",
+  "REPLY_COUNT": "Vastausten lukumäärä"
 }

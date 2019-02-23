@@ -19,13 +19,13 @@ namespace Makro.Controllers
         [HttpGet("answer/{id}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForAnswer(string id)
         {
-            return await _commentService.GetAllCommentsForAnswer(id);
+            return await _commentService.GetAllCommentsForAnswer(id, HttpContext.User.Identity.Name);
         }
 
         [HttpGet("article/{id}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllCommentsForArticle(string id)
         {
-            return await _commentService.GetAllCommentsForArticle(id);
+            return await _commentService.GetAllCommentsForArticle(id, HttpContext.User.Identity.Name);
         }
 
         [HttpGet("user")]

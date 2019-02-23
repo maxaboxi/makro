@@ -13,6 +13,7 @@ namespace Makro.DTO
         public string ReplyToUser { get; set; }
         public int CommentReplyCount { get; set; }
         public int TotalPoints { get; set; }
+        public int UserLike { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

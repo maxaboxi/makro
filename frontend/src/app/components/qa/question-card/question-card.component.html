@@ -2,10 +2,9 @@
 <div *ngIf="!loading" class="card mt-3">
   <div class="card-body">
     <h5 class="card-title text-muted answer-button" (click)="openQuestion(question.uuid)"> {{ question.questionBody }} </h5>
+    <p class="text-muted answer-text"> {{ 'REPLY_COUNT' | translate }}: {{ question.answers.length }} </p>
     <ng-container *ngIf="question.answers.length > 0">
-      <ng-container *ngFor="let answer of question.answers">
-        <app-question-answer [user]="user" [answer]="answer" [showComment]="false"></app-question-answer>
-      </ng-container>
+      <app-question-answer [user]="user" [answer]="question.answers[0]" [showComment]="false"></app-question-answer>
     </ng-container>
     <span
       class="answer-button float-right text-muted"

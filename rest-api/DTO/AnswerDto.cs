@@ -11,6 +11,7 @@ namespace Makro.DTO
         public List<CommentDto> Comments { get; set; }
         public string AnswerBody { get; set; }
         public int TotalPoints { get; set; }
+        public int UserLike { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

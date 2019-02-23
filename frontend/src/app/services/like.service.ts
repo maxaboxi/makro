@@ -12,7 +12,7 @@ export class LikeService {
   constructor(private http: HttpClient) {}
 
   likePost(like: Like) {
-    const url = `${this.baseUrl}/likepost`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -21,33 +21,18 @@ export class LikeService {
     return this.http.post(url, like, { headers: headers });
   }
 
-  replacePreviousLike(like: Like) {
-    const url = `${this.baseUrl}/replacepreviouslike`;
+  replacePreviousLike(like: Like, id: string) {
+    const url = `${this.baseUrl}/update/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, like, { headers: headers });
+    return this.http.put(url, like, { headers: headers });
   }
 
-  getUserLikeWithId(userId, postId) {
-    const url = `${this.baseUrl}/getuserlikewithpostid`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const data = {
-      userId: userId,
-      postId: postId
-    };
-
-    return this.http.post<Like>(url, data, { headers: headers });
-  }
-
-  getAllUserLikesWithId(id) {
-    const url = `${this.baseUrl}/getalllikeswithuserid/${id}`;
+  getAllUserLikesWithId() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -57,7 +42,7 @@ export class LikeService {
   }
 
   getAllLikesWithPostId(id) {
-    const url = `${this.baseUrl}/getalllikeswithpostid/${id}`;
+    const url = `${this.baseUrl}/all/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
