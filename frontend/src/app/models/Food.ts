@@ -1,13 +1,13 @@
 export interface Food {
-  uuid?: String;
-  name: String;
+  uuid?: string;
+  name: string;
   energy: number;
   carbs: number;
   protein: number;
   fat: number;
   fiber?: number;
   sugar?: number;
-  username?: String;
+  username?: string;
   amount?: number;
   servingSize?: number;
   packageSize?: number;

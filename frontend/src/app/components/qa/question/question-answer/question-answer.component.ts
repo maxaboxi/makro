@@ -21,8 +21,6 @@ export class QuestionAnswerComponent implements OnInit {
   private _answer = new BehaviorSubject<Answer>(null);
   private _showComment = new BehaviorSubject<boolean>(true);
   commentText = '';
-  answerLikes: Like[];
-  pointsTotal = 0;
   userLike = 0;
   loading = false;
   online;
@@ -64,7 +62,6 @@ export class QuestionAnswerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pointsTotal = this.answer.totalPoints;
     this.userLike = this.answer.userLike;
     this.connectionService.monitor().subscribe(res => (this.online = res));
   }

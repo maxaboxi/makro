@@ -1,12 +1,12 @@
 export interface Article {
-  uuid?: String;
-  username?: String;
-  title: String;
-  origTitle?: String;
-  body: String;
-  origBody?: String;
-  headerImgId?: String;
-  tags: String[];
+  uuid?: string;
+  username?: string;
+  title: string;
+  origTitle?: string;
+  body: string;
+  origBody?: string;
+  headerImgId?: string;
+  tags: string[];
   pointsTotal?: Number;
   createdAt?: Date;
   updatedAt?: Date;

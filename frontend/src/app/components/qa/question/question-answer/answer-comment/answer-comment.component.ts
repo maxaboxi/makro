@@ -21,8 +21,6 @@ export class AnswerCommentComponent implements OnInit {
   private _user = new BehaviorSubject<User>(null);
   private _answer = new BehaviorSubject<Answer>(null);
   commentText = '';
-  commentLikes: Like[];
-  pointsTotal = 0;
   userLike = 0;
   likesFetched = false;
   online;

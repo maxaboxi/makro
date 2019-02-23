@@ -1,8 +1,8 @@
 import { Meal } from './Meal';
 
 export interface Day {
-  _id?: String;
-  name: String;
+  _id?: string;
+  name: string;
   meals: Meal[];
-  username: String;
+  username: string;
 }

@@ -26,7 +26,6 @@ export class SharedMealComponent implements OnInit {
   addToMeal = '';
   showRecipe = false;
   userLike = 0;
-  pointsTotal = 0;
   votesFetched = false;
   loading = true;
   online;
@@ -67,7 +66,6 @@ export class SharedMealComponent implements OnInit {
       this.carbTotal += f.carbs;
       this.fatTotal += f.fat;
     });
-    this.pointsTotal = this.meal.totalPoints;
     this.loading = false;
   }
 
@@ -106,48 +104,23 @@ export class SharedMealComponent implements OnInit {
     let like: Like = {
       userUUID: this.user.uuid,
       sharedMealUUID: this.meal.uuid,
-      value: 0
+      value: c
     };
-    if (!this.userLike) {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
+    if (this.userLike === 0) {
+      this.likeService.likePost(like).subscribe(res => {
+        if (res['success']) {
+          this.meal.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     } else {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += 2;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += -2;
-          }
-        });
-      }
+      this.likeService.replacePreviousLike(like, like.sharedMealUUID).subscribe(res => {
+        if (res['success']) {
+          this.meal.totalPoints += like.value;
+          this.meal.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     }
   }
 }
