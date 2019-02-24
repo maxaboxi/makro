@@ -111,15 +111,18 @@ export class AuthService {
   getUserInfo() {
     if (!this.user.getValue()) {
       this.setDefaultUserInfo();
-      if(localStorage.getItem('token')) {
-        this.fetchUserInfo().subscribe(user => {
-          this.user.next(user);
-          this.isLoggedIn.next(true);
-        }, (error: Error)=> {
-          this.isLoggedIn.next(false);
-          localStorage.removeItem('token');
-          this.router.navigate(['/login']);
-        });
+      if (localStorage.getItem('token')) {
+        this.fetchUserInfo().subscribe(
+          user => {
+            this.user.next(user);
+            this.isLoggedIn.next(true);
+          },
+          (error: Error) => {
+            this.isLoggedIn.next(false);
+            localStorage.removeItem('token');
+            this.router.navigate(['/login']);
+          }
+        );
       }
     }
     return this.user.getValue();
@@ -141,9 +144,9 @@ export class AuthService {
 
     this.user.getValue().showTargets = showTargets;
 
-    const url = `${this.baseUrl}/updateshowtargets`;
+    const url = `${this.baseUrl}/targets`;
 
-    this.http.post(url, { showTargets: showTargets }, { headers: headers }).subscribe();
+    this.http.post(url, { show: showTargets }, { headers: headers }).subscribe();
   }
 
   updateLanguage(lang: string) {
@@ -153,9 +156,9 @@ export class AuthService {
 
     this.user.getValue().lang = lang;
 
-    const url = `${this.baseUrl}/updatelanguage`;
+    const url = `${this.baseUrl}/language/${lang}`;
 
-    this.http.post(url, { lang: lang }, { headers: headers }).subscribe(res => {
+    this.http.post(url, { headers: headers }).subscribe(res => {
       if (res['success']) {
         localStorage.setItem('makro_lang', lang);
       }
@@ -190,15 +193,6 @@ export class AuthService {
     const url = `${this.baseUrl}/admin`;
 
     this.http.get<boolean>(url, { headers: headers }).subscribe(res => this.isAdmin.next(res['success']), (error: Error) => {});
-  }
-
-  validateToken() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/validatetoken`;
-
-    return this.http.post(url, { headers: headers });
   }
 
   getToken(): string {

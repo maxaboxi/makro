@@ -92,15 +92,10 @@ namespace Makro.Controllers
             return user;
         }
 
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUserInformation(string id, UserDto userDto)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUserInformation(UserDto userDto)
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            if (id != userDto.UUID)
+            if (HttpContext.User.Identity.Name != userDto.UUID)
             {
                 return BadRequest();
             }
@@ -125,6 +120,23 @@ namespace Makro.Controllers
         public async Task<ResultDto> CheckAdmin()
         {
             return await _userService.CheckAdminRights(HttpContext.User.Identity.Name);
+        }
+
+        [HttpPost("targets")]
+        public async Task<IActionResult> UpdateUserShowTargets(bool show)
+        {
+            return Ok(await _userService.UpdateUserShowTargets(HttpContext.User.Identity.Name, show));
+        }
+
+        [HttpPost("language/{lang}")]
+        public async Task<IActionResult> UpdateUserLang(string lang)
+        {
+            if (lang != "fi" && lang != "en")
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _userService.UpdateUserLang(HttpContext.User.Identity.Name, lang));
         }
     }
 }

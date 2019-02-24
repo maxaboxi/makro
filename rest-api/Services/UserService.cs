@@ -135,6 +135,16 @@ namespace Makro.Services
             return new ResultDto(true, "Information updated succesfully");
         }
 
+        public async Task<ResultDto> UpdateUserLang(string id, string lang)
+        {
+            var user = _context.Users.Where(u => u.UUID == id).FirstOrDefault();
+            user.Lang = lang;
+            user.UpdatedAt = DateTime.Now;
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, "Information updated succesfully");
+        }
+
         public async Task<ResultDto> DeleteAccount(string id)
         {
             var user = await _context.Users.Where(u => u.UUID == id).FirstOrDefaultAsync();
