@@ -119,9 +119,26 @@ namespace Makro.Services
             return new ResultDto(true, "Article added succesfully");
         }
 
-        public async Task<ResultDto> UpdateArticle(Article article)
+        public async Task<ResultDto> UpdateArticle(ArticleDto articleDto, string userId)
         {
+            var article = await _context.Articles.Where(a => a.User.UUID == userId && a.UUID == articleDto.UUID).FirstOrDefaultAsync();
+
+            if (article == null)
+            {
+                return new ResultDto(false, "Article not found");
+            }
+
             _context.Entry(article).State = EntityState.Modified;
+            article.Body = articleDto.Body;
+            article.Title = articleDto.Title;
+            article.UpdatedAt = DateTime.Now;
+            List<ArticleImage> articleImages = new List<ArticleImage>();
+            articleDto.Images.ForEach(img => {
+                var articleImage = _mapper.Map<ArticleImage>(img);
+                articleImage.Article = article;
+                articleImages.Add(articleImage);
+            });
+            article.Images = articleImages;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article updated succesfully");
         }

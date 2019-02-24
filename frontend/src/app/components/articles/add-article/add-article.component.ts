@@ -53,21 +53,11 @@ export class AddArticleComponent implements OnInit {
       this.editing = true;
       this.articleService.getArticleById(this.queryParams['uuid']).subscribe(
         article => {
-          this.article.uuid = this.queryParams['uuid'];
-          this.article.title = article[0].title;
-          this.article.origTitle = article[0].title;
-          this.article.body = article[0].body;
-          this.article.origBody = article[0].body;
-          this.article.headerImgId = article[0].headerImgId;
-          this.article.tags = article[0].tags;
-
-          if (this.article.headerImgId) {
-            this.articleService.getImageForArticle(this.article.headerImgId).subscribe(res => {
-              if (res) {
-                this.createImageFromBlob(res);
-              }
-            });
-          }
+          this.article.uuid = article.uuid;
+          this.article.title = article.title;
+          this.article.body = article.body;
+          this.article.images = article.images;
+          this.article.tags = article.tags;
         },
         (error: Error) => {
           this.router.navigate(['/articles']);
@@ -100,44 +90,9 @@ export class AddArticleComponent implements OnInit {
       type: this.imageBlob.type,
       lastModified: Date.now()
     });
-
-    this.articleService.addImageToArticle(file).subscribe(response => {
-      this.uploadingImage = false;
-      if (response['success']) {
-        if (this.image) {
-          this.oldImages.push(this.image);
-        }
-        this.image = response['file'];
-        this.showCropper = false;
-        this.fileError = '';
-      }
-    });
-
-    // this.articleService.scanFile(file).subscribe(res => {
-    //   if (res['success'] && res['clean']) {
-    //     this.articleService.addImageToArticle(file).subscribe(response => {
-    //       this.uploadingImage = false;
-    //       if (response['success']) {
-    //         if (this.image) {
-    //           this.oldImages.push(this.image);
-    //         }
-    //         this.image = response['file'];
-    //         this.showCropper = false;
-    //         this.fileError = '';
-    //       }
-    //     });
-    //   } else if (res['success'] && !res['clean']) {
-    //     this.fileError = 'Kuva ei läpäissyt virustarkistusta.';
-    //   } else {
-    //     this.fileError = 'Virhe kuvaa tallennettaessa.';
-    //   }
-    // });
   }
 
   addArticle() {
-    if (this.image) {
-      this.article.headerImgId = this.image;
-    }
     this.article.username = this.user.username;
     if (!this.editing) {
       this.articleService.addArticle(this.article).subscribe(
@@ -177,10 +132,6 @@ export class AddArticleComponent implements OnInit {
           });
         }
       );
-    }
-
-    if (this.oldImages.length > 0) {
-      this.articleService.deleteArticleImages(this.oldImages).subscribe(() => (this.oldImages = []));
     }
   }
 

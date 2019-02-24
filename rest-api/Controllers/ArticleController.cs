@@ -44,14 +44,14 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateArticle(int id, Article article)
+        public async Task<IActionResult> UpdateArticle(string id, [FromBody]ArticleDto articleDto)
         {
-            if (id != article.Id)
+            if (id != articleDto.UUID)
             {
                 return BadRequest();
             }
 
-            return Ok(await _articleService.UpdateArticle(article));
+            return Ok(await _articleService.UpdateArticle(articleDto, HttpContext.User.Identity.Name));
         }
 
         [HttpDelete("delete/{id}")]

@@ -8,7 +8,7 @@ export interface Article {
   body: string;
   tags: string[];
   images?: File[];
-  comments: Comment[];
+  comments?: Comment[];
   totalPoints?: number;
   userLike?: number;
   createdAt?: Date;

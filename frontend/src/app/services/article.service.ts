@@ -63,23 +63,14 @@ export class ArticleService {
     return this.http.post(url, article, { headers: headers });
   }
 
-  addImageToArticle(image: File) {
-    const url = `${this.baseUrl}/addimagetoarticle`;
-
-    const formData = new FormData();
-    formData.append('img', image);
-
-    return this.http.post(url, formData, { headers: new HttpHeaders() });
-  }
-
   editArticle(article: Article) {
-    const url = `${this.baseUrl}/editarticle`;
+    const url = `${this.baseUrl}/update/${article.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, article, { headers: headers });
+    return this.http.put(url, article, { headers: headers });
   }
 
   deleteArticle(id) {
@@ -102,21 +93,6 @@ export class ArticleService {
     const options = {
       headers: headers,
       body: articles
-    };
-
-    return this.http.delete(url, options);
-  }
-
-  deleteArticleImages(images) {
-    const url = `${this.baseUrl}/removearticleimages`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const options = {
-      headers: headers,
-      body: images
     };
 
     return this.http.delete(url, options);
