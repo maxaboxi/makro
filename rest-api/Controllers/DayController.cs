@@ -34,6 +34,19 @@ namespace Makro.Controllers
             return Ok(await _dayService.AddNewDay(dayDto, HttpContext.User.Identity.Name));
         }
 
+        [HttpPost("share")]
+        public async Task<IActionResult> ShareDay([FromBody]DayDto dayDto)
+        {
+            return Ok(await _dayService.ShareDay(dayDto, HttpContext.User.Identity.Name));
+        }
+
+        [AllowAnonymous]
+        [HttpGet("shared/{dayId}")]
+        public async Task<ActionResult<IEnumerable<MealDto>>> GetSharedDay(string dayId)
+        {
+            return await _dayService.GetSharedDay(dayId);
+        }
+
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateDay(string id, [FromBody]DayDto dayDto)
         {

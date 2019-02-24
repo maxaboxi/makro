@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class DayService {
-  private baseUrl = `${environment.baseUrl}/api/v1`;
+  private baseUrl = `${environment.baseUrl}/day`;
 
   constructor(private http: HttpClient) {}
 
@@ -67,18 +67,18 @@ export class DayService {
     return this.http.post(url, days, { headers: headers });
   }
 
-  saveDayForSharing(meals) {
-    const url = `${this.baseUrl}/shareddays/shareday`;
+  shareDay(day: Day) {
+    const url = `${this.baseUrl}/share`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, meals, { headers: headers });
+    return this.http.post(url, day, { headers: headers });
   }
 
   getSharedDay(id) {
-    const url = `${this.baseUrl}/shareddays/getsharedday/${id}`;
+    const url = `${this.baseUrl}/shared/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

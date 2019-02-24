@@ -49,11 +49,14 @@ export class DashboardComponent implements OnInit {
       this.user = this.auth.getUserInfo();
       this.setFoods();
       if (Object.keys(this.queryParams).length > 0) {
-        this.dayService.getSharedDay(this.queryParams['id']).subscribe(res => {
-          if (res !== null) {
-            localStorage.setItem('meals', JSON.stringify(res['meals']));
-          }
-        });
+        this.dayService.getSharedDay(this.queryParams['id']).subscribe(
+          res => {
+            if (res !== null) {
+              localStorage.setItem('meals', JSON.stringify(res));
+            }
+          },
+          (error: Error) => console.log(error)
+        );
       }
     });
   }

@@ -70,6 +70,40 @@ namespace Makro.Services
             return dayDto;
         }
 
+        public async Task<ActionResult<IEnumerable<MealDto>>> GetSharedDay(string dayId)
+        {
+            var day = await _context.SharedDays.AsNoTracking()
+                .Where(d => d.UUID == dayId)
+                .Include(d => d.User)
+                .Include(d => d.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.User)
+                .FirstOrDefaultAsync();
+
+            if (day == null)
+            {
+                return null;
+            }
+
+            var mealDtos = new List<MealDto>();
+
+            day.Meals.ToList().ForEach(m => {
+                m.User = day.User;
+                var mealDto = _mapper.Map<MealDto>(m);
+                var foodDtos = new List<FoodDto>();
+                m.MealFoods.ToList().ForEach(mf => {
+                    var foodDto = _mapper.Map<FoodDto>(mf.Food);
+                    foodDto.Amount = mf.FoodAmount;
+                    foodDtos.Add(foodDto);
+                });
+                mealDto.Foods = foodDtos;
+                mealDtos.Add(mealDto);
+            });
+
+            return mealDtos;
+        }
+
         public async Task<ResultDto> AddNewDay(DayDto dayDto, string userId)
         {
             var day = _mapper.Map<Day>(dayDto);
@@ -82,6 +116,20 @@ namespace Makro.Services
             _context.Add(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day added succesfully");
+        }
+
+        public async Task<ResultDto> ShareDay(DayDto dayDto, string userId)
+        {
+            var sharedDay = _mapper.Map<SharedDay>(dayDto);
+            sharedDay.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            sharedDay.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
+            sharedDay.UUID = Guid.NewGuid().ToString();
+            sharedDay.CreatedAt = DateTime.Now;
+            sharedDay.UpdatedAt = DateTime.Now;
+
+            _context.Add(sharedDay);
+            await _context.SaveChangesAsync();
+            return new ResultDto(true, sharedDay.UUID);
         }
 
         public async Task<ResultDto> UpdateDay(DayDto dayDto, string userId)

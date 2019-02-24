@@ -24,9 +24,9 @@ export class ToolbarComponent implements OnInit {
   showTargets;
   _user = new BehaviorSubject<User>(null);
   day: Day = {
-    username: '',
+    userId: '',
     name: '',
-    meals: null
+    allMeals: null
   };
   dayName = '';
   food: Food = {
@@ -148,8 +148,8 @@ export class ToolbarComponent implements OnInit {
         if (result === 'save') {
           const newDay: Day = {
             name: this.day.name,
-            meals: meals,
-            username: this.user.username
+            allMeals: meals,
+            userId: this.user.uuid
           };
           this.dayService.saveNewDay(newDay).subscribe(
             success => {
@@ -240,14 +240,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   generateLink(content) {
-    const data = {
-      user: this.user.uuid,
-      meals: this.addedFoodsService.getMeals()
+    const day: Day = {
+      userId: this.user.uuid,
+      allMeals: this.addedFoodsService.getMeals()
     };
-    this.dayService.saveDayForSharing(data).subscribe(
+    this.dayService.shareDay(day).subscribe(
       res => {
-        if (res['id']) {
-          this.shareLink = `https://makro.diet/?id=${res['id']}`;
+        if (res['success']) {
+          this.shareLink = `https://makro.diet/?id=${res['message']}`;
           this.openLinkModal(content);
           this.auth.user.unsubscribe();
         }

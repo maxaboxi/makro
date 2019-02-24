@@ -87,17 +87,9 @@ export class AddedFoodsService {
       this.proteinTarget = user.weight * 2;
       this.fatTarget = user.weight;
       if (!user.userAddedExpenditure) {
-        this.carbTarget =
-          (user.dailyExpenditure -
-            this.proteinTarget * 4 -
-            this.fatTarget * 9) /
-          4;
+        this.carbTarget = (user.dailyExpenditure - this.proteinTarget * 4 - this.fatTarget * 9) / 4;
       } else {
-        this.carbTarget =
-          (user.userAddedExpenditure -
-            this.proteinTarget * 4 -
-            this.fatTarget * 4) /
-          4;
+        this.carbTarget = (user.userAddedExpenditure - this.proteinTarget * 4 - this.fatTarget * 4) / 4;
       }
     } else if (!user.weight && user.userAddedExpenditure) {
       this.proteinTarget = (user.userAddedExpenditure * 0.3) / 4;
@@ -199,18 +191,12 @@ export class AddedFoodsService {
     for (let i = 0; i < meals[componentIndex].foods.length; i++) {
       // Check if food has ID since days saved in previous version don't include food IDs
       if (food.uuid) {
-        if (
-          meals[componentIndex].foods[i].uuid === food.uuid &&
-          meals[componentIndex].foods[i].amount === food.amount
-        ) {
+        if (meals[componentIndex].foods[i].uuid === food.uuid && meals[componentIndex].foods[i].amount === food.amount) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }
       } else {
-        if (
-          meals[componentIndex].foods[i].name === food.name &&
-          meals[componentIndex].foods[i].amount === food.amount
-        ) {
+        if (meals[componentIndex].foods[i].name === food.name && meals[componentIndex].foods[i].amount === food.amount) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }
