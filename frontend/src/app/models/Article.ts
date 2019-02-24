@@ -1,4 +1,4 @@
-import { Comment } from '@angular/compiler';
+import { Comment } from './Comment';
 
 export interface Article {
   uuid?: string;

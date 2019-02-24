@@ -44,7 +44,7 @@ export class ArticleService {
   }
 
   getArticleById(id) {
-    const url = `${this.baseUrl}/getarticle/${id}`;
+    const url = `${this.baseUrl}/single/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -120,25 +120,5 @@ export class ArticleService {
     };
 
     return this.http.delete(url, options);
-  }
-
-  postNewComment(comment: Comment) {
-    const url = `${this.baseUrl}/addcomment`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, comment, { headers: headers });
-  }
-
-  getCommentsToArticleWithId(id) {
-    const url = `${this.baseUrl}/getallcomments/${id}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Comment[]>(url, { headers: headers });
   }
 }

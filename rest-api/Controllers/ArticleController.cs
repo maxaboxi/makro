@@ -24,6 +24,13 @@ namespace Makro.Controllers
             return await _articleService.GetAllArticles(HttpContext.User.Identity.Name);
         }
 
+        [AllowAnonymous]
+        [HttpGet("single/{id}")]
+        public async Task<ActionResult<ArticleDto>> GetAllArticles(string id)
+        {
+            return await _articleService.GetOneArticle(id, HttpContext.User.Identity.Name);
+        }
+
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser()
         {

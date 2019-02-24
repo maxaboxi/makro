@@ -2,13 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Comment } from '../../../../models/Comment';
 import { User } from '../../../../models/User';
-import { ArticleService } from '../../../../services/article.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { LikeService } from '../../../../services/like.service';
 import { Article } from '../../../../models/Article';
 import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
+import { QaService } from '../../../../services/qa.service';
+import { ConnectionService } from '../../../../services/connection.service';
 
 @Component({
   selector: 'app-article-comment',
@@ -22,6 +23,7 @@ export class ArticleCommentComponent implements OnInit {
   commentText = '';
   userLike = 0;
   pointsTotal = 0;
+  online;
 
   @Input()
   set comment(c) {
@@ -54,29 +56,30 @@ export class ArticleCommentComponent implements OnInit {
   commented = new EventEmitter();
 
   constructor(
-    private articleService: ArticleService,
+    private qaService: QaService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private likeService: LikeService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private connectionService: ConnectionService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.connectionService.monitor().subscribe(res => (this.online = res));
+    this.userLike = this.comment.userLike;
+  }
 
   openCommentModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.article.uuid,
-            articleId: this.article.uuid,
             username: this.user.username,
             userId: this.user.uuid,
-            comment: this.commentText,
-            origPost: this.comment.comment,
-            replyTo: this.comment.username
+            body: this.commentText,
+            replyToUUID: this.comment.username
           };
-          this.articleService.postNewComment(comment).subscribe(
+          this.qaService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
                 this.commented.emit('commented');
@@ -108,48 +111,23 @@ export class ArticleCommentComponent implements OnInit {
     let like: Like = {
       userUUID: this.user.uuid,
       commentUUID: this.comment.uuid,
-      value: 0
+      value: c
     };
-    if (!this.userLike) {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
+    if (this.userLike === 0) {
+      this.likeService.likePost(like).subscribe(res => {
+        if (res['success']) {
+          this.comment.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     } else {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += 2;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += -2;
-          }
-        });
-      }
+      this.likeService.replacePreviousLike(like, like.sharedMealUUID).subscribe(res => {
+        if (res['success']) {
+          this.comment.totalPoints += like.value;
+          this.comment.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     }
   }
 }

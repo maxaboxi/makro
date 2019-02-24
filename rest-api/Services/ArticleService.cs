@@ -53,6 +53,59 @@ namespace Makro.Services
             return articleDtos;
         }
 
+        public async Task<ActionResult<ArticleDto>> GetOneArticle(string id, string userId)
+        {
+            var article = await _context.Articles.AsNoTracking()
+                .Where(a => a.UUID == id)
+                .Include(a => a.User)
+                .Include(a => a.Images)
+                .Include(a => a.Comments)
+                    .ThenInclude(c => c.User)
+                .Include(a => a.Comments)
+                    .ThenInclude(c => c.ReplyTo)
+                .FirstOrDefaultAsync();
+
+            var totalPoints = 0;
+            var articleDto = _mapper.Map<ArticleDto>(article);
+            var likes = _context.Likes.AsNoTracking().Where(l => l.Article == article).Include(l => l.User).ToList();
+            likes.ForEach(like => {
+                totalPoints += like.Value;
+                if (userId != null && like.User.UUID == userId)
+                {
+                    articleDto.UserLike = like.Value;
+                }
+            });
+            articleDto.TotalPoints = totalPoints;
+
+            List<ArticleImageDto> images = new List<ArticleImageDto>();
+            article.Images.ToList().ForEach(img => images.Add(_mapper.Map<ArticleImageDto>(img)));
+            articleDto.Images = images;
+
+            List<CommentDto> commentDtos = new List<CommentDto>();
+            article.Comments.ToList().ForEach(c =>
+            {
+                var commentDto = _mapper.Map<CommentDto>(c);
+                var totalPointsComment = 0;
+                var likesComment = _context.Likes.AsNoTracking().Where(l => l.Comment == c).Include(l => l.User).ToList();
+                likesComment.ForEach(like => {
+                    totalPointsComment += like.Value;
+                    if (userId != null && like.User.UUID == userId)
+                    {
+                        commentDto.UserLike = like.Value;
+                    }
+                });
+                commentDto.CommentReplyCount = _context.Comments.Where(com => com.ReplyTo == c).Count();
+                commentDto.TotalPoints = totalPointsComment;
+                commentDto.ReplyToUUID = c.ReplyTo?.UUID;
+                commentDto.ReplyToUser = c.ReplyTo?.User.Username;
+                commentDtos.Add(commentDto);
+            });
+
+            articleDto.Comments = commentDtos;
+
+            return articleDto;
+        }
+
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)
         {
             return await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).ToListAsync();
