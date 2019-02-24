@@ -12,7 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Comment } from '../../../models/Comment';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
-import { QaService } from '../../../services/qa.service';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-article',
@@ -63,7 +63,7 @@ export class ArticleComponent implements OnInit {
     private route: ActivatedRoute,
     private translator: TranslateService,
     private connectionService: ConnectionService,
-    private qaService: QaService
+    private commentService: CommentService
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -116,7 +116,7 @@ export class ArticleComponent implements OnInit {
   }
 
   fetchComments() {
-    this.qaService.getAllCommentsForArticle(this.article.uuid).subscribe(comments => (this.article.comments = comments));
+    this.commentService.getAllCommentsForArticle(this.article.uuid).subscribe(comments => (this.article.comments = comments));
   }
 
   openDeleteArticleModal(content) {
@@ -148,7 +148,7 @@ export class ArticleComponent implements OnInit {
             userId: this.user.uuid,
             body: this.commentText
           };
-          this.qaService.postNewComment(comment).subscribe(
+          this.commentService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
                 this.fetchComments();

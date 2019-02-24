@@ -8,8 +8,8 @@ import { LikeService } from '../../../../services/like.service';
 import { Article } from '../../../../models/Article';
 import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
-import { QaService } from '../../../../services/qa.service';
 import { ConnectionService } from '../../../../services/connection.service';
+import { CommentService } from '../../../../services/comment.service';
 
 @Component({
   selector: 'app-article-comment',
@@ -56,7 +56,7 @@ export class ArticleCommentComponent implements OnInit {
   commented = new EventEmitter();
 
   constructor(
-    private qaService: QaService,
+    private commentService: CommentService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private likeService: LikeService,
@@ -79,7 +79,7 @@ export class ArticleCommentComponent implements OnInit {
             body: this.commentText,
             replyToUUID: this.comment.username
           };
-          this.qaService.postNewComment(comment).subscribe(
+          this.commentService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
                 this.commented.emit('commented');

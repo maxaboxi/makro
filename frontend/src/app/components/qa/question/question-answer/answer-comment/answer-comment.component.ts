@@ -10,6 +10,7 @@ import { Like } from '../../../../../models/Like';
 import { Answer } from 'src/app/models/Answer';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../../../services/connection.service';
+import { CommentService } from '../../../../../services/comment.service';
 
 @Component({
   selector: 'app-answer-comment',
@@ -61,7 +62,8 @@ export class AnswerCommentComponent implements OnInit {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
+    private commentService: CommentService
   ) {}
 
   ngOnInit() {
@@ -80,7 +82,7 @@ export class AnswerCommentComponent implements OnInit {
             body: this.commentText,
             answerUUID: this.answer.uuid
           };
-          this.qaService.postNewComment(comment).subscribe(
+          this.commentService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
                 this.commented.emit(true);

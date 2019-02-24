@@ -10,6 +10,7 @@ import { Comment } from '../../../../models/Comment';
 import { Like } from '../../../../models/Like';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../../services/connection.service';
+import { CommentService } from '../../../../services/comment.service';
 
 @Component({
   selector: 'app-question-answer',
@@ -58,7 +59,8 @@ export class QuestionAnswerComponent implements OnInit {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
+    private commentService: CommentService
   ) {}
 
   ngOnInit() {
@@ -76,7 +78,7 @@ export class QuestionAnswerComponent implements OnInit {
             userId: this.user.uuid,
             body: this.commentText
           };
-          this.qaService.postNewComment(comment).subscribe(
+          this.commentService.postNewComment(comment).subscribe(
             res => {
               if (res['success']) {
                 this.fetchComments();
@@ -129,7 +131,7 @@ export class QuestionAnswerComponent implements OnInit {
   }
 
   fetchComments() {
-    this.qaService.getAllCommentsForAnswer(this.answer.uuid).subscribe(comments => {
+    this.commentService.getAllCommentsForAnswer(this.answer.uuid).subscribe(comments => {
       this.answer.comments = comments;
     });
   }

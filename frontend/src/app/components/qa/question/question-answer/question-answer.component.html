@@ -19,7 +19,7 @@
       </ng-container>
     </div>
     <span class="ml-3 text-muted">{{ answer.totalPoints }} {{ 'POINTS' | translate }}</span>
-    <span *ngIf="showComment" class="answer-button ml-auto text-muted" (click)="openCommentModal(commentModal, answer)">{{
+    <span *ngIf="showComment" class="answer-button ml-auto text-muted" (click)="openCommentModal(commentModal)">{{
       'ADD_COMMENT' | translate
     }}</span>
   </div>

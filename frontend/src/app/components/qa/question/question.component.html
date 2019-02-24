@@ -9,7 +9,7 @@
       </ng-container>
       <ng-container *ngIf="question && question.answers && question.answers.length > 0">
         <ng-container *ngFor="let answer of question.answers">
-          <app-question-answer [user]="user" [answer]="answer"></app-question-answer>
+          <app-question-answer [user]="user" [answer]="answer" [showComment]="true"></app-question-answer>
         </ng-container>
       </ng-container>
     </div>

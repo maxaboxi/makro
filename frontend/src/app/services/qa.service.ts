@@ -3,7 +3,6 @@ import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
-import { Comment } from '../models/Comment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,6 @@ import { Comment } from '../models/Comment';
 export class QaService {
   private baseUrlQuestion = `${environment.baseUrl}/question`;
   private baseUrlAnswer = `${environment.baseUrl}/answer`;
-  private baseUrlComment = `${environment.baseUrl}/comment`;
 
   constructor(private http: HttpClient) {}
 
@@ -45,16 +43,6 @@ export class QaService {
     return this.http.post(url, question, { headers: headers });
   }
 
-  postNewComment(comment: Comment) {
-    const url = `${this.baseUrlComment}/new`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, comment, { headers: headers });
-  }
-
   addAnswerToQuestion(answer: Answer) {
     const url = `${this.baseUrlAnswer}/new`;
 
@@ -83,36 +71,6 @@ export class QaService {
     });
 
     return this.http.get<Answer[]>(url, { headers: headers });
-  }
-
-  getAllCommentsByUser() {
-    const url = `${this.baseUrlComment}/user`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Comment[]>(url, { headers: headers });
-  }
-
-  getAllCommentsForAnswer(uuid: string) {
-    const url = `${this.baseUrlComment}/answer/${uuid}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Comment[]>(url, { headers: headers });
-  }
-
-  getAllCommentsForArticle(uuid: string) {
-    const url = `${this.baseUrlComment}/article/${uuid}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Comment[]>(url, { headers: headers });
   }
 
   editQuestion(question: Question) {
@@ -160,21 +118,6 @@ export class QaService {
     const options = {
       headers: headers,
       body: answerIds
-    };
-
-    return this.http.delete(url, options);
-  }
-
-  removeComments(commentIds) {
-    const url = `${this.baseUrlComment}/delete`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const options = {
-      headers: headers,
-      body: commentIds
     };
 
     return this.http.delete(url, options);
