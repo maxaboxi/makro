@@ -9,12 +9,12 @@ import { Comment } from '../models/Comment';
   providedIn: 'root'
 })
 export class ArticleService {
-  private baseUrl = `${environment.baseUrl}/api/v1/articles`;
+  private baseUrl = `${environment.baseUrl}/article`;
 
   constructor(private http: HttpClient) {}
 
   getAllArticles() {
-    const url = `${this.baseUrl}/getallarticles`;
+    const url = `${this.baseUrl}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

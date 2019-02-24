@@ -25,7 +25,6 @@ export class ArticleComponent implements OnInit {
   likesFetched = false;
   likes: Like[];
   userLike = 0;
-  pointsTotal = 0;
   queryParams = {};
   singleArticle = false;
   commentText = '';
@@ -79,23 +78,14 @@ export class ArticleComponent implements OnInit {
       this.auth.user.subscribe(user => {
         this.user = user;
         this.articleService.getArticleById(this.queryParams['id']).subscribe(a => {
-          this._article.next(a[0]);
-          this.initializeArticle();
-          this.articleService.getCommentsToArticleWithId(this.article.uuid).subscribe(comments => (this.comments = comments));
+          this._article.next(a);
+          this.loading = false;
+          this.userLike = a.userLike;
         });
       });
     } else {
-      this.initializeArticle();
-    }
-  }
-
-  initializeArticle() {
-    if (this.article.headerImgId) {
-      this.articleService.getImageForArticle(this.article.headerImgId).subscribe(res => {
-        if (res) {
-          this.createImageFromBlob(res);
-        }
-      });
+      this.loading = false;
+      this.userLike = this.article.userLike;
     }
   }
 
@@ -152,12 +142,10 @@ export class ArticleComponent implements OnInit {
       result => {
         if (result === 'save') {
           const comment: Comment = {
-            postId: this.article.uuid,
-            articleId: this.article.uuid,
+            articleUUID: this.article.uuid,
             username: this.user.username,
             userId: this.user.uuid,
-            comment: this.commentText,
-            origPost: this.article.body
+            body: this.commentText
           };
           this.articleService.postNewComment(comment).subscribe(
             res => {
@@ -191,48 +179,23 @@ export class ArticleComponent implements OnInit {
     let like: Like = {
       userUUID: this.user.uuid,
       articleUUID: this.article.uuid,
-      value: 0
+      value: c
     };
-    if (!this.userLike) {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.likePost(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += like.value;
-          }
-        });
-      }
+    if (this.userLike === 0) {
+      this.likeService.likePost(like).subscribe(res => {
+        if (res['success']) {
+          this.article.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     } else {
-      if (c === '+') {
-        like.value = 1;
-        this.userLike = 1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += 2;
-          }
-        });
-      }
-
-      if (c === '-') {
-        like.value = -1;
-        this.userLike = -1;
-        this.likeService.replacePreviousLike(like).subscribe(res => {
-          if (res['success']) {
-            this.pointsTotal += -2;
-          }
-        });
-      }
+      this.likeService.replacePreviousLike(like, like.sharedMealUUID).subscribe(res => {
+        if (res['success']) {
+          this.article.totalPoints += like.value;
+          this.article.totalPoints += like.value;
+          this.userLike = c;
+        }
+      });
     }
   }
 }

@@ -18,7 +18,8 @@ namespace Makro.Helpers
             CreateMap<DayDto, Day>();
             CreateMap<SharedDay, DayDto>().AfterMap((src, dest) => dest.UserId = src.User.UUID);
             CreateMap<DayDto, SharedDay>();
-            CreateMap<SharedMeal, SharedMealDto>().AfterMap((src, dest) => {
+            CreateMap<SharedMeal, SharedMealDto>().AfterMap((src, dest) =>
+            {
                 dest.AddedBy = src.User.UUID;
                 dest.AddedByName = src.User.Username;
             });
@@ -27,23 +28,34 @@ namespace Makro.Helpers
             CreateMap<MealDto, Meal>().AfterMap((src, dest) => dest.UUID = Guid.NewGuid().ToString());
             CreateMap<MealName, MealNameDto>().AfterMap((src, dest) => dest.Foods = new List<FoodDto>());
             CreateMap<MealNameDto, MealName>();
-            CreateMap<Question, QuestionDto>().AfterMap((src, dest) => {
+            CreateMap<Question, QuestionDto>().AfterMap((src, dest) =>
+            {
                 dest.UserId = src.User.UUID;
                 dest.Username = src.User.Username;
             });
             CreateMap<QuestionDto, Question>();
-            CreateMap<Answer, AnswerDto>().AfterMap((src, dest) => {
+            CreateMap<Answer, AnswerDto>().AfterMap((src, dest) =>
+            {
                 dest.UserId = src.User.UUID;
                 dest.Username = src.User.Username;
             });
             CreateMap<AnswerDto, Answer>();
-            CreateMap<Comment, CommentDto>().AfterMap((src, dest) => {
+            CreateMap<Comment, CommentDto>().AfterMap((src, dest) =>
+            {
                 dest.UserId = src.User.UUID;
                 dest.Username = src.User.Username;
             });
             CreateMap<CommentDto, Comment>();
             CreateMap<Like, LikeDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
             CreateMap<LikeDto, Like>();
+            CreateMap<Article, ArticleDto>().AfterMap((src, dest) =>
+            {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
+            CreateMap<ArticleDto, Article>();
+            CreateMap<ArticleImageDto, ArticleImage>();
+            CreateMap<ArticleImage, ArticleImageDto>().AfterMap((src, dest) => dest.ArticleUUID = src.UUID);
         }
     }
 }

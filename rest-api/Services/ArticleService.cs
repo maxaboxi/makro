@@ -7,22 +7,50 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System;
+using AutoMapper;
 namespace Makro.Services
 {
     public class ArticleService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public ArticleService(MakroContext context, ILogger<ArticleService> logger)
+        public ArticleService(MakroContext context, ILogger<ArticleService> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticles()
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllArticles(string userId)
         {
-            return await _context.Articles.AsNoTracking().Include(a => a.Comments).ToListAsync();
+            var articles = await _context.Articles.AsNoTracking()
+                .Include(a => a.User)
+                .Include(a => a.Images)
+                .ToListAsync();
+
+            List<ArticleDto> articleDtos = new List<ArticleDto>();
+            articles.ForEach(a =>
+            {
+                var articleDto = _mapper.Map<ArticleDto>(a);
+                var totalPoints = 0;
+                var likes = _context.Likes.AsNoTracking().Where(l => l.Article == a).Include(l => l.User).ToList();
+                likes.ForEach(like => {
+                    totalPoints += like.Value;
+                    if (like.User.UUID == userId)
+                    {
+                        articleDto.UserLike = like.Value;
+                    }
+                });
+                List<ArticleImageDto> images = new List<ArticleImageDto>();
+                a.Images.ToList().ForEach(img => images.Add(_mapper.Map<ArticleImageDto>(img)));
+                articleDto.Images = images;
+                articleDto.TotalPoints = totalPoints;
+                articleDtos.Add(articleDto);
+            });
+
+            return articleDtos;
         }
 
         public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)

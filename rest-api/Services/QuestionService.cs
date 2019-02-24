@@ -76,7 +76,7 @@ namespace Makro.Services
             {
                 var answerDto = _mapper.Map<AnswerDto>(a);
                 var totalPoints = 0;
-                var likes = _context.Likes.Where(l => l.Answer == a).Include(l => l.User).ToList();
+                var likes = _context.Likes.AsNoTracking().Where(l => l.Answer == a).Include(l => l.User).ToList();
                 likes.ForEach(like => {
                     totalPoints += like.Value;
                     if (like.User.UUID == userId)
@@ -88,7 +88,7 @@ namespace Makro.Services
                 a.Comments.ToList().ForEach(c => {
                     var commentDto = _mapper.Map<CommentDto>(c);
                     var totalPointsComment = 0;
-                    var likesComment = _context.Likes.Where(l => l.Comment == c).Include(l => l.User).ToList();
+                    var likesComment = _context.Likes.AsNoTracking().Where(l => l.Comment == c).Include(l => l.User).ToList();
                     likesComment.ForEach(like => {
                         totalPointsComment += like.Value;
                         if (like.User.UUID == userId)

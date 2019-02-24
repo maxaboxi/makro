@@ -1,13 +1,16 @@
+import { Comment } from '@angular/compiler';
+
 export interface Article {
   uuid?: string;
+  userId?: string;
   username?: string;
   title: string;
-  origTitle?: string;
   body: string;
-  origBody?: string;
-  headerImgId?: string;
   tags: string[];
-  pointsTotal?: Number;
+  images?: File[];
+  comments: Comment[];
+  totalPoints?: number;
+  userLike?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
