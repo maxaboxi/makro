@@ -111,9 +111,21 @@ namespace Makro.Services
             return await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).ToListAsync();
         }
 
-        public async Task<ResultDto> AddNewArticle(Article article)
+        public async Task<ResultDto> AddNewArticle(ArticleDto articleDto, string userId)
         {
+            var article = _mapper.Map<Article>(articleDto);
+            List<ArticleImage> articleImages = new List<ArticleImage>();
+            articleDto.Images.ForEach(img => {
+                var articleImage = _mapper.Map<ArticleImage>(img);
+                articleImage.Article = article;
+                articleImage.UUID = Guid.NewGuid().ToString();
+                articleImages.Add(articleImage);
+            });
+            article.Images = articleImages;
             article.UUID = Guid.NewGuid().ToString();
+            article.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            article.CreatedAt = DateTime.Now;
+            article.UpdatedAt = DateTime.Now;
             _context.Add(article);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article added succesfully");

@@ -24,13 +24,13 @@ export class AddArticleComponent implements OnInit {
   article: Article = {
     title: '',
     body: '',
-    tags: []
+    tags: [],
+    images: []
   };
   imageChangedEvent: any = '';
   croppedImage: any = '';
   imageBlob: Blob = undefined;
   showCropper = false;
-  uploadingImage = false;
 
   constructor(
     private articleService: ArticleService,
@@ -85,11 +85,12 @@ export class AddArticleComponent implements OnInit {
   }
 
   saveImage() {
-    this.uploadingImage = true;
     const file = new File([this.imageBlob], 'headerImage', {
       type: this.imageBlob.type,
       lastModified: Date.now()
     });
+    this.article.images.push(file);
+    this.showCropper = false;
   }
 
   addArticle() {

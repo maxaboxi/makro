@@ -54,7 +54,7 @@ export class ArticleService {
   }
 
   addArticle(article: Article) {
-    const url = `${this.baseUrl}/addnewarticle`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
