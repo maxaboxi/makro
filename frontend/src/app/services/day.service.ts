@@ -12,8 +12,8 @@ export class DayService {
 
   constructor(private http: HttpClient) {}
 
-  getAllSavedDays(user) {
-    const url = `${this.baseUrl}/days/getalldays/${user}`;
+  getAllSavedDays() {
+    const url = `${this.baseUrl}/user}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ export class DayService {
   }
 
   saveNewDay(day: Day) {
-    const url = `${this.baseUrl}/days/addnewday`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ export class DayService {
   }
 
   saveEditedDay(day) {
-    const url = `${this.baseUrl}/days/saveday`;
+    const url = `${this.baseUrl}/update`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
