@@ -81,7 +81,7 @@ export class FoodService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getamountoffoods`;
+    const url = `${this.baseUrl}/amount`;
 
     return this.http.get(url, { headers: headers });
   }
