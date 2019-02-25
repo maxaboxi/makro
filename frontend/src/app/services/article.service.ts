@@ -73,10 +73,17 @@ export class ArticleService {
     const url = `${this.baseUrl}/update/${article.uuid}`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Accept': 'application/json'
     });
 
-    return this.http.put(url, article, { headers: headers });
+    const formData = new FormData();
+    formData.append('headerImage', article.image);
+    formData.append('title', article.title);
+    formData.append('body', article.body);
+    formData.append('tags', article.tags[0]);
+    formData.append('uuid', article.uuid);
+
+    return this.http.put(url, formData, { headers: headers });
   }
 
   deleteArticle(id) {

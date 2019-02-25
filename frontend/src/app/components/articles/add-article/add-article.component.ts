@@ -31,6 +31,7 @@ export class AddArticleComponent implements OnInit {
   croppedImage: any = '';
   imageBlob: Blob = undefined;
   showCropper = false;
+  imageChanged = false;
 
   constructor(
     private articleService: ArticleService,
@@ -91,6 +92,7 @@ export class AddArticleComponent implements OnInit {
     });
     this.article.image = file;
     this.showCropper = false;
+    this.imageChanged = true;
   }
 
   addArticle() {

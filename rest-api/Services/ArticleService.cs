@@ -131,9 +131,17 @@ namespace Makro.Services
                 return new ResultDto(false, "Article not found");
             }
 
+            using (var memoryStream = new MemoryStream())
+            {
+                await articleDto.HeaderImage.CopyToAsync(memoryStream);
+                articleDto.Image = memoryStream.ToArray();
+            }
+
             _context.Entry(article).State = EntityState.Modified;
             article.Body = articleDto.Body;
             article.Title = articleDto.Title;
+            article.Image = articleDto.Image;
+            article.Tags = articleDto.Tags;
             article.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article updated succesfully");

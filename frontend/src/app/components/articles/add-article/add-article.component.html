@@ -26,6 +26,8 @@
           {{ 'SAVE_PICTURE' | translate }}
         </button>
 
+        <img *ngIf="article.image && editing && !imageChanged" class="img-fluid mb-4" src="{{'data:image/jpg;base64,' + article.image}}" />
+
         <div class="form-group">
           <label for="articleTitle">{{ 'ARTICLE_TITLE' | translate }}</label>
           <input

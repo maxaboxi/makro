@@ -44,7 +44,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateArticle(string id, [FromBody]ArticleDto articleDto)
+        public async Task<IActionResult> UpdateArticle(string id, [FromForm]ArticleDto articleDto)
         {
             if (id != articleDto.UUID)
             {
