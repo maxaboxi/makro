@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 <div *ngIf="!loading" class="container mt-3">
-  <img *ngIf="image" class="img-fluid" [src]="image" />
+  <img *ngIf="article.image" class="img-fluid" src="{{'data:image/jpg;base64,' + article.image}}" />
   <div *ngIf="article" class="article justify-content-center">
     <h1 class="h1">{{ article.title }}</h1> <p class="lead" [innerHTML]="article.body"></p>
     <div class="row">

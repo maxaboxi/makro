@@ -51,6 +51,7 @@ namespace Makro.Migrations
                     UserId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Body = table.Column<string>(nullable: false),
+                    Image = table.Column<byte[]>(nullable: true),
                     Tags = table.Column<List<string>>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
@@ -293,27 +294,6 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArticleImages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    ArticleId = table.Column<int>(nullable: false),
-                    Image = table.Column<byte[]>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArticleImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArticleImages_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
@@ -546,17 +526,6 @@ namespace Makro.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticleImages_ArticleId",
-                table: "ArticleImages",
-                column: "ArticleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ArticleImages_UUID",
-                table: "ArticleImages",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Articles_UUID",
                 table: "Articles",
                 column: "UUID",
@@ -778,9 +747,6 @@ namespace Makro.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ArticleImages");
-
             migrationBuilder.DropTable(
                 name: "EditedFoods");
 

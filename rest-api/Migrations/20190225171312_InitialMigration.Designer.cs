@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190221090317_InitialMigration")]
+    [Migration("20190225171312_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,8 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<byte[]>("Image");
+
                     b.Property<List<string>>("Tags")
                         .IsRequired();
 
@@ -84,29 +86,6 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("Makro.Models.ArticleImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ArticleId");
-
-                    b.Property<byte[]>("Image")
-                        .IsRequired();
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.ToTable("ArticleImages");
                 });
 
             modelBuilder.Entity("Makro.Models.Comment", b =>
@@ -623,14 +602,6 @@ namespace Makro.Migrations
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.ArticleImage", b =>
-                {
-                    b.HasOne("Makro.Models.Article", "Article")
-                        .WithMany("Images")
-                        .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

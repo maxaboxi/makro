@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Makro.DTO;
 using System;
 using AutoMapper;
+using System.IO;
 namespace Makro.Services
 {
     public class ArticleService
@@ -27,7 +28,6 @@ namespace Makro.Services
         {
             var articles = await _context.Articles.AsNoTracking()
                 .Include(a => a.User)
-                .Include(a => a.Images)
                 .ToListAsync();
 
             List<ArticleDto> articleDtos = new List<ArticleDto>();
@@ -43,9 +43,7 @@ namespace Makro.Services
                         articleDto.UserLike = like.Value;
                     }
                 });
-                List<ArticleImageDto> images = new List<ArticleImageDto>();
-                a.Images.ToList().ForEach(img => images.Add(_mapper.Map<ArticleImageDto>(img)));
-                articleDto.Images = images;
+
                 articleDto.TotalPoints = totalPoints;
                 articleDtos.Add(articleDto);
             });
@@ -58,7 +56,6 @@ namespace Makro.Services
             var article = await _context.Articles.AsNoTracking()
                 .Where(a => a.UUID == id)
                 .Include(a => a.User)
-                .Include(a => a.Images)
                 .Include(a => a.Comments)
                     .ThenInclude(c => c.User)
                 .Include(a => a.Comments)
@@ -76,10 +73,6 @@ namespace Makro.Services
                 }
             });
             articleDto.TotalPoints = totalPoints;
-
-            List<ArticleImageDto> images = new List<ArticleImageDto>();
-            article.Images.ToList().ForEach(img => images.Add(_mapper.Map<ArticleImageDto>(img)));
-            articleDto.Images = images;
 
             List<CommentDto> commentDtos = new List<CommentDto>();
             article.Comments.ToList().ForEach(c =>
@@ -113,15 +106,13 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewArticle(ArticleDto articleDto, string userId)
         {
+            using (var memoryStream = new MemoryStream())
+            {
+                await articleDto.HeaderImage.CopyToAsync(memoryStream);
+                articleDto.Image = memoryStream.ToArray();
+            }
+
             var article = _mapper.Map<Article>(articleDto);
-            List<ArticleImage> articleImages = new List<ArticleImage>();
-            articleDto.Images.ForEach(img => {
-                var articleImage = _mapper.Map<ArticleImage>(img);
-                articleImage.Article = article;
-                articleImage.UUID = Guid.NewGuid().ToString();
-                articleImages.Add(articleImage);
-            });
-            article.Images = articleImages;
             article.UUID = Guid.NewGuid().ToString();
             article.User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             article.CreatedAt = DateTime.Now;
@@ -144,13 +135,6 @@ namespace Makro.Services
             article.Body = articleDto.Body;
             article.Title = articleDto.Title;
             article.UpdatedAt = DateTime.Now;
-            List<ArticleImage> articleImages = new List<ArticleImage>();
-            articleDto.Images.ForEach(img => {
-                var articleImage = _mapper.Map<ArticleImage>(img);
-                articleImage.Article = article;
-                articleImages.Add(articleImage);
-            });
-            article.Images = articleImages;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article updated succesfully");
         }

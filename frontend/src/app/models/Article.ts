@@ -7,7 +7,7 @@ export interface Article {
   title: string;
   body: string;
   tags: string[];
-  images?: File[];
+  image?: File;
   comments?: Comment[];
   totalPoints?: number;
   userLike?: number;

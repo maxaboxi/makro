@@ -38,7 +38,7 @@ namespace Makro.Controllers
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewArticle([FromBody]ArticleDto articleDto)
+        public async Task<IActionResult> AddNewArticle([FromForm]ArticleDto articleDto)
         {
             return Ok(await _articleService.AddNewArticle(articleDto, HttpContext.User.Identity.Name));
         }

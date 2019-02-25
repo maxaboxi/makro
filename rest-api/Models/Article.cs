@@ -16,7 +16,7 @@ namespace Makro.Models
         public string Title { get; set; }
         [Required]
         public string Body { get; set; }
-        public ICollection<ArticleImage> Images { get; set; }
+        public byte[] Image { get; set; }
         public ICollection<Comment> Comments { get; set; }
         [Required]
         public List<string> Tags { get; set; }

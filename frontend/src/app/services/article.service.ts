@@ -57,10 +57,16 @@ export class ArticleService {
     const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Accept': 'application/json'
     });
 
-    return this.http.post(url, article, { headers: headers });
+    const formData = new FormData();
+    formData.append('headerImage', article.image);
+    formData.append('title', article.title);
+    formData.append('body', article.body);
+    formData.append('tags', article.tags[0]);
+
+    return this.http.post(url, formData, { headers: headers });
   }
 
   editArticle(article: Article) {

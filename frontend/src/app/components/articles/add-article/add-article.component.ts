@@ -25,7 +25,7 @@ export class AddArticleComponent implements OnInit {
     title: '',
     body: '',
     tags: [],
-    images: []
+    image: null
   };
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -56,7 +56,7 @@ export class AddArticleComponent implements OnInit {
           this.article.uuid = article.uuid;
           this.article.title = article.title;
           this.article.body = article.body;
-          this.article.images = article.images;
+          this.article.image = article.image;
           this.article.tags = article.tags;
         },
         (error: Error) => {
@@ -89,7 +89,7 @@ export class AddArticleComponent implements OnInit {
       type: this.imageBlob.type,
       lastModified: Date.now()
     });
-    this.article.images.push(file);
+    this.article.image = file;
     this.showCropper = false;
   }
 

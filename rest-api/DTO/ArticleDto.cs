@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 namespace Makro.DTO
 {
     public class ArticleDto
@@ -9,7 +10,8 @@ namespace Makro.DTO
         public string Username { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public List<ArticleImageDto> Images { get; set; }
+        public IFormFile HeaderImage { get; set; }
+        public byte[] Image { get; set; }
         public List<CommentDto> Comments { get; set; }
         public int TotalPoints { get; set; }
         public int UserLike { get; set; }

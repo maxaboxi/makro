@@ -14,7 +14,6 @@ namespace Makro.Models
         public DbSet<MealName> MealNames { get; set; }
         public DbSet<Day> Days { get; set; }
         public DbSet<Article> Articles { get; set; }
-        public DbSet<ArticleImage> ArticleImages { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
@@ -41,19 +40,13 @@ namespace Makro.Models
 
             modelBuilder.Entity<Meal>()
                 .HasIndex(e => e.UUID).IsUnique();
-
-            modelBuilder.Entity<Article>()
-                .HasMany(a => a.Images)
-                .WithOne(e => e.Article);
+                
             modelBuilder.Entity<Article>()
                 .HasMany(a => a.Comments)
                 .WithOne(e => e.Article)
                 .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Article>()
                 .HasIndex(a => a.UUID).IsUnique();
-
-            modelBuilder.Entity<ArticleImage>()
-                .HasIndex(e => e.UUID).IsUnique();
 
             modelBuilder.Entity<Answer>()
                 .HasMany(a => a.Comments)
