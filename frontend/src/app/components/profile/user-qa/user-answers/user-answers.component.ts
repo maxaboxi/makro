@@ -31,7 +31,7 @@ export class UserAnswersComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.qaService.getAllUserAnswersWithUsername(this.user.username).subscribe(answers => {
+        this.qaService.getAllUserAnswersByUser().subscribe(answers => {
           this.answers = answers;
           this.loading = false;
         });
@@ -53,7 +53,7 @@ export class UserAnswersComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.qaService.getAllUserAnswersWithUsername(this.user.username).subscribe(answers => {
+          this.qaService.getAllUserAnswersByUser().subscribe(answers => {
             this.answers = answers;
           });
           this.answersDeleted = false;
@@ -70,7 +70,7 @@ export class UserAnswersComponent implements OnInit {
 
   navigate(answer: Answer) {
     this.router.navigate(['/question'], {
-      queryParams: { id: answer.questionId }
+      queryParams: { id: answer.questionUUID }
     });
   }
 }

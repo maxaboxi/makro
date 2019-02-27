@@ -9,6 +9,7 @@ import { Like } from '../../../models/Like';
 import { Comment } from '../../../models/Comment';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-user-qa',
@@ -26,14 +27,15 @@ export class UserQaComponent implements OnInit {
     private qaService: QaService,
     private likeService: LikeService,
     private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private commentService: CommentService
   ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.qaService.getAllUserAnswersWithUsername(this.user.username).subscribe(
+        this.qaService.getAllUserAnswersByUser().subscribe(
           answers => {
             this.answers = answers;
           },
@@ -44,7 +46,7 @@ export class UserQaComponent implements OnInit {
             });
           }
         );
-        this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(
+        this.likeService.getAllUserLikesWithId().subscribe(
           likes => {
             this.likes = likes;
           },
@@ -55,7 +57,7 @@ export class UserQaComponent implements OnInit {
             });
           }
         );
-        this.qaService.getAllUserCommentsWithId(this.user.uuid).subscribe(
+        this.commentService.getAllCommentsByUser().subscribe(
           comments => {
             this.comments = comments;
           },

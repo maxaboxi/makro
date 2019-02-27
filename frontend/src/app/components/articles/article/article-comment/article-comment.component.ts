@@ -83,7 +83,7 @@ export class ArticleCommentComponent implements OnInit {
             res => {
               if (res['success']) {
                 this.commented.emit('commented');
-                this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
+                this.flashMessage.show(this.translator.instant('COMMENT_ADDED'), {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });

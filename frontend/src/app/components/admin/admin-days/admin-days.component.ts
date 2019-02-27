@@ -50,7 +50,7 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteDay(index) {
-    this.deletedDays.push(this.days[index]._id);
+    this.deletedDays.push(this.days[index].uuid);
     this.days.splice(index, 1);
     this.daysDeleted = true;
   }

@@ -153,22 +153,8 @@ export class AddArticleComponent implements OnInit {
     this.article = {
       title: '',
       body: '',
-      tags: []
+      tags: [],
+      image: null
     };
-  }
-
-  createImageFromBlob(image: Blob) {
-    const reader = new FileReader();
-    reader.addEventListener(
-      'load',
-      () => {
-        this.croppedImage = reader.result;
-      },
-      false
-    );
-
-    if (image) {
-      reader.readAsDataURL(image);
-    }
   }
 }

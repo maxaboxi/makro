@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
-import { QaService } from '../../../../services/qa.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../../models/User';
 import { Comment } from '../../../../models/Comment';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { CommentService } from '../../../../services/comment.service';
 
 @Component({
   selector: 'app-user-comments',
@@ -21,7 +21,7 @@ export class UserCommentsComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private qaService: QaService,
+    private commentService: CommentService,
     private flashMessage: FlashMessagesService,
     private router: Router,
     private translator: TranslateService
@@ -31,7 +31,7 @@ export class UserCommentsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.qaService.getAllUserCommentsWithId(this.user.uuid).subscribe(comments => {
+        this.commentService.getAllCommentsByUser().subscribe(comments => {
           this.comments = comments;
           this.loading = false;
         });
@@ -46,14 +46,14 @@ export class UserCommentsComponent implements OnInit {
   }
 
   deleteCommentsFromDb() {
-    this.qaService.removeComments(this.deletedComments).subscribe(
+    this.commentService.removeComments(this.deletedComments).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.qaService.getAllUserCommentsWithId(this.user.uuid).subscribe(comments => {
+          this.commentService.getAllCommentsByUser().subscribe(comments => {
             this.comments = comments;
           });
           this.commentsDeleted = false;
@@ -70,7 +70,7 @@ export class UserCommentsComponent implements OnInit {
 
   navigate(comment: Comment) {
     this.router.navigate(['/question'], {
-      queryParams: { id: comment.questionId }
+      // queryParams: { id: comment.questionId }
     });
   }
 }

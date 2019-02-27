@@ -36,7 +36,7 @@ export class SavedDaysComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.dayService.getAllSavedDays(this.user.username).subscribe(
+        this.dayService.getAllSavedDays().subscribe(
           days => {
             this.savedDays = days;
             this.loading = false;
@@ -54,8 +54,8 @@ export class SavedDaysComponent implements OnInit {
   }
 
   loadDay(index) {
-    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
-    localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index]._id));
+    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].allMeals));
+    localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
     this.addedFoodsService._mealsEdited.next(false);
     this.addedFoodsService._openedSavedMeal.next(true);
     this.addedFoodsService.setMealsFromLocalStorage();
@@ -63,7 +63,7 @@ export class SavedDaysComponent implements OnInit {
   }
 
   deleteDay(index) {
-    this.deletedDays.push(this.savedDays[index]._id);
+    this.deletedDays.push(this.savedDays[index].uuid);
     this.savedDays.splice(index, 1);
     this.daysDeleted = true;
   }
@@ -76,7 +76,7 @@ export class SavedDaysComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+          this.dayService.getAllSavedDays().subscribe(days => {
             this.savedDays = days;
           });
           this.daysDeleted = false;
@@ -109,7 +109,7 @@ export class SavedDaysComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+                this.dayService.getAllSavedDays().subscribe(days => {
                   this.savedDays = days;
                 });
               }

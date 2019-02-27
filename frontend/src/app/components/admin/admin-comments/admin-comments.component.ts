@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Comment } from '../../../models/Comment';
 import { AdminService } from '../../../services/admin.service';
-import { QaService } from '../../../services/qa.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-admin-comments',
@@ -27,7 +27,7 @@ export class AdminCommentsComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private modalService: NgbModal,
     private translator: TranslateService,
-    private qaService: QaService
+    private commentService: CommentService
   ) {}
 
   ngOnInit() {
@@ -41,7 +41,7 @@ export class AdminCommentsComponent implements OnInit {
   }
 
   deleteCommentsFromDb() {
-    this.qaService.removeComments(this.deletedComments).subscribe(
+    this.commentService.removeComments(this.deletedComments).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {

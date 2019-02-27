@@ -29,7 +29,7 @@ export class UserLikesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(
+        this.likeService.getAllUserLikesWithId().subscribe(
           likes => {
             this.likes = likes;
             this.loading = false;
@@ -60,7 +60,7 @@ export class UserLikesComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.likeService.getAllUserLikesWithId(this.user.uuid).subscribe(likes => {
+          this.likeService.getAllUserLikesWithId().subscribe(likes => {
             this.likes = likes;
           });
           this.likesDeleted = false;

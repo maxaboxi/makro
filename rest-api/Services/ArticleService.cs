@@ -28,6 +28,7 @@ namespace Makro.Services
         {
             var articles = await _context.Articles.AsNoTracking()
                 .Include(a => a.User)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
 
             List<ArticleDto> articleDtos = new List<ArticleDto>();
