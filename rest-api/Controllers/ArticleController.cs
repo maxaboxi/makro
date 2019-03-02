@@ -55,9 +55,9 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteArticle(int id)
+        public async Task<IActionResult> DeleteArticle(string id)
         {
-            return Ok(await _articleService.DeleteArticle(id));
+            return Ok(await _articleService.DeleteArticle(id, HttpContext.User.Identity.Name));
         }
     }
 }

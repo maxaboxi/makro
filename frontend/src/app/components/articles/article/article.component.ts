@@ -124,7 +124,7 @@ export class ArticleComponent implements OnInit {
       result => {
         if (result === 'save') {
           this.articleService.deleteArticle(this.article.uuid).subscribe(res => {
-            this.flashMessage.show(res['msg'], {
+            this.flashMessage.show(res['message'], {
               cssClass: res['success'] ? 'alert-success' : 'alert-danger',
               timeout: 2000
             });
@@ -134,7 +134,7 @@ export class ArticleComponent implements OnInit {
           });
         }
       },
-      dismissed => {}
+      dismissed => { }
     );
   }
 

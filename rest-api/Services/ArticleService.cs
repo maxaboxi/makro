@@ -148,9 +148,9 @@ namespace Makro.Services
             return new ResultDto(true, "Article updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteArticle(int id)
+        public async Task<ResultDto> DeleteArticle(string id, string userId)
         {
-            var article = await _context.Articles.FindAsync(id);
+            var article = await _context.Articles.Where(a => a.UUID == id && a.User.UUID == userId).FirstOrDefaultAsync();
 
             if (article == null)
             {
@@ -158,6 +158,7 @@ namespace Makro.Services
                 return new ResultDto(false, "Article not found");
             }
 
+            _context.Likes.RemoveRange(_context.Likes.Where(l => l.Article.Id == article.Id));
             _context.Articles.Remove(article);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article deleted succesfully");

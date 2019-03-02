@@ -11,7 +11,7 @@ import { Comment } from '../models/Comment';
 export class ArticleService {
   private baseUrl = `${environment.baseUrl}/article`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllArticles() {
     const url = `${this.baseUrl}`;
@@ -87,7 +87,7 @@ export class ArticleService {
   }
 
   deleteArticle(id) {
-    const url = `${this.baseUrl}/removearticle/${id}`;
+    const url = `${this.baseUrl}/delete/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
