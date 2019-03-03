@@ -10,16 +10,26 @@ import { environment } from '../../environments/environment';
 export class DayService {
   private baseUrl = `${environment.baseUrl}/day`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllSavedDays() {
-    const url = `${this.baseUrl}/user}`;
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     return this.http.get<Day[]>(url, { headers: headers });
+  }
+
+  getSavedDay(id) {
+    const url = `${this.baseUrl}/single/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Day>(url, { headers: headers });
   }
 
   saveNewDay(day: Day) {
@@ -87,8 +97,8 @@ export class DayService {
     return this.http.get<Meal[]>(url, { headers: headers });
   }
 
-  getSharedDaysByUser(id) {
-    const url = `${this.baseUrl}/shareddays/getdayssharedbyuser/${id}`;
+  getSharedDaysByUser() {
+    const url = `${this.baseUrl}/shared/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

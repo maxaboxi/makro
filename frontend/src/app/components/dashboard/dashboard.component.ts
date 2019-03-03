@@ -53,6 +53,7 @@ export class DashboardComponent implements OnInit {
           res => {
             if (res !== null) {
               localStorage.setItem('meals', JSON.stringify(res));
+              this.addedFoodService.setMeals(res);
             }
           },
           (error: Error) => console.log(error)

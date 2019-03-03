@@ -54,6 +54,8 @@ namespace Makro.Helpers
                 dest.Username = src.User.Username;
             });
             CreateMap<ArticleDto, Article>();
+            CreateMap<SharedDay, SharedDayDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
+            CreateMap<SharedDayDto, SharedDay>();
         }
     }
 }

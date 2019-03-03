@@ -30,7 +30,7 @@ export class SavedDaysComponent implements OnInit {
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
     private translator: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -54,12 +54,20 @@ export class SavedDaysComponent implements OnInit {
   }
 
   loadDay(index) {
-    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].allMeals));
-    localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
-    this.addedFoodsService._mealsEdited.next(false);
-    this.addedFoodsService._openedSavedMeal.next(true);
-    this.addedFoodsService.setMealsFromLocalStorage();
-    this.router.navigate(['/']);
+    this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(day => {
+      localStorage.setItem('meals', JSON.stringify(day.allMeals));
+      localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
+      this.addedFoodsService._mealsEdited.next(false);
+      this.addedFoodsService._openedSavedMeal.next(true);
+      this.addedFoodsService.setMealsFromLocalStorage();
+      this.router.navigate(['/']);
+    }, (error: Error) => {
+      this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+        cssClass: 'alert-danger',
+        timeout: 2000
+      });
+    })
+
   }
 
   deleteDay(index) {

@@ -22,13 +22,13 @@ export class SharedDaysComponent implements OnInit {
     private dayService: DayService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.uuid) {
-        this.dayService.getSharedDaysByUser(this.user.uuid).subscribe(
+        this.dayService.getSharedDaysByUser().subscribe(
           days => {
             this.sharedDays = JSON.parse(JSON.stringify(days));
             this.loading = false;
@@ -59,7 +59,7 @@ export class SharedDaysComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.dayService.getSharedDaysByUser(this.user.uuid).subscribe(days => {
+          this.dayService.getSharedDaysByUser().subscribe(days => {
             this.sharedDays = JSON.parse(JSON.stringify(days));
           });
           this.daysDeleted = false;

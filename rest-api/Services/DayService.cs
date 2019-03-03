@@ -33,6 +33,14 @@ namespace Makro.Services
             return dayDtos;
         }
 
+        public async Task<ActionResult<IEnumerable<SharedDayDto>>> GetAllSharedDaysByUser(string id)
+        {
+            var days = await _context.SharedDays.AsNoTracking().Where(d => d.User.UUID == id).Include(d => d.User).ToListAsync();
+            var dayDtos = new List<SharedDayDto>();
+            days.ForEach(d => dayDtos.Add(_mapper.Map<SharedDayDto>(d)));
+            return dayDtos;
+        }
+
         public async Task<ActionResult<DayDto>> GetDay(string dayId, string userId)
         {
             var day = await _context.Days.AsNoTracking()

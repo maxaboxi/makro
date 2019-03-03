@@ -29,13 +29,13 @@ export class UserInfoComponent implements OnInit {
     private modalService: NgbModal,
     private translator: TranslateService,
     private connectionService: ConnectionService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.connectionService.monitor().subscribe(res => (this.online = res));
     this.auth.fetchUserInfo().subscribe(
-      res => {
-        this.user = JSON.parse(JSON.stringify(res['user']));
+      user => {
+        this.user = user;
         this.calculateBaseExpenditure();
       },
       (error: Error) => {
