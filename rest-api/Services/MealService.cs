@@ -63,6 +63,46 @@ namespace Makro.Services
             return sharedMealDtos;
         }
 
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMealsByUser(string userId)
+        {
+            List<SharedMeal> sharedMeals = await _context.SharedMeals.Where(sm => sm.User.UUID == userId)
+                .Include(sm => sm.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var sharedMealDtos = new List<SharedMealDto>();
+            sharedMeals.ForEach(sm => sharedMealDtos.Add(_mapper.Map<SharedMealDto>(sm)));
+
+            return sharedMealDtos;
+        }
+
+        public async Task<ActionResult<SharedMealDto>> GetSingleSharedMeal(string id, string userId)
+        {
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.User.UUID == userId && sm.UUID == id)
+                .Include(m => m.User)
+                .Include(m => m.SharedMealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.User)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (sharedMeal == null)
+            {
+                return null;
+            }
+
+            var foodDtos = new List<FoodDto>();
+            sharedMeal.SharedMealFoods.ToList().ForEach(e => {
+                var foodDto = _mapper.Map<FoodDto>(e.Food);
+                foodDto.Amount = e.FoodAmount;
+                foodDtos.Add(foodDto);
+            });
+            var sharedMealDto = _mapper.Map<SharedMealDto>(sharedMeal);
+            sharedMealDto.Foods = foodDtos;
+
+            return sharedMealDto;
+        }
+
         public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
         {
             List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);

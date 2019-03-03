@@ -20,8 +20,17 @@ export class SharedMealsService {
     return this.http.get<Meal[]>(url, { headers: headers });
   }
 
-  getMealsByUser(user) {
-    const url = `${this.baseUrl}/getsharedmeals/${user}`;
+  getSingleMeal(id) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/single/${id}`;
+
+    return this.http.get<Meal>(url, { headers: headers });
+  }
+
+  getMealsByUser() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

@@ -27,6 +27,18 @@ namespace Makro.Controllers
             return await _mealService.GetAllSharedMeals(HttpContext.User.Identity.Name);
         }
 
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMealsByUser()
+        {
+            return await _mealService.GetAllSharedMealsByUser(HttpContext.User.Identity.Name);
+        }
+
+        [HttpGet("single/{id}")]
+        public async Task<ActionResult<SharedMealDto>> GetSingleSharedMeal(string id)
+        {
+            return await _mealService.GetSingleSharedMeal(id, HttpContext.User.Identity.Name);
+        }
+
         [HttpPost("new")]
         public async Task<IActionResult> AddNewSharedMeal([FromBody]SharedMealDto sharedMealDto)
         {
