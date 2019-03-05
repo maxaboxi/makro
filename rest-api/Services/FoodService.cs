@@ -114,6 +114,23 @@ namespace Makro.Services
             return new ResultDto(true, "Food deleted succesfully");
         }
 
+        public ResultDto DeleteMultipleFoods(List<string> foodIds, string userId)
+        {
+            foodIds.ForEach(foodId => { 
+                var food = _context.Foods.Include(f => f.User).Where(f => f.UUID == foodId && f.User.UUID == userId).FirstOrDefault();
+
+                if (food == null)
+                {
+                    _logger.LogDebug("Food not found with id: ", foodId);
+                }
+
+                _context.Foods.Remove(food);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Foods deleted succesfully");
+        }
+
         public async Task<AmountDto> GetAmountOfFoods()
         {
             return new AmountDto(await _context.Foods.CountAsync());

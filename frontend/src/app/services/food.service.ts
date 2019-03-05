@@ -63,7 +63,7 @@ export class FoodService {
   }
 
   removeFoods(foods) {
-    const url = `${this.baseUrl}/removefoods`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

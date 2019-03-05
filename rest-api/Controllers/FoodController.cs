@@ -82,5 +82,11 @@ namespace Makro.Controllers
             return Ok(await _foodService.DeleteFood(id, HttpContext.User.Identity.Name));
         }
 
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleFoods(List<string> foodIds)
+        {
+            return _foodService.DeleteMultipleFoods(foodIds, HttpContext.User.Identity.Name);
+        }
+
     }
 }
