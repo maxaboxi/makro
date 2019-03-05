@@ -54,7 +54,7 @@ export class QaService {
   }
 
   getAllUserQuestionsByUser() {
-    const url = `${this.baseUrlQuestion}/user/`;
+    const url = `${this.baseUrlQuestion}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

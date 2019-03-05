@@ -26,7 +26,10 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswersByUser(string userId)
         {
             List<AnswerDto> answerDtos = new List<AnswerDto>();
-            var answers = await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId).Include(a => a.User).ToListAsync();
+            var answers = await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId)
+                .Include(a => a.User)
+                .Include(a => a.Question)
+                .ToListAsync();
             answers.ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
             return answerDtos;
         }

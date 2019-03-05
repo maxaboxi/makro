@@ -10,7 +10,7 @@
       <ul>
         <li class="big-list lead" *ngFor="let question of questions; let i = index">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="navigate(question)"> {{ question.question }} </div>
+            <div class="col-10 day-list-name" (click)="navigate(question)"> {{ question.questionBody }} </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteQuestion(i)" title="{{ 'DELETE_QUESTION' | translate }}"></i>
             </div>

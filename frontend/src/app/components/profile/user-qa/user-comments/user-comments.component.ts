@@ -6,6 +6,7 @@ import { Comment } from '../../../../models/Comment';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CommentService } from '../../../../services/comment.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-comments',
@@ -18,13 +19,15 @@ export class UserCommentsComponent implements OnInit {
   deletedComments = [];
   commentsDeleted = false;
   loading = true;
+  commentText = '';
 
   constructor(
     private auth: AuthService,
     private commentService: CommentService,
     private flashMessage: FlashMessagesService,
     private router: Router,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -68,9 +71,34 @@ export class UserCommentsComponent implements OnInit {
     );
   }
 
-  navigate(comment: Comment) {
-    this.router.navigate(['/question'], {
-      // queryParams: { id: comment.questionId }
-    });
+  edit(content, comment: Comment) {
+    this.commentText = comment.body;
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const updatedComment = { ...comment };
+          updatedComment.body = this.commentText;
+          this.commentService.updateComment(updatedComment).subscribe(
+            res => {
+              if (res['success']) {
+                this.commentService.getAllCommentsByUser().subscribe(comments => (this.comments = comments));
+                this.commentText = '';
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.commentText = '';
+        }
+      },
+      dismissed => {
+        this.commentText = '';
+      }
+    );
   }
 }

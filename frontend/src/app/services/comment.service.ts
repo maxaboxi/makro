@@ -21,6 +21,16 @@ export class CommentService {
     return this.http.post(url, comment, { headers: headers });
   }
 
+  updateComment(comment: Comment) {
+    const url = `${this.baseUrl}/update/${comment.uuid}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put(url, comment, { headers: headers });
+  }
+
   getAllCommentsByUser() {
     const url = `${this.baseUrl}/user`;
 
