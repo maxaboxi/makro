@@ -67,10 +67,27 @@ namespace Makro.Services
             return new ResultDto(true, "Food added succesfully");
         }
 
-        public async Task<ResultDto> UpdateFoodInformation(Food food)
+        public async Task<ResultDto> UpdateFoodInformation(FoodDto foodDto)
         {
-            food.Id = _context.Foods.Where(f => f.UUID == food.UUID).AsNoTracking().FirstOrDefault().Id;
+            var food = await _context.Foods.Where(f => f.UUID == foodDto.UUID).FirstOrDefaultAsync();
+
+            if (food == null)
+            {
+                _logger.LogDebug("Food not found with id: ", foodDto.UUID);
+                return new ResultDto(false, "Food not found");
+            }
+
             food.UpdatedAt = DateTime.Now;
+            food.Name = foodDto.Name ?? food.Name;
+            food.Energy = foodDto.Energy;
+            food.Carbs = foodDto.Carbs;
+            food.Fat = foodDto.Fat;
+            food.Protein = foodDto.Protein;
+            food.Fiber = foodDto.Fiber;
+            food.Sugar = foodDto.Sugar;
+            food.PackageSize = foodDto.PackageSize;
+            food.ServingSize = foodDto.ServingSize;
+
             _context.Entry(food).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food updated succesfully");

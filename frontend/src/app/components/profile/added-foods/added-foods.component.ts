@@ -85,6 +85,7 @@ export class AddedFoodsComponent implements OnInit {
 
   openFoodModal(content, food) {
     this.selectedFood = food;
+    console.log(this.selectedFood);
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {

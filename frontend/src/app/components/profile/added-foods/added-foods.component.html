@@ -72,7 +72,7 @@
               name="foodEnergy"
               class="form-control"
               placeholder="{{ 'KCAL' | translate }} / 100 g"
-              [(ngModel)]="selectedFood.energia"
+              [(ngModel)]="selectedFood.energy"
               #foodEnergy="ngModel"
               [ngClass]="{ 'is-invalid': foodEnergy.errors && foodEnergy.touched }"
               required
@@ -88,7 +88,7 @@
               name="foodFat"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.rasva"
+              [(ngModel)]="selectedFood.fat"
               #foodFat="ngModel"
               [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
               required
@@ -104,7 +104,7 @@
               name="foodCarbs"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.hh"
+              [(ngModel)]="selectedFood.carbs"
               #foodCarbs="ngModel"
               [ngClass]="{ 'is-invalid': foodCarbs.errors && foodCarbs.touched }"
               required
@@ -120,7 +120,7 @@
               name="foodProtein"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.proteiini"
+              [(ngModel)]="selectedFood.protein"
               #foodProtein="ngModel"
               [ngClass]="{ 'is-invalid': foodProtein.errors && foodProtein.touched }"
               required
@@ -136,7 +136,7 @@
               name="foodFiber"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.kuitu"
+              [(ngModel)]="selectedFood.fiber"
               #foodFiber="ngModel"
             />
           </div>
@@ -149,7 +149,7 @@
               name="foodSugar"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.sokeri"
+              [(ngModel)]="selectedFood.sugar"
               #foodSugar="ngModel"
             />
           </div>
