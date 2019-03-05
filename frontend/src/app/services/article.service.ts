@@ -97,7 +97,7 @@ export class ArticleService {
   }
 
   deleteArticles(articles) {
-    const url = `${this.baseUrl}/removearticles`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

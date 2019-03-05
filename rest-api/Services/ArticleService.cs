@@ -166,5 +166,22 @@ namespace Makro.Services
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article deleted succesfully");
         }
+
+        public ResultDto DeleteMultipleArticles(List<string> articleIds, string userId)
+        {
+            articleIds.ForEach(articleId => {
+                var article = _context.Articles.Where(a => a.UUID == articleId && a.User.UUID == userId).FirstOrDefault();
+
+                if (article == null)
+                {
+                    _logger.LogDebug("Article not found with id: ", articleId);
+                }
+
+                _context.Likes.RemoveRange(_context.Likes.Where(l => l.Article.Id == article.Id));
+                _context.Articles.Remove(article);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Articles deleted succesfully");
+        }
     }
 }

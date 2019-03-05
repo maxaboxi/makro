@@ -14,7 +14,7 @@
             <div class="col-2">
               <i *ngIf="like.value > 0" class="fas fa-thumbs-up mr-3" style="color:#ff3b3f;"></i>
               <i *ngIf="like.value < 0" class="fas fa-thumbs-down mr-3" style="color:#ff3b3f;"></i>
-              <i class="far fa-minus-square" (click)="deleteVote(i, like)" title="{{ 'DELETE_LIKE' | translate }}"></i>
+              <i class="far fa-minus-square" (click)="deleteLike(i, like)" title="{{ 'DELETE_LIKE' | translate }}"></i>
             </div>
           </div>
           <hr />
