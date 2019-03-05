@@ -110,10 +110,13 @@ namespace Makro.Services
 
         public async Task<ResultDto> AddNewArticle(ArticleDto articleDto, string userId)
         {
-            using (var memoryStream = new MemoryStream())
+            if (articleDto.HeaderImage != null)
             {
-                await articleDto.HeaderImage.CopyToAsync(memoryStream);
-                articleDto.Image = memoryStream.ToArray();
+                using (var memoryStream = new MemoryStream())
+                {
+                    await articleDto.HeaderImage.CopyToAsync(memoryStream);
+                    articleDto.Image = memoryStream.ToArray();
+                }
             }
 
             var article = _mapper.Map<Article>(articleDto);

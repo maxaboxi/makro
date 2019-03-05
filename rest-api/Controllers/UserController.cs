@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Makro.Models;
 using System.Threading.Tasks;
 using Makro.Services;
 using Makro.DTO;
-using AutoMapper;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -20,13 +18,11 @@ namespace Makro.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UserController(UserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UserController(UserService userService, IOptions<AppSettings> appSettings)
         {
             _userService = userService;
-            _mapper = mapper;
             _appSettings = appSettings.Value;
         }
 
@@ -41,8 +37,7 @@ namespace Makro.Controllers
         [HttpPost("register")]
         public async Task<ResultDto> RegisterUser(UserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-            return await _userService.RegisterUser(user, userDto.Password);
+            return await _userService.RegisterUser(userDto, userDto.Password);
         }
 
         [AllowAnonymous]
@@ -109,17 +104,10 @@ namespace Makro.Controllers
             return Ok(await _userService.UpdateUserInformation(userDto));
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteAccount(string id)
+        [HttpPost("delete")]
+        public async Task<ResultDto> DeleteAccount(LoginDto credentials)
         {
-            if (HttpContext.User.Identity.Name != id)
-            {
-                return Unauthorized();
-            }
-
-            await _userService.DeleteAccount(id);
-
-            return Ok(new ResultDto(true, "Account deleted"));
+            return await _userService.DeleteAccount(credentials, HttpContext.User.Identity.Name);
         }
 
         [HttpGet("admin")]

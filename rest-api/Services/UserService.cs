@@ -26,8 +26,9 @@ namespace Makro.Services
             _logger = logger;
         }
 
-        public async Task<ResultDto> RegisterUser(User user, string password)
+        public async Task<ResultDto> RegisterUser(UserDto userDto, string password)
         {
+            var user = _mapper.Map<User>(userDto);
 
             if (string.IsNullOrWhiteSpace(password))
             {
@@ -144,7 +145,7 @@ namespace Makro.Services
         public async Task<ResultDto> CheckAdminRights(string userId)
         {
             var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
-            if (user.Roles.Contains("admin")) {
+            if (user.Roles != null && user.Roles.Contains("admin")) {
                 return new ResultDto(true, "Ok");
             }
 
@@ -171,19 +172,31 @@ namespace Makro.Services
             return new ResultDto(true, "Information updated succesfully");
         }
 
-        public async Task<ResultDto> DeleteAccount(string id)
+        public async Task<ResultDto> DeleteAccount(LoginDto credentials, string userId)
         {
-            var user = await _context.Users.Where(u => u.UUID == id).FirstOrDefaultAsync();
+            var user = await _context.Users
+                .Where(u => u.Username == credentials.UsernameOrEmail || u.Email == credentials.UsernameOrEmail)
+                .FirstOrDefaultAsync();
 
-            if (user == null)
+            if (user != null)
             {
-                return new ResultDto(false, "User not found");
+                if (user.UUID != userId)
+                {
+                    return new ResultDto(false, "Unauthorized");
+                }
+
+                if (ValidatePassword(credentials.Password, user.Password))
+                {
+                    _context.Meals.RemoveRange(_context.Meals.Where(m => m.User == user));
+                    _context.MealNames.RemoveRange(_context.MealNames.Where(m => m.User == user));
+                    _context.Remove(user);
+                    await _context.SaveChangesAsync();
+                    return new ResultDto(true, "Account deleted succesfully");
+                }
+
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return new ResultDto(true, "User deleted succesfully");
+            return new ResultDto(false, "Unauthorized");
         }
 
         public async Task<AmountDto> GetAmountOfUsers()

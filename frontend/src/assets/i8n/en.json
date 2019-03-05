@@ -232,7 +232,7 @@
   "CREATED_AT": "Created at",
   "UPDATED_AT": "Updated at",
   "CLOSE": "Close",
-  "DELETE_ACCOUNT_CONFIRMATION": "Are you completely sure that you want to delete your user account? When deleting your account all related information will be deleted too except the foods that you have added. After account has been deleted it cannot be restored.",
+  "DELETE_ACCOUNT_CONFIRMATION": "Are you completely sure that you want to delete your user account? When deleting your account all related information will be deleted too. After account has been deleted it cannot be restored.",
   "ACCOUNT_DELETED": "Account deleted",
   "CHANGE_PASSWORDS_DONT_MATCH": "Passwords did not match. Password was not changed.",
   "PASSWORD_CHANGED": "Password changed",

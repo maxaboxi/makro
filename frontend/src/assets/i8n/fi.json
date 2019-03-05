@@ -232,7 +232,7 @@
   "CREATED_AT": "Luotu",
   "UPDATED_AT": "Päivitetty",
   "CLOSE": "Sulje",
-  "DELETE_ACCOUNT_CONFIRMATION": "Oletko varma, että haluat poistaa käyttäjätilisi? Tilin mukana poistetaan myös kaikki tallentamasi tieto paitsi lisäämäsi ruoat. Tilin poistoa ei voi perua.",
+  "DELETE_ACCOUNT_CONFIRMATION": "Oletko varma, että haluat poistaa käyttäjätilisi? Tilin mukana poistetaan myös kaikki tallentamasi tieto. Tilin poistoa ei voi perua.",
   "ACCOUNT_DELETED": "Käyttäjätili poistettu.",
   "CHANGE_PASSWORDS_DONT_MATCH": "Salasanat eivät täsmänneet. Salasanaa ei vaihdettu.",
   "PASSWORD_CHANGED": "Salasana vaihdettu",

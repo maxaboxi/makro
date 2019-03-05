@@ -201,25 +201,41 @@ export class UserInfoComponent implements OnInit {
     this.showDeleteAccount = !this.showDeleteAccount;
   }
 
-  deleteAccount() {
-    if (confirm(this.translator.instant('DELETE_ACCOUNT_CONFIRMATION'))) {
-      this.auth.deleteAccount().subscribe(
-        success => {
-          this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.logout();
-        },
-        (error: Error) => {
-          this.flashMessage.show(error['error'].msg, {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
+  deleteAccount(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const user = {
+            usernameOrEmail: this.user.username,
+            password: this.currentPassword
+          };
+          this.auth.deleteAccount(user).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.logout();
+              } else {
+                this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
         }
-      );
-    } else {
-      this.showDeleteAccount = false;
-    }
+      },
+      dismissed => {}
+    );
+    this.showDeleteAccount = false;
+    this.currentPassword = null;
   }
 }

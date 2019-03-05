@@ -203,13 +203,13 @@ export class AuthService {
     return null;
   }
 
-  deleteAccount() {
+  deleteAccount(user) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/deleteaccount`;
+    const url = `${this.baseUrl}/delete`;
 
-    return this.http.delete(url, { headers: headers });
+    return this.http.post(url, user, { headers: headers });
   }
 
   getUsersCount() {
