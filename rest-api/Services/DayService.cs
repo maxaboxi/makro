@@ -165,7 +165,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteDay(string id, string userId)
         {
-            var day = await _context.Days.Where(d => d.UUID == id).Include(d => d.User).Include(d => d.Meals).FirstOrDefaultAsync();
+            var day = await _context.Days.Where(d => d.UUID == id && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefaultAsync();
 
             if (day == null)
             {
@@ -173,16 +173,28 @@ namespace Makro.Services
                 return new ResultDto(false, "Day not found");
             }
 
-            if (day.User.UUID != userId)
-            {
-                _logger.LogError("User with UUID " + userId + " tried to delete day which belnogs to " + day.User.UUID);
-                return new ResultDto(false, "Unauthorized");
-            }
-
             day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
             _context.Days.Remove(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleDays(List<string> dayIds, string userId)
+        {
+            dayIds.ForEach(dayId => { 
+                var day = _context.Days.Where(d => d.UUID == dayId && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefault();
+
+                if (day == null)
+                {
+                    _logger.LogDebug("Day not found with UUID: ", dayId);
+                }
+
+                day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+                _context.Days.Remove(day);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
         }
     }
 }

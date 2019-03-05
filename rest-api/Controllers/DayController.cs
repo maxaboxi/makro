@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Makro.DTO;
+using System;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -68,6 +69,12 @@ namespace Makro.Controllers
         public async Task<IActionResult> DeleteDay(string id)
         {
             return Ok(await _dayService.DeleteDay(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleDays([FromBody]List<string> dayIds)
+        {
+            return _dayService.DeleteMultipleDays(dayIds, HttpContext.User.Identity.Name);
         }
     }
 }
