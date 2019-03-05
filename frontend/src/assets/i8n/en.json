@@ -284,5 +284,8 @@
   "HELP_DEVELOPMENT_NAV": "Participate in development",
   "REASON_REQUIRED": "Reason required",
   "REPLY_COUNT": "Number of answers",
-  "UPDATE_COMMENT": "Update comment"
+  "UPDATE_COMMENT": "Update comment",
+  "CURRENT_PASSWORD": "Current password",
+  "WRONG_CREDENTIALS": "Invalid credentials",
+  "USERNAME_OR_EMAIL": "Username or email"
 }

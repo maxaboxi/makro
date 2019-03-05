@@ -284,5 +284,8 @@
   "HELP_DEVELOPMENT_NAV": "Osallistu kehitykseen",
   "REASON_REQUIRED": "Syy vaaditaan",
   "REPLY_COUNT": "Vastausten lukumäärä",
-  "UPDATE_COMMENT": "Muokkaa kommenttia"
+  "UPDATE_COMMENT": "Muokkaa kommenttia",
+  "CURRENT_PASSWORD": "Nykyinen salasana",
+  "WRONG_CREDENTIALS": "Väärä käyttäjätunnus ja/tai salasana",
+  "USERNAME_OR_EMAIL": "Käyttäjätunnus tai sähköpostiosoite"
 }

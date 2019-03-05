@@ -197,6 +197,19 @@
     <div class="container">
       <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
+          <label for="currentPassword">{{ 'CURRENT_PASSWORD' | translate }}</label>
+          <input
+            type="password"
+            name="currentpassword"
+            #userCurrentPassword="ngModel"
+            class="form-control"
+            [(ngModel)]="currentPassword"
+            required
+            [ngClass]="{ 'is-invalid': userCurrentPassword.errors && userCurrentPassword.touched }"
+          />
+          <div [hidden]="!userCurrentPassword.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
+        </div>
+        <div class="form-group">
           <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
           <input
             type="password"

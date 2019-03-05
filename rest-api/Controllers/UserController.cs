@@ -79,6 +79,12 @@ namespace Makro.Controllers
             });
         }
 
+        [HttpPost("changepassword")]
+        public async Task<ResultDto> ChangePassword(LoginDto credentials)
+        {
+            return await _userService.ChangePassword(credentials, HttpContext.User.Identity.Name);
+        }
+
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetUserInformation()
         {

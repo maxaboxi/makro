@@ -78,6 +78,32 @@ namespace Makro.Services
             return null;
         }
 
+        public async Task<ResultDto> ChangePassword(LoginDto credentials, string userId)
+        {
+            var user = await _context.Users
+                .Where(u => u.Username == credentials.UsernameOrEmail || u.Email == credentials.UsernameOrEmail)
+                .FirstOrDefaultAsync();
+                
+            if (user != null)
+            {
+                if (user.UUID != userId)
+                {
+                    return new ResultDto(false, "Unauthorized");
+                }
+
+                if (ValidatePassword(credentials.Password, user.Password))
+                {
+                    user.UpdatedAt = DateTime.Now;
+                    user.Password = HashPassword(credentials.NewPassword);
+                    await _context.SaveChangesAsync();
+                    return new ResultDto(true, "Password changed succesfully");
+                }
+
+            }
+
+            return new ResultDto(false, "Unauthorized");
+        }
+
         public async Task<ActionResult<UserDto>> GetUserDto (string id)
         {
             var user = await _context.Users.Include(u => u.MealNames).Where(p => p.UUID == id).AsNoTracking().FirstOrDefaultAsync();

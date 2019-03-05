@@ -169,7 +169,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/updatepassword`;
+    const url = `${this.baseUrl}/changepassword`;
 
     return this.http.post(url, user, { headers: headers });
   }

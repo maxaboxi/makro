@@ -19,6 +19,7 @@ export class UserInfoComponent implements OnInit {
   showDeleteAccount = false;
   newUserPassword;
   newUserPasswordAgain;
+  currentPassword;
   loading = true;
   online;
 
@@ -29,7 +30,7 @@ export class UserInfoComponent implements OnInit {
     private modalService: NgbModal,
     private translator: TranslateService,
     private connectionService: ConnectionService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.connectionService.monitor().subscribe(res => (this.online = res));
@@ -150,14 +151,23 @@ export class UserInfoComponent implements OnInit {
             });
           } else {
             const user = {
-              uuid: this.user.uuid,
-              password: this.newUserPassword
+              usernameOrEmail: this.user.username,
+              password: this.currentPassword,
+              newPassword: this.newUserPassword
             };
             this.auth.changePassword(user).subscribe(
               res => {
                 if (res['success']) {
                   this.flashMessage.show(this.translator.instant('PASSWORD_CHANGED'), {
                     cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.newUserPassword = null;
+                  this.newUserPasswordAgain = null;
+                  this.currentPassword = null;
+                } else {
+                  this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                    cssClass: 'alert-danger',
                     timeout: 2000
                   });
                 }
@@ -171,12 +181,11 @@ export class UserInfoComponent implements OnInit {
             );
           }
         }
-        this.newUserPassword = null;
-        this.newUserPasswordAgain = null;
       },
       dismissed => {
         this.newUserPassword = null;
         this.newUserPasswordAgain = null;
+        this.currentPassword = null;
       }
     );
   }
