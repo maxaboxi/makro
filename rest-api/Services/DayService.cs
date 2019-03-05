@@ -196,5 +196,23 @@ namespace Makro.Services
 
             return new ResultDto(true, "Days deleted succesfully");
         }
+
+        public ResultDto DeleteMultipleSharedDays(List<string> dayIds, string userId)
+        {
+            dayIds.ForEach(dayId => {
+                var day = _context.SharedDays.Where(d => d.UUID == dayId && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefault();
+
+                if (day == null)
+                {
+                    _logger.LogDebug("Day not found with UUID: ", dayId);
+                }
+
+                day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+                _context.SharedDays.Remove(day);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
+        }
     }
 }

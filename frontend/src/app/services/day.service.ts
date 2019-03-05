@@ -108,7 +108,7 @@ export class DayService {
   }
 
   removeSharedDays(days) {
-    const url = `${this.baseUrl}/shareddays/removeshareddays`;
+    const url = `${this.baseUrl}/shared/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

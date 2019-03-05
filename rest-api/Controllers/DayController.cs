@@ -76,5 +76,11 @@ namespace Makro.Controllers
         {
             return _dayService.DeleteMultipleDays(dayIds, HttpContext.User.Identity.Name);
         }
+
+        [HttpDelete("shared/delete/multiple")]
+        public ResultDto DeleteMultipleSharedDays([FromBody]List<string> dayIds)
+        {
+            return _dayService.DeleteMultipleSharedDays(dayIds, HttpContext.User.Identity.Name);
+        }
     }
 }
