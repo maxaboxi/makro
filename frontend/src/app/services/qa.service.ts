@@ -94,7 +94,7 @@ export class QaService {
   }
 
   removeQuestions(questionIds) {
-    const url = `${this.baseUrlQuestion}/delete`;
+    const url = `${this.baseUrlQuestion}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

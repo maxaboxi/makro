@@ -93,7 +93,7 @@
   "NO_QUESTIONS": "Ei kysymyksiä",
   "YOUR_QUESTION": "Kysymyksesi",
   "REQUIRED_FIELD": "Vaadittu kenttä",
-  "QUESTION_NOT_LONG_ENOGH": "Kysymyksen täytyy olla vähintään 10 merkkiä pitkä",
+  "QUESTION_NOT_LONG_ENOUGH": "Kysymyksen täytyy olla vähintään 10 merkkiä pitkä",
   "MORE_INFO_ABOUT_QUESTION": "Lisätietoja",
   "ANSWER_TO_QUESTION": "Vastaa",
   "ADD_ANSWER": "Lisää vastaus",

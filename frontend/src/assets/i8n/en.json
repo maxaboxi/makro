@@ -93,7 +93,7 @@
   "NO_QUESTIONS": "No questions",
   "YOUR_QUESTION": "Your question",
   "REQUIRED_FIELD": "This field is required",
-  "QUESTION_NOT_LONG_ENOGH": "Question has to be at least 10 characters long",
+  "QUESTION_NOT_LONG_ENOUGH": "Question has to be at least 10 characters long",
   "MORE_INFO_ABOUT_QUESTION": "More information about the question",
   "ANSWER_TO_QUESTION": "Answer",
   "ADD_ANSWER": "Add a new answer",
