@@ -142,7 +142,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateDay(DayDto dayDto, string userId)
         {
-            var day = await _context.Days.Where(d => d.UUID == dayDto.UUID)
+            var day = await _context.Days.Where(d => d.UUID == dayDto.UUID && d.User.UUID == userId)
                 .Include(d => d.User)
                 .Include(d => d.Meals)
                 .FirstOrDefaultAsync();
@@ -151,12 +151,6 @@ namespace Makro.Services
             {
                 _logger.LogDebug("Day not found with UUID: ", dayDto.UUID);
                 return new ResultDto(false, "Day not found");
-            }
-
-            if (day.User.UUID != userId)
-            {
-                _logger.LogError("User with UUID ", userId + " tried to modify day which belongs to " + day.User.UUID);
-                return new ResultDto(false, "Unauthorized");
             }
 
             day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));

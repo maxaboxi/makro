@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class DayService {
   private baseUrl = `${environment.baseUrl}/day`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllSavedDays() {
     const url = `${this.baseUrl}/user`;
@@ -42,14 +42,14 @@ export class DayService {
     return this.http.post(url, day, { headers: headers });
   }
 
-  saveEditedDay(day) {
-    const url = `${this.baseUrl}/update`;
+  saveEditedDay(day: Day) {
+    const url = `${this.baseUrl}/update/${day.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, day, { headers: headers });
+    return this.http.put(url, day, { headers: headers });
   }
 
   removeDays(days) {
