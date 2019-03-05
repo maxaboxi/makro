@@ -109,7 +109,7 @@ export class QaService {
   }
 
   removeAnswers(answerIds) {
-    const url = `${this.baseUrlAnswer}/delete`;
+    const url = `${this.baseUrlAnswer}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

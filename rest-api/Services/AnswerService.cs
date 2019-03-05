@@ -79,5 +79,22 @@ namespace Makro.Services
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Answer deleted succesfully");
         }
+
+        public ResultDto DeleteMultipleAnswers(List<string> anserIds, string userId)
+        {
+            anserIds.ForEach(answerId => {
+                var answer = _context.Answers.Where(a => a.UUID == answerId && a.User.UUID == userId).FirstOrDefault();
+
+                if (answer == null)
+                {
+                    _logger.LogDebug("Answer not found with id: " + answerId + " and with userId " + userId);
+                }
+
+                _context.Answers.Remove(answer);
+                 _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Answer deleted succesfully");
+        }
     }
 }
