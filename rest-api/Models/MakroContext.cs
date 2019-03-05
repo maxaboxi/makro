@@ -80,7 +80,6 @@ namespace Makro.Models
             modelBuilder.Entity<SharedMeal>()
                 .HasIndex(e => e.UUID).IsUnique();
 
-
             modelBuilder.Entity<Like>()
                 .HasIndex(e => e.UUID).IsUnique();
 

@@ -13,12 +13,10 @@ namespace Makro.Controllers
     public class MealController : ControllerBase
     {
         private readonly MealService _mealService;
-        private readonly UserService _userService;
 
-        public MealController(MealService mealService, UserService userService)
+        public MealController(MealService mealService)
         {
             _mealService = mealService;
-            _userService = userService;
         }
 
         [HttpGet]
@@ -47,14 +45,8 @@ namespace Makro.Controllers
             {
                 return BadRequest();
             }
-            var user = _userService.GetUser(HttpContext.User.Identity.Name);
 
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            return Ok(await _mealService.AddNewSharedMeal(sharedMealDto, user));
+            return Ok(await _mealService.AddNewSharedMeal(sharedMealDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPut("update/{id}")]
@@ -79,17 +71,16 @@ namespace Makro.Controllers
             return Ok(await _mealService.DeleteSharedMeal(id, HttpContext.User.Identity.Name));
         }
 
-        [HttpPut("updatemealnames/{userid}")]
-        public async Task<IActionResult> UpdateMealNames(string userId, [FromBody]List<MealNameDto> mealNames)
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleDays([FromBody]List<string> mealIds)
         {
-            if (HttpContext.User.Identity.Name != userId)
-            {
-                return Unauthorized();
-            }
+            return _mealService.DeleteMultipleSharedMeals(mealIds, HttpContext.User.Identity.Name);
+        }
 
-            var user = _userService.GetUser(userId);
-
-            return Ok(await _mealService.UpdateMealNamesForUser(user, mealNames));
+        [HttpPut("updatemealnames/")]
+        public async Task<IActionResult> UpdateMealNames([FromBody]List<MealNameDto> mealNames)
+        {
+            return Ok(await _mealService.UpdateMealNamesForUser(HttpContext.User.Identity.Name, mealNames));
         }
     }
 }

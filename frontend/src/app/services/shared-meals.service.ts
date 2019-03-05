@@ -40,7 +40,7 @@ export class SharedMealsService {
   }
 
   shareNewMeal(meal: Meal) {
-    const url = `${this.baseUrl}/addnewsharedmeal`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -49,18 +49,18 @@ export class SharedMealsService {
     return this.http.post(url, meal, { headers: headers });
   }
 
-  saveEditedMeal(meal) {
-    const url = `${this.baseUrl}/saveeditedsharedmeal`;
+  saveEditedMeal(meal: Meal) {
+    const url = `${this.baseUrl}/update/${meal.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, meal, { headers: headers });
+    return this.http.put(url, meal, { headers: headers });
   }
 
   removeMeals(meals) {
-    const url = `${this.baseUrl}/removesharedmeals`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

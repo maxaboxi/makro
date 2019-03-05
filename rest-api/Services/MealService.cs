@@ -103,8 +103,15 @@ namespace Makro.Services
             return sharedMealDto;
         }
 
-        public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
+        public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, string userId)
         {
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return new ResultDto(false, "Unauthorized");
+            }
+
             List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);
             var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
             sharedMeal.UUID = Guid.NewGuid().ToString();
@@ -112,6 +119,7 @@ namespace Makro.Services
             sharedMeal.CreatedAt = DateTime.Now;
             sharedMeal.UpdatedAt = DateTime.Now;
             await _context.AddAsync(sharedMeal);
+
             foods.ForEach(f => {
                 var smf = new SharedMealFood
                 {
@@ -121,6 +129,7 @@ namespace Makro.Services
                 };
                 _context.Add(smf);
             });
+
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal shared succesfully");
         }
@@ -183,7 +192,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteSharedMeal(string id, string userId)
         {
-            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id).Include(sm => sm.User).FirstOrDefaultAsync();
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id && sm.User.UUID == userId).Include(sm => sm.User).FirstOrDefaultAsync();
 
 
             if (sharedMeal == null)
@@ -192,21 +201,38 @@ namespace Makro.Services
                 return new ResultDto(false, "Not found");
             }
 
-            if (sharedMeal.User.UUID != userId)
-            {
-                _logger.LogError("User with UUID ", userId + " tried to delete shared meal which belongs to " + sharedMeal.User.UUID);
-                return new ResultDto(false, "Unauthorized");
-            }
-
             _context.SharedMeals.Remove(sharedMeal);
             await _context.SaveChangesAsync();
 
             return new ResultDto(true, "Shared meal deleted succesfully");
         }
 
-        public async Task<ResultDto> UpdateMealNamesForUser(User user, List<MealNameDto> mealNameDtos)
+        public ResultDto DeleteMultipleSharedMeals(List<string> mealIds, string userId)
         {
-            var originalMealNames = await _context.MealNames.Where(mn => mn.User == user).ToListAsync();
+            mealIds.ForEach(mealId => { 
+                var sharedMeal = _context.SharedMeals.Where(sm => sm.UUID == mealId && sm.User.UUID == userId).FirstOrDefault();
+
+                if (sharedMeal == null)
+                {
+                    _logger.LogDebug("SharedMeal not found with UUID: ", mealId);
+                }
+
+                _context.SharedMeals.Remove(sharedMeal);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Meals deleted succesfully");
+        }
+
+        public async Task<ResultDto> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
+        {
+            var originalMealNames = await _context.MealNames.Where(mn => mn.User.UUID == userId).ToListAsync();
+
+            if (originalMealNames == null)
+            {
+                return new ResultDto(false, "Not found");
+            }
+
             originalMealNames.ForEach(m =>
             {
                 mealNameDtos.ForEach(mnd => {
