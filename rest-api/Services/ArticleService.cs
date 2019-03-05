@@ -100,9 +100,12 @@ namespace Makro.Services
             return articleDto;
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllArticlesByUser(string id)
         {
-            return await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).ToListAsync();
+            List<Article> articles = await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).Include(a => a.User).ToListAsync();
+            List<ArticleDto> articleDtos = new List<ArticleDto>();
+            articles.ForEach(a => articleDtos.Add(_mapper.Map<ArticleDto>(a)));
+            return articleDtos;
         }
 
         public async Task<ResultDto> AddNewArticle(ArticleDto articleDto, string userId)
