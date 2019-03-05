@@ -226,23 +226,16 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
         {
-            var originalMealNames = await _context.MealNames.Where(mn => mn.User.UUID == userId).ToListAsync();
 
-            if (originalMealNames == null)
-            {
-                return new ResultDto(false, "Not found");
-            }
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            _context.MealNames.RemoveRange(_context.MealNames.Where(m => m.User == user));
 
-            originalMealNames.ForEach(m =>
+            mealNameDtos.ForEach(mn =>
             {
-                mealNameDtos.ForEach(mnd => {
-                    if (m.UUID == mnd.UUID)
-                    {
-                        m.Name = mnd.Name;
-                        _context.Entry(m).State = EntityState.Modified;
-                    }
-                });
+                var meal = new MealName(mn.Name, user);
+                _context.Add(meal);
             });
+
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Names updated succesfully");
         }

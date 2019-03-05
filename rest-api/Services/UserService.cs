@@ -125,7 +125,6 @@ namespace Makro.Services
 
         public User GetUser(string id)
         {
-
             return _context.Users.Where(p => p.UUID == id).AsNoTracking().FirstOrDefault();
         }
 

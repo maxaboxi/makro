@@ -79,11 +79,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   updateInfo() {
-    this.user.meals.forEach((m, i) => {
-      if (m.name.length === 0) {
-        m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
-      }
-    });
     const userInfo: User = {
       username: this.user.username,
       email: this.user.email,
@@ -123,11 +118,46 @@ export class UserInfoComponent implements OnInit {
     );
   }
 
-  openModal(content) {
+  updateMealNames() {
+    this.user.meals.forEach((m, i) => {
+      if (m.name.length === 0) {
+        m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
+      }
+    });
+
+    this.auth.updateMealNames(this.user.meals).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.changed = false;
+        } else {
+          this.flashMessage.show(res['message'], {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show('Something went wrong', {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  openModal(content, editingMealNames: boolean) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.updateInfo();
+          if (!editingMealNames) {
+            this.updateInfo();
+          } else {
+            this.updateMealNames();
+          }
         } else {
           this.user = this.auth.getUserInfo();
           this.changed = false;

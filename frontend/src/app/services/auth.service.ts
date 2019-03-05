@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AuthService {
   private baseUrl = `${environment.baseUrl}/user`;
+  private baseUrlMeal = `${environment.baseUrl}/meal`;
   isLoggedIn = new BehaviorSubject(false);
   isAdmin = new BehaviorSubject(false);
   user = new BehaviorSubject<User>(null);
@@ -163,6 +164,15 @@ export class AuthService {
         localStorage.setItem('makro_lang', lang);
       }
     });
+  }
+
+  updateMealNames(mealNames: Meal[]) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrlMeal}/user/meals`;
+
+    return this.http.post(url, mealNames, { headers: headers });
   }
 
   changePassword(user) {

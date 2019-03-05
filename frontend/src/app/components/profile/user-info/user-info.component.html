@@ -47,7 +47,7 @@
           >
         </li>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo, false)"
         ><i class="far fa-edit"></i> {{ 'EDIT_INFORMATION' | translate }}</button
       >
       <button *ngIf="showDeleteAccount && online" class="btn btn-danger btn-block" (click)="deleteAccount(deleteAccountModal)">
@@ -64,7 +64,7 @@
           {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>
         </li>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName, true)"
         ><i class="far fa-edit"></i> {{ 'EDIT_NAMES' | translate }}</button
       >
       <div class="row mt-1">
@@ -74,7 +74,7 @@
           }}</button>
         </div>
         <div class="col" *ngIf="changed">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">{{ 'SAVE_CHANGES' | translate }}</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="updateMealNames()">{{ 'SAVE_CHANGES' | translate }}</button>
         </div>
         <p *ngIf="changed" class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
       </div>
