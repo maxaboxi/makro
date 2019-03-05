@@ -94,7 +94,7 @@ namespace Makro.Services
                  _context.SaveChanges();
             });
 
-            return new ResultDto(true, "Answer deleted succesfully");
+            return new ResultDto(true, "Answers deleted succesfully");
         }
     }
 }

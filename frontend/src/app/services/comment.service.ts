@@ -62,7 +62,7 @@ export class CommentService {
   }
 
   removeComments(commentIds) {
-    const url = `${this.baseUrl}/delete`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

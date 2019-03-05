@@ -146,5 +146,21 @@ namespace Makro.Services
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Comment deleted succesfully");
         }
+
+        public ResultDto DeleteMultipleComments(List<string> commentIds, string userId)
+        {
+            commentIds.ForEach(commentId => { 
+                var comment = _context.Comments.Where(c => c.UUID == commentId && c.User.UUID == userId).FirstOrDefault();
+
+                if (comment == null)
+                {
+                    _logger.LogDebug("Comment not found with id: " + commentId + " and with userId " + userId);
+                }
+
+                _context.Comments.Remove(comment);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Comments deleted succesfully");
+        }
     }
 }
