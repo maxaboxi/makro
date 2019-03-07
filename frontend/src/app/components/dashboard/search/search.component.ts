@@ -23,6 +23,7 @@ export class SearchComponent implements OnInit {
   meals = [];
   isLoggedIn = false;
   defaultValues = [10, 30, 50, 100];
+  amountClicked = 0;
   private _user = new BehaviorSubject<User>(null);
 
   @ViewChild('searchbar') search: ElementRef;
@@ -133,6 +134,14 @@ export class SearchComponent implements OnInit {
       }
     } else {
       this.results = [];
+    }
+  }
+
+  setAmount(amount) {
+    if (this.amountClicked == amount) {
+      this.selectedAmount += amount;
+    } else {
+      this.selectedAmount = amount;
     }
   }
 
