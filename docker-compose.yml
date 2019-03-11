@@ -1,135 +1,34 @@
 version: '3'
 
 services:
-  virusscanner:
-    container_name: makro-scanner
-    restart: always
-    build: ./virusscanner/
-    ports:
-      - '1330:1330'
-    links:
-      - article-db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1330
-      - VIRTUAL_HOST=virusscanner.makro.diet
-      - LETSENCRYPT_HOST=virusscanner.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-
-  votes:
-    container_name: makro-votes
-    restart: always
-    build: ./votes/
-    ports:
-      - '1335:1335'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1335
-      - VIRTUAL_HOST=votes.makro.diet
-      - LETSENCRYPT_HOST=votes.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo:27020
-
-  auth:
-    container_name: makro-auth
-    restart: always
-    build: ./auth/
-    ports:
-      - '1336:1336'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1336
-      - VIRTUAL_HOST=auth.makro.diet
-      - LETSENCRYPT_HOST=auth.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo:27020
-
   backend:
-    container_name: makro-node
+    container_name: makro-restapi
     restart: always
-    build: ./backend/
+    build: ./rest-api/
     ports:
-      - '1337:1337'
-    links:
+      - '1337:80'
+    depends_on:
       - db
     networks:
       - back
       - reverse-proxy
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
       - VIRTUAL_PORT=1337
       - VIRTUAL_HOST=api.makro.diet
       - LETSENCRYPT_HOST=api.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo:27020
-  foods:
-    container_name: makro-foods
-    restart: always
-    build: ./foods/
-    ports:
-      - '1338:1338'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1338
-      - VIRTUAL_HOST=foods.makro.diet
-      - LETSENCRYPT_HOST=foods.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo:27020
-
-  articles:
-    container_name: makro-articles
-    restart: always
-    build: ./articles/
-    ports:
-      - '1339:1339'
-    links:
-      - db
-    networks:
-      - back
-      - reverse-proxy
-    environment:
-      - VIRTUAL_PORT=1339
-      - VIRTUAL_HOST=articles.makro.diet
-      - LETSENCRYPT_HOST=articles.makro.diet
-      - LETSENCRYPT_EMAIL=artotukki@gmail.com
-      - WAIT_HOSTS=makro-mongo-articles:27021
 
   db:
-    container_name: makro-mongo
-    image: mongo
-    command: mongod --port 27020
+    container_name: makro-db
+    image: postgres:11
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=adminpw
-      - MONGO_INITDB_DATABASE=admin
+      - POSTGRES_USER=tukki
+      - POSTGRES_PASSWORD=ABC
     ports:
-      - '27020:27020'
-    networks:
-      - back
-
-  article-db:
-    container_name: makro-mongo-articles
-    image: mongo
-    command: mongod --port 27021
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=adminpw
-      - MONGO_INITDB_DATABASE=admin
-    ports:
-      - '27021:27021'
+      - '7777:5432'
     networks:
       - back
 
