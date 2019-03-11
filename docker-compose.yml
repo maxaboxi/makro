@@ -21,11 +21,12 @@ services:
 
   db:
     container_name: makro-db
-    image: postgres:11
+    build: ./db/
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=tukki
+      - POSTGRES_DB=makro
+      - POSTGRES_USER=makro
       - POSTGRES_PASSWORD=ABC
     ports:
       - '7777:5432'
