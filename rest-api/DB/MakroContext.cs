@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-namespace Makro.Models
+using Makro.Models;
+namespace Makro.DB
 {
     public class MakroContext : DbContext
     {

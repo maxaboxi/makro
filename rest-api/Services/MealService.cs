@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using Makro.DTO;
 using System;
 using System.Linq;
-using Makro.Dto;
 namespace Makro.Services
 {
     public class MealService

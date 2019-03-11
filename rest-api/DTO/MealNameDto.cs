@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Makro.DTO;
-namespace Makro.Dto
+namespace Makro.DTO
 {
     public class MealNameDto
     {

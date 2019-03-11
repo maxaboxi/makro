@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,6 @@ using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Makro.Dto;
 namespace Makro.Services
 {
     public class UserService
