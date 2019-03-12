@@ -8,6 +8,7 @@ import { Like } from '../models/Like';
 import { Answer } from '../models/Answer';
 import { Comment } from '../models/Comment';
 import { EditedFood } from '../models/EditedFood';
+import { Food } from '../models/Food';
 
 @Injectable({
   providedIn: 'root'
@@ -149,6 +150,15 @@ export class AdminService {
     });
 
     return this.http.post(url, feedback, { headers: headers });
+  }
+
+  getMostRecentFoods() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/food`;
+
+    return this.http.get<Food[]>(url, { headers: headers });
   }
 
   getAllLikes() {

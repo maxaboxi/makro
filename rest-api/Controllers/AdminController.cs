@@ -91,6 +91,12 @@ namespace Makro.Controllers
             return _adminService.DeleteMultipleSharedMeals(mealIds);
         }
 
+        [HttpGet("food")]
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetMostRecentFoods()
+        {
+            return await _adminService.GetMostRecentFoods();
+        }
+
         [HttpDelete("food/delete/multiple")]
         public ResultDto DeleteMultipleFoods(List<string> foodIds)
         {

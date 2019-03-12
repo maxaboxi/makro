@@ -198,6 +198,19 @@ namespace Makro.Services
             return new ResultDto(true, "Meals deleted succesfully");
         }
 
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetMostRecentFoods()
+        {
+            var foods = await _context.Foods.AsNoTracking()
+                .Include(f => f.User)
+                .OrderBy(f => f.CreatedAt)
+                .Take(50)
+                .ToListAsync();
+            List<FoodDto> foodDtos = new List<FoodDto>();
+            foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
+            foodDtos.Reverse(0, foodDtos.Count);
+            return foodDtos;
+        }
+
         public ResultDto DeleteMultipleFoods(List<string> foodIds)
         {
             foodIds.ForEach(foodId =>

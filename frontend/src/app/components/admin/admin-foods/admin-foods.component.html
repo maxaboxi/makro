@@ -71,7 +71,7 @@
               type="text"
               name="foodUsername"
               class="form-control"
-              [(ngModel)]="selectedFood.username"
+              [(ngModel)]="selectedFood.addedByUsername"
               #foodUsername="ngModel"
               [ngClass]="{ 'is-invalid': foodUsername.errors && foodUsername.touched }"
               required
@@ -105,7 +105,7 @@
               name="foodEnergy"
               class="form-control"
               placeholder="Kcal / 100 g"
-              [(ngModel)]="selectedFood.energia"
+              [(ngModel)]="selectedFood.energy"
               #foodEnergy="ngModel"
               [ngClass]="{ 'is-invalid': foodEnergy.errors && foodEnergy.touched }"
               required
@@ -121,7 +121,7 @@
               name="foodFat"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.rasva"
+              [(ngModel)]="selectedFood.fat"
               #foodFat="ngModel"
               [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
               required
@@ -137,7 +137,7 @@
               name="foodCarbs"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.hh"
+              [(ngModel)]="selectedFood.carbs"
               #foodCarbs="ngModel"
               [ngClass]="{ 'is-invalid': foodCarbs.errors && foodCarbs.touched }"
               required
@@ -153,7 +153,7 @@
               name="foodProtein"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.proteiini"
+              [(ngModel)]="selectedFood.protein"
               #foodProtein="ngModel"
               [ngClass]="{ 'is-invalid': foodProtein.errors && foodProtein.touched }"
               required
@@ -169,7 +169,7 @@
               name="foodFiber"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.kuitu"
+              [(ngModel)]="selectedFood.fiber"
               #foodFiber="ngModel"
             />
           </div>
@@ -182,7 +182,7 @@
               name="foodSugar"
               class="form-control"
               placeholder="g / 100 g"
-              [(ngModel)]="selectedFood.sokeri"
+              [(ngModel)]="selectedFood.sugar"
               #foodSugar="ngModel"
             />
           </div>
@@ -282,7 +282,7 @@
                   name="foodEnergy"
                   class="form-control"
                   placeholder="Kcal / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.energia"
+                  [(ngModel)]="selectedEditedFood.originalFood.energy"
                   #foodEnergy="ngModel"
                   [ngClass]="{ 'is-invalid': foodEnergy.errors && foodEnergy.touched }"
                   required
@@ -298,7 +298,7 @@
                   name="foodFat"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.rasva"
+                  [(ngModel)]="selectedEditedFood.originalFood.fat"
                   #foodFat="ngModel"
                   [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
                   required
@@ -314,7 +314,7 @@
                   name="foodCarbs"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.hh"
+                  [(ngModel)]="selectedEditedFood.originalFood.carbs"
                   #foodCarbs="ngModel"
                   [ngClass]="{ 'is-invalid': foodCarbs.errors && foodCarbs.touched }"
                   required
@@ -330,7 +330,7 @@
                   name="foodProtein"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.proteiini"
+                  [(ngModel)]="selectedEditedFood.originalFood.protein"
                   #foodProtein="ngModel"
                   [ngClass]="{ 'is-invalid': foodProtein.errors && foodProtein.touched }"
                   required
@@ -346,7 +346,7 @@
                   name="foodFiber"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.kuitu"
+                  [(ngModel)]="selectedEditedFood.originalFood.fiber"
                   #foodFiber="ngModel"
                 />
               </div>
@@ -359,7 +359,7 @@
                   name="foodSugar"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.originalFood.sokeri"
+                  [(ngModel)]="selectedEditedFood.originalFood.sugar"
                   #foodSugar="ngModel"
                 />
               </div>
@@ -422,7 +422,7 @@
                   name="foodEnergy"
                   class="form-control"
                   placeholder="Kcal / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.energia"
+                  [(ngModel)]="selectedEditedFood.editedFood.energy"
                   #editedFoodEnergy="ngModel"
                   [ngClass]="{ 'is-invalid': editedFoodEnergy.errors && editedFoodEnergy.touched }"
                   required
@@ -438,7 +438,7 @@
                   name="foodFat"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.rasva"
+                  [(ngModel)]="selectedEditedFood.editedFood.fat"
                   #editedFoodFat="ngModel"
                   [ngClass]="{ 'is-invalid': editedFoodFat.errors && editedFoodFat.touched }"
                   required
@@ -454,7 +454,7 @@
                   name="foodCarbs"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.hh"
+                  [(ngModel)]="selectedEditedFood.editedFood.carbs"
                   #editedFoodCarbs="ngModel"
                   [ngClass]="{ 'is-invalid': editedFoodCarbs.errors && editedFoodCarbs.touched }"
                   required
@@ -470,7 +470,7 @@
                   name="foodProtein"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.proteiini"
+                  [(ngModel)]="selectedEditedFood.editedFood.protein"
                   #editedFoodProtein="ngModel"
                   [ngClass]="{ 'is-invalid': editedFoodProtein.errors && editedFoodProtein.touched }"
                   required
@@ -486,7 +486,7 @@
                   name="foodFiber"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.kuitu"
+                  [(ngModel)]="selectedEditedFood.editedFood.fiber"
                   #foodFiber="ngModel"
                 />
               </div>
@@ -499,7 +499,7 @@
                   name="foodSugar"
                   class="form-control"
                   placeholder="g / 100 g"
-                  [(ngModel)]="selectedEditedFood.editedFood.sokeri"
+                  [(ngModel)]="selectedEditedFood.editedFood.sugar"
                   #editedFoodSugar="ngModel"
                 />
               </div>

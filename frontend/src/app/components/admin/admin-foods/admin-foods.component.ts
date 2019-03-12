@@ -35,7 +35,7 @@ export class AdminFoodsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
+    this.adminService.getMostRecentFoods().subscribe(foods => (this.foods = foods));
     this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => (this.editedFoods = editedFoods));
   }
 
