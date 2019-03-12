@@ -74,6 +74,56 @@ namespace Makro.Services
             return new ResultDto(false, "Feedback not found");
         }
 
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
+        {
+            var days = await _context.Days.AsNoTracking()
+                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User})
+                .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
+
+            List<DayDto> dayDtos = new List<DayDto>();
+            days.ForEach(d => dayDtos.Add(_mapper.Map<DayDto>(d)));
+
+            return dayDtos;
+        }
+
+        public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
+        {
+            return await _context.SharedDays.AsNoTracking().ToListAsync();
+        }
+
+        public ResultDto DeleteMultipleDays(List<string> dayIds)
+        {
+            dayIds.ForEach(dayId => {
+                var day = _context.Days.Where(d => d.UUID == dayId).Include(d => d.Meals).FirstOrDefault();
+
+                if (day != null)
+                {
+                    day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+                    _context.Days.Remove(day);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleSharedDays(List<string> dayIds)
+        {
+            dayIds.ForEach(dayId => {
+                var day = _context.SharedDays.Where(d => d.UUID == dayId).Include(d => d.Meals).FirstOrDefault();
+
+                if (day != null)
+                {
+                    day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+                    _context.SharedDays.Remove(day);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
+        }
+
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
         {
             return await _context.EditedFoods.AsNoTracking().ToListAsync();
@@ -102,16 +152,6 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<Like>>> GetAllLikes()
         {
             return await _context.Likes.AsNoTracking().ToListAsync();
-        }
-
-        public async Task<ActionResult<IEnumerable<Day>>> GetAllDays()
-        {
-            return await _context.Days.AsNoTracking().ToListAsync();
-        }
-
-        public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
-        {
-            return await _context.SharedDays.AsNoTracking().ToListAsync();
         }
 
     }

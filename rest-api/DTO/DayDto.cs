@@ -7,6 +7,7 @@ namespace Makro.DTO
     {
         public string UUID { get; set; }
         public string UserId { get; set; }
+        public string Username { get; set; }
         [Required]
         public string Name { get; set; }
         public List<MealDto> AllMeals { get; set; }

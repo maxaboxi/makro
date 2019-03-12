@@ -72,19 +72,49 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getalldays`;
+    const url = `${this.baseUrl}/day`;
 
     return this.http.get<Day[]>(url, { headers: headers });
   }
 
   getAllSharedDays() {
-    const url = `${this.baseUrl}/getallshareddays`;
+    const url = `${this.baseUrl}/day/shared`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     return this.http.get(url, { headers: headers });
+  }
+
+  removeDays(days) {
+    const url = `${this.baseUrl}/day/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  removeSharedDays(days) {
+    const url = `${this.baseUrl}/day/shared/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
   }
 
   removeFeedbacks(feedbacks: String[]) {

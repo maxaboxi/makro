@@ -13,7 +13,10 @@ namespace Makro.Helpers
             CreateMap<UserDto, User>();
             CreateMap<Food, FoodDto>().AfterMap((src, dest) => dest.AddedBy = src.User.UUID);
             CreateMap<FoodDto, Food>();
-            CreateMap<Day, DayDto>().AfterMap((src, dest) => dest.UserId = src.User.UUID);
+            CreateMap<Day, DayDto>().AfterMap((src, dest) => {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
             CreateMap<DayDto, Day>();
             CreateMap<SharedDay, DayDto>().AfterMap((src, dest) => dest.UserId = src.User.UUID);
             CreateMap<DayDto, SharedDay>();

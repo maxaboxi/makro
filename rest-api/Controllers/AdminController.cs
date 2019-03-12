@@ -49,5 +49,28 @@ namespace Makro.Controllers
             return await _adminService.AnswerToFeedback(feedbackDto, HttpContext.User.Identity.Name);
         }
 
+        [HttpGet("day")]
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
+        {
+            return await _adminService.GetAllDays();
+        }
+
+        [HttpGet("day/shared")]
+        public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
+        {
+            return await _adminService.GetAllSharedDays();
+        }
+
+        [HttpDelete("day/delete/multiple")]
+        public ResultDto DeleteMultipleDays(List<string> dayIds)
+        {
+            return _adminService.DeleteMultipleDays(dayIds);
+        }
+
+        [HttpDelete("day/shared/delete/multiple")]
+        public ResultDto DeleteMultipleSharedDays(List<string> dayIds)
+        {
+            return _adminService.DeleteMultipleSharedDays(dayIds);
+        }
     }
 }
