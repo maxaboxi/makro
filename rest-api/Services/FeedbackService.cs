@@ -23,8 +23,10 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacks()
         {
-            var feedbacks = await _context.Feedbacks.Include(f => f.User).Include(f => f.AnsweredBy).AsNoTracking().ToListAsync();
+            var feedbacks = await _context.Feedbacks.Include(f => f.User).Include(f => f.AnsweredBy)
+                .OrderByDescending(f => f.CreatedAt).AsNoTracking().ToListAsync();
             var feedbackDtos = new List<FeedbackDto>();
+
             feedbacks.ForEach(f => {
                 var feedbackDto = new FeedbackDto
                 {
@@ -40,6 +42,7 @@ namespace Makro.Services
                 };
                 feedbackDtos.Add(feedbackDto);
             });
+
             return feedbackDtos;
         }
 
@@ -74,7 +77,7 @@ namespace Makro.Services
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 UUID = Guid.NewGuid().ToString(),
-                Anonymous = feedbackDto.UserId == null
+                Anonymous = feedbackDto.UserId.Length == 0
             };
             _context.Add(feedback);
             await _context.SaveChangesAsync();

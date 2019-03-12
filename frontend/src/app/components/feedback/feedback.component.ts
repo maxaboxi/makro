@@ -66,7 +66,7 @@ export class FeedbackComponent implements OnInit {
       result => {
         if (result === 'save') {
           if (this.feedback.username !== 'Nimetön') {
-            this.feedback.userId == this.user.uuid;
+            this.feedback.userId = this.user.uuid;
           }
           this.feedbackService.submitFeedback(this.feedback).subscribe(
             res => {
