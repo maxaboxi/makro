@@ -13,11 +13,9 @@ namespace Makro.Controllers
     public class AdminController: ControllerBase
     {
         private readonly AdminService _adminService;
-        private readonly UserService _userService;
-        public AdminController(AdminService adminService, UserService userService)
+        public AdminController(AdminService adminService)
         {
             _adminService = adminService;
-            _userService = userService;
         }
 
         [HttpGet("user")]
@@ -44,5 +42,12 @@ namespace Makro.Controllers
         {
             return _adminService.DeleteMultipleUsers(userIds);
         }
+
+        [HttpPost("feedback/answer")]
+        public async Task<ResultDto> AnswerToFeedback([FromBody]FeedbackDto feedbackDto)
+        {
+            return await _adminService.AnswerToFeedback(feedbackDto, HttpContext.User.Identity.Name);
+        }
+
     }
 }

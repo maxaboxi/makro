@@ -35,7 +35,7 @@ namespace Makro.Services
                     Username = f.Anonymous ? "Nimetön" : f.User.Username,
                     FeedbackBody = f.FeedbackBody,
                     Answer = f.Answer,
-                    AnsweredBy = f.AnsweredBy?.UUID,
+                    AnsweredBy = f.AnsweredBy?.Username,
                     CreatedAt = f.CreatedAt,
                     UpdatedAt = f.UpdatedAt,
                     AnsweredAt = f.AnsweredAt

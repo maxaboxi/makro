@@ -103,7 +103,7 @@ export class AdminService {
   }
 
   submitAnswer(feedback: Feedback) {
-    const url = `${this.baseUrl}/answertofeedback`;
+    const url = `${this.baseUrl}/feedback/answer`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

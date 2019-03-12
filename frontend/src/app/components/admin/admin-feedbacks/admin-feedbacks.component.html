@@ -20,7 +20,7 @@
   </div>
   <div class="modal-body">
     <div class="container">
-      <p [innerHTML]="selectedFeedback.feedback"></p>
+      <p [innerHTML]="selectedFeedback.feedbackBody"></p>
       <p>
         <span *ngIf="selectedFeedback.username !== 'Nimetön'">{{ selectedFeedback.username }}</span>
         <span *ngIf="selectedFeedback.username === 'Nimetön'">{{ 'ANONYMOUS' | translate }}</span> -

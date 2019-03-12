@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using AutoMapper;
 using Makro.DTO;
+using System;
 namespace Makro.Services
 {
     public class AdminService
@@ -57,6 +58,22 @@ namespace Makro.Services
             return new ResultDto(true, "Days deleted succesfully");
         }
 
+        public async Task<ResultDto> AnswerToFeedback(FeedbackDto feedbackDto, string userId)
+        {
+            var feedback = await _context.Feedbacks.Where(f => f.UUID == feedbackDto.UUID).FirstOrDefaultAsync();
+            if (feedback != null)
+            {
+                feedback.AnsweredAt = DateTime.Now;
+                feedback.Answer = feedbackDto.Answer;
+                feedback.AnsweredBy = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+                _context.Entry(feedback).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return new ResultDto(true, "Answer added succesfully");
+            }
+
+            return new ResultDto(false, "Feedback not found");
+        }
+
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
         {
             return await _context.EditedFoods.AsNoTracking().ToListAsync();
@@ -67,7 +84,7 @@ namespace Makro.Services
             return await _context.Articles.AsNoTracking().ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllEAnswers()
+        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswers()
         {
             return await _context.Answers.AsNoTracking().ToListAsync();
         }
