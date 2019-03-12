@@ -98,7 +98,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallusers`;
+    const url = `${this.baseUrl}/users`;
 
     return this.http.get<User[]>(url, { headers: headers });
   }

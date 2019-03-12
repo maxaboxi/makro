@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Makro.Models;
 using Microsoft.AspNetCore.Authorization;
+using Makro.DTO;
 namespace Makro.Controllers
 {
     [Route("api/v2/admin")]
@@ -19,7 +20,7 @@ namespace Makro.Controllers
             _userService = userService;
         }
 
-        [HttpGet("allusers")]
+        [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             return await _adminService.GetAllUsers();

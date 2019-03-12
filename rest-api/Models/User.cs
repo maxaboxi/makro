@@ -1,15 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 namespace Makro.Models
 {
     public class User
     {
+        [JsonIgnore]
         public int Id { get; set; }
         [Required]
         public string UUID { get; set; }
         [Required]
         public string Username { get; set; }
+        [JsonIgnore]
         public string Password { get; set; }
         public string Email { get; set; }
         public int Age { get; set; }

@@ -5,19 +5,25 @@ using Makro.DB;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using AutoMapper;
 namespace Makro.Services
 {
     public class AdminService
     {
         private readonly MakroContext _context;
-        public AdminService(MakroContext context)
+        private readonly IMapper _mapper;
+        public AdminService(MakroContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            return await _context.Users.AsNoTracking().ToListAsync();
+            return await _context.Users.AsNoTracking()
+                .Select(u => new User { UUID = u.UUID, Username = u.Username, LastLogin = u.LastLogin })
+                .OrderByDescending(u => u.LastLogin)
+                .ToListAsync();
         }
 
         public async Task<ActionResult<User>> GetUserInformation(string id)
