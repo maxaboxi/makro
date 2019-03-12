@@ -17,8 +17,26 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
+  getAllUsers() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/user`;
+
+    return this.http.get<User[]>(url, { headers: headers });
+  }
+
+  getUser(userId: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/user/${userId}`;
+
+    return this.http.get<User>(url, { headers: headers });
+  }
+
   removeUsers(users: String[]) {
-    const url = `${this.baseUrl}/removeusers`;
+    const url = `${this.baseUrl}/user/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -92,15 +110,6 @@ export class AdminService {
     });
 
     return this.http.post(url, feedback, { headers: headers });
-  }
-
-  getAllUsers() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/users`;
-
-    return this.http.get<User[]>(url, { headers: headers });
   }
 
   getAllVotes() {

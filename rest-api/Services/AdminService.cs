@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using AutoMapper;
+using Makro.DTO;
 namespace Makro.Services
 {
     public class AdminService
@@ -38,6 +39,22 @@ namespace Makro.Services
             }
 
             return null;
+        }
+
+        public ResultDto DeleteMultipleUsers(List<string> userIds)
+        {
+            userIds.ForEach(id => {
+                var user = _context.Users.Where(u => u.UUID == id).FirstOrDefault();
+                if (user != null)
+                {
+                    _context.Meals.RemoveRange(_context.Meals.Where(m => m.User == user));
+                    _context.Users.Remove(user);
+                    _context.SaveChanges();
+                }
+
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
         }
 
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()

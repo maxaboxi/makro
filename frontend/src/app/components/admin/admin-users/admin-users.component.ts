@@ -31,64 +31,74 @@ export class AdminUsersComponent implements OnInit {
   }
 
   openUserModal(content, user) {
-    this.selectedUser = user;
-    this.modalService.open(content, { centered: true }).result.then(
-      result => {
-        if (result === 'save') {
-          if (this.newUserPassword && this.newUserPasswordAgain) {
-            if (this.newUserPassword !== this.newUserPasswordAgain) {
-              this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-              this.newUserPassword = null;
-              this.newUserPasswordAgain = null;
-            } else {
-              const user = {
-                uuid: this.selectedUser.uuid,
-                password: this.newUserPassword
-              };
-              this.adminService.updateUserPassword(user).subscribe(
-                res => {
-                  if (res['success']) {
-                    this.flashMessage.show(this.translator.instant('USER_PASSWORD_CHANGED'), {
-                      cssClass: 'alert-success',
-                      timeout: 2000
-                    });
-                  }
-                },
-                (error: Error) => {
-                  this.flashMessage.show(error['error'].msg, {
+    this.adminService.getUser(user.uuid).subscribe(
+      user => {
+        this.selectedUser = user;
+        this.modalService.open(content, { centered: true }).result.then(
+          result => {
+            if (result === 'save') {
+              if (this.newUserPassword && this.newUserPasswordAgain) {
+                if (this.newUserPassword !== this.newUserPasswordAgain) {
+                  this.flashMessage.show(this.translator.instant('CHANGE_PASSWORDS_DONT_MATCH'), {
                     cssClass: 'alert-danger',
                     timeout: 2000
                   });
+                  this.newUserPassword = null;
+                  this.newUserPasswordAgain = null;
+                } else {
+                  const user = {
+                    uuid: this.selectedUser.uuid,
+                    password: this.newUserPassword
+                  };
+                  this.adminService.updateUserPassword(user).subscribe(
+                    res => {
+                      if (res['success']) {
+                        this.flashMessage.show(this.translator.instant('USER_PASSWORD_CHANGED'), {
+                          cssClass: 'alert-success',
+                          timeout: 2000
+                        });
+                      }
+                    },
+                    (error: Error) => {
+                      this.flashMessage.show(error['error'].msg, {
+                        cssClass: 'alert-danger',
+                        timeout: 2000
+                      });
+                    }
+                  );
                 }
-              );
-            }
-          } else {
-            this.adminService.updateUserInformation(this.selectedUser).subscribe(
-              res => {
-                if (res['success']) {
-                  this.flashMessage.show(this.translator.instant('USER_INFORMATION_UPDATED'), {
-                    cssClass: 'alert-success',
-                    timeout: 2000
-                  });
-                  this.adminService.getAllUsers().subscribe(users => (this.users = users));
-                }
-              },
-              (error: Error) => {
-                this.flashMessage.show(error['error'].msg, {
-                  cssClass: 'alert-danger',
-                  timeout: 2000
-                });
+              } else {
+                this.adminService.updateUserInformation(this.selectedUser).subscribe(
+                  res => {
+                    if (res['success']) {
+                      this.flashMessage.show(this.translator.instant('USER_INFORMATION_UPDATED'), {
+                        cssClass: 'alert-success',
+                        timeout: 2000
+                      });
+                      this.adminService.getAllUsers().subscribe(users => (this.users = users));
+                    }
+                  },
+                  (error: Error) => {
+                    this.flashMessage.show(error['error'].msg, {
+                      cssClass: 'alert-danger',
+                      timeout: 2000
+                    });
+                  }
+                );
               }
-            );
+            }
+            this.selectedUser = null;
+          },
+          dismissed => {
+            this.selectedUser = null;
           }
-        }
-        this.selectedUser = null;
+        );
       },
-      dismissed => {
-        this.selectedUser = null;
+      (error: Error) => {
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
       }
     );
   }

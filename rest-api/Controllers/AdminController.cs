@@ -20,7 +20,7 @@ namespace Makro.Controllers
             _userService = userService;
         }
 
-        [HttpGet("users")]
+        [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             return await _adminService.GetAllUsers();
@@ -37,6 +37,12 @@ namespace Makro.Controllers
             }
 
             return user;
+        }
+
+        [HttpDelete("user/delete/multiple")]
+        public ResultDto DeleteMultipleUsers(List<string> userIds)
+        {
+            return _adminService.DeleteMultipleUsers(userIds);
         }
     }
 }
