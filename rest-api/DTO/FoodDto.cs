@@ -8,6 +8,7 @@ namespace Makro.DTO
         public string Name { get; set; }
         public string UUID { get; set; }
         public string AddedBy { get; set; }
+        public string AddedByUsername { get; set; }
         [Required]
         public decimal Energy { get; set; }
         [Required]

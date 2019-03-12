@@ -15,8 +15,8 @@ export class AdminQuestionsComponent implements OnInit {
   propertiesToShow = [
     { name: 'username', date: false },
     { name: 'createdAt', date: true },
-    { name: 'question', date: false },
-    { name: 'info', date: false }
+    { name: 'questionBody', date: false },
+    { name: 'questionInformation', date: false }
   ];
   deletedQuestions = [];
   questionsDeleted = false;

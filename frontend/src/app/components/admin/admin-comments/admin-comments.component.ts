@@ -13,12 +13,7 @@ import { CommentService } from '../../../services/comment.service';
 })
 export class AdminCommentsComponent implements OnInit {
   comments: Comment[];
-  propertiesToShow = [
-    { name: 'username', date: false },
-    { name: 'createdAt', date: true },
-    { name: 'comment', date: false },
-    { name: 'origPost', date: false }
-  ];
+  propertiesToShow = [{ name: 'username', date: false }, { name: 'createdAt', date: true }, { name: 'body', date: false }];
   deletedComments = [];
   commentsDeleted = false;
 

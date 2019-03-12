@@ -13,12 +13,7 @@ import { QaService } from '../../../services/qa.service';
 })
 export class AdminAnswersComponent implements OnInit {
   answers: Answer[];
-  propertiesToShow = [
-    { name: 'username', date: false },
-    { name: 'createdAt', date: true },
-    { name: 'answer', date: false },
-    { name: 'origPost', date: false }
-  ];
+  propertiesToShow = [{ name: 'username', date: false }, { name: 'createdAt', date: true }, { name: 'answerBody', date: false }];
   deletedAnswers = [];
   answersDeleted = false;
 

@@ -142,11 +142,11 @@ export class AdminService {
     return this.http.post(url, feedback, { headers: headers });
   }
 
-  getAllVotes() {
+  getAllLikes() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallvotes`;
+    const url = `${this.baseUrl}/like`;
 
     return this.http.get<Like[]>(url, { headers: headers });
   }
@@ -155,7 +155,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallanswers`;
+    const url = `${this.baseUrl}/answer`;
 
     return this.http.get<Answer[]>(url, { headers: headers });
   }
@@ -164,7 +164,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallcomments`;
+    const url = `${this.baseUrl}/comment`;
 
     return this.http.get<Comment[]>(url, { headers: headers });
   }
@@ -173,13 +173,13 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallsentforapproval`;
+    const url = `${this.baseUrl}/food/edited`;
 
     return this.http.get<EditedFood[]>(url, { headers: headers });
   }
 
   approveEditedFood(editedFood: EditedFood) {
-    const url = `${this.baseUrl}/approve`;
+    const url = `${this.baseUrl}/food/approve`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -189,7 +189,7 @@ export class AdminService {
   }
 
   disapproveEditedFoods(editedFoods: EditedFood[]) {
-    const url = `${this.baseUrl}/disapprove`;
+    const url = `${this.baseUrl}/food/disapprove`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

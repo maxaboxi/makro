@@ -74,6 +74,21 @@ namespace Makro.Services
             return new ResultDto(false, "Feedback not found");
         }
 
+        public ResultDto DeleteMultipleFeedbacks(List<string> feedbackIds)
+        {
+            feedbackIds.ForEach(feedbackId => {
+                var feedback = _context.Feedbacks.Where(f => f.UUID == feedbackId).FirstOrDefault();
+
+                if (feedback != null)
+                {
+                    _context.Feedbacks.Remove(feedback);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Feedbacks deleted succesfully");
+        }
+
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
         {
             var days = await _context.Days.AsNoTracking()
@@ -124,34 +139,157 @@ namespace Makro.Services
             return new ResultDto(true, "Days deleted succesfully");
         }
 
+        public ResultDto DeleteMultipleSharedMeals(List<string> mealIds)
+        {
+            mealIds.ForEach(mealId => {
+                var sharedMeal = _context.SharedMeals.Where(sm => sm.UUID == mealId).FirstOrDefault();
+
+                if (sharedMeal != null)
+                {
+                    _context.SharedMeals.Remove(sharedMeal);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Meals deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleFoods(List<string> foodIds)
+        {
+            foodIds.ForEach(foodId => {
+                var food = _context.Foods.Include(f => f.User).Where(f => f.UUID == foodId).FirstOrDefault();
+
+                if (food != null)
+                {
+                    _context.Foods.Remove(food);
+                    _context.SaveChanges();
+                }
+
+            });
+
+            return new ResultDto(true, "Foods deleted succesfully");
+        }
+
         public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
         {
             return await _context.EditedFoods.AsNoTracking().ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllAritcles()
+        public ResultDto DeleteMultipleQuestions(List<string> questionIds)
         {
-            return await _context.Articles.AsNoTracking().ToListAsync();
+            questionIds.ForEach(questionId => {
+                var question = _context.Questions.Where(q => q.UUID == questionId).FirstOrDefault();
+
+                if (question != null)
+                {
+                    _context.Questions.Remove(question);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Questions deleted succesfully");
         }
 
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAllAnswers()
+        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswers()
         {
-            return await _context.Answers.AsNoTracking().ToListAsync();
+            var answers = await _context.Answers.AsNoTracking()
+                .Include(a => a.User)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToListAsync();
+            List<AnswerDto> answerDtos = new List<AnswerDto>();
+            answers.ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
+            return answerDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<Question>>> GetAllQuestions()
+        public ResultDto DeleteMultipleAnswers(List<string> answerIds)
         {
-            return await _context.Questions.AsNoTracking().ToListAsync();
+            answerIds.ForEach(answerId => {
+                var answer = _context.Answers.Where(a => a.UUID == answerId).FirstOrDefault();
+
+                if (answer != null)
+                {
+                    _context.Answers.Remove(answer);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Answers deleted succesfully");
         }
 
-        public async Task<ActionResult<IEnumerable<Comment>>> GetAllComments()
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllComments()
         {
-            return await _context.Comments.AsNoTracking().ToListAsync();
+            var comments = await _context.Comments.AsNoTracking()
+                .Include(c => c.User)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+            List<CommentDto> commentDtos = new List<CommentDto>();
+            comments.ForEach(c => commentDtos.Add(_mapper.Map<CommentDto>(c)));
+            return commentDtos;
         }
 
-        public async Task<ActionResult<IEnumerable<Like>>> GetAllLikes()
+        public ResultDto DeleteMultipleComments(List<string> commentIds)
         {
-            return await _context.Likes.AsNoTracking().ToListAsync();
+            commentIds.ForEach(commentId => {
+                var comment = _context.Comments.Where(c => c.UUID == commentId).FirstOrDefault();
+
+                if (comment != null)
+                {
+                    _context.Comments.Remove(comment);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Comments deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleArticles(List<string> articleIds)
+        {
+            articleIds.ForEach(articleId => {
+                var article = _context.Articles.Where(a => a.UUID == articleId).FirstOrDefault();
+
+                if (article != null)
+                {
+                    _context.Articles.Remove(article);
+                    _context.SaveChanges();
+                }
+
+            });
+            return new ResultDto(true, "Articles deleted succesfully");
+        }
+
+        public async Task<ActionResult<IEnumerable<LikeDto>>> GetAllLikes()
+        {
+            var likes = await _context.Likes.AsNoTracking()
+                .Include(l => l.User)
+                .Include(l => l.Answer)
+                .Include(l => l.Article)
+                .Include(l => l.Comment)
+                .Include(l => l.SharedMeal)
+                .OrderByDescending(l => l.CreatedAt)
+                .ToListAsync();
+            List<LikeDto> likeDtos = new List<LikeDto>();
+            likes.ForEach(l => {
+                var likeDto = _mapper.Map<LikeDto>(l);
+                likeDto.LikedContent = l.Article?.Title ?? l.Answer?.AnswerBody ?? l.Comment?.Body ?? l.SharedMeal?.Name;
+                likeDtos.Add(likeDto);
+            });
+
+            return likeDtos;
+        }
+
+        public ResultDto DeleteMultipleLikes(List<string> likeIds)
+        {
+            likeIds.ForEach(likeId => {
+                var like = _context.Likes.Where(l => l.UUID == likeId).FirstOrDefault();
+
+                if (like != null)
+                {
+                    _context.Likes.Remove(like);
+                    _context.SaveChanges();
+                }
+
+            });
+            return new ResultDto(true, "Likes deleted succesfully");
         }
 
     }

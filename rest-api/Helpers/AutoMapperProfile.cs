@@ -11,7 +11,10 @@ namespace Makro.Helpers
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
-            CreateMap<Food, FoodDto>().AfterMap((src, dest) => dest.AddedBy = src.User.UUID);
+            CreateMap<Food, FoodDto>().AfterMap((src, dest) => {
+                dest.AddedBy = src.User.UUID;
+                dest.AddedByUsername = src.User.Username;
+            });
             CreateMap<FoodDto, Food>();
             CreateMap<Day, DayDto>().AfterMap((src, dest) => {
                 dest.UserId = src.User.UUID;
@@ -48,7 +51,10 @@ namespace Makro.Helpers
                 dest.Username = src.User.Username;
             });
             CreateMap<CommentDto, Comment>();
-            CreateMap<Like, LikeDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
+            CreateMap<Like, LikeDto>().AfterMap((src, dest) => {
+                dest.UserUUID = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
             CreateMap<LikeDto, Like>();
             CreateMap<Article, ArticleDto>().AfterMap((src, dest) =>
             {

@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AdminFoodsComponent implements OnInit {
   foods: Food[];
-  propertiesToShow = [{ name: 'username', date: false }, { name: 'name', date: false }, { name: 'createdAt', date: true }];
+  propertiesToShow = [{ name: 'addedByUsername', date: false }, { name: 'name', date: false }, { name: 'createdAt', date: true }];
   searchTerm = '';
   results: Food[] = [];
   editedFoods: EditedFood[];
