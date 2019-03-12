@@ -61,6 +61,12 @@ namespace Makro.Controllers
             return await _adminService.GetAllDays();
         }
 
+        [HttpGet("day/{id}")]
+        public async Task<ActionResult<DayDto>> GetSingleDay(string id)
+        {
+            return await _adminService.GetSingleDay(id);
+        }
+
         [HttpGet("day/shared")]
         public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
         {

@@ -44,7 +44,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleUsers(List<string> userIds)
         {
-            userIds.ForEach(id => {
+            userIds.ForEach(id =>
+            {
                 var user = _context.Users.Where(u => u.UUID == id).FirstOrDefault();
                 if (user != null)
                 {
@@ -76,7 +77,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleFeedbacks(List<string> feedbackIds)
         {
-            feedbackIds.ForEach(feedbackId => {
+            feedbackIds.ForEach(feedbackId =>
+            {
                 var feedback = _context.Feedbacks.Where(f => f.UUID == feedbackId).FirstOrDefault();
 
                 if (feedback != null)
@@ -92,7 +94,7 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
         {
             var days = await _context.Days.AsNoTracking()
-                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User})
+                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User })
                 .OrderByDescending(d => d.CreatedAt)
                 .ToListAsync();
 
@@ -102,6 +104,45 @@ namespace Makro.Services
             return dayDtos;
         }
 
+        public async Task<ActionResult<DayDto>> GetSingleDay(string id)
+        {
+            var day = await _context.Days.AsNoTracking()
+                .Where(d => d.UUID == id)
+                .Include(d => d.User)
+                .Include(d => d.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.User)
+                .FirstOrDefaultAsync();
+
+            if (day == null)
+            {
+                return null;
+            }
+
+            var dayDto = _mapper.Map<DayDto>(day);
+
+            var mealDtos = new List<MealDto>();
+
+            day.Meals.ToList().ForEach(m =>
+            {
+                m.User = day.User;
+                var mealDto = _mapper.Map<MealDto>(m);
+                var foodDtos = new List<FoodDto>();
+                m.MealFoods.ToList().ForEach(mf =>
+                {
+                    var foodDto = _mapper.Map<FoodDto>(mf.Food);
+                    foodDto.Amount = mf.FoodAmount;
+                    foodDtos.Add(foodDto);
+                });
+                mealDto.Foods = foodDtos;
+                mealDtos.Add(mealDto);
+            });
+
+            dayDto.AllMeals = mealDtos;
+            return dayDto;
+        }
+
         public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
         {
             return await _context.SharedDays.AsNoTracking().ToListAsync();
@@ -109,7 +150,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleDays(List<string> dayIds)
         {
-            dayIds.ForEach(dayId => {
+            dayIds.ForEach(dayId =>
+            {
                 var day = _context.Days.Where(d => d.UUID == dayId).Include(d => d.Meals).FirstOrDefault();
 
                 if (day != null)
@@ -125,7 +167,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleSharedDays(List<string> dayIds)
         {
-            dayIds.ForEach(dayId => {
+            dayIds.ForEach(dayId =>
+            {
                 var day = _context.SharedDays.Where(d => d.UUID == dayId).Include(d => d.Meals).FirstOrDefault();
 
                 if (day != null)
@@ -141,7 +184,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleSharedMeals(List<string> mealIds)
         {
-            mealIds.ForEach(mealId => {
+            mealIds.ForEach(mealId =>
+            {
                 var sharedMeal = _context.SharedMeals.Where(sm => sm.UUID == mealId).FirstOrDefault();
 
                 if (sharedMeal != null)
@@ -156,7 +200,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleFoods(List<string> foodIds)
         {
-            foodIds.ForEach(foodId => {
+            foodIds.ForEach(foodId =>
+            {
                 var food = _context.Foods.Include(f => f.User).Where(f => f.UUID == foodId).FirstOrDefault();
 
                 if (food != null)
@@ -177,7 +222,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleQuestions(List<string> questionIds)
         {
-            questionIds.ForEach(questionId => {
+            questionIds.ForEach(questionId =>
+            {
                 var question = _context.Questions.Where(q => q.UUID == questionId).FirstOrDefault();
 
                 if (question != null)
@@ -203,7 +249,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleAnswers(List<string> answerIds)
         {
-            answerIds.ForEach(answerId => {
+            answerIds.ForEach(answerId =>
+            {
                 var answer = _context.Answers.Where(a => a.UUID == answerId).FirstOrDefault();
 
                 if (answer != null)
@@ -229,7 +276,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleComments(List<string> commentIds)
         {
-            commentIds.ForEach(commentId => {
+            commentIds.ForEach(commentId =>
+            {
                 var comment = _context.Comments.Where(c => c.UUID == commentId).FirstOrDefault();
 
                 if (comment != null)
@@ -244,7 +292,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleArticles(List<string> articleIds)
         {
-            articleIds.ForEach(articleId => {
+            articleIds.ForEach(articleId =>
+            {
                 var article = _context.Articles.Where(a => a.UUID == articleId).FirstOrDefault();
 
                 if (article != null)
@@ -268,7 +317,8 @@ namespace Makro.Services
                 .OrderByDescending(l => l.CreatedAt)
                 .ToListAsync();
             List<LikeDto> likeDtos = new List<LikeDto>();
-            likes.ForEach(l => {
+            likes.ForEach(l =>
+            {
                 var likeDto = _mapper.Map<LikeDto>(l);
                 likeDto.LikedContent = l.Article?.Title ?? l.Answer?.AnswerBody ?? l.Comment?.Body ?? l.SharedMeal?.Name;
                 likeDtos.Add(likeDto);
@@ -279,7 +329,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleLikes(List<string> likeIds)
         {
-            likeIds.ForEach(likeId => {
+            likeIds.ForEach(likeId =>
+            {
                 var like = _context.Likes.Where(l => l.UUID == likeId).FirstOrDefault();
 
                 if (like != null)

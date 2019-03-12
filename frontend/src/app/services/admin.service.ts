@@ -77,6 +77,15 @@ export class AdminService {
     return this.http.get<Day[]>(url, { headers: headers });
   }
 
+  getDay(dayId) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/day/${dayId}`;
+
+    return this.http.get<Day>(url, { headers: headers });
+  }
+
   getAllSharedDays() {
     const url = `${this.baseUrl}/day/shared`;
 
