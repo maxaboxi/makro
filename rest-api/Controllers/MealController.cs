@@ -31,7 +31,7 @@ namespace Makro.Controllers
         }
 
         [HttpPost("user/meals")]
-        public async Task<ResultDto> UpdateMealNamesForUser([FromBody]List<MealNameDto> mealNames)
+        public async Task<List<MealNameDto>> UpdateMealNamesForUser([FromBody]List<MealNameDto> mealNames)
         {
             return await _mealService.UpdateMealNamesForUser(HttpContext.User.Identity.Name, mealNames);
         }

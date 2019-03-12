@@ -127,11 +127,13 @@ export class UserInfoComponent implements OnInit {
 
     this.auth.updateMealNames(this.user.meals).subscribe(
       res => {
-        if (res['success']) {
+        if (res.length > 0) {
           this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
             cssClass: 'alert-success',
             timeout: 2000
           });
+          this.user.meals = res;
+          this.auth.setUserInfo(this.user);
           this.changed = false;
         } else {
           this.flashMessage.show(res['message'], {

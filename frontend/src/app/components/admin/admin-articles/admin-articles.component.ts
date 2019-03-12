@@ -46,7 +46,7 @@ export class AdminArticlesComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.articleService.getArticlesByUser(this.user.username).subscribe(articles => {
+          this.articleService.getAllArticles().subscribe(articles => {
             this.articles = articles;
           });
           this.articlesDeleted = false;

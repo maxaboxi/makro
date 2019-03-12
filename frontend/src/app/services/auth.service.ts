@@ -172,7 +172,7 @@ export class AuthService {
     });
     const url = `${this.baseUrlMeal}/user/meals`;
 
-    return this.http.post(url, mealNames, { headers: headers });
+    return this.http.post<Meal[]>(url, mealNames, { headers: headers });
   }
 
   changePassword(user) {

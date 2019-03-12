@@ -224,20 +224,22 @@ namespace Makro.Services
             return new ResultDto(true, "Meals deleted succesfully");
         }
 
-        public async Task<ResultDto> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
+        public async Task<List<MealNameDto>> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
         {
 
             var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             _context.MealNames.RemoveRange(_context.MealNames.Where(m => m.User == user));
 
+            List<MealNameDto> mealNames = new List<MealNameDto>();
             mealNameDtos.ForEach(mn =>
             {
                 var meal = new MealName(mn.Name, user);
+                mealNames.Add(_mapper.Map<MealNameDto>(meal));
                 _context.Add(meal);
             });
 
             await _context.SaveChangesAsync();
-            return new ResultDto(true, "Names updated succesfully");
+            return mealNames;
         }
 
         public List<MealName> GenerateDefaultMealNamesForUser()
