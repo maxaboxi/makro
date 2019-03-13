@@ -86,6 +86,7 @@ export class UserInfoComponent implements OnInit {
       height: this.user.height,
       weight: this.user.weight,
       activity: this.user.activity,
+      dailyExpenditure: this.user.dailyExpenditure,
       sex: this.user.sex
     };
     this.auth.updateUserInfo(userInfo).subscribe(
