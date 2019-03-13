@@ -169,22 +169,4 @@ export class AdminService {
 
     return this.http.get<Like[]>(url, { headers: headers });
   }
-
-  getAllAnswers() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/answer`;
-
-    return this.http.get<Answer[]>(url, { headers: headers });
-  }
-
-  getAllComments() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/comment`;
-
-    return this.http.get<Comment[]>(url, { headers: headers });
-  }
 }

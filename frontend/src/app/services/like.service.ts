@@ -41,16 +41,6 @@ export class LikeService {
     return this.http.get<Like[]>(url, { headers: headers });
   }
 
-  getAllLikesWithPostId(id) {
-    const url = `${this.baseUrl}/all/${id}`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<Like[]>(url, { headers: headers });
-  }
-
   removeLikes(likeIds) {
     const url = `${this.baseUrl}/delete/multiple`;
 
