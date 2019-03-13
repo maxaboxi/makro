@@ -3,7 +3,6 @@ import { Like } from '../../../models/Like';
 import { AdminService } from '../../../services/admin.service';
 import { LikeService } from '../../../services/like.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
@@ -26,7 +25,6 @@ export class AdminLikesComponent implements OnInit {
     private adminService: AdminService,
     private voteService: LikeService,
     private flashMessage: FlashMessagesService,
-    private modalService: NgbModal,
     private translator: TranslateService
   ) {}
 
@@ -35,7 +33,7 @@ export class AdminLikesComponent implements OnInit {
   }
 
   deleteVote(index) {
-    this.deletedVotes.push({ ...this.likes[index] });
+    this.deletedVotes.push(this.likes[index].uuid);
     this.likes.splice(index, 1);
     this.likesDeleted = true;
   }
