@@ -18,6 +18,7 @@ namespace Makro.Migrations
                     UUID = table.Column<string>(nullable: false),
                     Username = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: true),
+                    PasswordResetToken = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Age = table.Column<int>(nullable: false),
                     Height = table.Column<decimal>(nullable: false),

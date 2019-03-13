@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190313053129_InitialMigration")]
+    [Migration("20190313104738_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace Makro.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Makro.Models.Day", b =>
@@ -340,6 +340,8 @@ namespace Makro.Migrations
                     b.Property<DateTime>("LastLogin");
 
                     b.Property<string>("Password");
+
+                    b.Property<string>("PasswordResetToken");
 
                     b.Property<List<string>>("Roles");
 

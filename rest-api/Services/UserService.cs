@@ -17,7 +17,6 @@ namespace Makro.Services
         private readonly MealService _mealService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-
         public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger)
         {
             _context = context;
@@ -103,6 +102,21 @@ namespace Makro.Services
             }
 
             return new ResultDto(false, "Unauthorized");
+        }
+
+        public async Task<ResultDto> ResetPassword(string email)
+        {
+            var foundUser = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+
+            if (foundUser != null)
+            {
+                foundUser.PasswordResetToken = Guid.NewGuid().ToString();
+                _context.Entry(foundUser).State = EntityState.Modified;
+                 await _context.SaveChangesAsync();
+                return new ResultDto(true, "Password reset token sent to " + email);
+            }
+
+            return new ResultDto(false, "Something went wrong");
         }
 
         public async Task<ActionResult<UserDto>> GetUserDto (string id)

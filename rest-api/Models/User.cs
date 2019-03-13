@@ -14,6 +14,8 @@ namespace Makro.Models
         public string Username { get; set; }
         [JsonIgnore]
         public string Password { get; set; }
+        [JsonIgnore]
+        public string PasswordResetToken { get; set; }
         public string Email { get; set; }
         public int Age { get; set; }
         public decimal Height { get; set; }
