@@ -192,6 +192,24 @@ namespace Makro.Services
             return new ResultDto(true, "Information updated succesfully");
         }
 
+        public async Task<ResultDto> UpdateUserTargets(string userId, UserTargetsDto dto)
+        {
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.UserAddedProteinTarget = dto.UserAddedProteinTarget;
+                user.UserAddedFatTarget = dto.UserAddedFatTarget;
+                user.UserAddedCarbTarget = dto.UserAddedCarbTarget;
+                user.UserAddedExpenditure = dto.UserAddedExpenditure;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return new ResultDto(true, "Information updated succesfully");
+            }
+
+            return new ResultDto(false, "Something went wrong");
+        }
+
         public async Task<ResultDto> CheckAdminRights(string userId)
         {
             var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();

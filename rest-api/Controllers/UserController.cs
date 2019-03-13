@@ -136,6 +136,12 @@ namespace Makro.Controllers
             return Ok(await _userService.UpdateUserShowTargets(HttpContext.User.Identity.Name, show));
         }
 
+        [HttpPost("targets/update")]
+        public async Task<IActionResult> UpdateUserTargets([FromBody]UserTargetsDto userTargetsDto)
+        {
+            return Ok(await _userService.UpdateUserTargets(HttpContext.User.Identity.Name, userTargetsDto));
+        }
+
         [HttpPost("language/{lang}")]
         public async Task<IActionResult> UpdateUserLang(string lang)
         {

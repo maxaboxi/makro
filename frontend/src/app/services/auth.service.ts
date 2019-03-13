@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { UserTargets } from '../models/UserTargets';
 
 @Injectable({
   providedIn: 'root'
@@ -136,6 +137,16 @@ export class AuthService {
     const url = `${this.baseUrl}/updateuserinformation`;
 
     return this.http.post(url, user, { headers: headers });
+  }
+
+  updateUserTargets(targets: UserTargets) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.baseUrl}/targets/update`;
+
+    return this.http.post(url, targets, { headers: headers });
   }
 
   updateShowTargets(showTargets: boolean) {

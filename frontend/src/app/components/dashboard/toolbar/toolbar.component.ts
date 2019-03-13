@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Meal } from '../../../models/Meal';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
+import { UserTargets } from 'src/app/models/UserTargets';
 
 declare var jsPDF: any;
 
@@ -210,7 +211,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   updateUserInfo() {
-    this.auth.updateUserInfo(this.user).subscribe(
+    const targets: UserTargets = {
+      userAddedExpenditure: this.user.userAddedExpenditure,
+      userAddedFatTarget: this.user.userAddedFatTarget,
+      userAddedProteinTarget: this.user.userAddedProteinTarget,
+      userAddedCarbTarget: this.user.userAddedCarbTarget
+    };
+
+    this.auth.updateUserTargets(targets).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translate.instant('INFORMATION_SAVED'), {
