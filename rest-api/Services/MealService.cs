@@ -226,20 +226,44 @@ namespace Makro.Services
 
         public async Task<List<MealNameDto>> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
         {
-
-            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
-            _context.MealNames.RemoveRange(_context.MealNames.Where(m => m.User == user));
-
-            List<MealNameDto> mealNames = new List<MealNameDto>();
             mealNameDtos.ForEach(mn =>
             {
-                var meal = new MealName(mn.Name, user);
-                mealNames.Add(_mapper.Map<MealNameDto>(meal));
-                _context.Add(meal);
+                if (!mn.Deleted)
+                {
+                    if (mn.UUID != null)
+                    {
+                        var meal = _context.MealNames.Where(m => m.UUID == mn.UUID && m.User.UUID == userId).FirstOrDefault();
+                        if (meal != null)
+                        {
+                            meal.Name = mn.Name;
+                            meal.UpdatedAt = DateTime.Now;
+                            _context.Entry(meal).State = EntityState.Modified;
+                            _context.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        var user = _context.Users.Where(u => u.UUID == userId).FirstOrDefault();
+                        var meal = new MealName(mn.Name, user);
+                        _context.Add(meal);
+                        _context.SaveChanges();
+                    }
+                } else
+                {
+                    var meal = _context.MealNames.Where(m => m.UUID == mn.UUID && m.User.UUID == userId).FirstOrDefault();
+                    _context.MealNames.Remove(meal);
+                    _context.SaveChanges();
+                }
+
             });
 
-            await _context.SaveChangesAsync();
-            return mealNames;
+            List<MealNameDto> dtos = new List<MealNameDto>();
+            var mealNames = await _context.MealNames.Where(m => m.User.UUID == userId)
+                .OrderBy(m => m.CreatedAt)
+                .ToListAsync();
+            mealNames.ForEach(m => dtos.Add(_mapper.Map<MealNameDto>(m)));
+
+            return dtos;
         }
 
         public List<MealName> GenerateDefaultMealNamesForUser()

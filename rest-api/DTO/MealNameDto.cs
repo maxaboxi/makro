@@ -9,6 +9,7 @@ namespace Makro.DTO
         public string UUID { get; set; }
         [Required]
         public string Name { get; set; }
+        public bool Deleted { get; set; }
         public List<FoodDto> Foods { get; set; }
     }
 }

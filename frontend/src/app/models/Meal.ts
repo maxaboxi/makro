@@ -12,4 +12,5 @@ export interface Meal {
   userLike?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deleted?: boolean;
 }

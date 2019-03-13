@@ -74,7 +74,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   deleteMeal(index) {
-    this.user.meals.splice(index, 1);
+    this.user.meals[index].deleted = true;
     this.changed = true;
   }
 
