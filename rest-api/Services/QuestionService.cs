@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Makro.Models;
+using Makro.DB;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -158,7 +159,9 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteQuestion(string id, string userId)
         {
-            var question = await _context.Questions.Where(q => q.UUID == id).Include(q => q.User).FirstOrDefaultAsync();
+            var question = await _context.Questions
+                .Where(q => q.UUID == id && q.User.UUID == userId)
+                .FirstOrDefaultAsync();
 
             if (question == null)
             {
@@ -166,15 +169,27 @@ namespace Makro.Services
                 return new ResultDto(false, "Question not found");
             }
 
-            if (question.User.UUID != userId)
-            {
-                _logger.LogError("User with UUID " + userId + " tried to delete question which belnogs to " + question.User.UUID);
-                return new ResultDto(false, "Unauthorized");
-            }
-
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Question deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleQuestions(List<string> questionIds, string userId)
+        {
+            questionIds.ForEach(questionId => { 
+                var question = _context.Questions
+                    .Where(q => q.UUID == questionId && q.User.UUID == userId)
+                    .FirstOrDefault();
+
+                if (question == null)
+                {
+                    _logger.LogDebug("Question not found with id: " + questionId);
+                }
+
+                _context.Questions.Remove(question);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Questions deleted succesfully");
         }
     }
 }

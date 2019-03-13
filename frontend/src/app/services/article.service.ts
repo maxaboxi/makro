@@ -11,7 +11,7 @@ import { Comment } from '../models/Comment';
 export class ArticleService {
   private baseUrl = `${environment.baseUrl}/article`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllArticles() {
     const url = `${this.baseUrl}`;
@@ -33,8 +33,8 @@ export class ArticleService {
     return this.http.get(url, { responseType: 'blob', headers: headers });
   }
 
-  getArticlesByUser(user) {
-    const url = `${this.baseUrl}/getarticles/${user}`;
+  getArticlesByUser() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export class ArticleService {
     const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
-      'Accept': 'application/json'
+      Accept: 'application/json'
     });
 
     const formData = new FormData();
@@ -73,7 +73,7 @@ export class ArticleService {
     const url = `${this.baseUrl}/update/${article.uuid}`;
 
     const headers = new HttpHeaders({
-      'Accept': 'application/json'
+      Accept: 'application/json'
     });
 
     const formData = new FormData();
@@ -97,7 +97,7 @@ export class ArticleService {
   }
 
   deleteArticles(articles) {
-    const url = `${this.baseUrl}/removearticles`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

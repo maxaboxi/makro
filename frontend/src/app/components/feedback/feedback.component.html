@@ -38,7 +38,7 @@
             <h5 class="card-title text-muted">{{ 'ANSWER' | translate }}</h5> <p class="card-text" [innerHTML]="feedback.answer"></p>
             <p class="text-muted">
               <span>{{ feedback.answeredBy }}</span>
-              <span *ngIf="feedback.answerDate"> @ {{ feedback.answeredAt | date: 'dd.MM.yyyy' }}</span>
+              <span *ngIf="feedback.answeredAt"> @ {{ feedback.answeredAt | date: 'dd.MM.yyyy' }}</span>
             </p>
           </div>
         </div>

@@ -53,17 +53,17 @@ export class FoodService {
   }
 
   editFood(food: Food) {
-    const url = `${this.baseUrl}/editfood`;
+    const url = `${this.baseUrl}/update/${food.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, food, { headers: headers });
+    return this.http.put(url, food, { headers: headers });
   }
 
   removeFoods(foods) {
-    const url = `${this.baseUrl}/removefoods`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

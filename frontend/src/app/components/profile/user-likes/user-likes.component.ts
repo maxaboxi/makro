@@ -47,7 +47,7 @@ export class UserLikesComponent implements OnInit {
   }
 
   deleteLike(index, like) {
-    this.deletedLikes.push(like);
+    this.deletedLikes.push(like.uuid);
     this.likes.splice(index, 1);
     this.likesDeleted = true;
   }

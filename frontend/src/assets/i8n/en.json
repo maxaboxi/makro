@@ -93,7 +93,7 @@
   "NO_QUESTIONS": "No questions",
   "YOUR_QUESTION": "Your question",
   "REQUIRED_FIELD": "This field is required",
-  "QUESTION_NOT_LONG_ENOGH": "Question has to be at least 10 characters long",
+  "QUESTION_NOT_LONG_ENOUGH": "Question has to be at least 10 characters long",
   "MORE_INFO_ABOUT_QUESTION": "More information about the question",
   "ANSWER_TO_QUESTION": "Answer",
   "ADD_ANSWER": "Add a new answer",
@@ -232,7 +232,7 @@
   "CREATED_AT": "Created at",
   "UPDATED_AT": "Updated at",
   "CLOSE": "Close",
-  "DELETE_ACCOUNT_CONFIRMATION": "Are you completely sure that you want to delete your user account? When deleting your account all related information will be deleted too except the foods that you have added. After account has been deleted it cannot be restored.",
+  "DELETE_ACCOUNT_CONFIRMATION": "Are you completely sure that you want to delete your user account? When deleting your account all related information will be deleted too. After account has been deleted it cannot be restored.",
   "ACCOUNT_DELETED": "Account deleted",
   "CHANGE_PASSWORDS_DONT_MATCH": "Passwords did not match. Password was not changed.",
   "PASSWORD_CHANGED": "Password changed",
@@ -283,5 +283,9 @@
   "TRANSLATION": "Translation",
   "HELP_DEVELOPMENT_NAV": "Participate in development",
   "REASON_REQUIRED": "Reason required",
-  "REPLY_COUNT": "Number of answers"
+  "REPLY_COUNT": "Number of answers",
+  "UPDATE_COMMENT": "Update comment",
+  "CURRENT_PASSWORD": "Current password",
+  "WRONG_CREDENTIALS": "Invalid credentials",
+  "USERNAME_OR_EMAIL": "Username or email"
 }

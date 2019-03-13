@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -67,10 +68,27 @@ namespace Makro.Services
             return new ResultDto(true, "Food added succesfully");
         }
 
-        public async Task<ResultDto> UpdateFoodInformation(Food food)
+        public async Task<ResultDto> UpdateFoodInformation(FoodDto foodDto)
         {
-            food.Id = _context.Foods.Where(f => f.UUID == food.UUID).AsNoTracking().FirstOrDefault().Id;
+            var food = await _context.Foods.Where(f => f.UUID == foodDto.UUID).FirstOrDefaultAsync();
+
+            if (food == null)
+            {
+                _logger.LogDebug("Food not found with id: ", foodDto.UUID);
+                return new ResultDto(false, "Food not found");
+            }
+
             food.UpdatedAt = DateTime.Now;
+            food.Name = foodDto.Name ?? food.Name;
+            food.Energy = foodDto.Energy;
+            food.Carbs = foodDto.Carbs;
+            food.Fat = foodDto.Fat;
+            food.Protein = foodDto.Protein;
+            food.Fiber = foodDto.Fiber;
+            food.Sugar = foodDto.Sugar;
+            food.PackageSize = foodDto.PackageSize;
+            food.ServingSize = foodDto.ServingSize;
+
             _context.Entry(food).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food updated succesfully");
@@ -95,6 +113,23 @@ namespace Makro.Services
             _context.Foods.Remove(food);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Food deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleFoods(List<string> foodIds, string userId)
+        {
+            foodIds.ForEach(foodId => { 
+                var food = _context.Foods.Include(f => f.User).Where(f => f.UUID == foodId && f.User.UUID == userId).FirstOrDefault();
+
+                if (food == null)
+                {
+                    _logger.LogDebug("Food not found with id: ", foodId);
+                }
+
+                _context.Foods.Remove(food);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Foods deleted succesfully");
         }
 
         public async Task<AmountDto> GetAmountOfFoods()

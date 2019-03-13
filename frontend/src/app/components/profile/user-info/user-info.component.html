@@ -47,10 +47,10 @@
           >
         </li>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo, false)"
         ><i class="far fa-edit"></i> {{ 'EDIT_INFORMATION' | translate }}</button
       >
-      <button *ngIf="showDeleteAccount && online" class="btn btn-danger btn-block" (click)="deleteAccount()">
+      <button *ngIf="showDeleteAccount && online" class="btn btn-danger btn-block" (click)="deleteAccount(deleteAccountModal)">
         <i class="fas fa-user-minus mr-1"></i> {{ 'DELETE_ACCOUNT' | translate }}</button
       >
     </div>
@@ -64,7 +64,7 @@
           {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>
         </li>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName, true)"
         ><i class="far fa-edit"></i> {{ 'EDIT_NAMES' | translate }}</button
       >
       <div class="row mt-1">
@@ -74,7 +74,7 @@
           }}</button>
         </div>
         <div class="col" *ngIf="changed">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">{{ 'SAVE_CHANGES' | translate }}</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="updateMealNames()">{{ 'SAVE_CHANGES' | translate }}</button>
         </div>
         <p *ngIf="changed" class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
       </div>
@@ -197,6 +197,19 @@
     <div class="container">
       <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
+          <label for="currentPassword">{{ 'CURRENT_PASSWORD' | translate }}</label>
+          <input
+            type="password"
+            name="currentpassword"
+            #userCurrentPassword="ngModel"
+            class="form-control"
+            [(ngModel)]="currentPassword"
+            required
+            [ngClass]="{ 'is-invalid': userCurrentPassword.errors && userCurrentPassword.touched }"
+          />
+          <div [hidden]="!userCurrentPassword.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
+        </div>
+        <div class="form-group">
           <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
           <input
             type="password"
@@ -242,3 +255,39 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #deleteAccountModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{ 'DELETE_ACCOUNT' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <form #deleteAccountForm="ngForm" (ngSubmit)="modal.close('save')">
+          <div class="form-group">
+            <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
+            <input
+              type="password"
+              name="password"
+              #userPassword="ngModel"
+              class="form-control"
+              [(ngModel)]="currentPassword"
+              required />
+              </div>
+              <div class="form-group"><label for="confirmation">{{ 'DELETE_ACCOUNT_CONFIRMATION' | translate }}</label></div>
+          <div class="container text-center">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+              </div>
+              <div class="col">
+                <button type="submit" class="btn btn-danger btn-block" [disabled]="!deleteAccountForm.form.valid">
+                  {{ 'DELETE_ACCOUNT' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>

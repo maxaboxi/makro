@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Makro.Models;
 using System.Collections.Generic;
 using Makro.DTO;
-using AutoMapper;
-using System;
 namespace Makro.Controllers
 {
     [Authorize]
@@ -16,13 +14,11 @@ namespace Makro.Controllers
     {
 
         private readonly FoodService _foodService;
-        private readonly IMapper _mapper;
         private readonly UserService _userService;
 
-        public FoodController(FoodService foodService, IMapper mapper, UserService userService)
+        public FoodController(FoodService foodService, UserService userService)
         {
             _foodService = foodService;
-            _mapper = mapper;
             _userService = userService;
         }
 
@@ -65,7 +61,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateFood(string id, FoodDto foodDto)
+        public async Task<IActionResult> UpdateFood(string id, [FromBody]FoodDto foodDto)
         {
             if (HttpContext.User.Identity.Name != foodDto.AddedBy)
             {
@@ -77,14 +73,19 @@ namespace Makro.Controllers
                 return BadRequest();
             }
 
-            var food = _mapper.Map<Food>(foodDto);
-            return Ok(await _foodService.UpdateFoodInformation(food));
+            return Ok(await _foodService.UpdateFoodInformation(foodDto));
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteFood(string id)
         {
             return Ok(await _foodService.DeleteFood(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleFoods(List<string> foodIds)
+        {
+            return _foodService.DeleteMultipleFoods(foodIds, HttpContext.User.Identity.Name);
         }
 
     }

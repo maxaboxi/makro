@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -100,17 +101,23 @@ namespace Makro.Services
             return articleDto;
         }
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser(string id)
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllArticlesByUser(string id)
         {
-            return await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).ToListAsync();
+            List<Article> articles = await _context.Articles.AsNoTracking().Where(a => a.User.UUID == id).Include(a => a.User).ToListAsync();
+            List<ArticleDto> articleDtos = new List<ArticleDto>();
+            articles.ForEach(a => articleDtos.Add(_mapper.Map<ArticleDto>(a)));
+            return articleDtos;
         }
 
         public async Task<ResultDto> AddNewArticle(ArticleDto articleDto, string userId)
         {
-            using (var memoryStream = new MemoryStream())
+            if (articleDto.HeaderImage != null)
             {
-                await articleDto.HeaderImage.CopyToAsync(memoryStream);
-                articleDto.Image = memoryStream.ToArray();
+                using (var memoryStream = new MemoryStream())
+                {
+                    await articleDto.HeaderImage.CopyToAsync(memoryStream);
+                    articleDto.Image = memoryStream.ToArray();
+                }
             }
 
             var article = _mapper.Map<Article>(articleDto);
@@ -162,6 +169,23 @@ namespace Makro.Services
             _context.Articles.Remove(article);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Article deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleArticles(List<string> articleIds, string userId)
+        {
+            articleIds.ForEach(articleId => {
+                var article = _context.Articles.Where(a => a.UUID == articleId && a.User.UUID == userId).FirstOrDefault();
+
+                if (article == null)
+                {
+                    _logger.LogDebug("Article not found with id: ", articleId);
+                }
+
+                _context.Likes.RemoveRange(_context.Likes.Where(l => l.Article.Id == article.Id));
+                _context.Articles.Remove(article);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Articles deleted succesfully");
         }
     }
 }

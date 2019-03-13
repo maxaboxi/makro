@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System;
-using Makro.Dto;
 namespace Makro.DTO
 {
     public class UserDto

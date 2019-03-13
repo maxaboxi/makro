@@ -117,7 +117,7 @@
           </div>
         </div>
         <label for="meals">{{ 'MEALS' | translate }}:</label>
-        <div class="form-group" *ngFor="let meal of selectedUser.meals">
+        <div class="form-group" *ngFor="let meal of selectedUser.mealNames">
           <input
             type="text"
             name="{{ meal.name }}"

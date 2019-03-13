@@ -24,5 +24,14 @@ namespace Makro.Models
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
         }
+
+        public MealName(string name, User user)
+        {
+            Name = name;
+            User = user;
+            UUID = Guid.NewGuid().ToString();
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+        }
     }
 }

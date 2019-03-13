@@ -54,7 +54,7 @@ export class QaService {
   }
 
   getAllUserQuestionsByUser() {
-    const url = `${this.baseUrlQuestion}/user/`;
+    const url = `${this.baseUrlQuestion}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ export class QaService {
   }
 
   removeQuestions(questionIds) {
-    const url = `${this.baseUrlQuestion}/delete`;
+    const url = `${this.baseUrlQuestion}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ export class QaService {
   }
 
   removeAnswers(answerIds) {
-    const url = `${this.baseUrlAnswer}/delete`;
+    const url = `${this.baseUrlAnswer}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

@@ -52,7 +52,7 @@ export class LikeService {
   }
 
   removeLikes(likeIds) {
-    const url = `${this.baseUrl}/removelikes`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

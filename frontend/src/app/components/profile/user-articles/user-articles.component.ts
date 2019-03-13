@@ -31,7 +31,7 @@ export class UserArticlesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.articleService.getArticlesByUser(user.username).subscribe(
+        this.articleService.getArticlesByUser().subscribe(
           articles => {
             this.articles = articles;
             this.loading = false;
@@ -62,7 +62,7 @@ export class UserArticlesComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.articleService.getArticlesByUser(this.user.username).subscribe(articles => {
+          this.articleService.getArticlesByUser().subscribe(articles => {
             this.articles = articles;
           });
           this.articlesDeleted = false;

@@ -16,8 +16,8 @@ export class AdminLikesComponent implements OnInit {
   propertiesToShow = [
     { name: 'username', date: false },
     { name: 'createdAt', date: true },
-    { name: 'content', date: false },
-    { name: 'like', date: false }
+    { name: 'likedContent', date: false },
+    { name: 'value', date: false }
   ];
   deletedVotes = [];
   likesDeleted = false;
@@ -31,7 +31,7 @@ export class AdminLikesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.adminService.getAllVotes().subscribe(likes => (this.likes = likes));
+    this.adminService.getAllLikes().subscribe(likes => (this.likes = likes));
   }
 
   deleteVote(index) {
@@ -48,7 +48,7 @@ export class AdminLikesComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.adminService.getAllVotes().subscribe(likes => (this.likes = likes));
+          this.adminService.getAllLikes().subscribe(likes => (this.likes = likes));
           this.likesDeleted = false;
         }
       },

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Makro.Models;
+using Makro.DB;
 using Microsoft.EntityFrameworkCore;
 using Makro.Services;
 using AutoMapper;
@@ -12,8 +12,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
-using System;
-
 namespace Makro
 {
     public class Startup

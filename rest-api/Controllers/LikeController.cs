@@ -59,5 +59,11 @@ namespace Makro.Controllers
         {
             return Ok(await _likeService.DeleteLike(id, HttpContext.User.Identity.Name));
         }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleLikes([FromBody]List<string> likeIds)
+        {
+            return _likeService.DeleteMultipleLikes(likeIds, HttpContext.User.Identity.Name);
+        }
     }
 }

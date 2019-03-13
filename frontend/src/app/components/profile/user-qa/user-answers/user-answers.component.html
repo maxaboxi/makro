@@ -10,7 +10,7 @@
       <ul>
         <li class="big-list lead" *ngFor="let answer of answers; let i = index">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="navigate(answer)"> <p [innerHTML]="answer.answer"></p> </div>
+            <div class="col-10 day-list-name" (click)="navigate(answer)"> <p [innerHTML]="answer.answerBody"></p> </div>
             <div class="col-2">
               <i class="far fa-minus-square float-right" (click)="deleteAnswer(i)" title="{{ 'DELETE_ANSWER' | translate }}"></i>
             </div>

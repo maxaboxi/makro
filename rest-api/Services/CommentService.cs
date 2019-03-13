@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -145,6 +146,22 @@ namespace Makro.Services
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Comment deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleComments(List<string> commentIds, string userId)
+        {
+            commentIds.ForEach(commentId => { 
+                var comment = _context.Comments.Where(c => c.UUID == commentId && c.User.UUID == userId).FirstOrDefault();
+
+                if (comment == null)
+                {
+                    _logger.LogDebug("Comment not found with id: " + commentId + " and with userId " + userId);
+                }
+
+                _context.Comments.Remove(comment);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Comments deleted succesfully");
         }
     }
 }

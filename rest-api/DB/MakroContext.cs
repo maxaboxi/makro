@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-namespace Makro.Models
+using Makro.Models;
+namespace Makro.DB
 {
     public class MakroContext : DbContext
     {
@@ -79,7 +80,6 @@ namespace Makro.Models
 
             modelBuilder.Entity<SharedMeal>()
                 .HasIndex(e => e.UUID).IsUnique();
-
 
             modelBuilder.Entity<Like>()
                 .HasIndex(e => e.UUID).IsUnique();

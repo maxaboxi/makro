@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -26,7 +27,10 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswersByUser(string userId)
         {
             List<AnswerDto> answerDtos = new List<AnswerDto>();
-            var answers = await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId).Include(a => a.User).ToListAsync();
+            var answers = await _context.Answers.AsNoTracking().Where(a => a.User.UUID == userId)
+                .Include(a => a.User)
+                .Include(a => a.Question)
+                .ToListAsync();
             answers.ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
             return answerDtos;
         }
@@ -75,6 +79,23 @@ namespace Makro.Services
             _context.Answers.Remove(answer);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Answer deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleAnswers(List<string> anserIds, string userId)
+        {
+            anserIds.ForEach(answerId => {
+                var answer = _context.Answers.Where(a => a.UUID == answerId && a.User.UUID == userId).FirstOrDefault();
+
+                if (answer == null)
+                {
+                    _logger.LogDebug("Answer not found with id: " + answerId + " and with userId " + userId);
+                }
+
+                _context.Answers.Remove(answer);
+                 _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Answers deleted succesfully");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -138,6 +139,22 @@ namespace Makro.Services
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Like deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleLikes(List<string> likeIds, string userId)
+        {
+            likeIds.ForEach(likeId => { 
+                var like = _context.Likes.Where(l => l.User.UUID == userId && l.UUID == likeId).FirstOrDefault();
+
+                if (like == null)
+                {
+                    _logger.LogDebug("Like not found with id: " + likeId + " and with userId " + userId);
+                }
+
+                _context.Likes.Remove(like);
+                _context.SaveChanges();
+            });
+            return new ResultDto(true, "Likes deleted succesfully");
         }
 
         private bool CheckUnique(string userId, string uuidToCheck)

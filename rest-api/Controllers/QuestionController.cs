@@ -61,5 +61,11 @@ namespace Makro.Controllers
         {
             return Ok(await _questionService.DeleteQuestion(id, HttpContext.User.Identity.Name));
         }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleQuestions([FromBody]List<string> questionIds)
+        {
+            return _questionService.DeleteMultipleQuestions(questionIds, HttpContext.User.Identity.Name);
+        }
     }
 }

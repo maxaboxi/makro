@@ -55,12 +55,19 @@ export class RegisterComponent implements OnInit {
     };
 
     this.auth.register(data).subscribe(
-      success => {
-        this.flashMessage.show(this.translator.instant('REGISTER_SUCCESFULL'), {
-          cssClass: 'alert-success',
-          timeout: 2000
-        });
-        this.router.navigate(['/login']);
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('REGISTER_SUCCESFULL'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.router.navigate(['/login']);
+        } else {
+          this.flashMessage.show(res['message'], {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {

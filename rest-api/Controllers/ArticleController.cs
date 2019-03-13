@@ -32,9 +32,9 @@ namespace Makro.Controllers
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticlesByUser()
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllArticlesByUser()
         {
-            return await _articleService.GetAllArticlesByUser(HttpContext.User.Identity.AuthenticationType);
+            return await _articleService.GetAllArticlesByUser(HttpContext.User.Identity.Name);
         }
 
         [HttpPost("new")]
@@ -58,6 +58,12 @@ namespace Makro.Controllers
         public async Task<IActionResult> DeleteArticle(string id)
         {
             return Ok(await _articleService.DeleteArticle(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleArticles([FromBody]List<string> articleIds)
+        {
+            return _articleService.DeleteMultipleArticles(articleIds, HttpContext.User.Identity.Name);
         }
     }
 }

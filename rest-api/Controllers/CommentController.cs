@@ -72,5 +72,11 @@ namespace Makro.Controllers
         {
             return Ok(await _commentService.DeleteComment(id, HttpContext.User.Identity.Name));
         }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleComments([FromBody]List<string> commentIds)
+        {
+            return _commentService.DeleteMultipleComments(commentIds, HttpContext.User.Identity.Name);
+        }
     }
 }

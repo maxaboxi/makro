@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,10 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacks()
         {
-            var feedbacks = await _context.Feedbacks.Include(f => f.User).Include(f => f.AnsweredBy).AsNoTracking().ToListAsync();
+            var feedbacks = await _context.Feedbacks.Include(f => f.User).Include(f => f.AnsweredBy)
+                .OrderByDescending(f => f.CreatedAt).AsNoTracking().ToListAsync();
             var feedbackDtos = new List<FeedbackDto>();
+
             feedbacks.ForEach(f => {
                 var feedbackDto = new FeedbackDto
                 {
@@ -32,13 +35,14 @@ namespace Makro.Services
                     Username = f.Anonymous ? "Nimetön" : f.User.Username,
                     FeedbackBody = f.FeedbackBody,
                     Answer = f.Answer,
-                    AnsweredBy = f.AnsweredBy?.UUID,
+                    AnsweredBy = f.AnsweredBy?.Username,
                     CreatedAt = f.CreatedAt,
                     UpdatedAt = f.UpdatedAt,
                     AnsweredAt = f.AnsweredAt
                 };
                 feedbackDtos.Add(feedbackDto);
             });
+
             return feedbackDtos;
         }
 
@@ -73,7 +77,7 @@ namespace Makro.Services
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 UUID = Guid.NewGuid().ToString(),
-                Anonymous = feedbackDto.UserId == null
+                Anonymous = feedbackDto.UserId.Length == 0
             };
             _context.Add(feedback);
             await _context.SaveChangesAsync();

@@ -5,6 +5,7 @@ namespace Makro.DTO
     {
         public string UUID { get; set; }
         public string UserUUID { get; set; }
+        public string Username { get; set; }
         public int Value { get; set; }
         public string ArticleUUID { get; set; }
         public string AnswerUUID { get; set; }

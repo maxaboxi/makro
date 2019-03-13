@@ -1,4 +1,5 @@
-﻿using Makro.Models;
+﻿using Makro.DB;
+using Makro.Models;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using Makro.DTO;
 using System;
 using System.Linq;
-using Makro.Dto;
 namespace Makro.Services
 {
     public class MealService
@@ -103,8 +103,15 @@ namespace Makro.Services
             return sharedMealDto;
         }
 
-        public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, User user)
+        public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, string userId)
         {
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return new ResultDto(false, "Unauthorized");
+            }
+
             List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);
             var sharedMeal = _mapper.Map<SharedMeal>(sharedMealDto);
             sharedMeal.UUID = Guid.NewGuid().ToString();
@@ -112,6 +119,7 @@ namespace Makro.Services
             sharedMeal.CreatedAt = DateTime.Now;
             sharedMeal.UpdatedAt = DateTime.Now;
             await _context.AddAsync(sharedMeal);
+
             foods.ForEach(f => {
                 var smf = new SharedMealFood
                 {
@@ -121,6 +129,7 @@ namespace Makro.Services
                 };
                 _context.Add(smf);
             });
+
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Meal shared succesfully");
         }
@@ -183,7 +192,7 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteSharedMeal(string id, string userId)
         {
-            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id).Include(sm => sm.User).FirstOrDefaultAsync();
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id && sm.User.UUID == userId).Include(sm => sm.User).FirstOrDefaultAsync();
 
 
             if (sharedMeal == null)
@@ -192,33 +201,45 @@ namespace Makro.Services
                 return new ResultDto(false, "Not found");
             }
 
-            if (sharedMeal.User.UUID != userId)
-            {
-                _logger.LogError("User with UUID ", userId + " tried to delete shared meal which belongs to " + sharedMeal.User.UUID);
-                return new ResultDto(false, "Unauthorized");
-            }
-
             _context.SharedMeals.Remove(sharedMeal);
             await _context.SaveChangesAsync();
 
             return new ResultDto(true, "Shared meal deleted succesfully");
         }
 
-        public async Task<ResultDto> UpdateMealNamesForUser(User user, List<MealNameDto> mealNameDtos)
+        public ResultDto DeleteMultipleSharedMeals(List<string> mealIds, string userId)
         {
-            var originalMealNames = await _context.MealNames.Where(mn => mn.User == user).ToListAsync();
-            originalMealNames.ForEach(m =>
-            {
-                mealNameDtos.ForEach(mnd => {
-                    if (m.UUID == mnd.UUID)
-                    {
-                        m.Name = mnd.Name;
-                        _context.Entry(m).State = EntityState.Modified;
-                    }
-                });
+            mealIds.ForEach(mealId => { 
+                var sharedMeal = _context.SharedMeals.Where(sm => sm.UUID == mealId && sm.User.UUID == userId).FirstOrDefault();
+
+                if (sharedMeal == null)
+                {
+                    _logger.LogDebug("SharedMeal not found with UUID: ", mealId);
+                }
+
+                _context.SharedMeals.Remove(sharedMeal);
+                _context.SaveChanges();
             });
+
+            return new ResultDto(true, "Meals deleted succesfully");
+        }
+
+        public async Task<List<MealNameDto>> UpdateMealNamesForUser(string userId, List<MealNameDto> mealNameDtos)
+        {
+
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
+            _context.MealNames.RemoveRange(_context.MealNames.Where(m => m.User == user));
+
+            List<MealNameDto> mealNames = new List<MealNameDto>();
+            mealNameDtos.ForEach(mn =>
+            {
+                var meal = new MealName(mn.Name, user);
+                mealNames.Add(_mapper.Map<MealNameDto>(meal));
+                _context.Add(meal);
+            });
+
             await _context.SaveChangesAsync();
-            return new ResultDto(true, "Names updated succesfully");
+            return mealNames;
         }
 
         public List<MealName> GenerateDefaultMealNamesForUser()
