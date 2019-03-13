@@ -5,9 +5,6 @@ import { Feedback } from '../models/Feedback';
 import { User } from '../models/User';
 import { environment } from '../../environments/environment';
 import { Like } from '../models/Like';
-import { Answer } from '../models/Answer';
-import { Comment } from '../models/Comment';
-import { EditedFood } from '../models/EditedFood';
 import { Food } from '../models/Food';
 
 @Injectable({
