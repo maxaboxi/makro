@@ -287,5 +287,9 @@
   "UPDATE_COMMENT": "Update comment",
   "CURRENT_PASSWORD": "Current password",
   "WRONG_CREDENTIALS": "Invalid credentials",
-  "USERNAME_OR_EMAIL": "Username or email"
+  "USERNAME_OR_EMAIL": "Username or email",
+  "RESET_PASSWORD": "Reset password",
+  "PASSWORD_RESET_TOKEN": "Password reset code",
+  "PASSWORD_RESET_TOKEN_REQUIRED": "Password reset code is required",
+  "PASSWORD_RESET_SUCCESFULL": "Password was reset succesfully"
 }

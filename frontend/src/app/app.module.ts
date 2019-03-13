@@ -45,6 +45,7 @@ import { DataListComponent } from './components/admin/data-list/data-list.compon
 import { AdminLikesComponent } from './components/admin/admin-likes/admin-likes.component';
 import { AdminMealsComponent } from './components/admin/admin-meals/admin-meals.component';
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
+import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -82,7 +83,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataListComponent,
     AdminLikesComponent,
     AdminMealsComponent,
-    AdminFeedbacksComponent
+    AdminFeedbacksComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule,

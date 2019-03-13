@@ -9,6 +9,11 @@ using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Net.Mail;
+using System.Net;
+using Makro.Helpers;
+using Microsoft.Extensions.Options;
+
 namespace Makro.Services
 {
     public class UserService
@@ -17,12 +22,14 @@ namespace Makro.Services
         private readonly MealService _mealService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger)
+        private readonly AppSettings _appSettings;
+        public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger, IOptions<AppSettings> appSettings)
         {
             _context = context;
             _mealService = mealService;
             _mapper = mapper;
             _logger = logger;
+            _appSettings = appSettings.Value;
         }
 
         public async Task<ResultDto> RegisterUser(UserDto userDto, string password)
@@ -104,16 +111,46 @@ namespace Makro.Services
             return new ResultDto(false, "Unauthorized");
         }
 
-        public async Task<ResultDto> ResetPassword(string email)
+        public async Task<ResultDto> ForgotPassword(string usernameOrEmail)
         {
-            var foundUser = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
-
-            if (foundUser != null)
+            var foundUser = await _context.Users
+                .Where(u => u.Email == usernameOrEmail || u.Username == usernameOrEmail)
+                .FirstOrDefaultAsync();
+      
+            if (foundUser != null && foundUser.Email != null)
             {
                 foundUser.PasswordResetToken = Guid.NewGuid().ToString();
                 _context.Entry(foundUser).State = EntityState.Modified;
                  await _context.SaveChangesAsync();
-                return new ResultDto(true, "Password reset token sent to " + email);
+                var result = SendTokenViaEmail(foundUser.Email, foundUser.PasswordResetToken);
+
+                if (!result)
+                {
+                    foundUser.PasswordResetToken = null;
+                    _context.Entry(foundUser).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return new ResultDto(false, "Unable to sent email");
+                }
+
+                return new ResultDto(true, "Password reset token sent to " + foundUser.Email);
+            }
+
+            return new ResultDto(false, "Something went wrong");
+        }
+
+        public async Task<ResultDto> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var foundUser = await _context.Users
+                .Where(u => u.Email == resetPasswordDto.Email && u.PasswordResetToken == resetPasswordDto.PasswordResetToken)
+                .FirstOrDefaultAsync();
+
+            if (foundUser != null)
+            {
+                foundUser.PasswordResetToken = null;
+                foundUser.Password = HashPassword(resetPasswordDto.Password);
+                _context.Entry(foundUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return new ResultDto(true, "Password changed succesfully");
             }
 
             return new ResultDto(false, "Something went wrong");
@@ -236,6 +273,32 @@ namespace Makro.Services
         {
             _context.Entry(user).State = EntityState.Modified;
             return await _context.SaveChangesAsync();
+        }
+
+        private bool SendTokenViaEmail(string email, string resetToken)
+        {
+            var message = new MailMessage();
+            message.To.Add(new MailAddress(email));
+            message.From = new MailAddress(_appSettings.Email, "Makro Support");
+            message.Subject = "Koodi salasanan nollaamiseen";
+            message.Body = "<p>Hei,</p><p>Koodi salasanan nollaamiseen on: " +
+                resetToken +
+                "</p><p>Osoite: <a href='https://makro.diet/resetpassword'>https://makro.diet/resetpassword<a></p>" +
+                "<p>Ystävällisin terveisin,</p><p>Makro Support</p>";
+            message.IsBodyHtml = true;
+
+            var client = new SmtpClient(_appSettings.Smtp);
+            client.Port = 587;
+            client.Credentials = new NetworkCredential(_appSettings.Email, _appSettings.Password);
+            client.EnableSsl = true;
+            try
+            {
+                client.Send(message);
+                return true;
+            } catch (SmtpException)
+            {
+                return false;
+            }
         }
     }
 }

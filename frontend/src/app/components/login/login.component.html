@@ -1,5 +1,6 @@
 <div class="container mt-5">
-  <h3>{{ 'LOGIN' | translate }}</h3> <br />
+  <h3>{{ 'LOGIN' | translate }}</h3>
+  <br />
   <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
     <div class="form-group">
       <label class="lead" for="username">{{ 'USERNAME_OR_EMAIL' | translate }}</label>
@@ -14,8 +15,8 @@
         [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
         required
       />
-      <div [hidden]="!userUsername.errors?.required" class="invalid-feedback"> {{ 'USERNAME_REQUIRED' | translate }} </div>
-      <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback"> {{ 'USERNAME_NOT_LONG_ENOUGH' | translate }} </div>
+      <div [hidden]="!userUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
+      <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback">{{ 'USERNAME_NOT_LONG_ENOUGH' | translate }}</div>
     </div>
     <div class="form-group">
       <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
@@ -29,7 +30,7 @@
         [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
         required
       />
-      <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> {{ 'PASSWORD_REQUIRED' | translate }} </div>
+      <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">{{ 'LOGIN' | translate }}</button>
   </form>
@@ -37,9 +38,9 @@
     <div class="col">
       <div class="form-group">
         <p class="lead text-muted">{{ 'NEW_PASSWORD_SENT_TEXT' | translate }}</p>
-        <button (click)="resetPassword()" [disabled]="!user.username || user.username?.length < 2" class="btn btn-block btn-primary mt-3">{{
-          'SEND_NEW_PASSWORD' | translate
-        }}</button>
+        <button (click)="forgotPassword()" [disabled]="!user.username || user.username?.length < 2" class="btn btn-block btn-primary mt-3">
+          {{ 'SEND_NEW_PASSWORD' | translate }}
+        </button>
       </div>
     </div>
   </div>

@@ -184,16 +184,25 @@ export class AuthService {
     return this.http.post(url, user, { headers: headers });
   }
 
-  resetPassword(username) {
+  forgotPassword(usernameOrEmail) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/forgotpassword`;
+    const user = {
+      usernameOrEmail: usernameOrEmail
+    };
+
+    return this.http.post(url, user, { headers: headers });
+  }
+
+  resetPassword(resetPasswordDto) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/resetpassword`;
-    const user = {
-      username: username
-    };
 
-    return this.http.post(url, user, { headers: headers });
+    return this.http.post(url, resetPasswordDto, { headers: headers });
   }
 
   checkAdmin() {

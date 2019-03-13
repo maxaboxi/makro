@@ -23,11 +23,13 @@ import { AdminLikesComponent } from './components/admin/admin-likes/admin-likes.
 import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
 import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
+import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'resetpassword', component: ResetpasswordComponent },
   {
     path: 'profile',
     component: ProfileComponent,

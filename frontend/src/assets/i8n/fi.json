@@ -287,5 +287,9 @@
   "UPDATE_COMMENT": "Muokkaa kommenttia",
   "CURRENT_PASSWORD": "Nykyinen salasana",
   "WRONG_CREDENTIALS": "Väärä käyttäjätunnus ja/tai salasana",
-  "USERNAME_OR_EMAIL": "Käyttäjätunnus tai sähköpostiosoite"
+  "USERNAME_OR_EMAIL": "Käyttäjätunnus tai sähköpostiosoite",
+  "RESET_PASSWORD": "Nollaa salasana",
+  "PASSWORD_RESET_TOKEN": "Salasanan nollauskoodi",
+  "PASSWORD_RESET_TOKEN_REQUIRED": "Salasanan nollauskoodi vaaditaan",
+  "PASSWORD_RESET_SUCCESFULL": "Salasana nollattu onnistuneesti"
 }

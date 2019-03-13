@@ -70,8 +70,8 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  resetPassword() {
-    this.auth.resetPassword(this.user.username).subscribe(
+  forgotPassword() {
+    this.auth.forgotPassword(this.user.username).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(res['message'], {
@@ -79,6 +79,7 @@ export class LoginComponent implements OnInit {
             timeout: 3000
           });
           this.showPasswordReset = false;
+          this.router.navigate(['/resetpassword']);
         } else {
           this.flashMessage.show(res['message'], {
             cssClass: 'alert-danger',
@@ -88,7 +89,7 @@ export class LoginComponent implements OnInit {
         this.username = null;
       },
       (error: Error) => {
-        this.flashMessage.show('asdsa', {
+        this.flashMessage.show('Something went wrong', {
           cssClass: 'alert-danger',
           timeout: 2000
         });

@@ -74,6 +74,20 @@ namespace Makro.Controllers
             });
         }
 
+        [AllowAnonymous]
+        [HttpPost("forgotpassword")]
+        public async Task<ResultDto> ForgotPassword([FromBody]LoginDto login)
+        {
+            return await _userService.ForgotPassword(login.UsernameOrEmail);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetpassword")]
+        public async Task<ResultDto> ResetPassword([FromBody]ResetPasswordDto resetPasswordDto)
+        {
+            return await _userService.ResetPassword(resetPasswordDto);
+        }
+
         [HttpPost("changepassword")]
         public async Task<ResultDto> ChangePassword(LoginDto credentials)
         {
