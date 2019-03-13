@@ -32,13 +32,9 @@ namespace Makro
             services.AddScoped<MealService>();
             services.AddScoped<AdminService>();
             services.AddScoped<FoodService>();
-            services.AddScoped<AnswerService>();
-            services.AddScoped<ArticleService>();
-            services.AddScoped<CommentService>();
             services.AddScoped<DayService>();
             services.AddScoped<FeedbackService>();
             services.AddScoped<LikeService>();
-            services.AddScoped<QuestionService>();
             services.AddAutoMapper();
             services.AddCors(options =>
             {

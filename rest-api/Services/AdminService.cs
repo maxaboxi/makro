@@ -228,104 +228,10 @@ namespace Makro.Services
             return new ResultDto(true, "Foods deleted succesfully");
         }
 
-        public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
-        {
-            return await _context.EditedFoods.AsNoTracking().ToListAsync();
-        }
-
-        public ResultDto DeleteMultipleQuestions(List<string> questionIds)
-        {
-            questionIds.ForEach(questionId =>
-            {
-                var question = _context.Questions.Where(q => q.UUID == questionId).FirstOrDefault();
-
-                if (question != null)
-                {
-                    _context.Questions.Remove(question);
-                    _context.SaveChanges();
-                }
-            });
-
-            return new ResultDto(true, "Questions deleted succesfully");
-        }
-
-        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswers()
-        {
-            var answers = await _context.Answers.AsNoTracking()
-                .Include(a => a.User)
-                .OrderByDescending(a => a.CreatedAt)
-                .ToListAsync();
-            List<AnswerDto> answerDtos = new List<AnswerDto>();
-            answers.ForEach(a => answerDtos.Add(_mapper.Map<AnswerDto>(a)));
-            return answerDtos;
-        }
-
-        public ResultDto DeleteMultipleAnswers(List<string> answerIds)
-        {
-            answerIds.ForEach(answerId =>
-            {
-                var answer = _context.Answers.Where(a => a.UUID == answerId).FirstOrDefault();
-
-                if (answer != null)
-                {
-                    _context.Answers.Remove(answer);
-                    _context.SaveChanges();
-                }
-            });
-
-            return new ResultDto(true, "Answers deleted succesfully");
-        }
-
-        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllComments()
-        {
-            var comments = await _context.Comments.AsNoTracking()
-                .Include(c => c.User)
-                .OrderByDescending(c => c.CreatedAt)
-                .ToListAsync();
-            List<CommentDto> commentDtos = new List<CommentDto>();
-            comments.ForEach(c => commentDtos.Add(_mapper.Map<CommentDto>(c)));
-            return commentDtos;
-        }
-
-        public ResultDto DeleteMultipleComments(List<string> commentIds)
-        {
-            commentIds.ForEach(commentId =>
-            {
-                var comment = _context.Comments.Where(c => c.UUID == commentId).FirstOrDefault();
-
-                if (comment != null)
-                {
-                    _context.Comments.Remove(comment);
-                    _context.SaveChanges();
-                }
-            });
-
-            return new ResultDto(true, "Comments deleted succesfully");
-        }
-
-        public ResultDto DeleteMultipleArticles(List<string> articleIds)
-        {
-            articleIds.ForEach(articleId =>
-            {
-                var article = _context.Articles.Where(a => a.UUID == articleId).FirstOrDefault();
-
-                if (article != null)
-                {
-                    _context.Articles.Remove(article);
-                    _context.SaveChanges();
-                }
-
-            });
-            return new ResultDto(true, "Articles deleted succesfully");
-        }
-
         public async Task<ActionResult<IEnumerable<LikeDto>>> GetAllLikes()
         {
             var likes = await _context.Likes.AsNoTracking()
                 .Include(l => l.User)
-                .Include(l => l.Answer)
-                .Include(l => l.Article)
-                .Include(l => l.Comment)
                 .Include(l => l.SharedMeal)
                 .OrderByDescending(l => l.CreatedAt)
                 .ToListAsync();
@@ -333,7 +239,7 @@ namespace Makro.Services
             likes.ForEach(l =>
             {
                 var likeDto = _mapper.Map<LikeDto>(l);
-                likeDto.LikedContent = l.Article?.Title ?? l.Answer?.AnswerBody ?? l.Comment?.Body ?? l.SharedMeal?.Name;
+                likeDto.LikedContent = l.SharedMeal?.Name;
                 likeDtos.Add(likeDto);
             });
 

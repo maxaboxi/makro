@@ -33,35 +33,11 @@ namespace Makro.Helpers
             CreateMap<MealDto, Meal>().AfterMap((src, dest) => dest.UUID = Guid.NewGuid().ToString());
             CreateMap<MealName, MealNameDto>().AfterMap((src, dest) => dest.Foods = new List<FoodDto>());
             CreateMap<MealNameDto, MealName>();
-            CreateMap<Question, QuestionDto>().AfterMap((src, dest) =>
-            {
-                dest.UserId = src.User.UUID;
-                dest.Username = src.User.Username;
-            });
-            CreateMap<QuestionDto, Question>();
-            CreateMap<Answer, AnswerDto>().AfterMap((src, dest) =>
-            {
-                dest.UserId = src.User.UUID;
-                dest.Username = src.User.Username;
-            });
-            CreateMap<AnswerDto, Answer>();
-            CreateMap<Comment, CommentDto>().AfterMap((src, dest) =>
-            {
-                dest.UserId = src.User.UUID;
-                dest.Username = src.User.Username;
-            });
-            CreateMap<CommentDto, Comment>();
             CreateMap<Like, LikeDto>().AfterMap((src, dest) => {
                 dest.UserUUID = src.User.UUID;
                 dest.Username = src.User.Username;
             });
             CreateMap<LikeDto, Like>();
-            CreateMap<Article, ArticleDto>().AfterMap((src, dest) =>
-            {
-                dest.UserId = src.User.UUID;
-                dest.Username = src.User.Username;
-            });
-            CreateMap<ArticleDto, Article>();
             CreateMap<SharedDay, SharedDayDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
             CreateMap<SharedDayDto, SharedDay>();
         }

@@ -21,60 +21,10 @@
   ],
   "dataGroups": [
     {
-      "name": "foods",
-      "urls": ["https://*.makro.diet/api/v1/foods/"],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "5s",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "validate",
-      "urls": ["https://auth.makro.diet/auth/validatetoken"],
-      "cacheConfig": {
-        "maxSize": 2,
-        "maxAge": "3d",
-        "timeOut": "1s",
-        "strategy": "performance"
-      }
-    },
-    {
-      "name": "userInfo",
-      "urls": ["https://auth.makro.diet/auth/getuserinfo"],
-      "cacheConfig": {
-        "maxSize": 2,
-        "maxAge": "12h",
-        "timeOut": "5s",
-        "strategy": "freshness"
-      }
-    },
-    {
       "name": "backend",
-      "urls": ["https://api.makro.diet/api/v1/"],
+      "urls": ["https://api.makro.diet/api/v2/"],
       "cacheConfig": {
         "maxSize": 50,
-        "maxAge": "6h",
-        "timeOut": "5s",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "votes",
-      "urls": ["https://votes.makro.diet/api/v1/"],
-      "cacheConfig": {
-        "maxSize": 20,
-        "maxAge": "6h",
-        "timeOut": "5s",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "articles",
-      "urls": ["https://articles.makro.diet/api/v1/"],
-      "cacheConfig": {
-        "maxSize": 20,
         "maxAge": "6h",
         "timeOut": "5s",
         "strategy": "freshness"

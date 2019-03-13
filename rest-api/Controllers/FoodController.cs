@@ -54,12 +54,6 @@ namespace Makro.Controllers
             return Ok(await _foodService.AddNewFood(foodDto, HttpContext.User.Identity.Name));
         }
 
-        [HttpPost("newedited")]
-        public async Task<IActionResult> AddNewEditedFood(EditedFood editedFood)
-        {
-            return Ok(await _foodService.AddNewEditedFood(editedFood));
-        }
-
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateFood(string id, [FromBody]FoodDto foodDto)
         {

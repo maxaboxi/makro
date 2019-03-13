@@ -103,42 +103,6 @@ namespace Makro.Controllers
             return _adminService.DeleteMultipleFoods(foodIds);
         }
 
-        [HttpGet("food/edited")]
-        public async Task<ActionResult<IEnumerable<EditedFood>>> GetAllEditedFoods()
-        {
-            return await _adminService.GetAllEditedFoods();
-        }
-
-        [HttpDelete("question/delete/multiple")]
-        public ResultDto DeleteMultiplQuestions(List<string> questionIds)
-        {
-            return _adminService.DeleteMultipleQuestions(questionIds);
-        }
-
-        [HttpGet("answer")]
-        public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswers()
-        {
-            return await _adminService.GetAllAnswers();
-        }
-
-        [HttpDelete("answer/delete/multiple")]
-        public ResultDto DeleteMultiplAnswers(List<string> answerIds)
-        {
-            return _adminService.DeleteMultipleAnswers(answerIds);
-        }
-
-        [HttpGet("comment")]
-        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAllComments()
-        {
-            return await _adminService.GetAllComments();
-        }
-
-        [HttpDelete("comment/delete/multiple")]
-        public ResultDto DeleteMultipleComments(List<string> commentIds)
-        {
-            return _adminService.DeleteMultipleComments(commentIds);
-        }
-
         [HttpGet("like")]
         public async Task<ActionResult<IEnumerable<LikeDto>>> GetAllLikes()
         {

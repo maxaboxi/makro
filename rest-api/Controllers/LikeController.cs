@@ -25,7 +25,7 @@ namespace Makro.Controllers
         [HttpPost("new")]
         public async Task<IActionResult> AddNewLike([FromBody]LikeDto likeDto)
         {
-            if (likeDto.AnswerUUID == null && likeDto.ArticleUUID == null && likeDto.CommentUUID == null && likeDto.SharedMealUUID == null)
+            if (likeDto.SharedMealUUID == null)
             {
                 return BadRequest();
             }
@@ -46,7 +46,7 @@ namespace Makro.Controllers
                 return BadRequest();
             }
 
-            if (likeDto.AnswerUUID == null && likeDto.ArticleUUID == null && likeDto.CommentUUID == null && likeDto.SharedMealUUID == null)
+            if (likeDto.SharedMealUUID == null)
             {
                 return BadRequest();
             }

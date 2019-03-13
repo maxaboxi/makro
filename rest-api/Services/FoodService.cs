@@ -60,14 +60,6 @@ namespace Makro.Services
             return new ResultDto(true, "Food added succesfully");
         }
 
-        public async Task<ResultDto> AddNewEditedFood(EditedFood editedFood)
-        {
-            editedFood.UUID = Guid.NewGuid().ToString();
-            _context.Add(editedFood);
-            await _context.SaveChangesAsync();
-            return new ResultDto(true, "Food added succesfully");
-        }
-
         public async Task<ResultDto> UpdateFoodInformation(FoodDto foodDto)
         {
             var food = await _context.Foods.Where(f => f.UUID == foodDto.UUID).FirstOrDefaultAsync();
