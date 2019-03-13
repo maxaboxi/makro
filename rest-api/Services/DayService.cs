@@ -164,6 +164,22 @@ namespace Makro.Services
             return new ResultDto(true, "Day updated succesfully");
         }
 
+        public async Task<ResultDto> UpdateDayNames(List<DayDto> dayDtos, string userId)
+        {
+            dayDtos.ForEach(d =>
+            {
+                var origDay = _context.Days.Where(day => day.UUID == d.UUID && day.User.UUID == userId).FirstOrDefault();
+                if (origDay != null)
+                {
+                    origDay.Name = d.Name;
+                    _context.Entry(origDay).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Day names updated");
+        }
+
         public async Task<ResultDto> DeleteDay(string id, string userId)
         {
             var day = await _context.Days.Where(d => d.UUID == id && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefaultAsync();

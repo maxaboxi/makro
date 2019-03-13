@@ -3,6 +3,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Day } from '../models/Day';
 import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
+import { DayName } from '../models/DayName';
 
 @Injectable({
   providedIn: 'root'
@@ -67,14 +68,14 @@ export class DayService {
     return this.http.delete(url, options);
   }
 
-  updateDayNames(days) {
-    const url = `${this.baseUrl}/days/updatedaynames`;
+  updateDayNames(days: DayName[]) {
+    const url = `${this.baseUrl}/updatenames`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, days, { headers: headers });
+    return this.http.put(url, days, { headers: headers });
   }
 
   shareDay(day: Day) {
