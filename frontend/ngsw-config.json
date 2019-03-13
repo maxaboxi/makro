@@ -21,10 +21,30 @@
   ],
   "dataGroups": [
     {
-      "name": "backend",
-      "urls": ["https://api.makro.diet/api/v2/"],
+      "name": "foods",
+      "urls": ["https://api.makro.diet/api/v2/food/*"],
       "cacheConfig": {
-        "maxSize": 50,
+        "maxSize": 4,
+        "maxAge": "6h",
+        "timeOut": "5s",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "likes",
+      "urls": ["https://api.makro.diet/api/v2/like"],
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "6h",
+        "timeOut": "5s",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "meals",
+      "urls": ["https://api.makro.diet/api/v2/meal"],
+      "cacheConfig": {
+        "maxSize": 5,
         "maxAge": "6h",
         "timeOut": "5s",
         "strategy": "freshness"
