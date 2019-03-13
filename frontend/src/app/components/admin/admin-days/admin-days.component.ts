@@ -21,6 +21,14 @@ export class AdminDaysComponent implements OnInit {
   daysDeleted = false;
   deletedSharedDays = [];
   sharedDaysDeleted = false;
+  selectedDayTotals = {
+    energy: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    fiber: 0,
+    sugar: 0
+  };
 
   constructor(
     private dayService: DayService,
@@ -38,6 +46,35 @@ export class AdminDaysComponent implements OnInit {
   }
 
   openDayModal(content, day) {
+    this.adminService.getDay(day.uuid).subscribe(
+      res => {
+        this.selectedDay = res;
+        this.selectedDay.allMeals.forEach(m => {
+          m.foods.forEach(f => {
+            this.selectedDayTotals.energy += f.energy;
+            (this.selectedDayTotals.protein += f.protein),
+              (this.selectedDayTotals.carbs += f.carbs),
+              (this.selectedDayTotals.fat += f.fat),
+              (this.selectedDayTotals.fiber += f.fiber),
+              (this.selectedDayTotals.sugar += f.sugar);
+          });
+        });
+        this.modalService.open(content, { centered: true }).result.then(
+          result => {
+            this.selectedDay = null;
+          },
+          dismissed => {
+            this.selectedDay = null;
+          }
+        );
+      },
+      (error: Error) => {
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
     this.selectedDay = day;
     this.modalService.open(content, { centered: true }).result.then(
       result => {
@@ -50,13 +87,13 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteDay(index) {
-    this.deletedDays.push(this.days[index]._id);
+    this.deletedDays.push(this.days[index].uuid);
     this.days.splice(index, 1);
     this.daysDeleted = true;
   }
 
   deleteDaysFromDb() {
-    this.dayService.removeDays(this.deletedDays).subscribe(
+    this.adminService.removeDays(this.deletedDays).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
@@ -78,13 +115,13 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteSharedDay(index) {
-    this.deletedSharedDays.push(this.sharedDays[index]._id);
+    this.deletedSharedDays.push(this.sharedDays[index].uuid);
     this.sharedDays.splice(index, 1);
     this.sharedDaysDeleted = true;
   }
 
   deleteSharedDaysFromDb() {
-    this.dayService.removeSharedDays(this.deletedSharedDays).subscribe(
+    this.adminService.removeSharedDays(this.deletedSharedDays).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {

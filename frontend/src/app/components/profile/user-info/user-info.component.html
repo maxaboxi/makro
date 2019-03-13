@@ -2,7 +2,8 @@
 <div class="container mt-2" *ngIf="this.user && !loading">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-      <h2 class="h2">{{ 'MY_INFO' | translate }}</h2> <h2 class="h2 mt-3" *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</h2>
+      <h2 class="h2">{{ 'MY_INFO' | translate }}</h2>
+      <h2 class="h2 mt-3" *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</h2>
       <ul>
         <li class="list lead"><i class="far fa-user"></i> {{ 'USERNAME' | translate }}: {{ user.username }}</li>
         <li *ngIf="user.email" class="list lead"><i class="fas fa-at"></i> Email: {{ user.email }}</li>
@@ -20,9 +21,9 @@
         <li class="list lead"><i class="fas fa-weight"></i> {{ 'WEIGHT' | translate }}: {{ user.weight }} kg</li>
         <li class="list lead"><i class="fas fa-arrows-alt-v"></i> {{ 'HEIGHT' | translate }}: {{ user.height }} cm</li>
         <li class="list lead"><i class="fas fa-heartbeat"></i> {{ 'AGE' | translate }}: {{ user.age }} {{ 'YEARS' | translate }}</li>
-        <li class="list lead"
-          ><i class="fas fa-child"></i> {{ 'SEX' | translate }}: {{ (user.sex === 'mies' ? 'MALE' : 'FEMALE') | translate }}</li
-        >
+        <li class="list lead">
+          <i class="fas fa-child"></i> {{ 'SEX' | translate }}: {{ (user.sex === 'mies' ? 'MALE' : 'FEMALE') | translate }}
+        </li>
         <li *ngIf="online" class="list lead">
           <span class="day-list-name" (click)="openChangePasswordModal(changePasswordModal)">
             <i class="fas fa-key"></i> {{ 'CHANGE_PASSWORD' | translate }}
@@ -32,27 +33,27 @@
           <span class="day-list-name" (click)="toggleDelete()"> <i class="fas fa-trash-alt"></i> {{ 'DELETE_ACCOUNT' | translate }} </span>
         </li>
         <li *ngIf="showInfo" class="lead mt-3 info-box">
-          <p
-            >{{ 'EQUATION_USED' | translate }}
+          <p>
+            {{ 'EQUATION_USED' | translate }}
             <a href="https://en.wikipedia.org/wiki/Harris–Benedict_equation" target="_blank">{{ 'HARRIS_BENEDICT' | translate }}</a
-            >:</p
-          >
-          <p
-            >{{ 'MEN' | translate }}: 88,4 + (13,4 * {{ 'BODY_MASS_IN_KG' | translate }}) + (4,8 * {{ 'HEIGHT_IN_CM' | translate }}) – (5,7
-            * {{ 'AGE_IN_YEARS' | translate }}).</p
-          >
-          <p
-            >{{ 'WOMEN' | translate }}: 447,6 + (9,25 * {{ 'BODY_MASS_IN_KG' | translate }}) + (3,1 * {{ 'HEIGHT_IN_CM' | translate }}) –
-            (4,3 * {{ 'AGE_IN_YEARS' | translate }})</p
-          >
+            >:
+          </p>
+          <p>
+            {{ 'MEN' | translate }}: 88,4 + (13,4 * {{ 'BODY_MASS_IN_KG' | translate }}) + (4,8 * {{ 'HEIGHT_IN_CM' | translate }}) – (5,7 *
+            {{ 'AGE_IN_YEARS' | translate }}).
+          </p>
+          <p>
+            {{ 'WOMEN' | translate }}: 447,6 + (9,25 * {{ 'BODY_MASS_IN_KG' | translate }}) + (3,1 * {{ 'HEIGHT_IN_CM' | translate }}) –
+            (4,3 * {{ 'AGE_IN_YEARS' | translate }})
+          </p>
         </li>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo)"
-        ><i class="far fa-edit"></i> {{ 'EDIT_INFORMATION' | translate }}</button
-      >
-      <button *ngIf="showDeleteAccount && online" class="btn btn-danger btn-block" (click)="deleteAccount()">
-        <i class="fas fa-user-minus mr-1"></i> {{ 'DELETE_ACCOUNT' | translate }}</button
-      >
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(userInfo, false)">
+        <i class="far fa-edit"></i> {{ 'EDIT_INFORMATION' | translate }}
+      </button>
+      <button *ngIf="showDeleteAccount && online" class="btn btn-danger btn-block" (click)="deleteAccount(deleteAccountModal)">
+        <i class="fas fa-user-minus mr-1"></i> {{ 'DELETE_ACCOUNT' | translate }}
+      </button>
     </div>
   </div>
   <hr />
@@ -60,21 +61,25 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
       <h2 class="h2">{{ 'MEAL_NAMES' | translate }}</h2>
       <ul>
-        <li *ngFor="let meal of user.meals; let i = index" class="list lead">
-          {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>
-        </li>
+        <ng-container *ngFor="let meal of user.meals; let i = index">
+          <li *ngIf="!meal.deleted" class="list lead">
+            {{ meal.name }} <i class="far fa-minus-square float-right" (click)="deleteMeal(i)" title="{{ 'DELETE_MEAL' | translate }} "></i>
+          </li>
+        </ng-container>
       </ul>
-      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName)"
-        ><i class="far fa-edit"></i> {{ 'EDIT_NAMES' | translate }}</button
-      >
+      <button *ngIf="online" class="btn btn-sm btn-outline-warning btn-block" (click)="openModal(mealName, true)">
+        <i class="far fa-edit"></i> {{ 'EDIT_NAMES' | translate }}
+      </button>
       <div class="row mt-1">
         <div class="col">
-          <button *ngIf="online" type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">{{
-            'ADD_MEAL' | translate
-          }}</button>
+          <button *ngIf="online" type="button" class="btn btn-outline-success btn-block" (click)="addNewMeal()">
+            {{ 'ADD_MEAL' | translate }}
+          </button>
         </div>
         <div class="col" *ngIf="changed">
-          <button type="button" class="btn btn-outline-success btn-block" (click)="updateInfo()">{{ 'SAVE_CHANGES' | translate }}</button>
+          <button type="button" class="btn btn-outline-success btn-block" (click)="updateMealNames()">
+            {{ 'SAVE_CHANGES' | translate }}
+          </button>
         </div>
         <p *ngIf="changed" class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
       </div>
@@ -85,7 +90,7 @@
 <ng-template #userInfo let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_INFORMATION' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -142,7 +147,7 @@
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+              <button type="submit" class="btn btn-primary btn-block">{{ 'SAVE' | translate }}</button>
             </div>
           </div>
         </div>
@@ -154,7 +159,7 @@
 <ng-template #mealName let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_NAMES' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -179,7 +184,7 @@
               <span class="btn btn-primary btn-block" (click)="addNewMeal()"> {{ 'ADD_MEAL' | translate }} </span>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-success btn-block"> {{ 'SAVE' | translate }} </button>
+              <button type="submit" class="btn btn-success btn-block">{{ 'SAVE' | translate }}</button>
             </div>
           </div>
         </div>
@@ -191,11 +196,24 @@
 <ng-template #changePasswordModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'CHANGE_PASSWORD' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
       <form #changePasswordForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="currentPassword">{{ 'CURRENT_PASSWORD' | translate }}</label>
+          <input
+            type="password"
+            name="currentpassword"
+            #userCurrentPassword="ngModel"
+            class="form-control"
+            [(ngModel)]="currentPassword"
+            required
+            [ngClass]="{ 'is-invalid': userCurrentPassword.errors && userCurrentPassword.touched }"
+          />
+          <div [hidden]="!userCurrentPassword.errors?.required" class="invalid-feedback">{{ 'REQUIRED_FIELD' | translate }}</div>
+        </div>
         <div class="form-group">
           <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
           <input
@@ -208,8 +226,8 @@
             required
             [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
           />
-          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
-          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback"> {{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">{{ 'REQUIRED_FIELD' | translate }}</div>
+          <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback">{{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="form-group">
           <label for="userPasswordAgain">{{ 'PASSWORD_AGAIN' | translate }}</label>
@@ -223,8 +241,8 @@
             required
             [ngClass]="{ 'is-invalid': userPasswordAgain.errors && userPasswordAgain.touched }"
           />
-          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback"> {{ 'REQUIRED_FIELD' | translate }} </div>
-          <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback"> {{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!userPasswordAgain.errors?.required" class="invalid-feedback">{{ 'REQUIRED_FIELD' | translate }}</div>
+          <div [hidden]="!userPasswordAgain.errors?.minlength" class="invalid-feedback">{{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="container text-center">
           <div class="row">
@@ -234,6 +252,38 @@
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!changePasswordForm.form.valid">
                 {{ 'CHANGE_PASSWORD' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteAccountModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'DELETE_ACCOUNT' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #deleteAccountForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="userPassword">{{ 'PASSWORD' | translate }}</label>
+          <input type="password" name="password" #userPassword="ngModel" class="form-control" [(ngModel)]="currentPassword" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmation">{{ 'DELETE_ACCOUNT_CONFIRMATION' | translate }}</label>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-danger btn-block" [disabled]="!deleteAccountForm.form.valid">
+                {{ 'DELETE_ACCOUNT' | translate }}
               </button>
             </div>
           </div>

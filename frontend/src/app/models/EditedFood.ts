@@ -1,8 +1,8 @@
 import { Food } from './Food';
 
 export interface EditedFood {
-  _id?: String;
-  editedBy: String;
+  uuid?: string;
+  editedBy: string;
   originalFood?: Food;
   editedFood?: Food;
   deleted?: boolean;

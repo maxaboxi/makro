@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AdminFoodsComponent implements OnInit {
   foods: Food[];
-  propertiesToShow = [{ name: 'username', date: false }, { name: 'name', date: false }, { name: 'createdAt', date: true }];
+  propertiesToShow = [{ name: 'addedByUsername', date: false }, { name: 'name', date: false }, { name: 'createdAt', date: true }];
   searchTerm = '';
   results: Food[] = [];
   editedFoods: EditedFood[];
@@ -35,8 +35,7 @@ export class AdminFoodsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
-    this.adminService.getAllFoodsSentForApproval().subscribe(editedFoods => (this.editedFoods = editedFoods));
+    this.adminService.getMostRecentFoods().subscribe(foods => (this.foods = foods));
   }
 
   searchFoods() {
@@ -107,10 +106,10 @@ export class AdminFoodsComponent implements OnInit {
 
   deleteFood(index) {
     if (this.results.length === 0 && this.searchTerm.length === 0) {
-      this.deletedFoods.push(this.foods[index]._id);
+      this.deletedFoods.push(this.foods[index].uuid);
       this.foods.splice(index, 1);
     } else {
-      this.deletedFoods.push(this.results[index]._id);
+      this.deletedFoods.push(this.results[index].uuid);
       this.results.splice(index, 1);
     }
     this.foodsDeleted = true;
@@ -128,67 +127,6 @@ export class AdminFoodsComponent implements OnInit {
         this.deletedFoods = [];
         this.foodsDeleted = false;
         this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
-    );
-  }
-
-  openEditedFoodModal(content, editedFood) {
-    this.selectedEditedFood = editedFood;
-    this.modalService.open(content, { centered: true, size: 'lg' }).result.then(
-      result => {
-        if (result === 'save') {
-          this.adminService.approveEditedFood(editedFood).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
-                this.selectedEditedFood = null;
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
-        }
-        this.selectedEditedFood = null;
-      },
-      dismissed => {
-        this.selectedFood = null;
-      }
-    );
-  }
-
-  disapproveEditedFood(index: number, editedFood: EditedFood) {
-    this.disapprovedEditedFoods.push(editedFood);
-    this.editedFoods.splice(index, 1);
-    this.editedFoodsDisapproved = true;
-  }
-
-  deleteEditedFoodsFromDb() {
-    this.adminService.disapproveEditedFoods(this.disapprovedEditedFoods).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.deletedFoods = [];
-          this.foodsDeleted = false;
-          this.editedFoodsDisapproved = false;
-          this.adminService.getAllFoodsSentForApproval().subscribe(foods => (this.editedFoods = foods));
-        }
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {

@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DayName } from 'src/app/models/DayName';
 
 @Component({
   selector: 'app-saved-days',
@@ -36,7 +37,7 @@ export class SavedDaysComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.dayService.getAllSavedDays(this.user.username).subscribe(
+        this.dayService.getAllSavedDays().subscribe(
           days => {
             this.savedDays = days;
             this.loading = false;
@@ -54,16 +55,26 @@ export class SavedDaysComponent implements OnInit {
   }
 
   loadDay(index) {
-    localStorage.setItem('meals', JSON.stringify(this.savedDays[index].meals));
-    localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index]._id));
-    this.addedFoodsService._mealsEdited.next(false);
-    this.addedFoodsService._openedSavedMeal.next(true);
-    this.addedFoodsService.setMealsFromLocalStorage();
-    this.router.navigate(['/']);
+    this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
+      day => {
+        localStorage.setItem('meals', JSON.stringify(day.allMeals));
+        localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
+        this.addedFoodsService._mealsEdited.next(false);
+        this.addedFoodsService._openedSavedMeal.next(true);
+        this.addedFoodsService.setMealsFromLocalStorage();
+        this.router.navigate(['/']);
+      },
+      (error: Error) => {
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 
   deleteDay(index) {
-    this.deletedDays.push(this.savedDays[index]._id);
+    this.deletedDays.push(this.savedDays[index].uuid);
     this.savedDays.splice(index, 1);
     this.daysDeleted = true;
   }
@@ -76,7 +87,7 @@ export class SavedDaysComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+          this.dayService.getAllSavedDays().subscribe(days => {
             this.savedDays = days;
           });
           this.daysDeleted = false;
@@ -93,13 +104,13 @@ export class SavedDaysComponent implements OnInit {
 
   openDayModal(content) {
     const originalDays = JSON.parse(JSON.stringify(this.savedDays));
-    const changedDays = [];
+    const changedDays: DayName[] = [];
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           this.savedDays.forEach((d, i) => {
             if (d.name !== originalDays[i].name) {
-              changedDays.push(d);
+              changedDays.push({ uuid: d.uuid, name: d.name });
             }
           });
           this.dayService.updateDayNames(changedDays).subscribe(
@@ -109,7 +120,7 @@ export class SavedDaysComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.dayService.getAllSavedDays(this.user.username).subscribe(days => {
+                this.dayService.getAllSavedDays().subscribe(days => {
                   this.savedDays = days;
                 });
               }

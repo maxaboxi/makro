@@ -39,7 +39,7 @@ export class UserSharedMealsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.sharedMealsService.getMealsByUser(this.user.username).subscribe(
+        this.sharedMealsService.getMealsByUser().subscribe(
           meals => {
             this.sharedMeals = meals;
             this.foodService.getAllFoods().subscribe(
@@ -69,7 +69,7 @@ export class UserSharedMealsComponent implements OnInit {
   }
 
   deleteSharedMeal(index) {
-    this.deletedSharedMeals.push(this.sharedMeals[index]._id);
+    this.deletedSharedMeals.push(this.sharedMeals[index].uuid);
     this.sharedMeals.splice(index, 1);
     this.sharedMealsDeleted = true;
   }
@@ -82,7 +82,7 @@ export class UserSharedMealsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
+          this.sharedMealsService.getMealsByUser().subscribe(meals => {
             this.sharedMeals = meals;
           });
           this.sharedMealsDeleted = false;
@@ -98,61 +98,72 @@ export class UserSharedMealsComponent implements OnInit {
   }
 
   openEditSharedMealModal(content, meal) {
-    this.selectedSharedMeal = meal;
-    if (!this.selectedSharedMealOrigFoods) {
-      this.selectedSharedMealOrigFoods = JSON.parse(JSON.stringify(this.selectedSharedMeal.foods));
-    }
-
-    if (!this.selectedSharedMealOrigTags) {
-      this.selectedSharedMealOrigTags = JSON.parse(JSON.stringify(this.selectedSharedMeal.tags));
-    }
-    this.modalService.open(content, { centered: true }).result.then(
-      result => {
-        if (result === 'save') {
-          this.selectedSharedMeal.foods.forEach((f, i) => {
-            if (!f.amount || f.amount === 0) {
-              this.selectedSharedMeal.foods.splice(i, 1);
-            }
-            if (f.amount !== 100) {
-              const a = f.amount / 100;
-              const origFood = this.returnOriginalFoodValues(f._id, f.name);
-              f.energia = origFood[0].energia * a;
-              f.proteiini = origFood[0].proteiini * a;
-              f.hh = origFood[0].hh * a;
-              f.rasva = origFood[0].rasva * a;
-              f.kuitu = origFood[0].kuitu * a;
-              f.sokeri = origFood[0].sokeri * a;
-            }
-          });
-          this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
-            if (res['success']) {
-              this.sharedMealsService.getMealsByUser(this.user.username).subscribe(meals => {
-                this.sharedMeals = meals;
-                this.selectedSharedMealOrigFoods = undefined;
-                this.selectedSharedMeal = undefined;
-                this.sharedMealTag = '';
-                this.selectedSharedMealOrigTags = undefined;
-                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-              });
-            }
-          });
-        } else {
-          this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
-          this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
-          this.selectedSharedMealOrigFoods = undefined;
-          this.selectedSharedMealOrigTags = undefined;
-          this.sharedMealTag = '';
+    this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
+      res => {
+        this.selectedSharedMeal = res;
+        if (!this.selectedSharedMealOrigFoods) {
+          this.selectedSharedMealOrigFoods = { ...this.selectedSharedMeal.foods };
         }
+
+        if (!this.selectedSharedMealOrigTags) {
+          this.selectedSharedMealOrigTags = { ...this.selectedSharedMeal.tags };
+        }
+        this.modalService.open(content, { centered: true }).result.then(
+          result => {
+            if (result === 'save') {
+              this.selectedSharedMeal.foods.forEach((f, i) => {
+                if (!f.amount || f.amount === 0) {
+                  this.selectedSharedMeal.foods.splice(i, 1);
+                }
+                if (f.amount !== 100) {
+                  const a = f.amount / 100;
+                  const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+                  f.energy = origFood[0].energy * a;
+                  f.protein = origFood[0].protein * a;
+                  f.carbs = origFood[0].carbs * a;
+                  f.fat = origFood[0].fat * a;
+                  f.fiber = origFood[0].fiber * a;
+                  f.sugar = origFood[0].sugar * a;
+                }
+              });
+              this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
+                if (res['success']) {
+                  this.sharedMealsService.getMealsByUser().subscribe(meals => {
+                    this.sharedMeals = meals;
+                    this.selectedSharedMealOrigFoods = undefined;
+                    this.selectedSharedMeal = undefined;
+                    this.sharedMealTag = '';
+                    this.selectedSharedMealOrigTags = undefined;
+                    this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                      cssClass: 'alert-success',
+                      timeout: 2000
+                    });
+                  });
+                }
+              });
+            } else {
+              this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+              this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
+              this.selectedSharedMealOrigFoods = undefined;
+              this.selectedSharedMealOrigTags = undefined;
+              this.sharedMealTag = '';
+            }
+          },
+          dismissed => {
+            this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+            this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
+            this.selectedSharedMealOrigFoods = undefined;
+            this.selectedSharedMealOrigTags = undefined;
+            this.sharedMealTag = '';
+          }
+        );
       },
-      dismissed => {
-        this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
-        this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
-        this.selectedSharedMealOrigFoods = undefined;
-        this.selectedSharedMealOrigTags = undefined;
-        this.sharedMealTag = '';
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
       }
     );
   }
@@ -164,7 +175,7 @@ export class UserSharedMealsComponent implements OnInit {
   returnOriginalFoodValues(id, name) {
     if (id) {
       return this.allFoods.filter(f => {
-        if (f._id === id) {
+        if (f.uuid === id) {
           return f;
         }
       });

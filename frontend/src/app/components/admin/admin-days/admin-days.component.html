@@ -42,7 +42,21 @@
         >{{ 'UPDATED_AT' | translate }}: {{ selectedDay.updatedAt | date: 'dd.MM.yyyy' }}
       </h5>
       <hr *ngIf="selectedDay.username || selectedDay.createdAt || selectedDay.updatedAt" />
-      <ng-container *ngFor="let meal of selectedDay.meals">
+      <div class="container">
+        <h5 class="h5 text-muted">{{ 'TOTAL' | translate }}</h5>
+        <div class="row">
+          <div class="col">{{ 'ENERGY' | translate }}: {{ selectedDayTotals.energy.toFixed(0) }} kcal</div>
+          <div class="col">{{ 'PROTEIN' | translate }}: {{ selectedDayTotals.protein.toFixed(0) }}g</div>
+          <div class="col">{{ 'CARBS' | translate }}: {{ selectedDayTotals.carbs.toFixed(0) }}g</div>
+        </div>
+        <div class="row">
+          <div class="col">{{ 'FAT' | translate }}: {{ selectedDayTotals.fat.toFixed(0) }}g</div>
+          <div class="col">{{ 'FIBER' | translate }}: {{ selectedDayTotals.fiber.toFixed(0) }}g</div>
+          <div class="col">{{ 'SUGAR' | translate }}: {{ selectedDayTotals.sugar.toFixed(0) }}g</div>
+        </div>
+      </div>
+      <hr />
+      <ng-container *ngFor="let meal of selectedDay.allMeals">
         <p class="text-muted">{{ meal.name }}</p>
         <ul>
           <li *ngFor="let food of meal.foods">{{ food.name }} - ({{ food.amount }}g)</li>

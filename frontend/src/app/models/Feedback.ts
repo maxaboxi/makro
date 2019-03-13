@@ -1,10 +1,11 @@
 export interface Feedback {
-  _id?: String;
-  feedback: String;
-  answer?: String;
-  username?: String;
+  uuid?: string;
+  feedbackBody: string;
+  answer?: string;
+  userId?: string;
+  username?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  answerDate?: Date;
-  answerUsername?: String;
+  answeredAt?: Date;
+  answeredBy?: string;
 }

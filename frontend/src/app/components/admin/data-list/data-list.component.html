@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col-10 list-name" (click)="openModal(item)">
         <ng-container *ngFor="let property of propertiesToShow">
-          <a *ngIf="property.link" href="https://makro.diet/?id={{ item._id }}">https://makro.diet/?id={{ item._id }} | </a>
+          <a *ngIf="property.link" href="https://makro.diet/?id={{ item.uuid }}">https://makro.diet/?id={{ item.uuid }} | </a>
           <span *ngIf="!property.date && !property.link">{{ item[property.name] }} | </span>
           <span *ngIf="property.date" class="text-muted">{{ item[property.name] | date: 'dd.MM.yyyy HH:mm:ss' }} | </span>
         </ng-container>

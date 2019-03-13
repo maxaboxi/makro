@@ -8,13 +8,12 @@ import { EditedFood } from '../models/EditedFood';
   providedIn: 'root'
 })
 export class FoodService {
-  private baseUrl = `${environment.foods}/api/v1/foods`;
-  private baseUrlEditedFoods = `${environment.foods}/api/v1/editedfoods`;
+  private baseUrl = `${environment.baseUrl}/food`;
 
   constructor(private http: HttpClient) {}
 
   getAllFoods() {
-    const url = `${this.baseUrl}/getallfoods`;
+    const url = `${this.baseUrl}/all`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -23,8 +22,8 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoodsByUserAndAdmin(user) {
-    const url = `${this.baseUrl}/getfoods/${user}`;
+  getFoodsExcludeOtherUsers() {
+    const url = `${this.baseUrl}/exclude`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -33,8 +32,8 @@ export class FoodService {
     return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getFoodsAddedByUser(user) {
-    const url = `${this.baseUrl}/getfoodsbyuser/${user}`;
+  getFoodsAddedByUser() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -44,7 +43,7 @@ export class FoodService {
   }
 
   saveNewFood(food: Food) {
-    const url = `${this.baseUrl}/addnewfood`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -54,17 +53,17 @@ export class FoodService {
   }
 
   editFood(food: Food) {
-    const url = `${this.baseUrl}/editfood`;
+    const url = `${this.baseUrl}/update/${food.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, food, { headers: headers });
+    return this.http.put(url, food, { headers: headers });
   }
 
   removeFoods(foods) {
-    const url = `${this.baseUrl}/removefoods`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -82,18 +81,8 @@ export class FoodService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getamountoffoods`;
+    const url = `${this.baseUrl}/amount`;
 
     return this.http.get(url, { headers: headers });
-  }
-
-  sentForApproval(foods: EditedFood[]) {
-    const url = `${this.baseUrlEditedFoods}/sendforapproval`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, { foods: foods }, { headers: headers });
   }
 }

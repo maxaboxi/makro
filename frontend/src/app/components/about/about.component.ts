@@ -25,9 +25,9 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this.auth.getUsersCount().subscribe(
       res => {
-        this.usersCount = res['count'];
+        this.usersCount = res['amount'];
         this.foodService.getFoodsCount().subscribe(res => {
-          this.foodsCount = res['count'];
+          this.foodsCount = res['amount'];
           this.loading = false;
         });
       },

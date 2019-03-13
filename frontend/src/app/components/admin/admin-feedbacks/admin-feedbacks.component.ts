@@ -40,7 +40,7 @@ export class AdminFeedbacksComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.selectedFeedback.answerUsername = this.user.username;
+          this.selectedFeedback.answeredBy = this.user.username;
           this.adminService.submitAnswer(this.selectedFeedback).subscribe(
             res => {
               if (res['success']) {
@@ -68,7 +68,7 @@ export class AdminFeedbacksComponent implements OnInit {
   }
 
   deleteFeedback(index) {
-    this.deletedFeedbacks.push(this.feedbacks[index]._id);
+    this.deletedFeedbacks.push(this.feedbacks[index].uuid);
     this.feedbacks.splice(index, 1);
     this.feedbacksDeleted = true;
   }

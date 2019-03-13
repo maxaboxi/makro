@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Meal } from '../../../models/Meal';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
+import { UserTargets } from 'src/app/models/UserTargets';
 
 declare var jsPDF: any;
 
@@ -24,19 +25,19 @@ export class ToolbarComponent implements OnInit {
   showTargets;
   _user = new BehaviorSubject<User>(null);
   day: Day = {
-    username: '',
+    userId: '',
     name: '',
-    meals: null
+    allMeals: null
   };
   dayName = '';
   food: Food = {
     name: '',
-    energia: null,
-    proteiini: null,
-    hh: null,
-    rasva: null,
-    kuitu: null,
-    sokeri: null,
+    energy: null,
+    protein: null,
+    carbs: null,
+    fat: null,
+    fiber: null,
+    sugar: null,
     servingSize: null,
     packageSize: null,
     username: ''
@@ -92,12 +93,12 @@ export class ToolbarComponent implements OnInit {
         if (result === 'save') {
           const addedFood: Food = {
             name: this.food.name,
-            energia: this.food.energia,
-            proteiini: this.food.proteiini,
-            hh: this.food.hh,
-            rasva: this.food.rasva,
-            kuitu: this.food.kuitu ? this.food.kuitu : 0,
-            sokeri: this.food.sokeri ? this.food.sokeri : 0,
+            energy: this.food.energy,
+            protein: this.food.protein,
+            carbs: this.food.carbs,
+            fat: this.food.fat,
+            fiber: this.food.fiber ? this.food.fiber : 0,
+            sugar: this.food.sugar ? this.food.sugar : 0,
             packageSize: this.food.packageSize ? this.food.packageSize : 0,
             servingSize: this.food.servingSize ? this.food.servingSize : 0,
             username: this.user.username
@@ -148,8 +149,8 @@ export class ToolbarComponent implements OnInit {
         if (result === 'save') {
           const newDay: Day = {
             name: this.day.name,
-            meals: meals,
-            username: this.user.username
+            allMeals: meals,
+            userId: this.user.uuid
           };
           this.dayService.saveNewDay(newDay).subscribe(
             success => {
@@ -210,7 +211,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   updateUserInfo() {
-    this.auth.updateUserInfo(this.user).subscribe(
+    const targets: UserTargets = {
+      userAddedExpenditure: this.user.userAddedExpenditure,
+      userAddedFatTarget: this.user.userAddedFatTarget,
+      userAddedProteinTarget: this.user.userAddedProteinTarget,
+      userAddedCarbTarget: this.user.userAddedCarbTarget
+    };
+
+    this.auth.updateUserTargets(targets).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translate.instant('INFORMATION_SAVED'), {
@@ -240,14 +248,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   generateLink(content) {
-    const data = {
-      user: this.user._id,
-      meals: this.addedFoodsService.getMeals()
+    const day: Day = {
+      userId: this.user.uuid,
+      allMeals: this.addedFoodsService.getMeals()
     };
-    this.dayService.saveDayForSharing(data).subscribe(
+    this.dayService.shareDay(day).subscribe(
       res => {
-        if (res['id']) {
-          this.shareLink = `https://makro.diet/?id=${res['id']}`;
+        if (res['success']) {
+          this.shareLink = `https://makro.diet/?id=${res['message']}`;
           this.openLinkModal(content);
           this.auth.user.unsubscribe();
         }

@@ -7,7 +7,7 @@ import { Meal } from '../models/Meal';
   providedIn: 'root'
 })
 export class SharedMealsService {
-  private baseUrl = `${environment.baseUrl}/api/v1/sharedmeals`;
+  private baseUrl = `${environment.baseUrl}/meal`;
 
   constructor(private http: HttpClient) {}
 
@@ -15,13 +15,22 @@ export class SharedMealsService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getallsharedmeals`;
+    const url = `${this.baseUrl}`;
 
     return this.http.get<Meal[]>(url, { headers: headers });
   }
 
-  getMealsByUser(user) {
-    const url = `${this.baseUrl}/getsharedmeals/${user}`;
+  getSingleMeal(id) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/single/${id}`;
+
+    return this.http.get<Meal>(url, { headers: headers });
+  }
+
+  getMealsByUser() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -31,7 +40,7 @@ export class SharedMealsService {
   }
 
   shareNewMeal(meal: Meal) {
-    const url = `${this.baseUrl}/addnewsharedmeal`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -40,18 +49,18 @@ export class SharedMealsService {
     return this.http.post(url, meal, { headers: headers });
   }
 
-  saveEditedMeal(meal) {
-    const url = `${this.baseUrl}/saveeditedsharedmeal`;
+  saveEditedMeal(meal: Meal) {
+    const url = `${this.baseUrl}/update/${meal.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, meal, { headers: headers });
+    return this.http.put(url, meal, { headers: headers });
   }
 
   removeMeals(meals) {
-    const url = `${this.baseUrl}/removesharedmeals`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

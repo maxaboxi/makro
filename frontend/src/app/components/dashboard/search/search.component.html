@@ -25,7 +25,7 @@
         <div class="row">
           <div class="col-9"> {{ food.name }} </div>
           <div class="col text-right">
-            <span class="mr-2"> {{ food.energia.toFixed(0) }}{{ 'KCAL' | translate }} </span>
+            <span class="mr-2"> {{ food.energy.toFixed(0) }}{{ 'KCAL' | translate }} </span>
           </div>
         </div>
       </li>
@@ -45,7 +45,7 @@
           <span class="lead">{{ 'ENERGY' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.energia.toFixed(0) }} {{ 'KCAL' | translate }}</span>
+          <span>{{ selectedFood.energy.toFixed(0) }} {{ 'KCAL' | translate }}</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -53,7 +53,7 @@
           <span class="lead">{{ 'PROTEIN' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.proteiini ? selectedFood.proteiini.toFixed(0) : 0 }}g</span>
+          <span>{{ selectedFood.protein ? selectedFood.protein.toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row">
@@ -61,7 +61,7 @@
           <span class="lead">{{ 'CARBS' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.hh ? selectedFood.hh.toFixed(0) : 0 }}g</span>
+          <span>{{ selectedFood.carbs ? selectedFood.carbs.toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -69,7 +69,7 @@
           <span class="lead">{{ 'FAT' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.rasva ? selectedFood.rasva.toFixed(0) : 0 }}g</span>
+          <span>{{ selectedFood.fat ? selectedFood.fat.toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row">
@@ -77,7 +77,7 @@
           <span class="lead">{{ 'FIBER' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.kuitu ? selectedFood.kuitu.toFixed(0) : 0 }}g</span>
+          <span>{{ selectedFood.fiber ? selectedFood.fiber.toFixed(0) : 0 }}g</span>
         </div>
       </div>
       <div class="row bg-light">
@@ -85,7 +85,7 @@
           <span class="lead">{{ 'SUGAR' | translate }}:</span>
         </div>
         <div class="col text-right">
-          <span>{{ selectedFood.sokeri ? selectedFood.sokeri.toFixed(0) : 0 }}g</span>
+          <span>{{ selectedFood.sugar ? selectedFood.sugar.toFixed(0) : 0 }}g</span>
         </div>
       </div>
     </div>

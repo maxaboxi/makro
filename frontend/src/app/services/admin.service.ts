@@ -4,24 +4,37 @@ import { Day } from '../models/Day';
 import { Feedback } from '../models/Feedback';
 import { User } from '../models/User';
 import { environment } from '../../environments/environment';
-import { Vote } from '../models/Vote';
-import { Answer } from '../models/Answer';
-import { Comment } from '../models/Comment';
-import { EditedFood } from '../models/EditedFood';
+import { Like } from '../models/Like';
+import { Food } from '../models/Food';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
   private baseUrl = `${environment.baseUrl}/admin`;
-  private baseUrlAuth = `${environment.auth}/admin`;
-  private baseUrlVotes = `${environment.votes}/admin`;
-  private baseUrlFoods = `${environment.foods}/api/v1/admin`;
 
   constructor(private http: HttpClient) {}
 
+  getAllUsers() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/user`;
+
+    return this.http.get<User[]>(url, { headers: headers });
+  }
+
+  getUser(userId: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/user/${userId}`;
+
+    return this.http.get<User>(url, { headers: headers });
+  }
+
   removeUsers(users: String[]) {
-    const url = `${this.baseUrlAuth}/removeusers`;
+    const url = `${this.baseUrl}/user/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -39,7 +52,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrlAuth}/updateuserinformation`;
+    const url = `${this.baseUrl}/updateuserinformation`;
 
     return this.http.post(url, user, { headers: headers });
   }
@@ -48,7 +61,7 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrlAuth}/updateuserpassword`;
+    const url = `${this.baseUrl}/updateuserpassword`;
 
     return this.http.post(url, user, { headers: headers });
   }
@@ -57,19 +70,58 @@ export class AdminService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/getalldays`;
+    const url = `${this.baseUrl}/day`;
 
     return this.http.get<Day[]>(url, { headers: headers });
   }
 
+  getDay(dayId) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/day/${dayId}`;
+
+    return this.http.get<Day>(url, { headers: headers });
+  }
+
   getAllSharedDays() {
-    const url = `${this.baseUrl}/getallshareddays`;
+    const url = `${this.baseUrl}/day/shared`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     return this.http.get(url, { headers: headers });
+  }
+
+  removeDays(days) {
+    const url = `${this.baseUrl}/day/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  removeSharedDays(days) {
+    const url = `${this.baseUrl}/day/shared/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: days
+    };
+
+    return this.http.delete(url, options);
   }
 
   removeFeedbacks(feedbacks: String[]) {
@@ -88,7 +140,7 @@ export class AdminService {
   }
 
   submitAnswer(feedback: Feedback) {
-    const url = `${this.baseUrl}/answertofeedback`;
+    const url = `${this.baseUrl}/feedback/answer`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -97,73 +149,21 @@ export class AdminService {
     return this.http.post(url, feedback, { headers: headers });
   }
 
-  getAllUsers() {
+  getMostRecentFoods() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrlAuth}/getallusers`;
+    const url = `${this.baseUrl}/food`;
 
-    return this.http.get<User[]>(url, { headers: headers });
+    return this.http.get<Food[]>(url, { headers: headers });
   }
 
-  getAllVotes() {
+  getAllLikes() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrlVotes}/getallvotes`;
+    const url = `${this.baseUrl}/like`;
 
-    return this.http.get<Vote[]>(url, { headers: headers });
-  }
-
-  getAllAnswers() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/getallanswers`;
-
-    return this.http.get<Answer[]>(url, { headers: headers });
-  }
-
-  getAllComments() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/getallcomments`;
-
-    return this.http.get<Comment[]>(url, { headers: headers });
-  }
-
-  getAllFoodsSentForApproval() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrlFoods}/getallsentforapproval`;
-
-    return this.http.get<EditedFood[]>(url, { headers: headers });
-  }
-
-  approveEditedFood(editedFood: EditedFood) {
-    const url = `${this.baseUrlFoods}/approve`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, editedFood, { headers: headers });
-  }
-
-  disapproveEditedFoods(editedFoods: EditedFood[]) {
-    const url = `${this.baseUrlFoods}/disapprove`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const options = {
-      headers: headers,
-      body: editedFoods
-    };
-
-    return this.http.delete(url, options);
+    return this.http.get<Like[]>(url, { headers: headers });
   }
 }
