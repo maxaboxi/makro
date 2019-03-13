@@ -42,32 +42,6 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Articles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false),
-                    Body = table.Column<string>(nullable: false),
-                    Image = table.Column<byte[]>(nullable: true),
-                    Tags = table.Column<List<string>>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Articles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Articles_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Days",
                 columns: table => new
                 {
@@ -84,48 +58,6 @@ namespace Makro.Migrations
                     table.PrimaryKey("PK_Days", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Days_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EditedFoods",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Energy = table.Column<decimal>(nullable: false),
-                    Protein = table.Column<decimal>(nullable: false),
-                    Carbs = table.Column<decimal>(nullable: false),
-                    Fat = table.Column<decimal>(nullable: false),
-                    Sugar = table.Column<decimal>(nullable: false),
-                    Fiber = table.Column<decimal>(nullable: false),
-                    PackageSize = table.Column<decimal>(nullable: false),
-                    ServingSize = table.Column<decimal>(nullable: false),
-                    En = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
-                    WaitingForApproval = table.Column<bool>(nullable: false),
-                    ReasonForEditing = table.Column<string>(nullable: false),
-                    EditedById = table.Column<int>(nullable: false),
-                    EnglishTranslation = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EditedFoods", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EditedFoods_Users_EditedById",
-                        column: x => x.EditedById,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EditedFoods_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -221,31 +153,6 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Questions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    QuestionBody = table.Column<string>(nullable: false),
-                    QuestionInformation = table.Column<string>(nullable: true),
-                    Tags = table.Column<List<string>>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Questions_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SharedDays",
                 columns: table => new
                 {
@@ -294,36 +201,6 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Answers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    QuestionId = table.Column<int>(nullable: true),
-                    AnswerBody = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Answers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Meals",
                 columns: table => new
                 {
@@ -361,6 +238,36 @@ namespace Makro.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    UUID = table.Column<string>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    Value = table.Column<int>(nullable: false),
+                    SharedMealId = table.Column<int>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Likes_SharedMeals_SharedMealId",
+                        column: x => x.SharedMealId,
+                        principalTable: "SharedMeals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Likes_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SharedMealFoods",
                 columns: table => new
                 {
@@ -383,50 +290,6 @@ namespace Makro.Migrations
                         name: "FK_SharedMealFoods_SharedMeals_SharedMealId",
                         column: x => x.SharedMealId,
                         principalTable: "SharedMeals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    Body = table.Column<string>(nullable: false),
-                    AnswerId = table.Column<int>(nullable: true),
-                    ArticleId = table.Column<int>(nullable: true),
-                    ReplyToId = table.Column<int>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Comments_Answers_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Comments_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Comments_Comments_ReplyToId",
-                        column: x => x.ReplyToId,
-                        principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -458,129 +321,9 @@ namespace Makro.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Likes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UUID = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    Value = table.Column<int>(nullable: false),
-                    ArticleId = table.Column<int>(nullable: true),
-                    AnswerId = table.Column<int>(nullable: true),
-                    CommentId = table.Column<int>(nullable: true),
-                    SharedMealId = table.Column<int>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Likes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Likes_Answers_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Likes_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Likes_Comments_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Likes_SharedMeals_SharedMealId",
-                        column: x => x.SharedMealId,
-                        principalTable: "SharedMeals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Likes_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Answers_QuestionId",
-                table: "Answers",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Answers_UUID",
-                table: "Answers",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Answers_UserId",
-                table: "Answers",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Articles_UUID",
-                table: "Articles",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Articles_UserId",
-                table: "Articles",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_AnswerId",
-                table: "Comments",
-                column: "AnswerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_ArticleId",
-                table: "Comments",
-                column: "ArticleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_ReplyToId",
-                table: "Comments",
-                column: "ReplyToId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UUID",
-                table: "Comments",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Days_UserId",
                 table: "Days",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EditedFoods_EditedById",
-                table: "EditedFoods",
-                column: "EditedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EditedFoods_UUID",
-                table: "EditedFoods",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EditedFoods_UserId",
-                table: "EditedFoods",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -609,21 +352,6 @@ namespace Makro.Migrations
                 name: "IX_Foods_UserId",
                 table: "Foods",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Likes_AnswerId",
-                table: "Likes",
-                column: "AnswerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Likes_ArticleId",
-                table: "Likes",
-                column: "ArticleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Likes_CommentId",
-                table: "Likes",
-                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Likes_SharedMealId",
@@ -684,17 +412,6 @@ namespace Makro.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_UUID",
-                table: "Questions",
-                column: "UUID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Questions_UserId",
-                table: "Questions",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SharedDays_UUID",
                 table: "SharedDays",
                 column: "UUID",
@@ -748,9 +465,6 @@ namespace Makro.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EditedFoods");
-
-            migrationBuilder.DropTable(
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
@@ -766,9 +480,6 @@ namespace Makro.Migrations
                 name: "SharedMealFoods");
 
             migrationBuilder.DropTable(
-                name: "Comments");
-
-            migrationBuilder.DropTable(
                 name: "Meals");
 
             migrationBuilder.DropTable(
@@ -778,19 +489,10 @@ namespace Makro.Migrations
                 name: "SharedMeals");
 
             migrationBuilder.DropTable(
-                name: "Answers");
-
-            migrationBuilder.DropTable(
-                name: "Articles");
-
-            migrationBuilder.DropTable(
                 name: "Days");
 
             migrationBuilder.DropTable(
                 name: "SharedDays");
-
-            migrationBuilder.DropTable(
-                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Users");

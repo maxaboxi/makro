@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Makro.Migrations
 {
     [DbContext(typeof(MakroContext))]
-    [Migration("20190311072749_InitialMigration")]
+    [Migration("20190313053129_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,111 +21,6 @@ namespace Makro.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            modelBuilder.Entity("Makro.Models.Answer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AnswerBody")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("QuestionId");
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("Makro.Models.Article", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Body")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<byte[]>("Image");
-
-                    b.Property<List<string>>("Tags")
-                        .IsRequired();
-
-                    b.Property<string>("Title")
-                        .IsRequired();
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("Makro.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("AnswerId");
-
-                    b.Property<int?>("ArticleId");
-
-                    b.Property<string>("Body")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("ReplyToId");
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("ReplyToId");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
 
             modelBuilder.Entity("Makro.Models.Day", b =>
                 {
@@ -149,62 +44,6 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Days");
-                });
-
-            modelBuilder.Entity("Makro.Models.EditedFood", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<decimal>("Carbs");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int>("EditedById");
-
-                    b.Property<string>("En");
-
-                    b.Property<decimal>("Energy");
-
-                    b.Property<string>("EnglishTranslation");
-
-                    b.Property<decimal>("Fat");
-
-                    b.Property<decimal>("Fiber");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<decimal>("PackageSize");
-
-                    b.Property<decimal>("Protein");
-
-                    b.Property<string>("ReasonForEditing")
-                        .IsRequired();
-
-                    b.Property<decimal>("ServingSize");
-
-                    b.Property<decimal>("Sugar");
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<bool>("WaitingForApproval");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditedById");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EditedFoods");
                 });
 
             modelBuilder.Entity("Makro.Models.Feedback", b =>
@@ -294,12 +133,6 @@ namespace Makro.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AnswerId");
-
-                    b.Property<int?>("ArticleId");
-
-                    b.Property<int?>("CommentId");
-
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<int?>("SharedMealId");
@@ -314,12 +147,6 @@ namespace Makro.Migrations
                     b.Property<int>("Value");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("CommentId");
 
                     b.HasIndex("SharedMealId");
 
@@ -411,38 +238,6 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("MealNames");
-                });
-
-            modelBuilder.Entity("Makro.Models.Question", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("QuestionBody")
-                        .IsRequired();
-
-                    b.Property<string>("QuestionInformation");
-
-                    b.Property<List<string>>("Tags")
-                        .IsRequired();
-
-                    b.Property<string>("UUID")
-                        .IsRequired();
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UUID")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Makro.Models.SharedDay", b =>
@@ -584,64 +379,8 @@ namespace Makro.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Makro.Models.Answer", b =>
-                {
-                    b.HasOne("Makro.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Makro.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.Article", b =>
-                {
-                    b.HasOne("Makro.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.Comment", b =>
-                {
-                    b.HasOne("Makro.Models.Answer", "Answer")
-                        .WithMany("Comments")
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Makro.Models.Article", "Article")
-                        .WithMany("Comments")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Makro.Models.Comment", "ReplyTo")
-                        .WithMany()
-                        .HasForeignKey("ReplyToId");
-
-                    b.HasOne("Makro.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Makro.Models.Day", b =>
                 {
-                    b.HasOne("Makro.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.EditedFood", b =>
-                {
-                    b.HasOne("Makro.Models.User", "EditedBy")
-                        .WithMany()
-                        .HasForeignKey("EditedById")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -670,18 +409,6 @@ namespace Makro.Migrations
 
             modelBuilder.Entity("Makro.Models.Like", b =>
                 {
-                    b.HasOne("Makro.Models.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId");
-
-                    b.HasOne("Makro.Models.Article", "Article")
-                        .WithMany()
-                        .HasForeignKey("ArticleId");
-
-                    b.HasOne("Makro.Models.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId");
-
                     b.HasOne("Makro.Models.SharedMeal", "SharedMeal")
                         .WithMany()
                         .HasForeignKey("SharedMealId");
@@ -724,14 +451,6 @@ namespace Makro.Migrations
                 {
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany("MealNames")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Makro.Models.Question", b =>
-                {
-                    b.HasOne("Makro.Models.User", "User")
-                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -502,7 +502,7 @@ function addVotes(cursor) {
         const v = [e.postId];
         pg.query(q, v)
           .then(res => {
-            if (re.rows.length > 0) {
+            if (res.rows.length > 0) {
               postId = res.rows[0].Id;
               text =
                 'INSERT INTO "Likes"("UUID", "UserId", "SharedMealId", "Value", "CreatedAt", "UpdatedAt") VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
