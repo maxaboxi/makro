@@ -134,9 +134,9 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const url = `${this.baseUrl}/updateuserinformation`;
+    const url = `${this.baseUrl}/update`;
 
-    return this.http.post(url, user, { headers: headers });
+    return this.http.put<User>(url, user, { headers: headers });
   }
 
   updateUserTargets(targets: UserTargets) {

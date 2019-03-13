@@ -86,21 +86,13 @@ export class UserInfoComponent implements OnInit {
       height: this.user.height,
       weight: this.user.weight,
       activity: this.user.activity,
-      sex: this.user.sex,
-      dailyExpenditure: this.user.dailyExpenditure,
-      userAddedExpenditure: this.user.userAddedExpenditure,
-      userAddedProteinTarget: this.user.userAddedProteinTarget,
-      userAddedCarbTarget: this.user.userAddedCarbTarget,
-      userAddedFatTarget: this.user.userAddedFatTarget,
-      meals: this.user.meals,
-      showTargets: this.user.showTargets,
-      lang: this.user.lang
+      sex: this.user.sex
     };
     this.auth.updateUserInfo(userInfo).subscribe(
       res => {
         if (res) {
           this.changed = false;
-          this.auth.setUserInfo(res['user']);
+          this.auth.setUserInfo(res['value']);
           this.user = this.auth.getUserInfo();
           this.calculateBaseExpenditure();
           this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
@@ -110,7 +102,7 @@ export class UserInfoComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
           cssClass: 'alert-danger',
           timeout: 2000
         });

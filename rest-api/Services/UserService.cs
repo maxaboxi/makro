@@ -179,17 +179,21 @@ namespace Makro.Services
             return _context.Users.Where(p => p.UUID == id).AsNoTracking().FirstOrDefault();
         }
 
-        public async Task<ResultDto> UpdateUserInformation(UserDto userDto)
+        public async Task<ActionResult<UserDto>> UpdateUserInformation(string userId, UserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-            var origInfo = _context.Users.Where(u => u.UUID == user.UUID).AsNoTracking().FirstOrDefault();
-            user.Id = origInfo.Id;
-            user.Password = origInfo.Password;
-            user.Roles = origInfo.Roles;
+            var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
             user.UpdatedAt = DateTime.Now;
+            user.Email = userDto.Email ?? user.Email;
+            user.Age = userDto.Age;
+            user.DailyExpenditure = userDto.DailyExpenditure;
+            user.Weight = userDto.Weight;
+            user.Height = userDto.Height;
+            user.Sex = userDto.Sex ?? user.Sex;
+            user.Activity = userDto.Activity;
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return new ResultDto(true, "Information updated succesfully");
+            var dto = await GetUserDto(user.UUID);
+            return dto;
         }
 
         public async Task<ResultDto> UpdateUserTargets(string userId, UserTargetsDto dto)
