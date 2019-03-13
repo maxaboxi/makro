@@ -187,38 +187,4 @@ export class AdminService {
 
     return this.http.get<Comment[]>(url, { headers: headers });
   }
-
-  getAllFoodsSentForApproval() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    const url = `${this.baseUrl}/food/edited`;
-
-    return this.http.get<EditedFood[]>(url, { headers: headers });
-  }
-
-  approveEditedFood(editedFood: EditedFood) {
-    const url = `${this.baseUrl}/food/approve`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, editedFood, { headers: headers });
-  }
-
-  disapproveEditedFoods(editedFoods: EditedFood[]) {
-    const url = `${this.baseUrl}/food/disapprove`;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    const options = {
-      headers: headers,
-      body: editedFoods
-    };
-
-    return this.http.delete(url, options);
-  }
 }
