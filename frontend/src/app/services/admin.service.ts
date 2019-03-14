@@ -125,7 +125,7 @@ export class AdminService {
   }
 
   removeFeedbacks(feedbacks: String[]) {
-    const url = `${this.baseUrl}/removefeedbacks`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
