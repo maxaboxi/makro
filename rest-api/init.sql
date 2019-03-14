@@ -7,7 +7,7 @@
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Users" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -38,7 +38,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Days" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -54,7 +54,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Feedbacks" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -75,7 +75,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Foods" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -100,7 +100,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "MealNames" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -116,7 +116,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "SharedDays" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -131,7 +131,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "SharedMeals" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -150,7 +150,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Meals" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -170,7 +170,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "Likes" (
         "Id" serial NOT NULL,
         "UUID" text NOT NULL,
@@ -188,7 +188,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "SharedMealFoods" (
         "Id" serial NOT NULL,
         "FoodId" integer NOT NULL,
@@ -203,7 +203,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE TABLE "MealFoods" (
         "Id" serial NOT NULL,
         "MealId" integer NOT NULL,
@@ -218,190 +218,190 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Days_UserId" ON "Days" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Feedbacks_AnsweredById" ON "Feedbacks" ("AnsweredById");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Feedbacks_UUID" ON "Feedbacks" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Feedbacks_UserId" ON "Feedbacks" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Foods_UUID" ON "Foods" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Foods_UserId" ON "Foods" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Likes_SharedMealId" ON "Likes" ("SharedMealId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Likes_UUID" ON "Likes" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Likes_UserId" ON "Likes" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_MealFoods_FoodId" ON "MealFoods" ("FoodId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_MealFoods_MealId" ON "MealFoods" ("MealId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_MealNames_UUID" ON "MealNames" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_MealNames_UserId" ON "MealNames" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Meals_DayId" ON "Meals" ("DayId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Meals_SharedDayId" ON "Meals" ("SharedDayId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Meals_UUID" ON "Meals" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_Meals_UserId" ON "Meals" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_SharedDays_UUID" ON "SharedDays" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_SharedDays_UserId" ON "SharedDays" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_SharedMealFoods_FoodId" ON "SharedMealFoods" ("FoodId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_SharedMealFoods_SharedMealId" ON "SharedMealFoods" ("SharedMealId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_SharedMeals_UUID" ON "SharedMeals" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE INDEX "IX_SharedMeals_UserId" ON "SharedMeals" ("UserId");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Users_Email" ON "Users" ("Email");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Users_UUID" ON "Users" ("UUID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     CREATE UNIQUE INDEX "IX_Users_Username" ON "Users" ("Username");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190314082344_InitialMigration') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190313104738_InitialMigration') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20190314082344_InitialMigration', '2.2.1-servicing-10028');
+    VALUES ('20190313104738_InitialMigration', '2.2.1-servicing-10028');
     END IF;
 END $$;
