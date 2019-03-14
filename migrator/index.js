@@ -2,10 +2,10 @@ const mongodb = require('mongodb');
 const uuidv4 = require('uuid/v4');
 const { Client } = require('pg');
 const pg = new Client({
-  user: 'tukki',
-  password: 'ABC',
-  host: 'localhost',
-  database: 'Makro',
+  user: 'user',
+  password: 'password',
+  host: 'makro-db',
+  database: 'dbname',
   port: 5432
 });
 
