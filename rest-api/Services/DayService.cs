@@ -164,7 +164,7 @@ namespace Makro.Services
             return new ResultDto(true, "Day updated succesfully");
         }
 
-        public async Task<ResultDto> UpdateDayNames(List<DayDto> dayDtos, string userId)
+        public ResultDto UpdateDayNames(List<DayDto> dayDtos, string userId)
         {
             dayDtos.ForEach(d =>
             {

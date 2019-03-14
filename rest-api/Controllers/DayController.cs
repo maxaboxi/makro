@@ -66,9 +66,9 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updatenames")]
-        public async Task<IActionResult> UpdateDayNames(string id, [FromBody]List<DayDto> dayDtos)
+        public ResultDto UpdateDayNames(string id, [FromBody]List<DayDto> dayDtos)
         {
-            return Ok(await _dayService.UpdateDayNames(dayDtos, HttpContext.User.Identity.Name));
+            return _dayService.UpdateDayNames(dayDtos, HttpContext.User.Identity.Name);
         }
 
         [HttpDelete("delete/{id}")]
