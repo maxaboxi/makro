@@ -38,12 +38,18 @@ namespace Makro
             services.AddAutoMapper();
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
+                options.AddPolicy("CorsDevelopment",
                     builder => builder
                     .AllowCredentials()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithOrigins("http://localhost:4200"));
+                options.AddPolicy("CorsProduction",
+                    builder => builder
+                    .AllowCredentials()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("https://makro.diet"));
             });
 
             // configure strongly typed settings objects
@@ -94,16 +100,16 @@ namespace Makro
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("CorsDevelopment");
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseCors("CorsProduction");
             }
 
-            //app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseCors("CorsPolicy");
             app.UseMvc();
         }
     }
