@@ -19,7 +19,7 @@ export class SearchComponent implements OnInit {
   results = [];
   selectedFood: Food;
   selectedMeal = '';
-  selectedAmount: Number;
+  selectedAmount: number;
   meals = [];
   isLoggedIn = false;
   defaultValues = [10, 30, 50, 100];
@@ -137,12 +137,8 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  setAmount(amount) {
-    if (this.amountClicked == amount) {
-      this.selectedAmount += amount;
-    } else {
-      this.selectedAmount = amount;
-    }
+  setAmount() {
+    this.selectedAmount += this.amountClicked;
   }
 
   selectFood(food) {

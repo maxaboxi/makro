@@ -90,18 +90,18 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="amountClicked">
+      <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
         <label [ngClass]="{ 'btn-primary': selectedAmount !== 10, success: selectedAmount === 10 }" ngbButtonLabel>
-          <input type="radio" ngbButton [value]="10" (click)="setAmount(10)" /> 10g
+          <input type="radio" ngbButton [value]="10" [(ngModel)]="amountClicked" /> 10g
         </label>
         <label [ngClass]="{ 'btn-primary': selectedAmount !== 30, success: selectedAmount === 30 }" ngbButtonLabel>
-          <input type="radio" ngbButton [value]="30" (click)="setAmount(30)" /> 30g
+          <input type="radio" ngbButton [value]="30" [(ngModel)]="amountClicked" /> 30g
         </label>
         <label [ngClass]="{ 'btn-primary': selectedAmount !== 50, success: selectedAmount === 50 }" ngbButtonLabel>
-          <input type="radio" ngbButton [value]="50" (click)="setAmount(50)" /> 50g
+          <input type="radio" ngbButton [value]="50" [(ngModel)]="amountClicked" /> 50g
         </label>
         <label [ngClass]="{ 'btn-primary': selectedAmount !== 100, success: selectedAmount === 100 }" ngbButtonLabel>
-          <input type="radio" ngbButton [value]="100" (click)="setAmount(100)" /> 100g
+          <input type="radio" ngbButton [value]="100" [(ngModel)]="amountClicked" /> 100g
         </label>
       </div>
     </div>
@@ -112,16 +112,21 @@
           [ngClass]="{ 'btn-primary': selectedAmount !== selectedFood.servingSize, success: selectedAmount === selectedFood.servingSize }"
           ngbButtonLabel
         >
-          <input type="radio" ngbButton [value]="selectedFood.servingSize" (click)="setAmount(selectedFood.servingSize)" /> {{ selectedFood.servingSize }}g
+          <input type="radio" ngbButton [value]="selectedFood.servingSize" [(ngModel)]="amountClicked" />
+          {{ selectedFood.servingSize }}g
         </label>
         <label
           *ngIf="selectedFood.packageSize && defaultValues.indexOf(selectedFood.packageSize) === -1"
           [ngClass]="{ 'btn-primary': selectedAmount !== selectedFood.packageSize, success: selectedAmount === selectedFood.packageSize }"
           ngbButtonLabel
         >
-          <input type="radio" ngbButton [value]="selectedFood.packageSize" (click)="setAmount(selectedFood.packageSize)" /> {{ selectedFood.packageSize }}g
+          <input type="radio" ngbButton [value]="selectedFood.packageSize" [(ngModel)]="amountClicked" />
+          {{ selectedFood.packageSize }}g
         </label>
       </div>
+    </div>
+    <div *ngIf="selectedAmount > 0" class="row justify-content-center mt-2">
+      <button class="btn btn-primary" (click)="setAmount()">+ {{ amountClicked }}g</button>
     </div>
     <div class="form-group mt-2">
       <label for="amount">{{ 'AMOUNT' | translate }}</label>
