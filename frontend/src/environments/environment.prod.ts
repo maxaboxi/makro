@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://api.makro.diet'
+  baseUrl: 'https://api.makro.diet/api/v2'
 };
