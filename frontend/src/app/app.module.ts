@@ -33,37 +33,19 @@ import { SavedDaysComponent } from './components/profile/saved-days/saved-days.c
 import { AddedFoodsComponent } from './components/profile/added-foods/added-foods.component';
 import { UserSharedMealsComponent } from './components/profile/user-shared-meals/user-shared-meals.component';
 import { SharedDaysComponent } from './components/profile/shared-days/shared-days.component';
-import { QaComponent } from './components/qa/qa.component';
-import { QuestionCardComponent } from './components/qa/question-card/question-card.component';
-import { QuestionComponent } from './components/qa/question/question.component';
-import { QuestionAnswerComponent } from './components/qa/question/question-answer/question-answer.component';
-import { AnswerCommentComponent } from './components/qa/question/question-answer/answer-comment/answer-comment.component';
 import { UserInfoComponent } from './components/profile/user-info/user-info.component';
-import { UserQaComponent } from './components/profile/user-qa/user-qa.component';
-import { UserQuestionsComponent } from './components/profile/user-qa/user-questions/user-questions.component';
-import { UserCommentsComponent } from './components/profile/user-qa/user-comments/user-comments.component';
-import { UserAnswersComponent } from './components/profile/user-qa/user-answers/user-answers.component';
-import { UserVotesComponent } from './components/profile/user-votes/user-votes.component';
-import { ArticlesComponent } from './components/articles/articles.component';
-import { ArticleComponent } from './components/articles/article/article.component';
-import { AddArticleComponent } from './components/articles/add-article/add-article.component';
-import { UserArticlesComponent } from './components/profile/user-articles/user-articles.component';
-import { ArticleCommentComponent } from './components/articles/article/article-comment/article-comment.component';
+import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { DevComponent } from './components/dev/dev.component';
 import { AdminFoodsComponent } from './components/admin/admin-foods/admin-foods.component';
 import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
 import { AdminDaysComponent } from './components/admin/admin-days/admin-days.component';
-import { AdminArticlesComponent } from './components/admin/admin-articles/admin-articles.component';
-import { AdminQuestionsComponent } from './components/admin/admin-questions/admin-questions.component';
 import { DataListComponent } from './components/admin/data-list/data-list.component';
-import { AdminAnswersComponent } from './components/admin/admin-answers/admin-answers.component';
-import { AdminCommentsComponent } from './components/admin/admin-comments/admin-comments.component';
-import { AdminVotesComponent } from './components/admin/admin-votes/admin-votes.component';
+import { AdminLikesComponent } from './components/admin/admin-likes/admin-likes.component';
 import { AdminMealsComponent } from './components/admin/admin-meals/admin-meals.component';
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
+import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -92,35 +74,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddedFoodsComponent,
     UserSharedMealsComponent,
     SharedDaysComponent,
-    QaComponent,
-    QuestionCardComponent,
-    QuestionComponent,
-    QuestionAnswerComponent,
-    AnswerCommentComponent,
     UserInfoComponent,
-    UserQaComponent,
-    UserQuestionsComponent,
-    UserCommentsComponent,
-    UserAnswersComponent,
-    UserVotesComponent,
-    ArticlesComponent,
-    ArticleComponent,
-    AddArticleComponent,
-    UserArticlesComponent,
-    ArticleCommentComponent,
+    UserLikesComponent,
     LoadingSpinnerComponent,
-    DevComponent,
     AdminFoodsComponent,
     AdminUsersComponent,
     AdminDaysComponent,
-    AdminArticlesComponent,
-    AdminQuestionsComponent,
     DataListComponent,
-    AdminAnswersComponent,
-    AdminCommentsComponent,
-    AdminVotesComponent,
+    AdminLikesComponent,
     AdminMealsComponent,
-    AdminFeedbacksComponent
+    AdminFeedbacksComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule,

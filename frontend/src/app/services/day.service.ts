@@ -3,17 +3,18 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Day } from '../models/Day';
 import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
+import { DayName } from '../models/DayName';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayService {
-  private baseUrl = `${environment.baseUrl}/api/v1`;
+  private baseUrl = `${environment.baseUrl}/day`;
 
   constructor(private http: HttpClient) {}
 
-  getAllSavedDays(user) {
-    const url = `${this.baseUrl}/days/getalldays/${user}`;
+  getAllSavedDays() {
+    const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -22,8 +23,18 @@ export class DayService {
     return this.http.get<Day[]>(url, { headers: headers });
   }
 
+  getSavedDay(id) {
+    const url = `${this.baseUrl}/single/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Day>(url, { headers: headers });
+  }
+
   saveNewDay(day: Day) {
-    const url = `${this.baseUrl}/days/addnewday`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -32,18 +43,18 @@ export class DayService {
     return this.http.post(url, day, { headers: headers });
   }
 
-  saveEditedDay(day) {
-    const url = `${this.baseUrl}/days/saveday`;
+  saveEditedDay(day: Day) {
+    const url = `${this.baseUrl}/update/${day.uuid}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, day, { headers: headers });
+    return this.http.put(url, day, { headers: headers });
   }
 
   removeDays(days) {
-    const url = `${this.baseUrl}/days/removedays`;
+    const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -57,28 +68,28 @@ export class DayService {
     return this.http.delete(url, options);
   }
 
-  updateDayNames(days) {
-    const url = `${this.baseUrl}/days/updatedaynames`;
+  updateDayNames(days: DayName[]) {
+    const url = `${this.baseUrl}/updatenames`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, days, { headers: headers });
+    return this.http.put(url, days, { headers: headers });
   }
 
-  saveDayForSharing(meals) {
-    const url = `${this.baseUrl}/shareddays/shareday`;
+  shareDay(day: Day) {
+    const url = `${this.baseUrl}/share`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(url, meals, { headers: headers });
+    return this.http.post(url, day, { headers: headers });
   }
 
   getSharedDay(id) {
-    const url = `${this.baseUrl}/shareddays/getsharedday/${id}`;
+    const url = `${this.baseUrl}/shared/${id}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -87,8 +98,8 @@ export class DayService {
     return this.http.get<Meal[]>(url, { headers: headers });
   }
 
-  getSharedDaysByUser(id) {
-    const url = `${this.baseUrl}/shareddays/getdayssharedbyuser/${id}`;
+  getSharedDaysByUser() {
+    const url = `${this.baseUrl}/shared/user`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -98,7 +109,7 @@ export class DayService {
   }
 
   removeSharedDays(days) {
-    const url = `${this.baseUrl}/shareddays/removeshareddays`;
+    const url = `${this.baseUrl}/shared/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

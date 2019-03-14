@@ -68,12 +68,12 @@ export class AddedFoodsService {
     if (meals) {
       meals.forEach(m => {
         m.foods.forEach(f => {
-          t.energy += f.energia;
-          t.protein += f.proteiini;
-          t.carb += f.hh;
-          t.fat += f.rasva;
-          t.fiber += f.kuitu;
-          t.sugar += f.sokeri;
+          t.energy += f.energy;
+          t.protein += f.protein;
+          t.carb += f.carbs;
+          t.fat += f.fat;
+          t.fiber += f.fiber;
+          t.sugar += f.sugar;
           t.amount += f.amount;
         });
       });
@@ -87,17 +87,9 @@ export class AddedFoodsService {
       this.proteinTarget = user.weight * 2;
       this.fatTarget = user.weight;
       if (!user.userAddedExpenditure) {
-        this.carbTarget =
-          (user.dailyExpenditure -
-            this.proteinTarget * 4 -
-            this.fatTarget * 9) /
-          4;
+        this.carbTarget = (user.dailyExpenditure - this.proteinTarget * 4 - this.fatTarget * 9) / 4;
       } else {
-        this.carbTarget =
-          (user.userAddedExpenditure -
-            this.proteinTarget * 4 -
-            this.fatTarget * 4) /
-          4;
+        this.carbTarget = (user.userAddedExpenditure - this.proteinTarget * 4 - this.fatTarget * 4) / 4;
       }
     } else if (!user.weight && user.userAddedExpenditure) {
       this.proteinTarget = (user.userAddedExpenditure * 0.3) / 4;
@@ -138,23 +130,23 @@ export class AddedFoodsService {
     }
     if (e.food) {
       const food: Food = {
-        _id: e.food._id,
+        uuid: e.food.uuid,
         name: e.food.name,
-        energia: e.food.energia * (e.amount / 100),
-        proteiini: e.food.proteiini * (e.amount / 100),
-        hh: e.food.hh * (e.amount / 100),
-        rasva: e.food.rasva * (e.amount / 100),
-        kuitu: e.food.kuitu * (e.amount / 100),
-        sokeri: e.food.sokeri * (e.amount / 100),
+        energy: e.food.energy * (e.amount / 100),
+        protein: e.food.protein * (e.amount / 100),
+        carbs: e.food.carbs * (e.amount / 100),
+        fat: e.food.fat * (e.amount / 100),
+        fiber: e.food.fiber * (e.amount / 100),
+        sugar: e.food.sugar * (e.amount / 100),
         amount: e.amount
       };
       const t = this._totals.getValue();
-      t.energy += food.energia;
-      t.protein += food.proteiini;
-      t.carb += food.hh;
-      t.fat += food.rasva;
-      t.fiber += food.kuitu;
-      t.sugar += food.sokeri;
+      t.energy += food.energy;
+      t.protein += food.protein;
+      t.carb += food.carbs;
+      t.fat += food.fat;
+      t.fiber += food.fiber;
+      t.sugar += food.sugar;
       t.amount += food.amount;
       this._totals.next(t);
       this._meals.getValue().forEach(m => {
@@ -198,19 +190,13 @@ export class AddedFoodsService {
     // Changed to regular for instead of forEach to be able to break the loop
     for (let i = 0; i < meals[componentIndex].foods.length; i++) {
       // Check if food has ID since days saved in previous version don't include food IDs
-      if (food._id) {
-        if (
-          meals[componentIndex].foods[i]._id === food._id &&
-          meals[componentIndex].foods[i].amount === food.amount
-        ) {
+      if (food.uuid) {
+        if (meals[componentIndex].foods[i].uuid === food.uuid && meals[componentIndex].foods[i].amount === food.amount) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }
       } else {
-        if (
-          meals[componentIndex].foods[i].name === food.name &&
-          meals[componentIndex].foods[i].amount === food.amount
-        ) {
+        if (meals[componentIndex].foods[i].name === food.name && meals[componentIndex].foods[i].amount === food.amount) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }

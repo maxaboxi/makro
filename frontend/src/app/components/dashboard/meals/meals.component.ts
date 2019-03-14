@@ -7,6 +7,7 @@ import { DayService } from '../../../services/day.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
+import { Day } from '../../../models/Day';
 
 @Component({
   selector: 'app-meals',
@@ -66,9 +67,10 @@ export class MealsComponent implements OnInit {
     }
 
     const d = JSON.parse(localStorage.getItem('loadedDay'));
-    const editedDay = {
-      _id: d,
-      meals: meals
+    const editedDay: Day = {
+      uuid: d,
+      allMeals: meals,
+      userId: this.user.uuid
     };
     this.dayService.saveEditedDay(editedDay).subscribe(
       success => {

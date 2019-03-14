@@ -7,12 +7,12 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class FeedbackService {
-  private baseUrl = `${environment.baseUrl}/api/v1/feedbacks`;
+  private baseUrl = `${environment.baseUrl}/feedback`;
 
   constructor(private http: HttpClient) {}
 
   getAllFeedbacks() {
-    const url = `${this.baseUrl}/getallfeedbacks`;
+    const url = `${this.baseUrl}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ export class FeedbackService {
   }
 
   submitFeedback(feedback: Feedback) {
-    const url = `${this.baseUrl}/addnewfeedback`;
+    const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

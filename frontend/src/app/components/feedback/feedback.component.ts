@@ -17,8 +17,9 @@ export class FeedbackComponent implements OnInit {
   user: User;
   feedbacks: Feedback[];
   feedback: Feedback = {
-    feedback: '',
-    username: 'Nimetön'
+    feedbackBody: '',
+    username: 'Nimetön',
+    userId: ''
   };
   loading = true;
   online;
@@ -56,13 +57,17 @@ export class FeedbackComponent implements OnInit {
 
   resetForm() {
     this.feedback.username = 'Nimetön';
-    this.feedback.feedback = '';
+    this.feedback.feedbackBody = '';
+    this.feedback.userId = '';
   }
 
   openModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
+          if (this.feedback.username !== 'Nimetön') {
+            this.feedback.userId = this.user.uuid;
+          }
           this.feedbackService.submitFeedback(this.feedback).subscribe(
             res => {
               if (res['success']) {

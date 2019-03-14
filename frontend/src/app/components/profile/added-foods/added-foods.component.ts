@@ -32,7 +32,7 @@ export class AddedFoodsComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(
+        this.foodService.getFoodsAddedByUser().subscribe(
           foods => {
             this.userAddedFoods = foods;
             this.loading = false;
@@ -54,7 +54,7 @@ export class AddedFoodsComponent implements OnInit {
   }
 
   deleteFood(index) {
-    this.deletedFoods.push(this.userAddedFoods[index]._id);
+    this.deletedFoods.push(this.userAddedFoods[index].uuid);
     this.userAddedFoods.splice(index, 1);
     this.foodsDeleted = true;
   }
@@ -70,7 +70,7 @@ export class AddedFoodsComponent implements OnInit {
         }
         this.deletedFoods = [];
         this.foodsDeleted = false;
-        this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
+        this.foodService.getFoodsAddedByUser().subscribe(foods => {
           this.userAddedFoods = foods;
         });
       },
@@ -95,7 +95,7 @@ export class AddedFoodsComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.foodService.getFoodsAddedByUser(this.user.username).subscribe(foods => {
+                this.foodService.getFoodsAddedByUser().subscribe(foods => {
                   this.userAddedFoods = foods;
                 });
               }

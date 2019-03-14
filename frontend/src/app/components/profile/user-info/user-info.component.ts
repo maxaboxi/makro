@@ -19,6 +19,7 @@ export class UserInfoComponent implements OnInit {
   showDeleteAccount = false;
   newUserPassword;
   newUserPasswordAgain;
+  currentPassword;
   loading = true;
   online;
 
@@ -34,8 +35,8 @@ export class UserInfoComponent implements OnInit {
   ngOnInit() {
     this.connectionService.monitor().subscribe(res => (this.online = res));
     this.auth.fetchUserInfo().subscribe(
-      res => {
-        this.user = JSON.parse(JSON.stringify(res['user']));
+      user => {
+        this.user = user;
         this.calculateBaseExpenditure();
       },
       (error: Error) => {
@@ -73,16 +74,11 @@ export class UserInfoComponent implements OnInit {
   }
 
   deleteMeal(index) {
-    this.user.meals.splice(index, 1);
+    this.user.meals[index].deleted = true;
     this.changed = true;
   }
 
   updateInfo() {
-    this.user.meals.forEach((m, i) => {
-      if (m.name.length === 0) {
-        m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
-      }
-    });
     const userInfo: User = {
       username: this.user.username,
       email: this.user.email,
@@ -90,21 +86,14 @@ export class UserInfoComponent implements OnInit {
       height: this.user.height,
       weight: this.user.weight,
       activity: this.user.activity,
-      sex: this.user.sex,
       dailyExpenditure: this.user.dailyExpenditure,
-      userAddedExpenditure: this.user.userAddedExpenditure,
-      userAddedProteinTarget: this.user.userAddedProteinTarget,
-      userAddedCarbTarget: this.user.userAddedCarbTarget,
-      userAddedFatTarget: this.user.userAddedFatTarget,
-      meals: this.user.meals,
-      showTargets: this.user.showTargets,
-      lang: this.user.lang
+      sex: this.user.sex
     };
     this.auth.updateUserInfo(userInfo).subscribe(
       res => {
         if (res) {
           this.changed = false;
-          this.auth.setUserInfo(res['user']);
+          this.auth.setUserInfo(res['value']);
           this.user = this.auth.getUserInfo();
           this.calculateBaseExpenditure();
           this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
@@ -114,7 +103,7 @@ export class UserInfoComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
           cssClass: 'alert-danger',
           timeout: 2000
         });
@@ -122,11 +111,48 @@ export class UserInfoComponent implements OnInit {
     );
   }
 
-  openModal(content) {
+  updateMealNames() {
+    this.user.meals.forEach((m, i) => {
+      if (m.name.length === 0) {
+        m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
+      }
+    });
+
+    this.auth.updateMealNames(this.user.meals).subscribe(
+      res => {
+        if (res.length > 0) {
+          this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.user.meals = res;
+          this.auth.setUserInfo(this.user);
+          this.changed = false;
+        } else {
+          this.flashMessage.show(res['message'], {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show('Something went wrong', {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  openModal(content, editingMealNames: boolean) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.updateInfo();
+          if (!editingMealNames) {
+            this.updateInfo();
+          } else {
+            this.updateMealNames();
+          }
         } else {
           this.user = this.auth.getUserInfo();
           this.changed = false;
@@ -150,14 +176,23 @@ export class UserInfoComponent implements OnInit {
             });
           } else {
             const user = {
-              _id: this.user._id,
-              password: this.newUserPassword
+              usernameOrEmail: this.user.username,
+              password: this.currentPassword,
+              newPassword: this.newUserPassword
             };
             this.auth.changePassword(user).subscribe(
               res => {
                 if (res['success']) {
                   this.flashMessage.show(this.translator.instant('PASSWORD_CHANGED'), {
                     cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.newUserPassword = null;
+                  this.newUserPasswordAgain = null;
+                  this.currentPassword = null;
+                } else {
+                  this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                    cssClass: 'alert-danger',
                     timeout: 2000
                   });
                 }
@@ -171,12 +206,11 @@ export class UserInfoComponent implements OnInit {
             );
           }
         }
-        this.newUserPassword = null;
-        this.newUserPasswordAgain = null;
       },
       dismissed => {
         this.newUserPassword = null;
         this.newUserPasswordAgain = null;
+        this.currentPassword = null;
       }
     );
   }
@@ -192,25 +226,41 @@ export class UserInfoComponent implements OnInit {
     this.showDeleteAccount = !this.showDeleteAccount;
   }
 
-  deleteAccount() {
-    if (confirm(this.translator.instant('DELETE_ACCOUNT_CONFIRMATION'))) {
-      this.auth.deleteAccount().subscribe(
-        success => {
-          this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.logout();
-        },
-        (error: Error) => {
-          this.flashMessage.show(error['error'].msg, {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
+  deleteAccount(content) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const user = {
+            usernameOrEmail: this.user.username,
+            password: this.currentPassword
+          };
+          this.auth.deleteAccount(user).subscribe(
+            res => {
+              if (res['success']) {
+                this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.logout();
+              } else {
+                this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
         }
-      );
-    } else {
-      this.showDeleteAccount = false;
-    }
+      },
+      dismissed => {}
+    );
+    this.showDeleteAccount = false;
+    this.currentPassword = null;
   }
 }

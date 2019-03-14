@@ -12,10 +12,11 @@
         <li class="big-list lead" *ngFor="let day of sharedDays; let i = index">
           <div class="row">
             <div class="col-10 day-list-name">
-              <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day._id }}</a>
+              <a href="https://makro.diet/?id={{ day._id }}">https://makro.diet/?id={{ day.uuid }}</a>
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="{{ 'DELETE_DAY' | translate }}"></i>
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)"
+                title="{{ 'DELETE_DAY' | translate }}"></i>
             </div>
           </div>
         </li>
@@ -31,7 +32,8 @@
 
   <div class="row justify-content-center" *ngIf="daysDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteDaysFromDb()">{{ 'SAVE_CHANGES' | translate }}</button>
+      <button type="button" class="btn btn-outline-success btn-block"
+        (click)="deleteDaysFromDb()">{{ 'SAVE_CHANGES' | translate }}</button>
       <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>

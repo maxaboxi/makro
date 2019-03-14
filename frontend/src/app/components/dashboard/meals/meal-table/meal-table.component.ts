@@ -96,10 +96,10 @@ export class MealTableComponent implements OnInit, DoCheck {
       this.fatTotal = 0;
       this.amountTotal = 0;
       changes.collection.forEach(f => {
-        this.energyTotal += f.energia;
-        this.proteinTotal += f.proteiini;
-        this.carbTotal += f.hh;
-        this.fatTotal += f.rasva;
+        this.energyTotal += f.energy;
+        this.proteinTotal += f.protein;
+        this.carbTotal += f.carbs;
+        this.fatTotal += f.fat;
         this.amountTotal += f.amount;
       });
     }
@@ -116,10 +116,10 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.fatTotal = 0;
     this.amountTotal = 0;
     this.meal.foods.forEach(f => {
-      this.energyTotal += f.energia;
-      this.proteinTotal += f.proteiini;
-      this.carbTotal += f.hh;
-      this.fatTotal += f.rasva;
+      this.energyTotal += f.energy;
+      this.proteinTotal += f.protein;
+      this.carbTotal += f.carbs;
+      this.fatTotal += f.fat;
       this.amountTotal += f.amount;
     });
   }
@@ -130,20 +130,20 @@ export class MealTableComponent implements OnInit, DoCheck {
       return;
     }
     let food;
-    if (selectedFood._id) {
-      food = this.returnOriginalFoodValues(selectedFood._id, null);
+    if (selectedFood.uuid) {
+      food = this.returnOriginalFoodValues(selectedFood.uuid, null);
     } else {
       food = this.returnOriginalFoodValues(null, selectedFood.name);
     }
 
     this.meal.foods[index].amount = this.newFoodAmount;
     this.newFoodAmount /= 100;
-    this.meal.foods[index].energia = food[0].energia * this.newFoodAmount;
-    this.meal.foods[index].proteiini = food[0].proteiini * this.newFoodAmount;
-    this.meal.foods[index].hh = food[0].hh * this.newFoodAmount;
-    this.meal.foods[index].rasva = food[0].rasva * this.newFoodAmount;
-    this.meal.foods[index].kuitu = food[0].kuitu * this.newFoodAmount;
-    this.meal.foods[index].sokeri = food[0].sokeri * this.newFoodAmount;
+    this.meal.foods[index].energy = food[0].energy * this.newFoodAmount;
+    this.meal.foods[index].protein = food[0].protein * this.newFoodAmount;
+    this.meal.foods[index].carbs = food[0].carbs * this.newFoodAmount;
+    this.meal.foods[index].fat = food[0].fat * this.newFoodAmount;
+    this.meal.foods[index].fiber = food[0].fiber * this.newFoodAmount;
+    this.meal.foods[index].sugar = food[0].sugar * this.newFoodAmount;
     this.meal.foods[index].editing = false;
     this.calculateTotals();
     this.addedFoodsService.updateMealsInLocalStorage(this.meal);
@@ -153,7 +153,7 @@ export class MealTableComponent implements OnInit, DoCheck {
   returnOriginalFoodValues(id, name) {
     if (id) {
       return this.foods.filter(f => {
-        if (f._id === id) {
+        if (f.uuid === id) {
           return f;
         }
       });
