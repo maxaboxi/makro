@@ -3,6 +3,7 @@ import { Food } from './Food';
 export interface Meal {
   uuid?: string;
   username?: string;
+  addedByName?: string;
   name: string;
   info?: string;
   recipe?: string;

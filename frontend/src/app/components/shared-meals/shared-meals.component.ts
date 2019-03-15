@@ -59,7 +59,7 @@ export class SharedMealsComponent implements OnInit {
     this.allMeals.forEach(m => {
       const mLc = m.name.toLowerCase();
       const mdLc = m.info.toLowerCase();
-      const userLc = m.username.toLowerCase();
+      const userLc = m.addedByName.toLowerCase();
       if (mLc === st) {
         this.results.push(m);
       } else if (st === mLc.slice(0, st.length)) {
