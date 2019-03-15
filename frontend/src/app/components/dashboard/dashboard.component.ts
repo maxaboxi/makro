@@ -69,34 +69,18 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFoods() {
+    this.foodService.getAllFoods();
     this.loading = true;
     if (this.isLoggedIn) {
-      this.foodService.getFoodsExcludeOtherUsers().subscribe(
-        foods => {
-          this.foods = foods;
-          this.auth.checkAdmin();
-        },
-        (error: Error) => {
-          this.loading = false;
-          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-        }
-      );
+      this.foodService.getFoodsExcludeOtherUsers();
+      this.foodService.excludedFoods.subscribe(foods => {
+        this.foods = foods;
+        this.auth.checkAdmin();
+      });
     }
-    this.foodService.getAllFoods().subscribe(
-      foods => {
-        this.allFoods = foods;
-        this.loading = false;
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
-    );
+    this.foodService.allFoods.subscribe(foods => {
+      this.allFoods = foods;
+      this.loading = false;
+    });
   }
 }

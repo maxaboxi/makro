@@ -57,9 +57,6 @@ export class ToolbarComponent implements OnInit {
   @ViewChild('addFoodForm')
   form: any;
 
-  @Output()
-  changed = new EventEmitter<any>();
-
   constructor(
     private modalService: NgbModal,
     private foodService: FoodService,
@@ -111,7 +108,7 @@ export class ToolbarComponent implements OnInit {
                   timeout: 2000
                 });
                 this.resetForm();
-                this.changed.emit();
+                this.foodService.updateFoods();
               }
             },
             (error: Error) => {

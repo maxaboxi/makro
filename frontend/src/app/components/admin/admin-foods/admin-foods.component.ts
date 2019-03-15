@@ -85,7 +85,7 @@ export class AdminFoodsComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
-                this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
+                this.adminService.getMostRecentFoods().subscribe(foods => (this.foods = foods));
               }
             },
             (error: Error) => {
@@ -126,7 +126,7 @@ export class AdminFoodsComponent implements OnInit {
         }
         this.deletedFoods = [];
         this.foodsDeleted = false;
-        this.foodService.getAllFoods().subscribe(foods => (this.foods = foods));
+        this.adminService.getMostRecentFoods().subscribe(foods => (this.foods = foods));
       },
       (error: Error) => {
         this.flashMessage.show(error['error'].msg, {
