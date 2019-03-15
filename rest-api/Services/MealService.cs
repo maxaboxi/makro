@@ -43,6 +43,12 @@ namespace Makro.Services
                 sm.SharedMealFoods.ToList().ForEach(e => {
                     var foodDto = _mapper.Map<FoodDto>(e.Food);
                     foodDto.Amount = e.FoodAmount;
+                    foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
+                    foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
+                    foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
+                    foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
+                    foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
+                    foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
                     foodDtos.Add(foodDto);
                  });
                 var sharedMealDto = _mapper.Map<SharedMealDto>(sm);
@@ -95,6 +101,12 @@ namespace Makro.Services
             sharedMeal.SharedMealFoods.ToList().ForEach(e => {
                 var foodDto = _mapper.Map<FoodDto>(e.Food);
                 foodDto.Amount = e.FoodAmount;
+                foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
+                foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
+                foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
+                foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
+                foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
+                foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
                 foodDtos.Add(foodDto);
             });
             var sharedMealDto = _mapper.Map<SharedMealDto>(sharedMeal);
