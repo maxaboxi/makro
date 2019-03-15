@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { FoodService } from '../../services/food.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
+import { UserStats } from '../../models/UserStats';
 
 @Component({
   selector: 'app-about',
@@ -14,6 +15,9 @@ export class AboutComponent implements OnInit {
   usersCount: number;
   foodsCount: number;
   loading = true;
+  loadingStats = false;
+  showStats = false;
+  userStats: UserStats;
 
   constructor(
     private auth: AuthService,
@@ -43,5 +47,23 @@ export class AboutComponent implements OnInit {
 
   toggleShowOlderUpdates() {
     this.showOlderUpdates = !this.showOlderUpdates;
+  }
+
+  getUserStats() {
+    this.showStats = !this.showStats;
+    if (this.showStats) {
+      this.loadingStats = true;
+      this.auth.getUserStats().subscribe(
+        stats => (this.userStats = stats),
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      );
+      this.loadingStats = false;
+    }
   }
 }

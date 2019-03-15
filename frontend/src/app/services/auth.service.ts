@@ -7,6 +7,7 @@ import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { UserTargets } from '../models/UserTargets';
+import { UserStats } from '../models/UserStats';
 
 @Injectable({
   providedIn: 'root'
@@ -249,5 +250,14 @@ export class AuthService {
     const url = `${this.baseUrl}/amount`;
 
     return this.http.get(url, { headers: headers });
+  }
+
+  getUserStats() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/stats`;
+
+    return this.http.get<UserStats>(url, { headers: headers });
   }
 }

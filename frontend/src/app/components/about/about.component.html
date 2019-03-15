@@ -13,8 +13,25 @@
         </p>
         <p *ngIf="!loading && (!usersCount || !foodsCount)">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
       </div>
+      <button class="btn btn-block btn-outline-primary" (click)="getUserStats()">
+        {{ (showStats ? 'HIDE_USER_STATS' : 'SHOW_USER_STATS') | translate }}
+      </button>
+      <div class="mt-3" *ngIf="showStats">
+        <app-loading-spinner *ngIf="loadingStats"></app-loading-spinner>
+        <ng-container *ngIf="!loadingStats && userStats">
+          <p class="lead text-muted text-center">
+            {{ 'MAKRO_REGISTERED_USERS_MALE_AMOUNT' | translate }}: {{ userStats.maleCount }},
+            {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }}: {{ userStats.femaleCount }}
+          </p>
+          <p class="lead text-muted text-center">
+            {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} {{ userStats.averageHeight.toFixed(2) }} cm {{ 'AND' | translate }}
+            {{ 'MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT' | translate }} {{ userStats.averageWeight.toFixed(2) }} kg
+          </p>
+        </ng-container>
+        <p *ngIf="!loadingStats && !userStats">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
+      </div>
 
-      <p class="lead">
+      <p class="lead mt-3">
         {{ 'MAKRO_INFO_TEXT_PART_1' | translate }} <a href="https://paypal.me/tukki" target="_blank">{{ 'HERE' | translate }}.</a>
         {{ 'MAKRO_INFO_TEXT_PART_2' | translate }}
       </p>

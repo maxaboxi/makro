@@ -293,5 +293,11 @@
   "RESET_PASSWORD": "Nollaa salasana",
   "PASSWORD_RESET_TOKEN": "Salasanan nollauskoodi",
   "PASSWORD_RESET_TOKEN_REQUIRED": "Salasanan nollauskoodi vaaditaan",
-  "PASSWORD_RESET_SUCCESFULL": "Salasana nollattu onnistuneesti"
+  "PASSWORD_RESET_SUCCESFULL": "Salasana nollattu onnistuneesti",
+  "HIDE_USER_STATS": "Piilota tilastotiedot",
+  "SHOW_USER_STATS": "Näytä tilastotietoa rekisteröityneistä käyttäjistä",
+  "MAKRO_REGISTERED_USERS_MALE_AMOUNT": "Miehiä",
+  "MAKRO_REGISTERED_USERS_FEMALE_AMOUNT": "naisia",
+  "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "Keskipituus on",
+  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "keskipaino on"
 }

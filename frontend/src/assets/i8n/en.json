@@ -293,5 +293,11 @@
   "RESET_PASSWORD": "Reset password",
   "PASSWORD_RESET_TOKEN": "Password reset code",
   "PASSWORD_RESET_TOKEN_REQUIRED": "Password reset code is required",
-  "PASSWORD_RESET_SUCCESFULL": "Password was reset succesfully"
+  "PASSWORD_RESET_SUCCESFULL": "Password was reset succesfully",
+  "HIDE_USER_STATS": "Hide statistics",
+  "SHOW_USER_STATS": "Show statistics of registered users",
+  "MAKRO_REGISTERED_USERS_MALE_AMOUNT": "Males",
+  "MAKRO_REGISTERED_USERS_FEMALE_AMOUNT": "females",
+  "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "The average height is",
+  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "the average weight is"
 }
