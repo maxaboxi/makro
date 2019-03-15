@@ -34,6 +34,13 @@ namespace Makro.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("stats")]
+        public async Task<StatsDto> GetUserStats()
+        {
+            return await _userService.GetUsersStats();
+        }
+
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ResultDto> RegisterUser(UserDto userDto)
         {

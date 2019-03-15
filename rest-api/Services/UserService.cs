@@ -276,6 +276,19 @@ namespace Makro.Services
             return new AmountDto(await _context.Users.CountAsync());
         }
 
+        public async Task<StatsDto> GetUsersStats()
+        {
+            return new StatsDto
+            {
+                MaleCount = await _context.Users.Where(u => u.Sex == "mies").CountAsync(),
+                FemaleCount = await _context.Users.Where(u => u.Sex == "nainen").CountAsync(),
+                AverageAge = await _context.Users.Where(u => u.Age > 0).Select(u => u.Age).AverageAsync(),
+                AverageHeight = await _context.Users.Where(u => u.Height > 0).Select(u => u.Height).AverageAsync(),
+                AverageWeight = await _context.Users.Where(u => u.Weight > 0).Select(u => u.Weight).AverageAsync()
+            };
+
+        }
+
         private static string GetRandomSalt()
         {
             return BCrypt.Net.BCrypt.GenerateSalt(12);
