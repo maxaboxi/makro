@@ -62,9 +62,25 @@ export class AdminDaysComponent implements OnInit {
         this.modalService.open(content, { centered: true }).result.then(
           result => {
             this.selectedDay = null;
+            this.selectedDayTotals = {
+              energy: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0,
+              fiber: 0,
+              sugar: 0
+            };
           },
           dismissed => {
             this.selectedDay = null;
+            this.selectedDayTotals = {
+              energy: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0,
+              fiber: 0,
+              sugar: 0
+            };
           }
         );
       },
@@ -73,15 +89,6 @@ export class AdminDaysComponent implements OnInit {
           cssClass: 'alert-danger',
           timeout: 2000
         });
-      }
-    );
-    this.selectedDay = day;
-    this.modalService.open(content, { centered: true }).result.then(
-      result => {
-        this.selectedDay = null;
-      },
-      dismissed => {
-        this.selectedDay = null;
       }
     );
   }
