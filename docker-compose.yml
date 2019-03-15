@@ -33,29 +33,21 @@ services:
     networks:
       - back
 
-  migrator:
-    container_name: migrator
-    build: ./migrator/
+  frontend:
+    container_name: makro-angular
+    restart: always
+    image: makro-angular:latest
+    build: ./frontend
+    ports:
+      - '88:88'
     networks:
+      - reverse-proxy
       - back
     environment:
-      - WAIT_HOSTS=makro-db:5432
-
-    frontend:
-      container_name: makro-angular
-      restart: always
-      image: makro-angular:latest
-      build: ./frontend
-      ports:
-        - '88:88'
-      networks:
-        - reverse-proxy
-        - back
-      environment:
-        - VIRTUAL_PORT=88
-        - VIRTUAL_HOST=makro.diet
-        - LETSENCRYPT_HOST=makro.diet
-        - LETSENCRYPT_EMAIL=artotukki@gmail.com
+      - VIRTUAL_PORT=88
+      - VIRTUAL_HOST=makro.diet
+      - LETSENCRYPT_HOST=makro.diet
+      - LETSENCRYPT_EMAIL=artotukki@gmail.com
 
 networks:
   reverse-proxy:

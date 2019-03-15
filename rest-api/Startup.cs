@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 namespace Makro
 {
     public class Startup
@@ -51,6 +52,7 @@ namespace Makro
                     .AllowAnyMethod()
                     .WithOrigins("https://makro.diet"));
             });
+            services.AddSwaggerGen(g => g.SwaggerDoc("v2", new Info { Title = "Makro", Version = "v2" }));
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -101,6 +103,11 @@ namespace Makro
             {
                 app.UseDeveloperExceptionPage();
                 app.UseCors("CorsDevelopment");
+                app.UseSwagger();
+                app.UseSwaggerUI(u => {
+                    u.SwaggerEndpoint("/swagger/v2/swagger.json", "Makro API V2");
+                    u.RoutePrefix = string.Empty;
+                });
             }
             else
             {
