@@ -75,7 +75,7 @@ export class SearchComponent implements OnInit {
 
   foodsByOthers() {
     this.includeFoodsAddedByOthers = !this.includeFoodsAddedByOthers;
-    this.searchTerm = '';
+    this.searchFoods();
   }
 
   searchFoods() {
