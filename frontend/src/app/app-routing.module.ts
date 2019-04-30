@@ -24,6 +24,7 @@ import { AdminUsersComponent } from './components/admin/admin-users/admin-users.
 import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admin-feedbacks.component';
 import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
 import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
+import { UserTrackedPeriodsComponent } from './components/profile/user-tracked-periods/user-tracked-periods.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -39,7 +40,8 @@ const routes: Routes = [
       { path: 'foods', component: AddedFoodsComponent },
       { path: 'meals', component: UserSharedMealsComponent },
       { path: 'days', component: SavedDaysComponent },
-      { path: 'likes', component: UserLikesComponent }
+      { path: 'likes', component: UserLikesComponent },
+      { path: 'trackedperiods', component: UserTrackedPeriodsComponent }
     ]
   },
   { path: 'feedback', component: FeedbackComponent, canActivate: [AuthGuard] },

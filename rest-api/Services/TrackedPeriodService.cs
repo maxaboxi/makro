@@ -18,7 +18,7 @@ namespace Makro.Services
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
 
-        public TrackedPeriodService(MakroContext context, ILogger logger, IMapper mapper)
+        public TrackedPeriodService(MakroContext context, ILogger<TrackedPeriodService> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
@@ -53,6 +53,7 @@ namespace Makro.Services
 
             if (tp == null)
             {
+                _logger.LogDebug("No tracked period found with user: {0} and tracked period uuid: {1}", userId, uuid);
                 return null;
             }
 
@@ -160,6 +161,9 @@ namespace Makro.Services
                 SmallestCalorieCount = smallestCalorieCount,
                 BiggestCalorieCount = biggestCalorieCount
             };
+
+            _context.Add(tp);
+            await _context.SaveChangesAsync();
 
             return new ResultDto(true, "New period saved succesfully");
         }

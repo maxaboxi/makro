@@ -299,5 +299,10 @@
   "MAKRO_REGISTERED_USERS_MALE_AMOUNT": "Miehiä",
   "MAKRO_REGISTERED_USERS_FEMALE_AMOUNT": "naisia",
   "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "Keskipituus on",
-  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "keskipaino on"
+  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "keskipaino on",
+  "TRACKED_PERIOD": "Ajanjaksot",
+  "ADD_TRACKED_PERIOD": "Lisää uusi seurattava ajanjakso",
+  "TRACKED_PERIOD_SAVED": "Seurattava ajanjakso tallennettu onnistuneesti",
+  "ADDED_DAYS": "Lisätyt päivät:",
+  "ALL_DAYS": "Kaikki päivät"
 }

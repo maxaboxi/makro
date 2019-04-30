@@ -299,5 +299,10 @@
   "MAKRO_REGISTERED_USERS_MALE_AMOUNT": "Males",
   "MAKRO_REGISTERED_USERS_FEMALE_AMOUNT": "females",
   "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "The average height is",
-  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "the average weight is"
+  "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "the average weight is",
+  "TRACKED_PERIOD": "Tracked time periods",
+  "ADD_TRACKED_PERIOD": "Add new tracked time period",
+  "TRACKED_PERIOD_SAVED": "Tracked time period saved succesfully",
+  "ADDED_DAYS": "Days added:",
+  "ALL_DAYS": "All days"
 }

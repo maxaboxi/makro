@@ -11,7 +11,7 @@ using Makro.DTO;
 namespace Makro.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class TrackedPeriodController : ControllerBase
     {
