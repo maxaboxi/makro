@@ -40,6 +40,11 @@ namespace Makro.Helpers
             CreateMap<LikeDto, Like>();
             CreateMap<SharedDay, SharedDayDto>().AfterMap((src, dest) => dest.UserUUID = src.User.UUID);
             CreateMap<SharedDayDto, SharedDay>();
+            CreateMap<TrackedPeriodDto, TrackedPeriod>();
+            CreateMap<TrackedPeriod, TrackedPeriodDto>().AfterMap((src, dest) => {
+                dest.UserId = src.User.UUID;
+                dest.Username = src.User.Username;
+            });
         }
     }
 }
