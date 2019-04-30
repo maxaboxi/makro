@@ -145,6 +145,7 @@ namespace Makro.Services
 
             var tp = new TrackedPeriod
             {
+                UUID = Guid.NewGuid().ToString(),
                 Name = newTrackedPeriodDto.Name,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
