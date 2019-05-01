@@ -45,6 +45,8 @@ namespace Makro.Services
                 .AsNoTracking()
                 .Include(t => t.User)
                 .Include(t => t.Days)
+                    .ThenInclude(d => d.User)
+                .Include(t => t.Days)
                     .ThenInclude(d => d.Meals)
                         .ThenInclude(m => m.MealFoods)
                             .ThenInclude(mf => mf.Food)

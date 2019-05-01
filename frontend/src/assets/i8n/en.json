@@ -304,5 +304,17 @@
   "ADD_TRACKED_PERIOD": "Add new tracked time period",
   "TRACKED_PERIOD_SAVED": "Tracked time period saved succesfully",
   "ADDED_DAYS": "Days added:",
-  "ALL_DAYS": "All days"
+  "ALL_DAYS": "All days",
+  "CHOOSE_DAY": "Choose a day..",
+  "TOTAL_CALORIES": "Total calories during this time period",
+  "AVERAGE_CALORIES_PER_DAY": "Average calories per day",
+  "BIGGEST_CALORIES": "The highest calorie count for a day",
+  "SMALLEST_CALORIES": "The lowest calorie count for a day",
+  "TOTAL_PROTEIN": "Total amount of protein",
+  "TOTAL_CARBS": "Total amount of carbs",
+  "TOTAL_FAT": "Total amount of fat",
+  "TOTAL_FIBER": "Total amount of fiber",
+  "TOTAL_SUGAR": "Total amount of sugar",
+  "TOTAL_WEIGHT": "Total amount of food (in grams)",
+  "MY_SAVED_TRACKED_PERIODS": "Tracked time periods that I have saved"
 }

@@ -1,14 +1,62 @@
-<app-loading-spinner *ngIf="loading"></app-loading-spinner>
-<button
-  *ngIf="online && !loading"
-  class="btn btn-block btn-outline-success mt-3"
-  (click)="openModal(trackedPeriodModal)"
-  title="{{ 'ADD_TRACKED_PERIOD' | translate }}"
->
-  <i class="fas fa-plus"></i> {{ 'ADD_TRACKED_PERIOD' | translate }}
-</button>
-<div *ngIf="trackedPeriods.length > 0">
-  <p class="lead" *ngFor="let tp of trackedPeriods">{{ tp.name }}</p>
+<div class="container">
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+  <div class="row justify-content-center" *ngIf="online && !loading">
+    <div class="col-6">
+      <button
+        class="btn btn-block btn-outline-success mt-3"
+        (click)="openModal(trackedPeriodModal)"
+        title="{{ 'ADD_TRACKED_PERIOD' | translate }}"
+      >
+        <i class="fas fa-plus"></i> {{ 'ADD_TRACKED_PERIOD' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-3">
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_SAVED_TRACKED_PERIODS' | translate }}</h2>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="trackedPeriods.length > 0">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ul>
+        <li class="big-list lead" *ngFor="let tp of trackedPeriods; let i = index">
+          <div class="row">
+            <div class="col-10 day-list-name" (click)="openTrackedPeriod(tp)" title="{{ 'LOAD_DAY' | translate }}">{{ tp.name }}</div>
+            <div class="col-2">
+              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="{{ 'DELETE_DAY' | translate }}"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <app-loading-spinner *ngIf="loadingTrackedPeriod"></app-loading-spinner>
+
+  <div *ngIf="selectedTrackedPeriod" class="mt-5">
+    <p class="lead">
+      <ng-container *ngFor="let day of selectedTrackedPeriod.days; let i = index">
+        <span>{{ day.name }}<span *ngIf="i + 1 < selectedTrackedPeriod.days.length">, </span></span>
+      </ng-container>
+    </p>
+
+    <p class="lead">{{ 'NAME' | translate }}: {{ selectedTrackedPeriod.name }}</p>
+    <p>{{ 'TOTAL_CALORIES' | translate }}: {{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</p>
+
+    <p>
+      {{ 'AVERAGE_CALORIES_PER_DAY' | translate }}: {{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}
+    </p>
+    <p>{{ 'SMALLEST_CALORIES' | translate }}: {{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</p>
+    <p>{{ 'BIGGEST_CALORIES' | translate }}: {{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</p>
+    <p>{{ 'TOTAL_PROTEIN' | translate }}: {{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</p>
+    <p>{{ 'TOTAL_CARBS' | translate }}: {{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</p>
+    <p>{{ 'TOTAL_FAT' | translate }}: {{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</p>
+    <p>{{ 'TOTAL_FIBER' | translate }}: {{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</p>
+    <p>{{ 'TOTAL_SUGAR' | translate }}: {{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</p>
+    <p>{{ 'TOTAL_WEIGHT' | translate }}: {{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</p>
+    <p *ngFor="let day of selectedTrackedPeriod.days"></p>
+  </div>
 </div>
 
 <ng-template #trackedPeriodModal let-modal>
@@ -29,17 +77,17 @@
           <p>{{ 'ADDED_DAYS' | translate }}</p>
           <p class="text-muted">
             <ng-container *ngFor="let day of addedDays; let i = index">
-              <span class="day" (click)="removeDayFromAddedDays(i)">{{ day.name }}, </span>
+              <span class="day" (click)="removeDayFromAddedDays(i)">{{ day.name }}<span *ngIf="i + 1 < addedDays.length">, </span></span>
             </ng-container>
           </p>
         </div>
         <div class="form-group">
           <label for="all days">{{ 'ALL_DAYS' | translate }}</label>
           <select class="form-control" name="username" (change)="selectDay($event.target.value)">
+            <option [value]="-1" selected>{{ 'CHOOSE_DAY' | translate }}</option>
             <option *ngFor="let day of days; let i = index" [value]="i">{{ day.name }}</option>
           </select>
         </div>
-
         <div class="container text-center">
           <div class="row">
             <div class="col">

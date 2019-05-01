@@ -17,6 +17,7 @@ import { DayService } from 'src/app/services/day.service';
 export class UserTrackedPeriodsComponent implements OnInit {
   trackedPeriods: TrackedPeriod[] = [];
   loading = true;
+  loadingTrackedPeriod = false;
   online;
   addedDays: Day[] = [];
   days: Day[];
@@ -24,6 +25,8 @@ export class UserTrackedPeriodsComponent implements OnInit {
     name: '',
     dayIds: []
   };
+  selectedTrackedPeriod: TrackedPeriod;
+  fetchedTrackedPeriods: TrackedPeriod[] = [];
 
   constructor(
     private trackedPeriodService: TrackedPeriodService,
@@ -76,17 +79,57 @@ export class UserTrackedPeriodsComponent implements OnInit {
             }
           );
         } else {
-          this.newTrackedPeriod = undefined;
+          this.newTrackedPeriod = {
+            name: '',
+            dayIds: []
+          };
         }
       },
       dismissed => {
-        this.newTrackedPeriod = undefined;
+        this.newTrackedPeriod = {
+          name: '',
+          dayIds: []
+        };
       }
     );
   }
 
-  selectDay(index) {
-    this.addedDays.push(this.days[index]);
-    this.newTrackedPeriod.dayIds.push(this.days[index].uuid);
+  openTrackedPeriod(trackedPeriod: TrackedPeriod) {
+    this.checkIfAlreadyFetched(trackedPeriod);
+  }
+
+  checkIfAlreadyFetched(trackedPeriod: TrackedPeriod) {
+    this.loadingTrackedPeriod = true;
+    let tp: TrackedPeriod;
+    for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
+      if (this.fetchedTrackedPeriods[i].uuid === trackedPeriod.uuid) {
+        tp = this.fetchedTrackedPeriods[i];
+        this.loadingTrackedPeriod = false;
+      }
+    }
+
+    if (!tp) {
+      this.trackedPeriodService.getTrackedPeriod(trackedPeriod.uuid).subscribe(
+        res => {
+          this.selectedTrackedPeriod = res;
+          this.fetchedTrackedPeriods.push(res);
+          this.loadingTrackedPeriod = false;
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+          this.loadingTrackedPeriod = false;
+        }
+      );
+    }
+  }
+
+  selectDay(index: number) {
+    if (index > -1) {
+      this.addedDays.push(this.days[index]);
+      this.newTrackedPeriod.dayIds.push(this.days[index].uuid);
+    }
   }
 }

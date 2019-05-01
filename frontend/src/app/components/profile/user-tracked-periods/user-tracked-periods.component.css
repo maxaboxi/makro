@@ -2,3 +2,30 @@
   cursor: pointer;
   color: #ff3b3f;
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.big-list {
+  word-break: break-all;
+  font-size: 25px;
+}
+
+.big-list:hover {
+  font-size: 35px;
+}
+
+.fa-minus-square:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+.day-list-name:hover {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

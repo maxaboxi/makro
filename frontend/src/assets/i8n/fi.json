@@ -304,5 +304,17 @@
   "ADD_TRACKED_PERIOD": "Lisää uusi seurattava ajanjakso",
   "TRACKED_PERIOD_SAVED": "Seurattava ajanjakso tallennettu onnistuneesti",
   "ADDED_DAYS": "Lisätyt päivät:",
-  "ALL_DAYS": "Kaikki päivät"
+  "ALL_DAYS": "Kaikki päivät",
+  "CHOOSE_DAY": "Valitse päivä..",
+  "TOTAL_CALORIES": "Ajanjakson yhteenlasketut kalorit",
+  "AVERAGE_CALORIES_PER_DAY": "Kaloreita keskimäärin per päivä",
+  "BIGGEST_CALORIES": "Korkein kalorimäärä",
+  "SMALLEST_CALORIES": "Pienin kalorimäärä",
+  "TOTAL_PROTEIN": "Proteiinia yhteensä",
+  "TOTAL_CARBS": "Hiilihydraatteja yhteensä",
+  "TOTAL_FAT": "Rasvaa yhteensä",
+  "TOTAL_FIBER": "Kuituja yhteensä",
+  "TOTAL_SUGAR": "Sokeria yhteensä",
+  "TOTAL_WEIGHT": "Ruokien kokonaispaino (grammoina)",
+  "MY_SAVED_TRACKED_PERIODS": "Tallentamani ajanjaksot"
 }
