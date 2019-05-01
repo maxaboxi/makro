@@ -38,5 +38,28 @@ namespace Makro.Controllers
         {
             return await _trackedPeriodService.AddNewTrackedPeriod(newTrackedPeriodDto, HttpContext.User.Identity.Name);
         }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateTrackedPeriod(string id, [FromBody]NewTrackedPeriodDto newTrackedPeriodDto)
+        {
+            if (id != newTrackedPeriodDto.UUID)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _trackedPeriodService.UpdateTrackedPeriod(newTrackedPeriodDto, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteTrackedPeriod(string id)
+        {
+            return Ok(await _trackedPeriodService.DeleteTrackedPeriod(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/multiple")]
+        public ResultDto DeleteMultipleTrackedPeriods([FromBody]List<string> tpIds)
+        {
+            return _trackedPeriodService.DeleteMultipleTrackedPeriod(tpIds, HttpContext.User.Identity.Name);
+        }
     }
 }

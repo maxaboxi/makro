@@ -204,8 +204,8 @@ namespace Makro.Services
 
         public async Task<ResultDto> DeleteSharedMeal(string id, string userId)
         {
-            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id && sm.User.UUID == userId).Include(sm => sm.User).FirstOrDefaultAsync();
-
+            var sharedMeal = await _context.SharedMeals.Where(sm => sm.UUID == id && sm.User.UUID == userId)
+                .Include(sm => sm.User).FirstOrDefaultAsync();
 
             if (sharedMeal == null)
             {

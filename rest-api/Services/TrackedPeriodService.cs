@@ -49,10 +49,6 @@ namespace Makro.Services
                         .ThenInclude(d => d.User)
                 .Include(t => t.TrackedPeriodDays)
                     .ThenInclude(tpd => tpd.Day)
-                        .ThenInclude(d => d.Meals)
-                            .ThenInclude(m => m.MealFoods)
-                                .ThenInclude(mf => mf.Food)
-                                    .ThenInclude(f => f.User)
                 .FirstOrDefaultAsync();
 
             if (tp == null)
@@ -68,27 +64,6 @@ namespace Makro.Services
             tp.TrackedPeriodDays.ToList().ForEach(tpd =>
             {
                 var dayDto = _mapper.Map<DayDto>(tpd.Day);
-                tpd.Day.Meals.ToList().ForEach(m =>
-                {
-                    m.User = tpd.Day.User;
-                    var mealDto = _mapper.Map<MealDto>(m);
-                    var foodDtos = new List<FoodDto>();
-                    m.MealFoods.ToList().ForEach(mf =>
-                    {
-                        var foodDto = _mapper.Map<FoodDto>(mf.Food);
-                        foodDto.Amount = mf.FoodAmount;
-                        foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
-                        foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
-                        foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
-                        foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
-                        foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
-                        foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
-                        foodDtos.Add(foodDto);
-                    });
-                    mealDto.Foods = foodDtos;
-                    mealDtos.Add(mealDto);
-                });
-                dayDto.AllMeals = mealDtos;
                 dayDtos.Add(dayDto);
             });
 
@@ -113,6 +88,118 @@ namespace Makro.Services
                 return new ResultDto(false, "No days found with given information");
             }
 
+            var tp = new TrackedPeriod
+            {
+                UUID = Guid.NewGuid().ToString(),
+                Name = newTrackedPeriodDto.Name,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync(),
+            };
+
+            tp = CalculateTotals(tp, days);
+
+            _context.Add(tp);
+
+            days.ForEach(d =>
+            {
+                var tpd = new TrackedPeriodDay
+                {
+                    Day = d,
+                    TrackedPeriod = tp
+                };
+                _context.Add(tpd);
+            });
+
+            await _context.SaveChangesAsync();
+
+            return new ResultDto(true, "New period saved succesfully");
+        }
+
+        public async Task<ResultDto> UpdateTrackedPeriod(NewTrackedPeriodDto trackedPeriodDto, string userId)
+        {
+            var tp = await _context.TrackedPeriods.Where(tr => tr.UUID == trackedPeriodDto.UUID).FirstOrDefaultAsync();
+
+            if (tp == null)
+            {
+                _logger.LogDebug("SharedMeal not found with UUID: ", trackedPeriodDto.UUID);
+                return new ResultDto(false, "Tracked Period not found");
+            }
+
+            var days = new List<Day>();
+            trackedPeriodDto.DayIds.ForEach(d => days.Add(
+                _context.Days.Where(day => day.UUID == d && day.User.UUID == userId)
+                .Include(day => day.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                .FirstOrDefault()
+                )
+            );
+
+            if (days == null || days.Count == 0)
+            {
+                return new ResultDto(false, "No days found with given information");
+            }
+
+            _context.TrackedPeriodDays.RemoveRange(_context.TrackedPeriodDays.Where(tpd => tpd.TrackedPeriodId == tp.Id));
+            tp = CalculateTotals(tp, days);
+            tp.Name = trackedPeriodDto.Name;
+            tp.UpdatedAt = DateTime.Now;
+
+            days.ForEach(d =>
+            {
+                var tpd = new TrackedPeriodDay
+                {
+                    Day = d,
+                    TrackedPeriod = tp
+                };
+                _context.Add(tpd);
+            });
+
+            _context.Entry(tp).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return new ResultDto(true, "Tracked period updated succesfully");
+        }
+
+        public async Task<ResultDto> DeleteTrackedPeriod(string id, string userId)
+        {
+            var trackedPeriod = await _context.TrackedPeriods.Where(tp => tp.UUID == id && tp.User.UUID == userId)
+                .FirstOrDefaultAsync();
+
+            if (trackedPeriod == null)
+            {
+                _logger.LogDebug("TrackedPeriod not found with UUID: ", id);
+                return new ResultDto(false, "Not found");
+            }
+
+            _context.TrackedPeriods.Remove(trackedPeriod);
+            await _context.SaveChangesAsync();
+
+            return new ResultDto(true, "Tracked period deleted succesfully");
+        }
+
+        public ResultDto DeleteMultipleTrackedPeriod(List<string> trackedPeriodIds, string userId)
+        {
+            trackedPeriodIds.ForEach(id =>
+            {
+                var trackedPeriod = _context.TrackedPeriods.Where(tp => tp.UUID == id && tp.User.UUID == userId)
+                .FirstOrDefault();
+
+                if (trackedPeriod == null)
+                {
+                    _logger.LogDebug("TrackedPeriod not found with UUID: ", id);
+                }
+
+                _context.TrackedPeriods.Remove(trackedPeriod);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Tracked period deleted succesfully");
+        }
+
+        private TrackedPeriod CalculateTotals(TrackedPeriod tp, List<Day> days)
+        {
             decimal totalCalories = 0;
             decimal totalProtein = 0;
             decimal totalCarbs = 0;
@@ -143,44 +230,18 @@ namespace Makro.Services
                 calorieCountForDays.Add(totalCaloriesForDay);
             });
 
-            decimal averageCaloriesPerDay = totalCalories / days.Count;
-            decimal smallestCalorieCount = calorieCountForDays.Min();
-            decimal biggestCalorieCount = calorieCountForDays.Max();
+            tp.AverageCaloriesPerDay = totalCalories / days.Count;
+            tp.SmallestCalorieCount = calorieCountForDays.Min();
+            tp.BiggestCalorieCount = calorieCountForDays.Max();
+            tp.TotalCalories = totalCalories;
+            tp.TotalProtein = totalProtein;
+            tp.TotalCarbs = totalCarbs;
+            tp.TotalFat = totalFat;
+            tp.TotalFiber = totalFiber;
+            tp.TotalSugar = totalSugar;
+            tp.TotalFoodWeight = totalFoodWeight;
 
-            var tp = new TrackedPeriod
-            {
-                UUID = Guid.NewGuid().ToString(),
-                Name = newTrackedPeriodDto.Name,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync(),
-                TotalCalories = totalCalories,
-                AverageCaloriesPerDay = averageCaloriesPerDay,
-                TotalProtein = totalProtein,
-                TotalCarbs = totalCarbs,
-                TotalFat = totalFat,
-                TotalFiber = totalFiber,
-                TotalSugar = totalSugar,
-                TotalFoodWeight = totalFoodWeight,
-                SmallestCalorieCount = smallestCalorieCount,
-                BiggestCalorieCount = biggestCalorieCount
-            };
-
-            _context.Add(tp);
-
-            days.ForEach(d =>
-            {
-                var tpd = new TrackedPeriodDay
-                {
-                    Day = d,
-                    TrackedPeriod = tp
-                };
-                _context.Add(tpd);
-            });
-
-            await _context.SaveChangesAsync();
-
-            return new ResultDto(true, "New period saved succesfully");
+            return tp;
         }
     }
 }
