@@ -317,5 +317,8 @@
   "TOTAL_SUGAR": "Sokeria yhteensä",
   "TOTAL_WEIGHT": "Ruokien kokonaispaino (grammoina)",
   "MY_SAVED_TRACKED_PERIODS": "Tallentamani ajanjaksot",
-  "TRACKED_PERIOD_DAYS": "Ajanjaksoon lisätyt päivät"
+  "TRACKED_PERIOD_DAYS": "Ajanjaksoon lisätyt päivät",
+  "LOAD_TRACKED_PERIOD": "Avaa ajanjakso",
+  "DELETE_TRACKED_PERIOD": "Poista ajanjakso",
+  "EDIT_TRACKED_PERIOD": "Muokkaa ajanjaksoa"
 }

@@ -1,5 +1,4 @@
 <div class="container">
-  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
   <div class="row justify-content-center" *ngIf="online && !loading">
     <div class="col-6">
       <button
@@ -17,18 +16,35 @@
       <h2 class="h2">{{ 'MY_SAVED_TRACKED_PERIODS' | translate }}</h2>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="trackedPeriods.length > 0">
+
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <div class="row justify-content-center" *ngIf="trackedPeriods.length > 0 || trackedPeriodsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <ul>
         <li class="big-list lead" *ngFor="let tp of trackedPeriods; let i = index">
           <div class="row">
-            <div class="col-10 day-list-name" (click)="openTrackedPeriod(tp)" title="{{ 'LOAD_DAY' | translate }}">{{ tp.name }}</div>
+            <div class="col-10 day-list-name" (click)="openTrackedPeriod(tp)" title="{{ 'LOAD_TRACKED_PERIOD' | translate }}">
+              {{ tp.name }}
+            </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteDay(i)" title="{{ 'DELETE_DAY' | translate }}"></i>
+              <i
+                class="far fa-minus-square float-right"
+                (click)="deleteTrackedPeriod(i)"
+                title="{{ 'DELETE_TRACKED_PERIOD' | translate }}"
+              ></i>
             </div>
           </div>
         </li>
       </ul>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="trackedPeriodsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteTrackedPeriodsFromDb()">
+        {{ 'SAVE_CHANGES' | translate }}
+      </button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 
@@ -86,6 +102,9 @@
         <span>{{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</span>
       </li>
     </ul>
+    <button class="btn btn-sm btn-outline-warning btn-block mt-2" (click)="openEditTrackedPeriodModal(editTrackedPeriodModal)">
+      <i class="far fa-edit"></i> {{ 'EDIT_TRACKED_PERIOD' | translate }}
+    </button>
   </div>
 </div>
 
@@ -101,6 +120,52 @@
           <label class="lead col-sm-4 col-form-label" for="time period name">{{ 'NAME' | translate }}</label>
           <div class="col-sm-8">
             <input type="text" name="trackedPeriodName" class="form-control" [(ngModel)]="newTrackedPeriod.name" required />
+          </div>
+        </div>
+        <div *ngIf="addedDays.length > 0">
+          <p>{{ 'ADDED_DAYS' | translate }}</p>
+          <p class="text-muted">
+            <ng-container *ngFor="let day of addedDays; let i = index">
+              <span class="day" (click)="removeDayFromAddedDays(i)">{{ day.name }}<span *ngIf="i + 1 < addedDays.length">, </span></span>
+            </ng-container>
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="all days">{{ 'ALL_DAYS' | translate }}</label>
+          <select class="form-control" name="username" (change)="selectDay($event.target.value)">
+            <option [value]="-1" selected>{{ 'CHOOSE_DAY' | translate }}</option>
+            <option *ngFor="let day of days; let i = index" [value]="i">{{ day.name }}</option>
+          </select>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!trackedPeriodForm.form.valid">
+                {{ 'ADD' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editTrackedPeriodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'EDIT_TRACKED_PERIOD' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #trackedPeriodForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group row">
+          <label class="lead col-sm-4 col-form-label" for="time period name">{{ 'NAME' | translate }}</label>
+          <div class="col-sm-8">
+            <input type="text" name="trackedPeriodName" class="form-control" [(ngModel)]="selectedTrackedPeriod.name" required />
           </div>
         </div>
         <div *ngIf="addedDays.length > 0">

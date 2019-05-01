@@ -27,6 +27,9 @@ export class UserTrackedPeriodsComponent implements OnInit {
   };
   selectedTrackedPeriod: TrackedPeriod;
   fetchedTrackedPeriods: TrackedPeriod[] = [];
+  trackedPeriodsDeleted = false;
+  deletedTrackedPeriods: string[] = [];
+  editing = false;
 
   constructor(
     private trackedPeriodService: TrackedPeriodService,
@@ -98,11 +101,61 @@ export class UserTrackedPeriodsComponent implements OnInit {
     );
   }
 
-  openTrackedPeriod(trackedPeriod: TrackedPeriod) {
-    this.checkIfAlreadyFetched(trackedPeriod);
+  openEditTrackedPeriodModal(content) {
+    this.addedDays = [];
+    this.editing = true;
+    const originalTrackedPeriod = { ...this.selectedTrackedPeriod };
+    this.addedDays = JSON.parse(JSON.stringify(this.selectedTrackedPeriod.days));
+    console.log(this.addedDays);
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const tp: NewTrackedPeriod = {
+            name: this.selectedTrackedPeriod.name,
+            uuid: this.selectedTrackedPeriod.uuid,
+            dayIds: []
+          };
+
+          this.addedDays.forEach(d => {
+            tp.dayIds.push(d.uuid);
+          });
+
+          this.trackedPeriodService.saveEditedTrackedPeriod(tp).subscribe(
+            res => {
+              if (res['success']) {
+                this.selectedTrackedPeriod = undefined;
+                this.getAllTrackedPeriods();
+
+                for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
+                  if (this.fetchedTrackedPeriods[i].uuid === this.selectedTrackedPeriod.uuid) {
+                    this.fetchedTrackedPeriods.splice(i, 1);
+                    break;
+                  }
+                }
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.addedDays = [];
+          this.editing = false;
+          this.selectedTrackedPeriod = originalTrackedPeriod;
+        }
+      },
+      dismissed => {
+        this.addedDays = [];
+        this.editing = false;
+        this.selectedTrackedPeriod = originalTrackedPeriod;
+      }
+    );
   }
 
-  checkIfAlreadyFetched(trackedPeriod: TrackedPeriod) {
+  openTrackedPeriod(trackedPeriod: TrackedPeriod) {
     this.loadingTrackedPeriod = true;
     let found = false;
     for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
@@ -110,6 +163,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
         found = true;
         this.selectedTrackedPeriod = this.fetchedTrackedPeriods[i];
         this.loadingTrackedPeriod = false;
+        break;
       }
     }
 
@@ -131,10 +185,44 @@ export class UserTrackedPeriodsComponent implements OnInit {
     }
   }
 
+  deleteTrackedPeriod(index: number) {
+    this.deletedTrackedPeriods.push(this.trackedPeriods[index].uuid);
+    this.trackedPeriods.splice(index, 1);
+    this.trackedPeriodsDeleted = true;
+  }
+
+  deleteTrackedPeriodsFromDb() {
+    this.trackedPeriodService.removeTrackedPeriods(this.deletedTrackedPeriods).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.trackedPeriodService.getAllTrackedPeriods().subscribe(tps => {
+            this.trackedPeriods = tps;
+          });
+          this.trackedPeriodsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
   selectDay(index: number) {
     if (index > -1) {
       this.addedDays.push(this.days[index]);
-      this.newTrackedPeriod.dayIds.push(this.days[index].uuid);
+      this.editing ? this.selectedTrackedPeriod.days.push(this.days[index]) : this.newTrackedPeriod.dayIds.push(this.days[index].uuid);
     }
+  }
+
+  removeDayFromAddedDays(index) {
+    this.editing ? this.selectedTrackedPeriod.days.splice(index, 1) : this.newTrackedPeriod.dayIds.splice(index, 1);
+    this.addedDays.splice(index, 1);
   }
 }

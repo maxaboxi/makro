@@ -41,4 +41,29 @@ export class TrackedPeriodService {
 
     return this.http.post(url, tp, { headers: headers });
   }
+
+  saveEditedTrackedPeriod(tp: NewTrackedPeriod) {
+    const url = `${this.baseUrl}/update/${tp.uuid}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put(url, tp, { headers: headers });
+  }
+
+  removeTrackedPeriods(tpIds: string[]) {
+    const url = `${this.baseUrl}/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: tpIds
+    };
+
+    return this.http.delete(url, options);
+  }
 }

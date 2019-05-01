@@ -317,5 +317,8 @@
   "TOTAL_SUGAR": "Total amount of sugar",
   "TOTAL_WEIGHT": "Total amount of food (in grams)",
   "MY_SAVED_TRACKED_PERIODS": "Tracked time periods that I have saved",
-  "TRACKED_PERIOD_DAYS": "Days selected for tracking"
+  "TRACKED_PERIOD_DAYS": "Days selected for tracking",
+  "LOAD_TRACKED_PERIOD": "Load tracked time period",
+  "DELETE_TRACKED_PERIOD": "Delete tracked time period",
+  "EDIT_TRACKED_PERIOD": "Edit tracked time period"
 }
