@@ -68,6 +68,10 @@ export class UserTrackedPeriodsComponent implements OnInit {
                   cssClass: 'alert-success',
                   timeout: 2000
                 });
+                this.newTrackedPeriod = {
+                  name: '',
+                  dayIds: []
+                };
                 this.getAllTrackedPeriods();
               }
             },

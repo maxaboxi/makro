@@ -16,7 +16,7 @@ namespace Makro.Models
         [Required]
         public User User { get; set; }
         [Required]
-        public ICollection<Day> Days { get; set; }
+        public ICollection<TrackedPeriodDay> TrackedPeriodDays { get; set; }
         [Required]
         public decimal TotalCalories { get; set; }
         [Required]

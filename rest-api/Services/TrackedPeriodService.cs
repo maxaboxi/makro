@@ -44,13 +44,15 @@ namespace Makro.Services
             var tp = await _context.TrackedPeriods.Where(t => t.UUID == uuid && t.User.UUID == userId)
                 .AsNoTracking()
                 .Include(t => t.User)
-                .Include(t => t.Days)
-                    .ThenInclude(d => d.User)
-                .Include(t => t.Days)
-                    .ThenInclude(d => d.Meals)
-                        .ThenInclude(m => m.MealFoods)
-                            .ThenInclude(mf => mf.Food)
-                                .ThenInclude(f => f.User)
+                .Include(t => t.TrackedPeriodDays)
+                    .ThenInclude(tpd => tpd.Day)
+                        .ThenInclude(d => d.User)
+                .Include(t => t.TrackedPeriodDays)
+                    .ThenInclude(tpd => tpd.Day)
+                        .ThenInclude(d => d.Meals)
+                            .ThenInclude(m => m.MealFoods)
+                                .ThenInclude(mf => mf.Food)
+                                    .ThenInclude(f => f.User)
                 .FirstOrDefaultAsync();
 
             if (tp == null)
@@ -63,12 +65,12 @@ namespace Makro.Services
             var dayDtos = new List<DayDto>();
             var mealDtos = new List<MealDto>();
 
-            tp.Days.ToList().ForEach(day =>
+            tp.TrackedPeriodDays.ToList().ForEach(tpd =>
             {
-                var dayDto = _mapper.Map<DayDto>(day);
-                day.Meals.ToList().ForEach(m =>
+                var dayDto = _mapper.Map<DayDto>(tpd.Day);
+                tpd.Day.Meals.ToList().ForEach(m =>
                 {
-                    m.User = day.User;
+                    m.User = tpd.Day.User;
                     var mealDto = _mapper.Map<MealDto>(m);
                     var foodDtos = new List<FoodDto>();
                     m.MealFoods.ToList().ForEach(mf =>
@@ -152,7 +154,6 @@ namespace Makro.Services
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync(),
-                Days = days,
                 TotalCalories = totalCalories,
                 AverageCaloriesPerDay = averageCaloriesPerDay,
                 TotalProtein = totalProtein,
@@ -166,6 +167,17 @@ namespace Makro.Services
             };
 
             _context.Add(tp);
+
+            days.ForEach(d =>
+            {
+                var tpd = new TrackedPeriodDay
+                {
+                    Day = d,
+                    TrackedPeriod = tp
+                };
+                _context.Add(tpd);
+            });
+
             await _context.SaveChangesAsync();
 
             return new ResultDto(true, "New period saved succesfully");

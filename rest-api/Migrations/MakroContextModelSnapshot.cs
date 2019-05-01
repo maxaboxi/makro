@@ -30,8 +30,6 @@ namespace Makro.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("TrackedPeriodId");
-
                     b.Property<string>("UUID")
                         .IsRequired();
 
@@ -40,8 +38,6 @@ namespace Makro.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TrackedPeriodId");
 
                     b.HasIndex("UUID")
                         .IsUnique();
@@ -334,7 +330,8 @@ namespace Makro.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<decimal>("SmallestCalorieCount");
 
@@ -352,11 +349,12 @@ namespace Makro.Migrations
 
                     b.Property<decimal>("TotalSugar");
 
-                    b.Property<string>("UUID");
+                    b.Property<string>("UUID")
+                        .IsRequired();
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -366,6 +364,24 @@ namespace Makro.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TrackedPeriods");
+                });
+
+            modelBuilder.Entity("Makro.Models.TrackedPeriodDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DayId");
+
+                    b.Property<int>("TrackedPeriodId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DayId");
+
+                    b.HasIndex("TrackedPeriodId");
+
+                    b.ToTable("TrackedPeriodDays");
                 });
 
             modelBuilder.Entity("Makro.Models.User", b =>
@@ -433,10 +449,6 @@ namespace Makro.Migrations
 
             modelBuilder.Entity("Makro.Models.Day", b =>
                 {
-                    b.HasOne("Makro.Models.TrackedPeriod")
-                        .WithMany("Days")
-                        .HasForeignKey("TrackedPeriodId");
-
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -544,7 +556,21 @@ namespace Makro.Migrations
                 {
                     b.HasOne("Makro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Makro.Models.TrackedPeriodDay", b =>
+                {
+                    b.HasOne("Makro.Models.Day", "Day")
+                        .WithMany("TrackedPeriodDays")
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Makro.Models.TrackedPeriod", "TrackedPeriod")
+                        .WithMany("TrackedPeriodDays")
+                        .HasForeignKey("TrackedPeriodId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

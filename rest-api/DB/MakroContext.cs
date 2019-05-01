@@ -20,6 +20,7 @@ namespace Makro.DB
         public DbSet<MealFood> MealFoods { get; set; }
         public DbSet<SharedMealFood> SharedMealFoods { get; set; }
         public DbSet<TrackedPeriod> TrackedPeriods { get; set; }
+        public DbSet<TrackedPeriodDay> TrackedPeriodDays { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -62,8 +63,6 @@ namespace Makro.DB
             modelBuilder.Entity<TrackedPeriod>()
                 .HasIndex(e => e.UUID).IsUnique();
 
-            modelBuilder.Entity<TrackedPeriod>()
-                .HasMany(e => e.Days);
         }
     }
 }
