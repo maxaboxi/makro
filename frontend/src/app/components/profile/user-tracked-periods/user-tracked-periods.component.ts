@@ -100,15 +100,16 @@ export class UserTrackedPeriodsComponent implements OnInit {
 
   checkIfAlreadyFetched(trackedPeriod: TrackedPeriod) {
     this.loadingTrackedPeriod = true;
-    let tp: TrackedPeriod;
+    let found = false;
     for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
       if (this.fetchedTrackedPeriods[i].uuid === trackedPeriod.uuid) {
-        tp = this.fetchedTrackedPeriods[i];
+        found = true;
+        this.selectedTrackedPeriod = this.fetchedTrackedPeriods[i];
         this.loadingTrackedPeriod = false;
       }
     }
 
-    if (!tp) {
+    if (!found) {
       this.trackedPeriodService.getTrackedPeriod(trackedPeriod.uuid).subscribe(
         res => {
           this.selectedTrackedPeriod = res;

@@ -35,27 +35,57 @@
   <app-loading-spinner *ngIf="loadingTrackedPeriod"></app-loading-spinner>
 
   <div *ngIf="selectedTrackedPeriod" class="mt-5">
-    <p class="lead">
+    <p>
+      <span class="lead">{{ 'TRACKED_PERIOD_DAYS' | translate }}: </span>
       <ng-container *ngFor="let day of selectedTrackedPeriod.days; let i = index">
-        <span>{{ day.name }}<span *ngIf="i + 1 < selectedTrackedPeriod.days.length">, </span></span>
+        <span class="text-muted">{{ day.name }}<span *ngIf="i + 1 < selectedTrackedPeriod.days.length">, </span></span>
       </ng-container>
     </p>
-
-    <p class="lead">{{ 'NAME' | translate }}: {{ selectedTrackedPeriod.name }}</p>
-    <p>{{ 'TOTAL_CALORIES' | translate }}: {{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</p>
-
-    <p>
-      {{ 'AVERAGE_CALORIES_PER_DAY' | translate }}: {{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}
-    </p>
-    <p>{{ 'SMALLEST_CALORIES' | translate }}: {{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</p>
-    <p>{{ 'BIGGEST_CALORIES' | translate }}: {{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</p>
-    <p>{{ 'TOTAL_PROTEIN' | translate }}: {{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</p>
-    <p>{{ 'TOTAL_CARBS' | translate }}: {{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</p>
-    <p>{{ 'TOTAL_FAT' | translate }}: {{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</p>
-    <p>{{ 'TOTAL_FIBER' | translate }}: {{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</p>
-    <p>{{ 'TOTAL_SUGAR' | translate }}: {{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</p>
-    <p>{{ 'TOTAL_WEIGHT' | translate }}: {{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</p>
-    <p *ngFor="let day of selectedTrackedPeriod.days"></p>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'NAME' | translate }} <span>{{ selectedTrackedPeriod.name }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'AVERAGE_CALORIES_PER_DAY' | translate }}
+        <span>{{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'SMALLEST_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'BIGGEST_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_PROTEIN' | translate }}
+        <span>{{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_CARBS' | translate }}
+        <span>{{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_FAT' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_FIBER' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_SUGAR' | translate }}
+        <span>{{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_WEIGHT' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</span>
+      </li>
+    </ul>
   </div>
 </div>
 
