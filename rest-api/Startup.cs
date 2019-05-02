@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+
 namespace Makro
 {
     public class Startup
@@ -119,6 +121,20 @@ namespace Makro
 
             app.UseAuthentication();
             app.UseMvc();
+            UpdateDatabase(app);
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<MakroContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

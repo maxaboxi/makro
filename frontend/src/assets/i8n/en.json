@@ -321,5 +321,6 @@
   "LOAD_TRACKED_PERIOD": "Load tracked time period",
   "DELETE_TRACKED_PERIOD": "Delete tracked time period",
   "EDIT_TRACKED_PERIOD": "Edit tracked time period",
-  "FETCH_ALL": "Fetch all"
+  "FETCH_ALL": "Fetch all",
+  "NO_SAVED_TRACKED_PERIODS": "I haven't saved any time periods for tracking"
 }

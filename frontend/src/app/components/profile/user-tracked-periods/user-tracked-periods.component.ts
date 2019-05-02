@@ -129,7 +129,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
                 this.getAllTrackedPeriods();
 
                 for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
-                  if (this.fetchedTrackedPeriods[i].uuid === this.selectedTrackedPeriod.uuid) {
+                  if (this.fetchedTrackedPeriods[i].uuid === originalTrackedPeriod.uuid) {
                     this.fetchedTrackedPeriods.splice(i, 1);
                     break;
                   }

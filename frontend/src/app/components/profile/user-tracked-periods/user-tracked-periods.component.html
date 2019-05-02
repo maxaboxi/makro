@@ -39,6 +39,13 @@
       </ul>
     </div>
   </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="trackedPeriods.length === 0 && !trackedPeriodsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_SAVED_TRACKED_PERIODS' | translate }}</h2>
+    </div>
+  </div>
+
   <div class="row justify-content-center" *ngIf="trackedPeriodsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button type="button" class="btn btn-outline-success btn-block" (click)="deleteTrackedPeriodsFromDb()">

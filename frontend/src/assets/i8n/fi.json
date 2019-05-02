@@ -321,5 +321,6 @@
   "LOAD_TRACKED_PERIOD": "Avaa ajanjakso",
   "DELETE_TRACKED_PERIOD": "Poista ajanjakso",
   "EDIT_TRACKED_PERIOD": "Muokkaa ajanjaksoa",
-  "FETCH_ALL": "Hae kaikki"
+  "FETCH_ALL": "Hae kaikki",
+  "NO_SAVED_TRACKED_PERIODS": "Ei tallennettuja ajanjaksoja"
 }
