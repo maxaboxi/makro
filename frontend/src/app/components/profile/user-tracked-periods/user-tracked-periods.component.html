@@ -63,43 +63,51 @@
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_CALORIES' | translate }}
-        <span>{{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+        <span title="{{ selectedTrackedPeriod.totalCalories }} {{ 'KCAL' | translate }}"
+          >{{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</span
+        >
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'AVERAGE_CALORIES_PER_DAY' | translate }}
-        <span>{{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+        <span title="{{ selectedTrackedPeriod.averageCaloriesPerDay }} {{ 'KCAL' | translate }}"
+          >{{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}</span
+        >
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'SMALLEST_CALORIES' | translate }}
-        <span>{{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+        <span title="{{ selectedTrackedPeriod.smallestCalorieCount }} {{ 'KCAL' | translate }}"
+          >{{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span
+        >
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'BIGGEST_CALORIES' | translate }}
-        <span>{{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+        <span title="{{ selectedTrackedPeriod.biggestCalorieCount }} {{ 'KCAL' | translate }}"
+          >{{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span
+        >
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_PROTEIN' | translate }}
-        <span>{{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalProtein }}g">{{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_CARBS' | translate }}
-        <span>{{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalCarbs }}g">{{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_FAT' | translate }}
-        <span>{{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalFat }}g">{{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_FIBER' | translate }}
-        <span>{{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalFiber }}g">{{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_SUGAR' | translate }}
-        <span>{{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalSugar }}g">{{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ 'TOTAL_WEIGHT' | translate }}
-        <span>{{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</span>
+        <span title="{{ selectedTrackedPeriod.totalFoodWeight }}g">{{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</span>
       </li>
     </ul>
     <button class="btn btn-sm btn-outline-warning btn-block mt-2" (click)="openEditTrackedPeriodModal(editTrackedPeriodModal)">

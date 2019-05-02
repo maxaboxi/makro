@@ -25,6 +25,7 @@ import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admi
 import { UserLikesComponent } from './components/profile/user-likes/user-likes.component';
 import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 import { UserTrackedPeriodsComponent } from './components/profile/user-tracked-periods/user-tracked-periods.component';
+import { AdminTrackedPeriodsComponent } from './components/admin/admin-tracked-periods/admin-tracked-periods.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -61,7 +62,8 @@ const routes: Routes = [
       { path: 'meals', component: AdminMealsComponent },
       { path: 'days', component: AdminDaysComponent },
       { path: 'likes', component: AdminLikesComponent },
-      { path: 'feedbacks', component: AdminFeedbacksComponent }
+      { path: 'feedbacks', component: AdminFeedbacksComponent },
+      { path: 'trackedperiods', component: AdminTrackedPeriodsComponent }
     ]
   },
   { path: '**', component: DashboardComponent }

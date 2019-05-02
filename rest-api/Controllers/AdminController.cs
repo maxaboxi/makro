@@ -132,5 +132,23 @@ namespace Makro.Controllers
         {
             return _adminService.DeleteMultipleLikes(likeIds);
         }
+
+        [HttpGet("trackedperiod")]
+        public async Task<ActionResult<IEnumerable<TrackedPeriodDto>>> GetAllTrackedPeriods()
+        {
+            return await _adminService.GetAllTrackedPeriods();
+        }
+
+        [HttpGet("trackedperiod/{id}")]
+        public async Task<ActionResult<TrackedPeriodDto>> GetSingleTrackedPeriod(string id)
+        {
+            return await _adminService.GetSingleTrackedPeriod(id);
+        }
+
+        [HttpDelete("trackedperiod/delete/multiple")]
+        public ResultDto DeleteMultipleTrackedPeriod(List<string> trackedPeriodIds)
+        {
+            return _adminService.DeleteMultipleTrackedPeriod(trackedPeriodIds);
+        }
     }
 }

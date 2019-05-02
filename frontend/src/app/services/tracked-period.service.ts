@@ -22,7 +22,7 @@ export class TrackedPeriodService {
     return this.http.get<TrackedPeriod[]>(url, { headers: headers });
   }
 
-  getTrackedPeriod(id) {
+  getTrackedPeriod(id: string) {
     const url = `${this.baseUrl}/single/${id}`;
 
     const headers = new HttpHeaders({

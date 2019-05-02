@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <h2 class="h2 text-muted">{{ 'TRACKED_PERIOD' | translate }} ({{ trackedPeriods?.length }})</h2>
+      <app-data-list
+        [data]="trackedPeriods"
+        [propertiesToShow]="propertiesToShow"
+        (open)="openTrackedPeriod($event)"
+        (delete)="deleteTrackedPeriod($event)"
+        (save)="deleteTrackedPeriodsFromDb()"
+      ></app-data-list>
+    </div>
+  </div>
+
+  <div *ngIf="selectedTrackedPeriod" class="mt-5">
+    <p>
+      <span class="lead">{{ 'TRACKED_PERIOD_DAYS' | translate }}: </span>
+      <ng-container *ngFor="let day of selectedTrackedPeriod.days; let i = index">
+        <span class="text-muted">{{ day.name }}<span *ngIf="i + 1 < selectedTrackedPeriod.days.length">, </span></span>
+      </ng-container>
+    </p>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'NAME' | translate }} <span>{{ selectedTrackedPeriod.name }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.totalCalories.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'AVERAGE_CALORIES_PER_DAY' | translate }}
+        <span>{{ selectedTrackedPeriod.averageCaloriesPerDay.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'SMALLEST_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.smallestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'BIGGEST_CALORIES' | translate }}
+        <span>{{ selectedTrackedPeriod.biggestCalorieCount.toFixed(2) }} {{ 'KCAL' | translate }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_PROTEIN' | translate }}
+        <span>{{ selectedTrackedPeriod.totalProtein.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_CARBS' | translate }}
+        <span>{{ selectedTrackedPeriod.totalCarbs.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_FAT' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFat.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_FIBER' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFiber.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_SUGAR' | translate }}
+        <span>{{ selectedTrackedPeriod.totalSugar.toFixed(2) }}g</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ 'TOTAL_WEIGHT' | translate }}
+        <span>{{ selectedTrackedPeriod.totalFoodWeight.toFixed(2) }}g</span>
+      </li>
+    </ul>
+  </div>
+</div>

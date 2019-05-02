@@ -303,5 +303,69 @@ namespace Makro.Services
             return new ResultDto(true, "Likes deleted succesfully");
         }
 
+        public async Task<ActionResult<IEnumerable<TrackedPeriodDto>>> GetAllTrackedPeriods()
+        {
+            var trackedPeriods = await _context.TrackedPeriods.AsNoTracking()
+                .Include(tp => tp.User)
+                .OrderByDescending(tp => tp.CreatedAt)
+                .ToListAsync();
+            var tpDtos = new List<TrackedPeriodDto>();
+
+            if (trackedPeriods.Count > 0)
+            {
+                trackedPeriods.ForEach(tp => tpDtos.Add(_mapper.Map<TrackedPeriodDto>(tp)));
+            }
+
+            return tpDtos;
+        }
+
+        public async Task<ActionResult<TrackedPeriodDto>> GetSingleTrackedPeriod(string uuid)
+        {
+            var tp = await _context.TrackedPeriods.Where(t => t.UUID == uuid)
+                .AsNoTracking()
+                .Include(t => t.User)
+                .Include(t => t.TrackedPeriodDays)
+                    .ThenInclude(tpd => tpd.Day)
+                        .ThenInclude(d => d.User)
+                .Include(t => t.TrackedPeriodDays)
+                    .ThenInclude(tpd => tpd.Day)
+                .FirstOrDefaultAsync();
+
+            if (tp == null)
+            {
+                return null;
+            }
+
+            var tpDto = _mapper.Map<TrackedPeriodDto>(tp);
+            var dayDtos = new List<DayDto>();
+            var mealDtos = new List<MealDto>();
+
+            tp.TrackedPeriodDays.ToList().ForEach(tpd =>
+            {
+                var dayDto = _mapper.Map<DayDto>(tpd.Day);
+                dayDtos.Add(dayDto);
+            });
+
+            tpDto.Days = dayDtos;
+            return tpDto;
+        }
+
+        public ResultDto DeleteMultipleTrackedPeriod(List<string> trackedPeriodIds)
+        {
+            trackedPeriodIds.ForEach(id =>
+            {
+                var trackedPeriod = _context.TrackedPeriods.Where(tp => tp.UUID == id)
+                .FirstOrDefault();
+
+                if (trackedPeriod != null)
+                {
+                    _context.TrackedPeriods.Remove(trackedPeriod);
+                    _context.SaveChanges();
+                }
+            });
+
+            return new ResultDto(true, "Tracked period deleted succesfully");
+        }
+
     }
 }

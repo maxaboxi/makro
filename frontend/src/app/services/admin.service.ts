@@ -6,6 +6,7 @@ import { User } from '../models/User';
 import { environment } from '../../environments/environment';
 import { Like } from '../models/Like';
 import { Food } from '../models/Food';
+import { TrackedPeriod } from '../models/TrackedPeriod';
 
 @Injectable({
   providedIn: 'root'
@@ -143,7 +144,7 @@ export class AdminService {
   }
 
   removeFeedbacks(feedbacks: String[]) {
-    const url = `${this.baseUrl}/delete/multiple`;
+    const url = `${this.baseUrl}/feedback/delete/multiple`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -192,5 +193,39 @@ export class AdminService {
     const url = `${this.baseUrl}/like`;
 
     return this.http.get<Like[]>(url, { headers: headers });
+  }
+
+  getAllTrackedPeriods() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/trackedperiod`;
+
+    return this.http.get<TrackedPeriod[]>(url, { headers: headers });
+  }
+
+  getTrackedPeriod(id: string) {
+    const url = `${this.baseUrl}/trackedPeriod/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<TrackedPeriod>(url, { headers: headers });
+  }
+
+  removeTrackedPeriods(tpIds: string[]) {
+    const url = `${this.baseUrl}/trackedperiod/delete/multiple`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const options = {
+      headers: headers,
+      body: tpIds
+    };
+
+    return this.http.delete(url, options);
   }
 }
