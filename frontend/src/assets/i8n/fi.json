@@ -320,5 +320,6 @@
   "TRACKED_PERIOD_DAYS": "Ajanjaksoon lisätyt päivät",
   "LOAD_TRACKED_PERIOD": "Avaa ajanjakso",
   "DELETE_TRACKED_PERIOD": "Poista ajanjakso",
-  "EDIT_TRACKED_PERIOD": "Muokkaa ajanjaksoa"
+  "EDIT_TRACKED_PERIOD": "Muokkaa ajanjaksoa",
+  "FETCH_ALL": "Hae kaikki"
 }

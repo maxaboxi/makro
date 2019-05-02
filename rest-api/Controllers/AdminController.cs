@@ -19,6 +19,12 @@ namespace Makro.Controllers
         }
 
         [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<User>>> GetMostRecentUsers()
+        {
+            return await _adminService.GetMostRecentUsers();
+        }
+
+        [HttpGet("user/all")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             return await _adminService.GetAllUsers();
@@ -56,6 +62,12 @@ namespace Makro.Controllers
         }
 
         [HttpGet("day")]
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetMostRecentDays()
+        {
+            return await _adminService.GetMostRecentDays();
+        }
+
+        [HttpGet("day/all")]
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
         {
             return await _adminService.GetAllDays();
@@ -95,6 +107,12 @@ namespace Makro.Controllers
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetMostRecentFoods()
         {
             return await _adminService.GetMostRecentFoods();
+        }
+
+        [HttpGet("food/all")]
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
+        {
+            return await _adminService.GetAllFoods();
         }
 
         [HttpDelete("food/delete/multiple")]

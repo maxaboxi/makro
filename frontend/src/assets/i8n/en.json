@@ -320,5 +320,6 @@
   "TRACKED_PERIOD_DAYS": "Days selected for tracking",
   "LOAD_TRACKED_PERIOD": "Load tracked time period",
   "DELETE_TRACKED_PERIOD": "Delete tracked time period",
-  "EDIT_TRACKED_PERIOD": "Edit tracked time period"
+  "EDIT_TRACKED_PERIOD": "Edit tracked time period",
+  "FETCH_ALL": "Fetch all"
 }

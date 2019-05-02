@@ -1,6 +1,9 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <span class="badge badge-primary float-right mt-2" (click)="getAllUsers()"
+        ><i class="fas fa-sync"></i> {{ 'FETCH_ALL' | translate }}</span
+      >
       <h2 class="h2 text-muted">{{ 'USERS' | translate }} ({{ users?.length }})</h2>
       <app-data-list
         [data]="users"
@@ -16,14 +19,14 @@
 <ng-template #userModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_INFORMATION' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <p class="lead"
-            >{{ selectedUser.username }}
+          <p class="lead">
+            {{ selectedUser.username }}
             <span *ngIf="selectedUser.lastLogin">- {{ selectedUser.lastLogin | date: 'dd.MM.yyyy HH:mm:ss' }}</span>
           </p>
         </div>
@@ -108,7 +111,7 @@
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userPassword">{{ 'PASSWORD' | translate }}</label>
-          <div class="col-sm-8"> <input type="password" name="userPassword" class="form-control" [(ngModel)]="newUserPassword" /> </div>
+          <div class="col-sm-8"><input type="password" name="userPassword" class="form-control" [(ngModel)]="newUserPassword" /></div>
         </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="userPasswordAgain">{{ 'PASSWORD_AGAIN' | translate }}</label>
@@ -134,7 +137,7 @@
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+              <button type="submit" class="btn btn-primary btn-block">{{ 'SAVE' | translate }}</button>
             </div>
           </div>
         </div>

@@ -28,6 +28,15 @@ namespace Makro.Services
                 .ToListAsync();
         }
 
+        public async Task<ActionResult<IEnumerable<User>>> GetMostRecentUsers()
+        {
+            return await _context.Users.AsNoTracking()
+                .Select(u => new User { UUID = u.UUID, Username = u.Username, LastLogin = u.LastLogin })
+                .OrderByDescending(u => u.LastLogin)
+                .Take(50)
+                .ToListAsync();
+        }
+
         public async Task<ActionResult<User>> GetUserInformation(string id)
         {
             var user = await _context.Users.Include(u => u.MealNames).Where(p => p.UUID == id).FirstOrDefaultAsync();
@@ -94,8 +103,22 @@ namespace Makro.Services
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDays()
         {
             var days = await _context.Days.AsNoTracking()
-                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User })
+                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User, CreatedAt = d.CreatedAt })
                 .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
+
+            List<DayDto> dayDtos = new List<DayDto>();
+            days.ForEach(d => dayDtos.Add(_mapper.Map<DayDto>(d)));
+
+            return dayDtos;
+        }
+
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetMostRecentDays()
+        {
+            var days = await _context.Days.AsNoTracking()
+                .Select(d => new Day { UUID = d.UUID, Name = d.Name, User = d.User, CreatedAt = d.CreatedAt })
+                .OrderByDescending(d => d.CreatedAt)
+                .Take(50)
                 .ToListAsync();
 
             List<DayDto> dayDtos = new List<DayDto>();
@@ -210,6 +233,18 @@ namespace Makro.Services
                 .Include(f => f.User)
                 .OrderBy(f => f.CreatedAt)
                 .Take(50)
+                .ToListAsync();
+            List<FoodDto> foodDtos = new List<FoodDto>();
+            foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));
+            foodDtos.Reverse(0, foodDtos.Count);
+            return foodDtos;
+        }
+
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
+        {
+            var foods = await _context.Foods.AsNoTracking()
+                .Include(f => f.User)
+                .OrderBy(f => f.CreatedAt)
                 .ToListAsync();
             List<FoodDto> foodDtos = new List<FoodDto>();
             foods.ForEach(f => foodDtos.Add(_mapper.Map<FoodDto>(f)));

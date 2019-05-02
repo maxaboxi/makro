@@ -32,3 +32,7 @@ ul {
   cursor: pointer;
   color: #ff3b3f;
 }
+
+.badge:hover {
+  cursor: pointer;
+}

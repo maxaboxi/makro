@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DayService } from '../../../services/day.service';
 import { Day } from '../../../models/Day';
 import { AdminService } from '../../../services/admin.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -31,7 +30,6 @@ export class AdminDaysComponent implements OnInit {
   };
 
   constructor(
-    private dayService: DayService,
     private adminService: AdminService,
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
@@ -42,6 +40,10 @@ export class AdminDaysComponent implements OnInit {
     this.adminService.getAllSharedDays().subscribe(days => {
       this.sharedDays = JSON.parse(JSON.stringify(days));
     });
+    this.adminService.getMostRecentDays().subscribe(days => (this.days = days));
+  }
+
+  getAllDays() {
     this.adminService.getAllDays().subscribe(days => (this.days = days));
   }
 

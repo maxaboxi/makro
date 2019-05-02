@@ -1,6 +1,9 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <span class="badge badge-primary float-right mt-2" (click)="getAllDays()"
+        ><i class="fas fa-sync"></i> {{ 'FETCH_ALL' | translate }}</span
+      >
       <h2 class="h2 text-muted">{{ 'DAYS' | translate }} ({{ days?.length }})</h2>
       <app-data-list
         [data]="days"
@@ -30,16 +33,16 @@
 <ng-template #dayModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ selectedDay.name }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
       <h5 class="h5 text-muted" *ngIf="selectedDay.username">{{ 'CREATED_BY' | translate }}: {{ selectedDay.username }}</h5>
-      <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt"
-        >{{ 'CREATED_AT' | translate }}: {{ selectedDay.createdAt | date: 'dd.MM.yyyy' }}</h5
-      >
-      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt"
-        >{{ 'UPDATED_AT' | translate }}: {{ selectedDay.updatedAt | date: 'dd.MM.yyyy' }}
+      <h5 class="h5 text-muted" *ngIf="selectedDay.createdAt">
+        {{ 'CREATED_AT' | translate }}: {{ selectedDay.createdAt | date: 'dd.MM.yyyy' }}
+      </h5>
+      <h5 class="h5 text-muted" *ngIf="selectedDay.updatedAt">
+        {{ 'UPDATED_AT' | translate }}: {{ selectedDay.updatedAt | date: 'dd.MM.yyyy' }}
       </h5>
       <hr *ngIf="selectedDay.username || selectedDay.createdAt || selectedDay.updatedAt" />
       <div class="container">

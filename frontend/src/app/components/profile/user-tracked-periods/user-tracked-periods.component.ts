@@ -75,6 +75,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
                   name: '',
                   dayIds: []
                 };
+                this.addedDays = [];
                 this.getAllTrackedPeriods();
               }
             },
@@ -90,6 +91,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
             name: '',
             dayIds: []
           };
+          this.addedDays = [];
         }
       },
       dismissed => {
@@ -97,6 +99,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
           name: '',
           dayIds: []
         };
+        this.addedDays = [];
       }
     );
   }
@@ -106,7 +109,6 @@ export class UserTrackedPeriodsComponent implements OnInit {
     this.editing = true;
     const originalTrackedPeriod = { ...this.selectedTrackedPeriod };
     this.addedDays = JSON.parse(JSON.stringify(this.selectedTrackedPeriod.days));
-    console.log(this.addedDays);
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {

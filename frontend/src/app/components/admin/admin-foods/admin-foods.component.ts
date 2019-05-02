@@ -38,6 +38,10 @@ export class AdminFoodsComponent implements OnInit {
     this.adminService.getMostRecentFoods().subscribe(foods => (this.foods = foods));
   }
 
+  getAllFoods() {
+    this.adminService.getAllFoods().subscribe(foods => (this.foods = foods));
+  }
+
   searchFoods() {
     this.results = [];
     const secondaryResults = [];

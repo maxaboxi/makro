@@ -15,11 +15,20 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers() {
+  getMostRecentUsers() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/user`;
+
+    return this.http.get<User[]>(url, { headers: headers });
+  }
+
+  getAllUsers() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/user/all`;
 
     return this.http.get<User[]>(url, { headers: headers });
   }
@@ -66,11 +75,20 @@ export class AdminService {
     return this.http.post(url, user, { headers: headers });
   }
 
-  getAllDays() {
+  getMostRecentDays() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/day`;
+
+    return this.http.get<Day[]>(url, { headers: headers });
+  }
+
+  getAllDays() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/day/all`;
 
     return this.http.get<Day[]>(url, { headers: headers });
   }
@@ -154,6 +172,15 @@ export class AdminService {
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/food`;
+
+    return this.http.get<Food[]>(url, { headers: headers });
+  }
+
+  getAllFoods() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/food/all`;
 
     return this.http.get<Food[]>(url, { headers: headers });
   }

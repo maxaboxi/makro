@@ -4,6 +4,9 @@
 <div *ngIf="searchTerm.length === 0" class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+      <span class="badge badge-primary float-right mt-2" (click)="getAllFoods()"
+        ><i class="fas fa-sync"></i> {{ 'FETCH_ALL' | translate }}</span
+      >
       <h2 class="h2 text-muted">{{ 'FOODS' | translate }} ({{ foods?.length }})</h2>
       <app-data-list
         [data]="foods"

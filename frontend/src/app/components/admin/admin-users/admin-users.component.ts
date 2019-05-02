@@ -27,6 +27,10 @@ export class AdminUsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.adminService.getMostRecentUsers().subscribe(users => (this.users = users));
+  }
+
+  getAllUsers() {
     this.adminService.getAllUsers().subscribe(users => (this.users = users));
   }
 
