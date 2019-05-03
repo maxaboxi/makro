@@ -103,8 +103,18 @@ export class AdminService {
     return this.http.get<Day>(url, { headers: headers });
   }
 
-  getAllSharedDays() {
+  getMostRecentSharedDays() {
     const url = `${this.baseUrl}/day/shared`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(url, { headers: headers });
+  }
+
+  getAllSharedDays() {
+    const url = `${this.baseUrl}/day/shared/all`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

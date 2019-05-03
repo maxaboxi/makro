@@ -80,6 +80,12 @@ namespace Makro.Controllers
         }
 
         [HttpGet("day/shared")]
+        public async Task<ActionResult<IEnumerable<SharedDay>>> GetMostRecentSharedDays()
+        {
+            return await _adminService.GetMostRecentSharedDays();
+        }
+
+        [HttpGet("day/shared/all")]
         public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
         {
             return await _adminService.GetAllSharedDays();

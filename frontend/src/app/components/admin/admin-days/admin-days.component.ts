@@ -37,7 +37,7 @@ export class AdminDaysComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.adminService.getAllSharedDays().subscribe(days => {
+    this.adminService.getMostRecentSharedDays().subscribe(days => {
       this.sharedDays = JSON.parse(JSON.stringify(days));
     });
     this.adminService.getMostRecentDays().subscribe(days => (this.days = days));
@@ -45,6 +45,12 @@ export class AdminDaysComponent implements OnInit {
 
   getAllDays() {
     this.adminService.getAllDays().subscribe(days => (this.days = days));
+  }
+
+  getAllSharedDays() {
+    this.adminService.getAllSharedDays().subscribe(days => {
+      this.sharedDays = JSON.parse(JSON.stringify(days));
+    });
   }
 
   openDayModal(content, day) {

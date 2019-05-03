@@ -172,9 +172,16 @@ namespace Makro.Services
             return dayDto;
         }
 
+        public async Task<ActionResult<IEnumerable<SharedDay>>> GetMostRecentSharedDays()
+        {
+            return await _context.SharedDays.AsNoTracking()
+                .OrderByDescending(sd => sd.CreatedAt)
+                .Take(50)
+                .ToListAsync();
+        }
         public async Task<ActionResult<IEnumerable<SharedDay>>> GetAllSharedDays()
         {
-            return await _context.SharedDays.AsNoTracking().ToListAsync();
+            return await _context.SharedDays.AsNoTracking().OrderByDescending(sd => sd.CreatedAt).ToListAsync();
         }
 
         public ResultDto DeleteMultipleDays(List<string> dayIds)
