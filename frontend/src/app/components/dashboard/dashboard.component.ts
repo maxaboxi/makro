@@ -7,8 +7,6 @@ import { User } from '../../models/User';
 import { AddedFoodsService } from '../../services/added-foods.service';
 import { ActivatedRoute } from '@angular/router';
 import { DayService } from '../../services/day.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,9 +27,7 @@ export class DashboardComponent implements OnInit {
     private dayService: DayService,
     private auth: AuthService,
     private addedFoodService: AddedFoodsService,
-    private route: ActivatedRoute,
-    private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private route: ActivatedRoute
   ) {
     this.route.queryParams.subscribe(qp => {
       Object.keys(qp).forEach(param => {
@@ -54,6 +50,7 @@ export class DashboardComponent implements OnInit {
             if (res !== null) {
               localStorage.setItem('meals', JSON.stringify(res));
               this.addedFoodService.setMeals(res);
+              this.addedFoodService.setTotals();
             }
           },
           (error: Error) => console.log(error)
