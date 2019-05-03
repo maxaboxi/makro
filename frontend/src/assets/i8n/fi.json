@@ -322,5 +322,6 @@
   "DELETE_TRACKED_PERIOD": "Poista ajanjakso",
   "EDIT_TRACKED_PERIOD": "Muokkaa ajanjaksoa",
   "FETCH_ALL": "Hae kaikki",
-  "NO_SAVED_TRACKED_PERIODS": "Ei tallennettuja ajanjaksoja"
+  "NO_SAVED_TRACKED_PERIODS": "Ei tallennettuja ajanjaksoja",
+  "REGISTERED_AT": "Rekisteröitynyt"
 }

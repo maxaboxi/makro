@@ -29,6 +29,7 @@
             {{ selectedUser.username }}
             <span *ngIf="selectedUser.lastLogin">- {{ selectedUser.lastLogin | date: 'dd.MM.yyyy HH:mm:ss' }}</span>
           </p>
+          <p class="lead">{{ 'REGISTERED_AT' | translate }}: {{ selectedUser.createdAt | date: 'dd.MM.yyyy HH:mm:ss' }}</p>
         </div>
       </div>
       <form #editUserInformationForm="ngForm" (ngSubmit)="modal.close('save')">
