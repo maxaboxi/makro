@@ -4,6 +4,7 @@ import { FoodService } from '../../services/food.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
 import { UserStats } from '../../models/UserStats';
+import { DayService } from 'src/app/services/day.service';
 
 @Component({
   selector: 'app-about',
@@ -14,6 +15,7 @@ export class AboutComponent implements OnInit {
   showOlderUpdates = false;
   usersCount: number;
   foodsCount: number;
+  daysCount: number;
   loading = true;
   loadingStats = false;
   showStats = false;
@@ -22,6 +24,7 @@ export class AboutComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private foodService: FoodService,
+    private dayService: DayService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
@@ -32,7 +35,10 @@ export class AboutComponent implements OnInit {
         this.usersCount = res['amount'];
         this.foodService.getFoodsCount().subscribe(res => {
           this.foodsCount = res['amount'];
-          this.loading = false;
+          this.dayService.getSavedDaysCount().subscribe(res => {
+            this.daysCount = res['amount'];
+            this.loading = false;
+          });
         });
       },
       (error: Error) => {

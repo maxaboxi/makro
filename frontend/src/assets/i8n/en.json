@@ -323,5 +323,7 @@
   "EDIT_TRACKED_PERIOD": "Edit tracked time period",
   "FETCH_ALL": "Fetch all",
   "NO_SAVED_TRACKED_PERIODS": "I haven't saved any time periods for tracking",
-  "REGISTERED_AT": "Registered at"
+  "REGISTERED_AT": "Registered at",
+  "MAKRO_DAYS_AMOUNT": "The users of Makro have created",
+  "DAYS_ABOUT": "days"
 }

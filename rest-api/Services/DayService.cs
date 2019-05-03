@@ -243,5 +243,10 @@ namespace Makro.Services
 
             return new ResultDto(true, "Days deleted succesfully");
         }
+
+        public async Task<AmountDto> GetAmountOfSavedDays()
+        {
+            return new AmountDto(await _context.Days.CountAsync());
+        }
     }
 }

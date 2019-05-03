@@ -9,7 +9,7 @@
         <app-loading-spinner *ngIf="loading"></app-loading-spinner>
         <p *ngIf="!loading && usersCount && foodsCount" class="lead text-muted text-center">
           {{ usersCount }} {{ 'MAKRO_REGISTERED_USERS_AMOUNT' | translate }} {{ 'AND' | translate }} {{ foodsCount }}
-          {{ 'MAKRO_FOODS_AMOUNT' | translate }}.
+          {{ 'MAKRO_FOODS_AMOUNT' | translate }}. {{ 'MAKRO_DAYS_AMOUNT' | translate }} {{ daysCount }} {{ 'DAYS_ABOUT' | translate }}.
         </p>
         <p *ngIf="!loading && (!usersCount || !foodsCount)">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
       </div>
