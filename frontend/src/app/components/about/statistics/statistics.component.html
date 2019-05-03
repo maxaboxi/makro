@@ -2,17 +2,31 @@
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" *ngIf="!loading && usersCount && foodsCount && userStats">
       <app-loading-spinner *ngIf="loading"></app-loading-spinner>
-      <p class="lead text-center">
-        {{ 'STATS_USERS' | translate }}: {{ usersCount }} ({{ 'MAKRO_REGISTERED_USERS_MALE_AMOUNT' | translate }}:
-        {{ userStats.maleCount }}, {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }}: {{ userStats.femaleCount }})
-      </p>
-      <hr />
-      <p class="lead text-muted text-center">
-        {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} {{ userStats.averageHeight.toFixed(2) }} cm {{ 'AND' | translate }}
-        {{ 'MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT' | translate }} {{ userStats.averageWeight.toFixed(2) }} kg
-      </p>
-      <p class="lead text-center">{{ 'MAKRO_FOODS_AMOUNT' | translate }}: {{ foodsCount }}</p>
-      <p class="lead text-center">{{ 'MAKRO_DAYS_AMOUNT' | translate }} {{ daysCount }} {{ 'DAYS_ABOUT' | translate }}.</p>
+      <h2 class="h2 text-center">{{ 'STATISTICS' | translate }}</h2>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'STATS_USERS' | translate }} <span>{{ usersCount }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_REGISTERED_USERS_MALE_AMOUNT' | translate }} <span>{{ userStats.maleCount }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }} <span>{{ userStats.femaleCount }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} <span>{{ userStats.averageHeight.toFixed(2) }} cm</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT' | translate }} <span>{{ userStats.averageWeight.toFixed(2) }} kg</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_FOODS_AMOUNT' | translate }} <span>{{ foodsCount }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_DAYS_AMOUNT' | translate }} <span>{{ daysCount }} </span>
+        </li>
+      </ul>
+
       <p *ngIf="!loading && (!usersCount || !foodsCount || !userStats)">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
     </div>
   </div>
