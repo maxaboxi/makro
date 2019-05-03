@@ -130,8 +130,6 @@
   "ARTICLE_TITLE": "The title of the article",
   "MAKRO_INFO_TITLE": "Makro in a nutshell",
   "MAKRO_INFO_SUBTITLE": "If you have a problem or just want to say hello, feel free to contact me from",
-  "MAKRO_REGISTERED_USERS_AMOUNT": "registered users",
-  "MAKRO_FOODS_AMOUNT": "foods added to database",
   "AND": "and",
   "HERE": "here",
   "MAKRO_INFO_TEXT_PART_1": "Makro is free to use for each and everyone - now and always. The total cost for keeping Makro up and running is around 110 euros per year which are paid by me. Of the 110 euros, 50 is spent on email and the rest for the server. If you happen to have a PayPal account and want to help me with the costs related to Makro, you can do it from",
@@ -325,5 +323,10 @@
   "NO_SAVED_TRACKED_PERIODS": "I haven't saved any time periods for tracking",
   "REGISTERED_AT": "Registered at",
   "MAKRO_DAYS_AMOUNT": "The users of Makro have created",
-  "DAYS_ABOUT": "days"
+  "DAYS_ABOUT": "days",
+  "CHANGELOG": "Changelog",
+  "GEN_INFO": "General information",
+  "STATISTICS": "Statistics",
+  "STATS_USERS": "Registered users",
+  "MAKRO_FOODS_AMOUNT": "Foods added to database"
 }

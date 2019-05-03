@@ -130,8 +130,6 @@
   "ARTICLE_TITLE": "Otsikko",
   "MAKRO_INFO_TITLE": "Makro lyhyesti",
   "MAKRO_INFO_SUBTITLE": "Ongelmatilanteissa tai muissa asioissa apua saa",
-  "MAKRO_REGISTERED_USERS_AMOUNT": "rekisteröitynyttä käyttäjää",
-  "MAKRO_FOODS_AMOUNT": "ruokaa lisättynä tietokantaan",
   "AND": "ja",
   "HERE": "täältä",
   "MAKRO_INFO_TEXT_PART_1": "  Makro on ilmainen jokaiselle käyttäjälle - nyt ja aina. Ylläpitoa ei rahoiteta mainoksilla, vaan kaikki kustannukset (palvelin ~60€ / vuosi ja sähköposti ~50€ / vuosi) menevät minun omasta pussista. Jos sinulla on PayPal-tili ja haluat auttaa ylläpitokustannuksissa, voit tehdä lahjoituksen",
@@ -298,7 +296,7 @@
   "SHOW_USER_STATS": "Näytä tilastotietoa rekisteröityneistä käyttäjistä",
   "MAKRO_REGISTERED_USERS_MALE_AMOUNT": "Miehiä",
   "MAKRO_REGISTERED_USERS_FEMALE_AMOUNT": "naisia",
-  "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "Keskipituus on",
+  "MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT": "Käyttäjien keskipituus on",
   "MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT": "keskipaino on",
   "TRACKED_PERIOD": "Ajanjaksot",
   "ADD_TRACKED_PERIOD": "Lisää uusi seurattava ajanjakso",
@@ -325,5 +323,10 @@
   "NO_SAVED_TRACKED_PERIODS": "Ei tallennettuja ajanjaksoja",
   "REGISTERED_AT": "Rekisteröitynyt",
   "MAKRO_DAYS_AMOUNT": "Makron käyttäjät ovat luoneet yhteensä",
-  "DAYS_ABOUT": "päivää"
+  "DAYS_ABOUT": "päivää",
+  "CHANGELOG": "Muutosloki",
+  "GEN_INFO": "Yleistä",
+  "STATISTICS": "Tilastotietoa",
+  "STATS_USERS": "Rekisteröityneitä käyttäjiä",
+  "MAKRO_FOODS_AMOUNT": "Ruokia tietokannassa"
 }

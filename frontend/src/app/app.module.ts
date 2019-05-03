@@ -48,6 +48,9 @@ import { AdminFeedbacksComponent } from './components/admin/admin-feedbacks/admi
 import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 import { UserTrackedPeriodsComponent } from './components/profile/user-tracked-periods/user-tracked-periods.component';
 import { AdminTrackedPeriodsComponent } from './components/admin/admin-tracked-periods/admin-tracked-periods.component';
+import { ChangelogComponent } from './components/about/changelog/changelog.component';
+import { GeneralComponent } from './components/about/general/general.component';
+import { StatisticsComponent } from './components/about/statistics/statistics.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -88,7 +91,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     AdminFeedbacksComponent,
     ResetpasswordComponent,
     UserTrackedPeriodsComponent,
-    AdminTrackedPeriodsComponent
+    AdminTrackedPeriodsComponent,
+    ChangelogComponent,
+    GeneralComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,

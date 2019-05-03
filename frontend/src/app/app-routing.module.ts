@@ -26,6 +26,9 @@ import { UserLikesComponent } from './components/profile/user-likes/user-likes.c
 import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 import { UserTrackedPeriodsComponent } from './components/profile/user-tracked-periods/user-tracked-periods.component';
 import { AdminTrackedPeriodsComponent } from './components/admin/admin-tracked-periods/admin-tracked-periods.component';
+import { GeneralComponent } from './components/about/general/general.component';
+import { ChangelogComponent } from './components/about/changelog/changelog.component';
+import { StatisticsComponent } from './components/about/statistics/statistics.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -51,7 +54,15 @@ const routes: Routes = [
     component: SharedMealsComponent,
     canActivate: [AuthGuard]
   },
-  { path: 'about', component: AboutComponent },
+  {
+    path: 'about',
+    component: AboutComponent,
+    children: [
+      { path: '', component: GeneralComponent },
+      { path: 'stats', component: StatisticsComponent },
+      { path: 'changelog', component: ChangelogComponent }
+    ]
+  },
   {
     path: 'admin',
     component: AdminComponent,
