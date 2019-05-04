@@ -13,6 +13,7 @@ import { Meal } from '../../../models/Meal';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
 import { UserTargets } from 'src/app/models/UserTargets';
+import { StatisticsService } from 'src/app/services/statistics.service';
 
 declare var jsPDF: any;
 
@@ -65,7 +66,8 @@ export class ToolbarComponent implements OnInit {
     private addedFoodsService: AddedFoodsService,
     private auth: AuthService,
     private translate: TranslateService,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
+    private statisticsServcice: StatisticsService
   ) {}
 
   ngOnInit() {
@@ -271,45 +273,46 @@ export class ToolbarComponent implements OnInit {
   }
 
   createPdf() {
-    const d = new Date();
-    const date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()} - ${d.getHours()}.${d.getMinutes()}.${d.getSeconds()}`;
-    const doc = new jsPDF('p', 'pt');
-    const totalsTable = document.getElementById('totals');
-    const mealElement = document.getElementById('meals');
-    const foodTables = mealElement.getElementsByTagName('table');
+    const loaded = JSON.parse(localStorage.getItem('loadedDay'));
+    this.statisticsServcice.CreatePDF({ user: this.user.uuid, day: loaded }).subscribe(() => {
+      const doc = new jsPDF('p', 'pt');
+      const totalsTable = document.getElementById('totals');
+      const mealElement = document.getElementById('meals');
+      const foodTables = mealElement.getElementsByTagName('table');
 
-    const totals = doc.autoTableHtmlToJson(totalsTable);
-    totals.columns[0]['innerHTML'] = this.translate.instant('TOTAL');
-    if (totals.columns[7]) {
-      totals.columns[7]['innerHTML'] = this.translate.instant('AMOUNT');
-    } else {
-      totals.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
-    }
-    doc.autoTable(totals.columns, totals.data, {
-      startY: 30,
-      columnStyles: {
-        0: { columnWidth: 200, overflow: 'linebreak' }
-      }
-    });
-
-    Array.from(foodTables).forEach(t => {
-      const res = doc.autoTableHtmlToJson(t);
-      if (res.columns[5]) {
-        res.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
+      const totals = doc.autoTableHtmlToJson(totalsTable);
+      totals.columns[0]['innerHTML'] = this.translate.instant('TOTAL');
+      if (totals.columns[7]) {
+        totals.columns[7]['innerHTML'] = this.translate.instant('AMOUNT');
       } else {
-        res.columns[2]['innerHTML'] = this.translate.instant('AMOUNT');
+        totals.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
       }
-
-      const first = doc.autoTable.previous;
-      doc.autoTable(res.columns, res.data, {
-        startY: first.finalY + 10,
-        pageBreak: 'avoid',
+      doc.autoTable(totals.columns, totals.data, {
+        startY: 30,
         columnStyles: {
           0: { columnWidth: 200, overflow: 'linebreak' }
         }
       });
-    });
 
-    window.open(doc.output('bloburl'), '_blank');
+      Array.from(foodTables).forEach(t => {
+        const res = doc.autoTableHtmlToJson(t);
+        if (res.columns[5]) {
+          res.columns[5]['innerHTML'] = this.translate.instant('AMOUNT');
+        } else {
+          res.columns[2]['innerHTML'] = this.translate.instant('AMOUNT');
+        }
+
+        const first = doc.autoTable.previous;
+        doc.autoTable(res.columns, res.data, {
+          startY: first.finalY + 10,
+          pageBreak: 'avoid',
+          columnStyles: {
+            0: { columnWidth: 200, overflow: 'linebreak' }
+          }
+        });
+      });
+
+      window.open(doc.output('bloburl'), '_blank');
+    });
   }
 }

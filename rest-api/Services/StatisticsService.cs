@@ -1,6 +1,9 @@
 ﻿using Makro.DB;
 using Makro.DTO;
+using Makro.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,6 +30,24 @@ namespace Makro.Services
                 AverageHeight = await _context.Users.Where(u => u.Height > 0).Select(u => u.Height).AverageAsync(),
                 AverageWeight = await _context.Users.Where(u => u.Weight > 0).Select(u => u.Weight).AverageAsync()
             };
+        }
+
+        public async Task<ActionResult<ResultDto>> PdfCreated(UserPdfDto userPdfDto)
+        {
+            var user = await _context.Users.Where(u => u.UUID == userPdfDto.User).FirstOrDefaultAsync();
+            
+            await _context.UserPDFs.AddAsync(
+                new UserPDF {
+                    UUID = Guid.NewGuid().ToString(),
+                    User = user,
+                    Day = userPdfDto.Day != null ? await _context.Days.Where(d => d.UUID == userPdfDto.Day).FirstOrDefaultAsync() : null,
+                    CreatedAt = DateTime.Now
+                }
+            );
+
+            await _context.SaveChangesAsync();
+
+            return new ResultDto(true, "Stats updated");
         }
     }
 }
