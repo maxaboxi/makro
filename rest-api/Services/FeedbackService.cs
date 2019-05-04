@@ -38,8 +38,10 @@ namespace Makro.Services
                     AnsweredBy = f.AnsweredBy?.Username,
                     CreatedAt = f.CreatedAt,
                     UpdatedAt = f.UpdatedAt,
-                    AnsweredAt = f.AnsweredAt
+                    AnsweredAt = f.AnsweredAt,
+                    AnswerUpdatedAt = f.AnswerUpdatedAt
                 };
+
                 feedbackDtos.Add(feedbackDto);
             });
 

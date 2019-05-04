@@ -31,14 +31,18 @@
             <p class="text-muted">
               <span *ngIf="feedback.username === 'Nimetön'">{{ 'ANONYMOUS' | translate }}</span>
               <span *ngIf="feedback.username !== 'Nimetön'">{{ feedback.username }}</span>
-              <span *ngIf="feedback.createdAt"> @ {{ feedback.createdAt | date: 'dd.MM.yyyy' }}</span>
+              <span *ngIf="feedback.createdAt"> @ {{ feedback.createdAt | date: 'dd.MM.yyyy klo: hh:mm:ss' }}</span>
             </p>
           </div>
           <div class="card-footer" *ngIf="feedback.answer">
-            <h5 class="card-title text-muted">{{ 'ANSWER' | translate }}</h5> <p class="card-text" [innerHTML]="feedback.answer"></p>
+            <h5 class="card-title text-muted">{{ 'ANSWER' | translate }}</h5>
+            <p class="card-text" [innerHTML]="feedback.answer"></p>
             <p class="text-muted">
               <span>{{ feedback.answeredBy }}</span>
-              <span *ngIf="feedback.answeredAt"> @ {{ feedback.answeredAt | date: 'dd.MM.yyyy' }}</span>
+              <span *ngIf="feedback.answeredAt"> @ {{ feedback.answeredAt | date: 'dd.MM.yyyy klo: HH:mm:ss' }}</span>
+            </p>
+            <p class="text-muted" *ngIf="feedback.answerUpdatedAt > feedback.answeredAt">
+              {{ 'EDITED' | translate }}: {{ feedback.answerUpdatedAt | date: 'dd.MM.yyyy klo: HH:mm:ss' }}
             </p>
           </div>
         </div>
@@ -51,7 +55,7 @@
 <ng-template #feedbackModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'ADD_FEEDBACK' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -70,7 +74,7 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!feedbackForm.form.valid">

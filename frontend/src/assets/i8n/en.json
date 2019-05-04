@@ -329,5 +329,6 @@
   "STATISTICS": "Statistics",
   "STATS_USERS": "Registered users",
   "MAKRO_FOODS_AMOUNT": "Foods added to database",
-  "PDF_CREATED": "PDFs created"
+  "PDF_CREATED": "PDFs created",
+  "EDITED": "Last edit"
 }

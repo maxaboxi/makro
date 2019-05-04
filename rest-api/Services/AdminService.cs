@@ -73,7 +73,14 @@ namespace Makro.Services
             var feedback = await _context.Feedbacks.Where(f => f.UUID == feedbackDto.UUID).FirstOrDefaultAsync();
             if (feedback != null)
             {
-                feedback.AnsweredAt = DateTime.Now;
+                if (feedback.Answer != null)
+                {
+                    feedback.AnswerUpdatedAt = DateTime.Now;
+                } else
+                {
+                    feedback.AnsweredAt = DateTime.Now;
+                }
+                
                 feedback.Answer = feedbackDto.Answer;
                 feedback.AnsweredBy = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();
                 _context.Entry(feedback).State = EntityState.Modified;

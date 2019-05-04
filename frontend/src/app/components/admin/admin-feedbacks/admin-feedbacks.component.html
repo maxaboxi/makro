@@ -16,7 +16,7 @@
 <ng-template #feedbackModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'ADD_ANSWER' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -24,8 +24,8 @@
       <p>
         <span *ngIf="selectedFeedback.username !== 'Nimetön'">{{ selectedFeedback.username }}</span>
         <span *ngIf="selectedFeedback.username === 'Nimetön'">{{ 'ANONYMOUS' | translate }}</span> -
-        {{ selectedFeedback.createdAt | date: 'dd.MM.yyyy' }}</p
-      >
+        {{ selectedFeedback.createdAt | date: 'dd.MM.yyyy' }}
+      </p>
       <form #feedbackForm="ngForm" (ngSubmit)="modal.close('save')">
         <div class="form-group">
           <label for="feedbackAnswer">{{ 'ANSWER' | translate }}</label>
