@@ -124,11 +124,6 @@ namespace Makro.Services
             return new ResultDto(true, "Foods deleted succesfully");
         }
 
-        public async Task<AmountDto> GetAmountOfFoods()
-        {
-            return new AmountDto(await _context.Foods.CountAsync());
-        }
-
         public List<Food> MapFoodDtoListToFoodList(List<FoodDto> foodDtos)
         {
             List<Food> foods = new List<Food>();

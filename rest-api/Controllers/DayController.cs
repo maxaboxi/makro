@@ -17,13 +17,6 @@ namespace Makro.Controllers
             _dayService = dayService;
         }
 
-        [AllowAnonymous]
-        [HttpGet("amount")]
-        public async Task<AmountDto> GetAmountOfSavedDays()
-        {
-            return await _dayService.GetAmountOfSavedDays();
-        }
-
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser()
         {

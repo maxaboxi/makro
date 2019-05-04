@@ -39,6 +39,7 @@ namespace Makro
             services.AddScoped<FeedbackService>();
             services.AddScoped<LikeService>();
             services.AddScoped<TrackedPeriodService>();
+            services.AddScoped<StatisticsService>();
             services.AddAutoMapper();
             services.AddCors(options =>
             {

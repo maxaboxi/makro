@@ -20,13 +20,6 @@ namespace Makro.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("amount")]
-        public async Task<AmountDto> GetAmountOFoods()
-        {
-            return await _foodService.GetAmountOfFoods();
-        }
-
-        [AllowAnonymous]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<FoodDto>>> GetAllFoods()
         {

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { FoodService } from 'src/app/services/food.service';
-import { DayService } from 'src/app/services/day.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
-import { UserStats } from 'src/app/models/UserStats';
+import { Statistics } from 'src/app/models/Statistics';
+import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
   selector: 'app-statistics',
@@ -12,44 +10,21 @@ import { UserStats } from 'src/app/models/UserStats';
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit {
-  usersCount: number;
-  foodsCount: number;
-  daysCount: number;
   loading = true;
   loadingStats = false;
   showStats = false;
-  userStats: UserStats;
+  statistics: Statistics;
   constructor(
-    private auth: AuthService,
-    private foodService: FoodService,
-    private dayService: DayService,
+    private statisticsService: StatisticsService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
 
   ngOnInit() {
-    this.auth.getUsersCount().subscribe(
-      res => {
-        this.usersCount = res['amount'];
-        this.foodService.getFoodsCount().subscribe(res => {
-          this.foodsCount = res['amount'];
-          this.dayService.getSavedDaysCount().subscribe(res => {
-            this.daysCount = res['amount'];
-            this.auth.getUserStats().subscribe(
-              stats => {
-                this.userStats = stats;
-                this.loading = false;
-              },
-              (error: Error) => {
-                this.loading = false;
-                this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-                  cssClass: 'alert-danger',
-                  timeout: 2000
-                });
-              }
-            );
-          });
-        });
+    this.statisticsService.getStats().subscribe(
+      stats => {
+        this.statistics = stats;
+        this.loading = false;
       },
       (error: Error) => {
         this.loading = false;

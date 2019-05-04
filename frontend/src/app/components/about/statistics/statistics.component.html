@@ -1,33 +1,32 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" *ngIf="!loading && usersCount && foodsCount && userStats">
-      <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" *ngIf="!loading && statistics">
       <h2 class="h2 text-center">{{ 'STATISTICS' | translate }}</h2>
       <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'STATS_USERS' | translate }} <span>{{ usersCount }}</span>
+          {{ 'STATS_USERS' | translate }} <span>{{ statistics.users }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_REGISTERED_USERS_MALE_AMOUNT' | translate }} <span>{{ userStats.maleCount }}</span>
+          {{ 'MAKRO_REGISTERED_USERS_MALE_AMOUNT' | translate }} <span>{{ statistics.maleCount }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }} <span>{{ userStats.femaleCount }}</span>
+          {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }} <span>{{ statistics.femaleCount }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} <span>{{ userStats.averageHeight.toFixed(2) }} cm</span>
+          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} <span>{{ statistics.averageHeight.toFixed(2) }} cm</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT' | translate }} <span>{{ userStats.averageWeight.toFixed(2) }} kg</span>
+          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_WEIGHT' | translate }} <span>{{ statistics.averageWeight.toFixed(2) }} kg</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_FOODS_AMOUNT' | translate }} <span>{{ foodsCount }}</span>
+          {{ 'MAKRO_FOODS_AMOUNT' | translate }} <span>{{ statistics.foods }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ 'MAKRO_DAYS_AMOUNT' | translate }} <span>{{ daysCount }} </span>
+          {{ 'MAKRO_DAYS_AMOUNT' | translate }} <span>{{ statistics.days }} </span>
         </li>
       </ul>
-
-      <p *ngIf="!loading && (!usersCount || !foodsCount || !userStats)">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
     </div>
+    <p *ngIf="!loading && !statistics">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>
   </div>
 </div>

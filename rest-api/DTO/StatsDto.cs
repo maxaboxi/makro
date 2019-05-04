@@ -2,6 +2,9 @@
 {
     public class StatsDto
     {
+        public int Users { get; set; }
+        public int Foods { get; set; }
+        public int Days { get; set; }
         public int MaleCount { get; set; }
         public int FemaleCount { get; set; }
         public double AverageAge { get; set; }
