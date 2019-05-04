@@ -31,4 +31,14 @@ export class StatisticsService {
 
     return this.http.post(url, userPdf, { headers: headers });
   }
+
+  getAmountOfPdfCreatedByUser() {
+    const url = `${this.baseUrl}/user`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(url, { headers: headers });
+  }
 }

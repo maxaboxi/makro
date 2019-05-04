@@ -49,5 +49,10 @@ namespace Makro.Services
 
             return new ResultDto(true, "Stats updated");
         }
+
+        public async Task<AmountDto> GetAmoutOfPDFsCreatedByUser(string userId)
+        {
+            return new AmountDto(await _context.UserPDFs.Where(u => u.User.UUID == userId).CountAsync());
+        }
     }
 }

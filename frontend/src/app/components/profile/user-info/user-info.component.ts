@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
+import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
   selector: 'app-user-info',
@@ -22,6 +23,7 @@ export class UserInfoComponent implements OnInit {
   currentPassword;
   loading = true;
   online;
+  pdfsCreated = 0;
 
   constructor(
     private auth: AuthService,
@@ -29,7 +31,8 @@ export class UserInfoComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private translator: TranslateService,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
+    private statisticsService: StatisticsService
   ) {}
 
   ngOnInit() {
@@ -47,6 +50,7 @@ export class UserInfoComponent implements OnInit {
         });
       }
     );
+    this.statisticsService.getAmountOfPdfCreatedByUser().subscribe(res => (this.pdfsCreated = res['amount']));
   }
 
   calculateBaseExpenditure() {

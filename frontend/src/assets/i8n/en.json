@@ -328,5 +328,6 @@
   "GEN_INFO": "General information",
   "STATISTICS": "Statistics",
   "STATS_USERS": "Registered users",
-  "MAKRO_FOODS_AMOUNT": "Foods added to database"
+  "MAKRO_FOODS_AMOUNT": "Foods added to database",
+  "PDF_CREATED": "PDFs created"
 }

@@ -24,6 +24,7 @@
         <li class="list lead">
           <i class="fas fa-child"></i> {{ 'SEX' | translate }}: {{ (user.sex === 'mies' ? 'MALE' : 'FEMALE') | translate }}
         </li>
+        <li class="list lead"><i class="far fa-file-pdf"></i> {{ 'PDF_CREATED' | translate }}: {{ pdfsCreated }}</li>
         <li *ngIf="online" class="list lead">
           <span class="day-list-name" (click)="openChangePasswordModal(changePasswordModal)">
             <i class="fas fa-key"></i> {{ 'CHANGE_PASSWORD' | translate }}

@@ -33,6 +33,12 @@ namespace Makro.Controllers
             }
 
             return await _statisticsService.PdfCreated(userPdfDto);
-        } 
+        }
+        
+        [HttpGet("user")]
+        public async Task<AmountDto> GetAmoutOfPDFsCreatedByUser()
+        {
+            return await _statisticsService.GetAmoutOfPDFsCreatedByUser(HttpContext.User.Identity.Name);
+        }
     }
 }
