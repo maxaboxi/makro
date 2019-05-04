@@ -25,6 +25,9 @@
         <li class="list-group-item d-flex justify-content-between align-items-center">
           {{ 'MAKRO_DAYS_AMOUNT' | translate }} <span>{{ statistics.days }} </span>
         </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'PDF_CREATED' | translate }} <span>{{ statistics.pdf }} </span>
+        </li>
       </ul>
     </div>
     <p *ngIf="!loading && !statistics">{{ 'NETWORK_LOADING_ERROR' | translate }}</p>

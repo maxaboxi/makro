@@ -24,6 +24,7 @@ namespace Makro.Services
                 Users = await _context.Users.CountAsync(),
                 Foods = await _context.Foods.CountAsync(),
                 Days = await _context.Days.CountAsync(),
+                PDF = await _context.UserPDFs.CountAsync(),
                 MaleCount = await _context.Users.Where(u => u.Sex == "mies").CountAsync(),
                 FemaleCount = await _context.Users.Where(u => u.Sex == "nainen").CountAsync(),
                 AverageAge = await _context.Users.Where(u => u.Age > 0).Select(u => u.Age).AverageAsync(),
