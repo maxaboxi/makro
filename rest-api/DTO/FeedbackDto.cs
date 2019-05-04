@@ -14,5 +14,6 @@ namespace Makro.DTO
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime AnsweredAt { get; set; }
+        public DateTime AnswerUpdatedAt { get; set; }
     }
 }
