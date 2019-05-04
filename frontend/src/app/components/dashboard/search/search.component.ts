@@ -144,7 +144,7 @@ export class SearchComponent implements OnInit {
   selectFood(food) {
     const selection = {
       food: food,
-      amount: this.selectedAmount ? this.selectedAmount : 100,
+      amount: this.selectedAmount !== undefined ? this.selectedAmount : 100,
       meal: this.selectedMeal
     };
 

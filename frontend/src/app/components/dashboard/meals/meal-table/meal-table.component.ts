@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, DoCheck, IterableDiffers, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, DoCheck, IterableDiffers } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../../../../models/Food';
 import { Meal } from '../../../../models/Meal';
@@ -81,7 +81,6 @@ export class MealTableComponent implements OnInit, DoCheck {
     private modalService: NgbModal,
     private flashMessage: FlashMessagesService,
     private sharedMealsService: SharedMealsService,
-    private cdr: ChangeDetectorRef,
     private translator: TranslateService
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
@@ -125,7 +124,7 @@ export class MealTableComponent implements OnInit, DoCheck {
   }
 
   updateAmount(selectedFood, index) {
-    if (!this.newFoodAmount) {
+    if (this.newFoodAmount == null) {
       this.meal.foods[index].editing = false;
       return;
     }
