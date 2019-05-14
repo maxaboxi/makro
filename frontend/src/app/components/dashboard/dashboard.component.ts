@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn = false;
   queryParams = {};
   loading = true;
+  showSearch = true;
 
   constructor(
     private foodService: FoodService,

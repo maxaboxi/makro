@@ -10,7 +10,7 @@ export class TargetsComponent implements OnInit {
   targets;
   totals;
   caloriesLeft: Number;
-  showTargets;
+  showTargets: boolean;
 
   constructor(private addedFoodsService: AddedFoodsService) {}
 

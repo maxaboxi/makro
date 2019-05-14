@@ -330,5 +330,7 @@
   "STATS_USERS": "Rekisteröityneitä käyttäjiä",
   "MAKRO_FOODS_AMOUNT": "Ruokia tietokannassa",
   "PDF_CREATED": "PDF-tiedostoja luotu",
-  "EDITED": "Muokattu"
+  "EDITED": "Muokattu",
+  "SHOW_SEARCH": "Näytä haku",
+  "HIDE_SEARCH": "Piilota haku"
 }

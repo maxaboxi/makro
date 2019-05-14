@@ -330,5 +330,7 @@
   "STATS_USERS": "Registered users",
   "MAKRO_FOODS_AMOUNT": "Foods added to database",
   "PDF_CREATED": "PDFs created",
-  "EDITED": "Last edit"
+  "EDITED": "Last edit",
+  "SHOW_SEARCH": "Show search",
+  "HIDE_SEARCH": "Hide search"
 }

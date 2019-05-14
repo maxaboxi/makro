@@ -9,7 +9,6 @@ import { Day } from '../../../models/Day';
 import { BehaviorSubject } from 'rxjs';
 import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
-import { Meal } from '../../../models/Meal';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
 import { UserTargets } from 'src/app/models/UserTargets';
@@ -44,7 +43,8 @@ export class ToolbarComponent implements OnInit {
     username: ''
   };
   shareLink = '';
-  online;
+  online: boolean;
+  searchVisible = true;
 
   @Input()
   set user(user) {
@@ -54,6 +54,8 @@ export class ToolbarComponent implements OnInit {
   get user() {
     return this._user.getValue();
   }
+
+  @Output() hideSearch = new EventEmitter<any>();
 
   @ViewChild('addFoodForm')
   form: any;
@@ -314,5 +316,10 @@ export class ToolbarComponent implements OnInit {
 
       window.open(doc.output('bloburl'), '_blank');
     });
+  }
+
+  hideSearchBar() {
+    this.searchVisible = !this.searchVisible;
+    this.hideSearch.emit();
   }
 }

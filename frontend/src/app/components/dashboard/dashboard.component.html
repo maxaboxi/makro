@@ -1,12 +1,14 @@
 <div *ngIf="isLoggedIn" class="container mt-1 mb-3" style="min-width:90%">
-  <app-toolbar class="ml" (changed)="fetchFoods()" [user]="user"></app-toolbar>
+  <app-toolbar class="ml" (changed)="fetchFoods()" (hideSearch)="showSearch = !showSearch" [user]="user"></app-toolbar>
 </div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5" *ngIf="showSearch">
       <app-loading-spinner *ngIf="loading"></app-loading-spinner>
       <app-search *ngIf="!loading" [foods]="foods" [allFoods]="allFoods" [user]="user"></app-search>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-7"> <app-meals [foods]="allFoods" [user]="user"></app-meals> </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-7" [ngClass]="{ 'col-xl-12': !showSearch }">
+      <app-meals [foods]="allFoods" [user]="user"></app-meals>
+    </div>
   </div>
 </div>

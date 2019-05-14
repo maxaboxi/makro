@@ -6,6 +6,8 @@
     ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
+  <span *ngIf="searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</span>
+  <span *ngIf="!searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</span>
   <div class="ml-auto">
     <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
@@ -17,6 +19,8 @@
 <div class="row" *ngIf="!online">
   <span>{{ 'NO_CONNECTION' | translate }}</span>
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
+  <span *ngIf="searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</span>
+  <span *ngIf="!searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</span>
   <div class="ml-auto">
     <span *ngIf="showTargets && online" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
@@ -29,7 +33,7 @@
 <ng-template #addFood let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'ADD_FOOD' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -48,13 +52,13 @@
               [ngClass]="{ 'is-invalid': foodName.errors && foodName.touched }"
               required
             />
-            <div [hidden]="!foodName.errors?.required" class="invalid-feedback"> {{ 'FOOD_NAME_REQUIRED' | translate }} </div>
-            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback"> {{ 'FOOD_NAME_NOT_LONG_ENOUGH' | translate }} </div>
+            <div [hidden]="!foodName.errors?.required" class="invalid-feedback">{{ 'FOOD_NAME_REQUIRED' | translate }}</div>
+            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback">{{ 'FOOD_NAME_NOT_LONG_ENOUGH' | translate }}</div>
           </div>
         </div>
-        <div class="form-group"
-          ><p class="lead">{{ 'AMOUNT_PER_100_GRAMS' | translate }}</p></div
-        >
+        <div class="form-group">
+          <p class="lead">{{ 'AMOUNT_PER_100_GRAMS' | translate }}</p>
+        </div>
         <div class="form-group row">
           <label class="lead col-sm-4 col-form-label" for="foodEnergy">{{ 'ENERGY' | translate }}</label>
           <div class="col-sm-8">
@@ -70,7 +74,7 @@
               }"
               required
             />
-            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback"> {{ 'ENERGY_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback">{{ 'ENERGY_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -86,7 +90,7 @@
               [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
               required
             />
-            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback"> {{ 'FAT_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">{{ 'FAT_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -104,7 +108,7 @@
               }"
               required
             />
-            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback"> {{ 'CARBS_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback">{{ 'CARBS_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -122,7 +126,7 @@
               }"
               required
             />
-            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback"> {{ 'PROTEIN_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback">{{ 'PROTEIN_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -180,7 +184,7 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!addFoodForm.form.valid">
@@ -197,7 +201,7 @@
 <ng-template #dayName let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'SAVE_DAY' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -214,13 +218,13 @@
             minlength="3"
             required
           />
-          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback"> {{ 'NAME_REQUIRED' | translate }} </div>
-          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback"> N{{ 'NAME_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback">{{ 'NAME_REQUIRED' | translate }}</div>
+          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback">N{{ 'NAME_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!saveDayForm.form.valid">
@@ -237,7 +241,7 @@
 <ng-template #targetModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_TARGETS' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -261,7 +265,7 @@
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
               <button type="button" class="btn btn-primary btn-block" (click)="modal.close('reset')">
@@ -269,7 +273,7 @@
               </button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+              <button type="submit" class="btn btn-primary btn-block">{{ 'SAVE' | translate }}</button>
             </div>
           </div>
         </div>
@@ -281,7 +285,7 @@
 <ng-template #sharedDayModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'LINK' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -289,7 +293,7 @@
     </div>
     <div class="container text-center mt-3">
       <div class="row">
-        <div class="col"> <button type="button" class="btn btn-primary btn-block" (click)="modal.close('ok')"> OK </button> </div>
+        <div class="col"><button type="button" class="btn btn-primary btn-block" (click)="modal.close('ok')">OK</button></div>
       </div>
     </div>
   </div>
