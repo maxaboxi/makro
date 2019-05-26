@@ -33,6 +33,12 @@ namespace Makro.Controllers
             return await _trackedPeriodService.GetTrackedPeriodByUUID(periodId, HttpContext.User.Identity.Name);
         }
 
+        [HttpGet("single/7")]
+        public async Task<ActionResult<TrackedPeriodDto>> GetLastSevenDays()
+        {
+            return await _trackedPeriodService.GetLastSevenDayTotals(HttpContext.User.Identity.Name);
+        }
+
         [HttpPost("new")]
         public async Task<ResultDto> AddNewTrackedPeriod([FromBody]NewTrackedPeriodDto newTrackedPeriodDto)
         {

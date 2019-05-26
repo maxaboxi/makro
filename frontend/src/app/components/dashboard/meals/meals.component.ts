@@ -8,7 +8,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
 import { Day } from '../../../models/Day';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-meals',
@@ -27,6 +27,7 @@ export class MealsComponent implements OnInit {
     allMeals: null
   };
   dayName = '';
+  date: NgbDateStruct = null;
 
   @Input()
   set foods(foods) {
@@ -118,7 +119,8 @@ export class MealsComponent implements OnInit {
           const newDay: Day = {
             name: this.day.name,
             allMeals: meals,
-            userId: this.user.uuid
+            userId: this.user.uuid,
+            date: this.date !== null ? new Date(this.date.year, this.date.month - 1, this.date.day) : null
           };
           this.dayService.saveNewDay(newDay).subscribe(
             success => {

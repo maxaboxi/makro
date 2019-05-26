@@ -333,5 +333,9 @@
   "EDITED": "Muokattu",
   "SHOW_SEARCH": "Näytä haku",
   "HIDE_SEARCH": "Piilota haku",
-  "SAVE_AS_A_NEW_DAY": "Tallenna uutena päivänä"
+  "SAVE_AS_A_NEW_DAY": "Tallenna uutena päivänä",
+  "SHOW_LAST_SEVEN_DAYS": "Näytä viimeiset seitsemän päivää",
+  "LAST_SEVEN_DAYS": "Viimeiset 7 päivää",
+  "DATE": "Päivämäärä",
+  "DAY_DATE": "Suunniteltu ajankohta"
 }

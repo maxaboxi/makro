@@ -60,6 +60,36 @@ export class UserTrackedPeriodsComponent implements OnInit {
     );
   }
 
+  getLastSevenDays() {
+    this.loadingTrackedPeriod = true;
+    let found = false;
+    for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
+      if (this.fetchedTrackedPeriods[i].name === 'Last 7 days') {
+        found = true;
+        this.selectedTrackedPeriod = this.fetchedTrackedPeriods[i];
+        this.loadingTrackedPeriod = false;
+        break;
+      }
+    }
+
+    if (!found) {
+      this.trackedPeriodService.getLastSevenDays().subscribe(
+        res => {
+          this.selectedTrackedPeriod = res;
+          this.fetchedTrackedPeriods.push(res);
+          this.loadingTrackedPeriod = false;
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+          this.loadingTrackedPeriod = false;
+        }
+      );
+    }
+  }
+
   openModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {

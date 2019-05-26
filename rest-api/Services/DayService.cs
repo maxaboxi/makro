@@ -169,6 +169,7 @@ namespace Makro.Services
             day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
             day.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
             day.UpdatedAt = DateTime.Now;
+            day.Date = dayDto.Date == null && day.Date == null ? day.CreatedAt : dayDto.Date;
 
             _context.Entry(day).State = EntityState.Modified;
             await _context.SaveChangesAsync();

@@ -5,4 +5,5 @@ export interface Day {
   name?: string;
   allMeals: Meal[];
   userId: string;
+  date?: Date;
 }

@@ -333,5 +333,9 @@
   "EDITED": "Last edit",
   "SHOW_SEARCH": "Show search",
   "HIDE_SEARCH": "Hide search",
-  "SAVE_AS_A_NEW_DAY": "Save as a new day"
+  "SAVE_AS_A_NEW_DAY": "Save as a new day",
+  "SHOW_LAST_SEVEN_DAYS": "Show the last seven days",
+  "LAST_SEVEN_DAYS": "The last 7 days",
+  "DATE": "Date",
+  "DAY_DATE": "Planned date"
 }

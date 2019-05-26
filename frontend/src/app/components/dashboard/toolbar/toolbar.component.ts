@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { User } from '../../../models/User';
 import { FoodService } from '../../../services/food.service';
@@ -45,6 +45,7 @@ export class ToolbarComponent implements OnInit {
   shareLink = '';
   online: boolean;
   searchVisible = true;
+  date: NgbDateStruct = null;
 
   @Input()
   set user(user) {
@@ -69,7 +70,8 @@ export class ToolbarComponent implements OnInit {
     private auth: AuthService,
     private translate: TranslateService,
     private connectionService: ConnectionService,
-    private statisticsServcice: StatisticsService
+    private statisticsServcice: StatisticsService,
+    private calendar: NgbCalendar
   ) {}
 
   ngOnInit() {
@@ -151,7 +153,8 @@ export class ToolbarComponent implements OnInit {
           const newDay: Day = {
             name: this.day.name,
             allMeals: meals,
-            userId: this.user.uuid
+            userId: this.user.uuid,
+            date: this.date !== null ? new Date(this.date.year, this.date.month - 1, this.date.day) : null
           };
           this.dayService.saveNewDay(newDay).subscribe(
             success => {
@@ -321,5 +324,9 @@ export class ToolbarComponent implements OnInit {
   hideSearchBar() {
     this.searchVisible = !this.searchVisible;
     this.hideSearch.emit();
+  }
+
+  selectToday() {
+    this.date = this.calendar.getToday();
   }
 }

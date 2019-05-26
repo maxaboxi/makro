@@ -13,5 +13,6 @@ namespace Makro.DTO
         public List<MealDto> AllMeals { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

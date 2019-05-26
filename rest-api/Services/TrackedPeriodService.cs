@@ -59,7 +59,6 @@ namespace Makro.Services
 
             var tpDto = _mapper.Map<TrackedPeriodDto>(tp);
             var dayDtos = new List<DayDto>();
-            var mealDtos = new List<MealDto>();
 
             tp.TrackedPeriodDays.ToList().ForEach(tpd =>
             {
@@ -69,6 +68,49 @@ namespace Makro.Services
 
             tpDto.Days = dayDtos;
             return tpDto;
+        }
+
+        public async Task<ActionResult<TrackedPeriodDto>> GetLastSevenDayTotals(string userId)
+        {
+            var days = await _context.Days.Where(
+                d => d.User.UUID == userId &&
+                d.Date == null ? d.CreatedAt >= DateTime.Now.AddDays(-7)
+                : d.Date >= DateTime.Now.AddDays(-7)
+                )
+                .Include(d => d.User)
+                .Include(d => d.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.User)
+                .ToListAsync();
+
+            if (days != null)
+            {
+                var tp = new TrackedPeriod
+                {
+                    UUID = Guid.NewGuid().ToString(),
+                    Name = "Last 7 days",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    User = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync(),
+                };
+
+                tp = CalculateTotals(tp, days);
+
+                var tpDto = _mapper.Map<TrackedPeriodDto>(tp);
+                var dayDtos = new List<DayDto>();
+
+                days.ForEach(day =>
+                {
+                    var dayDto = _mapper.Map<DayDto>(day);
+                    dayDtos.Add(dayDto);
+                });
+
+                tpDto.Days = dayDtos;
+                return tpDto;
+            }
+
+            return new TrackedPeriodDto();
         }
 
         public async Task<ResultDto> AddNewTrackedPeriod(NewTrackedPeriodDto newTrackedPeriodDto, string userId)
