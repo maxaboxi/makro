@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AddedFoodsService } from '../../../../services/added-foods.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject } from 'rxjs';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-totals',
@@ -9,6 +11,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class TotalsComponent implements OnInit {
   totals;
+  _user = new BehaviorSubject<User>(null);
+
+  @Input()
+  set user(user) {
+    this._user.next(user);
+  }
+
+  get user() {
+    return this._user.getValue();
+  }
 
   constructor(private addedFoodsService: AddedFoodsService, private modalService: NgbModal) {}
 
@@ -19,7 +31,11 @@ export class TotalsComponent implements OnInit {
   }
 
   clearSelectedFoods() {
-    this.addedFoodsService.resetMeals();
+    if (this.user && this.user.meals) {
+      this.addedFoodsService.resetMeals(this.user.meals);
+    } else {
+      this.addedFoodsService.resetMeals(JSON.parse(localStorage.getItem('meals')));
+    }
   }
 
   openModal(content) {

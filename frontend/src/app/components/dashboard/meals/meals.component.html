@@ -1,5 +1,5 @@
 <app-targets></app-targets>
-<app-totals></app-totals>
+<app-totals [user]="user"></app-totals>
 <div class="row mb-1" *ngIf="openedSavedMeal && mealsEdited">
   <div class="col">
     <button class="btn btn-block btn-outline-success mb-1" (click)="saveEditedDay()" title="{{ 'SAVE_EDITED_DAY' | translate }}">

@@ -10,6 +10,7 @@ import { AddedFoodsService } from '../../../services/added-foods.service';
 import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DayName } from 'src/app/models/DayName';
+import { Meal } from 'src/app/models/Meal';
 
 @Component({
   selector: 'app-saved-days',
@@ -57,6 +58,21 @@ export class SavedDaysComponent implements OnInit {
   loadDay(index) {
     this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
       day => {
+        const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
+        userMeals.forEach(m => {
+          let found = false;
+          for (let i = 0; i < day.allMeals.length; i++) {
+            if (day.allMeals[i].name === m.name) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            day.allMeals.push(m);
+          }
+        });
+
         localStorage.setItem('meals', JSON.stringify(day.allMeals));
         localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
         this.addedFoodsService._mealsEdited.next(false);

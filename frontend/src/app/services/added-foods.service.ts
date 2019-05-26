@@ -39,8 +39,7 @@ export class AddedFoodsService {
     this.setTotals();
   }
 
-  resetMeals() {
-    const meals = this.getMeals();
+  resetMeals(meals: Meal[]) {
     meals.forEach(m => {
       m.foods = [];
     });

@@ -41,6 +41,7 @@ export class NavbarComponent implements OnInit {
     this.addedFoodsService.resetTotals();
     this.auth.logout();
     this.addedFoodsService.setMealsFromLocalStorage();
+    this.addedFoodsService._openedSavedMeal.next(false);
   }
 
   changeLanguage() {
