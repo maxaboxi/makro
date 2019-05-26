@@ -1,13 +1,17 @@
 <app-targets></app-targets>
 <app-totals></app-totals>
-<button
-  class="btn btn-block btn-outline-success mb-3"
-  *ngIf="openedSavedMeal && mealsEdited"
-  (click)="saveEditedDay()"
-  title="{{ 'SAVE_EDITED_DAY' | translate }}"
->
-  {{ 'SAVE_CHANGES' | translate }}
-</button>
+<div class="row mb-1" *ngIf="openedSavedMeal && mealsEdited">
+  <div class="col">
+    <button class="btn btn-block btn-outline-success mb-1" (click)="saveEditedDay()" title="{{ 'SAVE_EDITED_DAY' | translate }}">
+      {{ 'SAVE_CHANGES' | translate }}
+    </button>
+  </div>
+  <div class="col">
+    <button (click)="openSaveDayModal(dayName)" class="btn btn-block btn-outline-primary mb-1" title="{{ 'SAVE_EDITED_DAY' | translate }}">
+      {{ 'SAVE_AS_A_NEW_DAY' | translate }}
+    </button>
+  </div>
+</div>
 <div id="meals">
   <app-meal-table
     *ngFor="let meal of addedMeals; let i = index"
@@ -17,3 +21,43 @@
     [user]="user"
   ></app-meal-table>
 </div>
+
+<ng-template #dayName let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'SAVE_DAY' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <form #saveDayForm="ngForm" (ngSubmit)="modal.close('save')">
+        <div class="form-group">
+          <label for="nameOfDay">{{ 'NAME' | translate }}</label>
+          <input
+            type="text"
+            name="nameOfDay"
+            class="form-control"
+            #nameOfDay="ngModel"
+            [(ngModel)]="day.name"
+            [ngClass]="{ 'is-invalid': nameOfDay.errors && nameOfDay.touched }"
+            minlength="3"
+            required
+          />
+          <div [hidden]="!nameOfDay.errors?.required" class="invalid-feedback">{{ 'NAME_REQUIRED' | translate }}</div>
+          <div [hidden]="!nameOfDay.errors?.minlength" class="invalid-feedback">N{{ 'NAME_NOT_LONG_ENOUGH' | translate }}</div>
+        </div>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!saveDayForm.form.valid">
+                {{ 'SAVE' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

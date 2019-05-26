@@ -8,6 +8,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
 import { Day } from '../../../models/Day';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-meals',
@@ -20,6 +21,12 @@ export class MealsComponent implements OnInit {
   _user = new BehaviorSubject<User>(null);
   openedSavedMeal = false;
   mealsEdited = false;
+  day: Day = {
+    userId: '',
+    name: '',
+    allMeals: null
+  };
+  dayName = '';
 
   @Input()
   set foods(foods) {
@@ -43,7 +50,8 @@ export class MealsComponent implements OnInit {
     private addedFoodsService: AddedFoodsService,
     private dayService: DayService,
     private flashMessage: FlashMessagesService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -87,6 +95,55 @@ export class MealsComponent implements OnInit {
           cssClass: 'alert-danger',
           timeout: 2000
         });
+      }
+    );
+  }
+
+  openSaveDayModal(content) {
+    const meals = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded === 0) {
+      this.flashMessage.show(this.translator.instant('NO_FOODS_IN_MEALS_ERROR'), {
+        cssClass: 'alert-danger',
+        timeout: 2000
+      });
+      return;
+    }
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const newDay: Day = {
+            name: this.day.name,
+            allMeals: meals,
+            userId: this.user.uuid
+          };
+          this.dayService.saveNewDay(newDay).subscribe(
+            success => {
+              if (success) {
+                this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
+                  cssClass: 'alert-success',
+                  timeout: 2000
+                });
+                this.day.name = '';
+                this.addedFoodsService._mealsEdited.next(false);
+              }
+            },
+            (error: Error) => {
+              this.flashMessage.show(error['error'].msg, {
+                cssClass: 'alert-danger',
+                timeout: 2000
+              });
+            }
+          );
+        } else {
+          this.day.name = '';
+        }
+      },
+      dismissed => {
+        this.day.name = '';
       }
     );
   }

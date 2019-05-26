@@ -40,3 +40,7 @@ td {
   color: #ff3b3f;
   cursor: pointer;
 }
+
+.table {
+  margin-bottom: 0.4rem !important;
+}
