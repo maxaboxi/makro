@@ -22,8 +22,8 @@ export class TrackedPeriodService {
     return this.http.get<TrackedPeriod[]>(url, { headers: headers });
   }
 
-  getLastSevenDays() {
-    const url = `${this.baseUrl}/single/7`;
+  getLastSevenDays(includeCreatedAt: boolean) {
+    const url = `${this.baseUrl}/single/7/${includeCreatedAt}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

@@ -337,5 +337,7 @@
   "SHOW_LAST_SEVEN_DAYS": "Show the last seven days",
   "LAST_SEVEN_DAYS": "The last 7 days",
   "DATE": "Date",
-  "DAY_DATE": "Planned date"
+  "DAY_DATE": "Planned date",
+  "DONT_INCLUDE_CREATEDAT": "Include only days with planned date",
+  "INCLUDE_CREATEDAT": "Include both the creation date of the day and planned date of the day"
 }

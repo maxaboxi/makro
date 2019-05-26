@@ -337,5 +337,7 @@
   "SHOW_LAST_SEVEN_DAYS": "Näytä viimeiset seitsemän päivää",
   "LAST_SEVEN_DAYS": "Viimeiset 7 päivää",
   "DATE": "Päivämäärä",
-  "DAY_DATE": "Suunniteltu ajankohta"
+  "DAY_DATE": "Suunniteltu ajankohta",
+  "DONT_INCLUDE_CREATEDAT": "Vain annetun päivämäärän perusteella",
+  "INCLUDE_CREATEDAT": "Luomispäivämäärän ja annnetun päivämäärän mukaan"
 }

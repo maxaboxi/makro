@@ -70,9 +70,12 @@ namespace Makro.Services
             return tpDto;
         }
 
-        public async Task<ActionResult<TrackedPeriodDto>> GetLastSevenDayTotals(string userId)
+        public async Task<ActionResult<TrackedPeriodDto>> GetLastSevenDayTotals(string userId, bool includeCreatedAt)
         {
-            var days = await _context.Days.Where(
+            List<Day> days = new List<Day>();
+            if (includeCreatedAt)
+            {
+                days = await _context.Days.Where(
                 d => d.User.UUID == userId &&
                 d.Date == null ? d.CreatedAt >= DateTime.Now.AddDays(-7)
                 : d.Date >= DateTime.Now.AddDays(-7)
@@ -83,7 +86,20 @@ namespace Makro.Services
                         .ThenInclude(mf => mf.Food)
                             .ThenInclude(f => f.User)
                 .ToListAsync();
-
+            } else
+            {
+                days = await _context.Days.Where(
+                d => d.User.UUID == userId &&
+                d.Date != null  && d.Date >= DateTime.Now.AddDays(-7)
+                )
+                .Include(d => d.User)
+                .Include(d => d.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.User)
+                .ToListAsync();
+            }
+            
             if (days != null)
             {
                 var tp = new TrackedPeriod

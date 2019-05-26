@@ -33,6 +33,12 @@ namespace Makro.Services
             };
         }
 
+        public async void GetFoodStats()
+        {
+            var foods = await _context.MealFoods.Select(mf => mf.Food.Name).ToListAsync();
+            
+        }
+
         public async Task<ActionResult<ResultDto>> PdfCreated(UserPdfDto userPdfDto)
         {
             var user = await _context.Users.Where(u => u.UUID == userPdfDto.User).FirstOrDefaultAsync();

@@ -30,6 +30,7 @@ export class UserTrackedPeriodsComponent implements OnInit {
   trackedPeriodsDeleted = false;
   deletedTrackedPeriods: string[] = [];
   editing = false;
+  includeCreatedAt = false;
 
   constructor(
     private trackedPeriodService: TrackedPeriodService,
@@ -62,32 +63,19 @@ export class UserTrackedPeriodsComponent implements OnInit {
 
   getLastSevenDays() {
     this.loadingTrackedPeriod = true;
-    let found = false;
-    for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
-      if (this.fetchedTrackedPeriods[i].name === 'Last 7 days') {
-        found = true;
-        this.selectedTrackedPeriod = this.fetchedTrackedPeriods[i];
+    this.trackedPeriodService.getLastSevenDays(this.includeCreatedAt).subscribe(
+      res => {
+        this.selectedTrackedPeriod = res;
         this.loadingTrackedPeriod = false;
-        break;
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+        this.loadingTrackedPeriod = false;
       }
-    }
-
-    if (!found) {
-      this.trackedPeriodService.getLastSevenDays().subscribe(
-        res => {
-          this.selectedTrackedPeriod = res;
-          this.fetchedTrackedPeriods.push(res);
-          this.loadingTrackedPeriod = false;
-        },
-        (error: Error) => {
-          this.flashMessage.show(error['error'].msg, {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-          this.loadingTrackedPeriod = false;
-        }
-      );
-    }
+    );
   }
 
   openModal(content) {
