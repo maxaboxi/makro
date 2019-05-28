@@ -77,8 +77,11 @@ namespace Makro.Services
             {
                 days = await _context.Days.Where(
                 d => d.User.UUID == userId &&
-                d.Date == null ? d.CreatedAt >= DateTime.Now.AddDays(-7)
-                : d.Date >= DateTime.Now.AddDays(-7)
+                (
+                    (d.CreatedAt >= DateTime.Now.AddDays(-7) && d.CreatedAt <= DateTime.Now)
+                    ||
+                    (d.Date >= DateTime.Now.AddDays(-7) && d.Date <= DateTime.Now)
+                 )
                 )
                 .Include(d => d.User)
                 .Include(d => d.Meals)
@@ -89,8 +92,8 @@ namespace Makro.Services
             } else
             {
                 days = await _context.Days.Where(
-                d => d.User.UUID == userId &&
-                d.Date != null  && d.Date >= DateTime.Now.AddDays(-7)
+                d => d.User.UUID == userId 
+                && (d.Date >= DateTime.Now.AddDays(-7) && d.Date <= DateTime.Now)
                 )
                 .Include(d => d.User)
                 .Include(d => d.Meals)
@@ -100,7 +103,7 @@ namespace Makro.Services
                 .ToListAsync();
             }
             
-            if (days != null)
+            if (days.Count > 0)
             {
                 var tp = new TrackedPeriod
                 {
