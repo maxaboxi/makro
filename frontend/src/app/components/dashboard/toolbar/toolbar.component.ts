@@ -317,7 +317,8 @@ export class ToolbarComponent implements OnInit {
         });
       });
 
-      window.open(doc.output('bloburl'), '_blank');
+      // window.open(doc.output('bloburl'), '_blank');
+      doc.save();
     });
   }
 
