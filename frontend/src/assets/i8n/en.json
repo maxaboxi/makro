@@ -342,5 +342,6 @@
   "INCLUDE_CREATEDAT": "Include both the creation date of the day and planned date of the day",
   "MAKRO_REGISTERED_USERS_AVERAGE_AGE": "The average age",
   "TOP_FOODS": "The most popular foods",
-  "TOP_FOODS_INFO": "The number on right is the amount of times the food has been used in a meal plan."
+  "TOP_FOODS_INFO": "The number on right is the amount of times the food has been used in a meal plan.",
+  "STATS_USERS_LAST_WEEK": "Active users from the last seven days"
 }

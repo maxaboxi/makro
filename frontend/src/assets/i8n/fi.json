@@ -342,5 +342,6 @@
   "INCLUDE_CREATEDAT": "Luomispäivämäärän ja annnetun päivämäärän mukaan",
   "MAKRO_REGISTERED_USERS_AVERAGE_AGE": "Keski-ikä",
   "TOP_FOODS": "Suosituimmat ruoat",
-  "TOP_FOODS_INFO": "Oikealla oleva numero kertoo määrän montako kertaa ruokaa on käytetty ateriasuunnitelmassa."
+  "TOP_FOODS_INFO": "Oikealla oleva numero kertoo määrän montako kertaa ruokaa on käytetty ateriasuunnitelmassa.",
+  "STATS_USERS_LAST_WEEK": "Aktiivisia käyttäjiä viimeisen viikon aikana"
 }

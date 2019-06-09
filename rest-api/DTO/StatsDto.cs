@@ -5,6 +5,7 @@ namespace Makro.DTO
     public class StatsDto
     {
         public int Users { get; set; }
+        public int UserLoggedInTheLastSevenDays { get; set; }
         public int Foods { get; set; }
         public int Days { get; set; }
         public int PDF { get; set; }
