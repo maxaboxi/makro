@@ -339,5 +339,8 @@
   "DATE": "Päivämäärä",
   "DAY_DATE": "Suunniteltu ajankohta",
   "DONT_INCLUDE_CREATEDAT": "Vain annetun päivämäärän perusteella",
-  "INCLUDE_CREATEDAT": "Luomispäivämäärän ja annnetun päivämäärän mukaan"
+  "INCLUDE_CREATEDAT": "Luomispäivämäärän ja annnetun päivämäärän mukaan",
+  "MAKRO_REGISTERED_USERS_AVERAGE_AGE": "Keski-ikä",
+  "TOP_FOODS": "Suosituimmat ruoat",
+  "TOP_FOODS_INFO": "Oikealla oleva numero kertoo määrän montako kertaa ruokaa on käytetty ateriasuunnitelmassa."
 }

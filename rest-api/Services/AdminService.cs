@@ -245,7 +245,7 @@ namespace Makro.Services
         {
             var foods = await _context.Foods.AsNoTracking()
                 .Include(f => f.User)
-                .OrderBy(f => f.CreatedAt)
+                .OrderByDescending(f => f.CreatedAt)
                 .Take(50)
                 .ToListAsync();
             List<FoodDto> foodDtos = new List<FoodDto>();

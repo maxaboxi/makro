@@ -31,7 +31,7 @@
             <p class="text-muted">
               <span *ngIf="feedback.username === 'Nimetön'">{{ 'ANONYMOUS' | translate }}</span>
               <span *ngIf="feedback.username !== 'Nimetön'">{{ feedback.username }}</span>
-              <span *ngIf="feedback.createdAt"> @ {{ feedback.createdAt | date: 'dd.MM.yyyy klo: hh:mm:ss' }}</span>
+              <span *ngIf="feedback.createdAt"> @ {{ feedback.createdAt | date: 'dd.MM.yyyy klo: HH:mm:ss' }}</span>
             </p>
           </div>
           <div class="card-footer" *ngIf="feedback.answer">

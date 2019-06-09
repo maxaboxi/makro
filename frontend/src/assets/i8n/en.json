@@ -339,5 +339,8 @@
   "DATE": "Date",
   "DAY_DATE": "Planned date",
   "DONT_INCLUDE_CREATEDAT": "Include only days with planned date",
-  "INCLUDE_CREATEDAT": "Include both the creation date of the day and planned date of the day"
+  "INCLUDE_CREATEDAT": "Include both the creation date of the day and planned date of the day",
+  "MAKRO_REGISTERED_USERS_AVERAGE_AGE": "The average age",
+  "TOP_FOODS": "The most popular foods",
+  "TOP_FOODS_INFO": "The number on right is the amount of times the food has been used in a meal plan."
 }

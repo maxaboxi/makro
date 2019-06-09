@@ -4,6 +4,7 @@ using Makro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +30,8 @@ namespace Makro.Services
                 FemaleCount = await _context.Users.Where(u => u.Sex == "nainen").CountAsync(),
                 AverageAge = await _context.Users.Where(u => u.Age > 0).Select(u => u.Age).AverageAsync(),
                 AverageHeight = await _context.Users.Where(u => u.Height > 0).Select(u => u.Height).AverageAsync(),
-                AverageWeight = await _context.Users.Where(u => u.Weight > 0).Select(u => u.Weight).AverageAsync()
+                AverageWeight = await _context.Users.Where(u => u.Weight > 0).Select(u => u.Weight).AverageAsync(),
+                TopFoods = await GetFoodOccurences()
             };
         }
 
@@ -54,6 +56,40 @@ namespace Makro.Services
         public async Task<AmountDto> GetAmoutOfPDFsCreatedByUser(string userId)
         {
             return new AmountDto(await _context.UserPDFs.Where(u => u.User.UUID == userId).CountAsync());
+        }
+
+        private async Task<List<TopFoodsDto>> GetFoodOccurences()
+        {
+            var foods = await _context.MealFoods.Select(mf => mf.FoodId)
+                .GroupBy(mf => mf)
+                .OrderByDescending(f => f.Count())
+                .Take(10)
+                .ToListAsync();
+
+            var foodIds = new List<int>();
+
+            foreach (var f in foods)
+            {
+                foodIds.Add(f.Key);
+            }
+
+            var foodNames = await _context.Foods.Where(f => foodIds.Contains(f.Id))
+                .Select(f => new { f.Id, f.Name })
+                .ToListAsync();
+
+            var combined = new List<TopFoodsDto>();
+
+            foreach (var f in foodNames)
+            {
+                combined.Add(new TopFoodsDto {
+                    Name = f.Name,
+                    Count = foods.Where(tf => tf.Key == f.Id).Select(tf => tf.Count()).FirstOrDefault()
+                });
+            }
+
+            combined.Sort((n, c) => c.Count.CompareTo(n.Count));
+
+            return combined;
         }
     }
 }

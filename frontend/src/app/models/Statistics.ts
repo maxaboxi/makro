@@ -1,3 +1,5 @@
+import { TopFood } from './TopFood';
+
 export interface Statistics {
   users: number;
   foods: number;
@@ -8,4 +10,5 @@ export interface Statistics {
   averageAge: number;
   averageHeight: number;
   averageWeight: number;
+  topFoods: TopFood[];
 }

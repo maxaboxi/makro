@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-5">
   <div class="row justify-content-center">
     <app-loading-spinner *ngIf="loading"></app-loading-spinner>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" *ngIf="!loading && statistics">
@@ -14,6 +14,10 @@
           {{ 'MAKRO_REGISTERED_USERS_FEMALE_AMOUNT' | translate }} <span>{{ statistics.femaleCount }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'MAKRO_REGISTERED_USERS_AVERAGE_AGE' | translate }}
+          <span>{{ statistics.averageAge.toFixed(2) }} {{ 'YEARS' | translate }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
           {{ 'MAKRO_REGISTERED_USERS_AVERAGE_HEIGHT' | translate }} <span>{{ statistics.averageHeight.toFixed(2) }} cm</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -27,6 +31,14 @@
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
           {{ 'PDF_CREATED' | translate }} <span>{{ statistics.pdf }} </span>
+        </li>
+      </ul>
+
+      <h2 class="h2 text-center mt-3">{{ 'TOP_FOODS' | translate }}</h2>
+      <p class="text-center text-muted">{{ 'TOP_FOODS_INFO' | translate }}</p>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let food of statistics.topFoods">
+          {{ food.name }} <span>{{ food.count }}</span>
         </li>
       </ul>
     </div>

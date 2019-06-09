@@ -1,4 +1,6 @@
-﻿namespace Makro.DTO
+﻿using System.Collections.Generic;
+
+namespace Makro.DTO
 {
     public class StatsDto
     {
@@ -11,5 +13,6 @@
         public double AverageAge { get; set; }
         public decimal AverageHeight { get; set; }
         public decimal AverageWeight { get; set; }
+        public List<TopFoodsDto> TopFoods { get; set; }
     }
 }
