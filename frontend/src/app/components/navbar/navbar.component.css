@@ -1,9 +1,3 @@
-nav {
-  border-bottom: 2px solid rgba(194, 194, 194, 0.3);
-  -webkit-background-clip: padding-box; /* for Safari */
-  background-clip: padding-box;
-}
-
 .fas,
 .fab,
 .far {
@@ -13,10 +7,46 @@ a {
   color: #333 !important;
 }
 
-li:hover {
+a:hover {
+  cursor: pointer;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+p:hover {
   cursor: pointer;
 }
 
 img {
-  width: 1.7em;
+  width: 1.5em;
+}
+
+.mobile {
+  display: none;
+}
+
+.mainmenu {
+  width: 100%;
+}
+
+.mainmenu p {
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
+@media screen and (max-width: 570px) {
+  .mobile-hidden {
+    display: none;
+  }
+
+  .mobile {
+    display: inline;
+  }
+  .fa-sign-in-alt,
+  .fa-sign-out-alt,
+  .fa-user-plus {
+    font-size: 1.3rem;
+  }
 }
