@@ -28,6 +28,7 @@ export class MealsComponent implements OnInit {
   };
   dayName = '';
   date: NgbDateStruct = null;
+  previousFoodsInLocalStorage = false;
 
   @Input()
   set foods(foods) {
@@ -59,6 +60,7 @@ export class MealsComponent implements OnInit {
     this.addedFoodsService._meals.subscribe(meals => (this.addedMeals = meals));
     this.addedFoodsService._openedSavedMeal.subscribe(b => (this.openedSavedMeal = b));
     this.addedFoodsService._mealsEdited.subscribe(b => (this.mealsEdited = b));
+    this.addedFoodsService._previousMealsSavedToLocalStorage.subscribe(b => (this.previousFoodsInLocalStorage = b));
   }
 
   saveEditedDay() {
@@ -148,5 +150,15 @@ export class MealsComponent implements OnInit {
         this.day.name = '';
       }
     );
+  }
+
+  reloadPreviousFoods() {
+    this.addedFoodsService.setPreviousMealsFromLocalStorage();
+    this.deletePreviousFoods();
+  }
+
+  deletePreviousFoods() {
+    localStorage.removeItem('previousMeals');
+    this.addedFoodsService._previousMealsSavedToLocalStorage.next(false);
   }
 }

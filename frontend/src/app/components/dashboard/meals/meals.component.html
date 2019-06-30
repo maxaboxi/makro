@@ -1,4 +1,20 @@
 <app-targets></app-targets>
+<div class="row mb-1" *ngIf="openedSavedMeal && previousFoodsInLocalStorage">
+  <div class="col">
+    <button
+      class="btn btn-block btn-outline-primary mb-1"
+      (click)="reloadPreviousFoods()"
+      title="{{ 'RELOAD_PREVIOUS_FOODS' | translate }}"
+    >
+      {{ 'RELOAD_PREVIOUS_FOODS' | translate }}
+    </button>
+  </div>
+  <div class="col">
+    <button (click)="deletePreviousFoods()" class="btn btn-block btn-outline-danger mb-1" title="{{ 'FORGET_PREVIOUS_FOODS' | translate }}">
+      {{ 'FORGET_PREVIOUS_FOODS' | translate }}
+    </button>
+  </div>
+</div>
 <app-totals [user]="user"></app-totals>
 <div class="row mb-1" *ngIf="openedSavedMeal && mealsEdited">
   <div class="col">

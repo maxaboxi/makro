@@ -343,8 +343,9 @@
   "TOP_FOODS": "Suosituimmat ruoat",
   "TOP_FOODS_INFO": "Oikealla oleva numero kertoo määrän montako kertaa ruokaa on käytetty ateriasuunnitelmassa.",
   "STATS_USERS_LAST_WEEK": "Aktiivisia käyttäjiä viimeisen viikon aikana",
-  "RELOAD_PREVIOUS_FOOD": "Palauta aikaisemmat ruoat",
+  "RELOAD_PREVIOUS_FOODS": "Palauta aikaisemmat ruoat",
   "COMPARE_TO": "Vertaa..",
   "HOME": "Koti",
-  "TOOLS": "Työkalut"
+  "TOOLS": "Työkalut",
+  "FORGET_PREVIOUS_FOODS": "Unohda edelliset ruoat"
 }

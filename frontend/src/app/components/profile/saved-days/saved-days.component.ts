@@ -55,7 +55,17 @@ export class SavedDaysComponent implements OnInit {
     });
   }
 
-  loadDay(index) {
+  loadDay(index: number) {
+    const meals = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded > 0) {
+      localStorage.setItem('previousMeals', JSON.stringify(meals));
+      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
+    }
+
     this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
       day => {
         const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
@@ -89,7 +99,7 @@ export class SavedDaysComponent implements OnInit {
     );
   }
 
-  deleteDay(index) {
+  deleteDay(index: number) {
     this.deletedDays.push(this.savedDays[index].uuid);
     this.savedDays.splice(index, 1);
     this.daysDeleted = true;

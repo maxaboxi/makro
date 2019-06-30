@@ -11,6 +11,7 @@ export class AddedFoodsService {
   _showTargets = new BehaviorSubject<boolean>(true);
   _mealsEdited = new BehaviorSubject<boolean>(false);
   _openedSavedMeal = new BehaviorSubject<boolean>(false);
+  _previousMealsSavedToLocalStorage = new BehaviorSubject<boolean>(false);
   _meals = new BehaviorSubject<Meal[]>([]);
   _totals = new BehaviorSubject<any>({
     energy: 0,
@@ -35,6 +36,12 @@ export class AddedFoodsService {
 
   setMealsFromLocalStorage() {
     this._meals.next(JSON.parse(localStorage.getItem('meals')));
+    this.setTargets();
+    this.setTotals();
+  }
+
+  setPreviousMealsFromLocalStorage() {
+    this._meals.next(JSON.parse(localStorage.getItem('previousMeals')));
     this.setTargets();
     this.setTotals();
   }

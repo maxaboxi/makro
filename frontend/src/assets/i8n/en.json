@@ -14,7 +14,7 @@
   "SAVE_DAY": "Save the current day",
   "SHARE_DAY": "Share the current day",
   "SHOW_LINK": "Show generated link",
-  "CREATE_PDF": "Create a PDF from the current day",
+  "CREATE_PDF": "Create a PDF",
   "SHOW_TARGETS": "Show targets",
   "EDIT_TARGETS": "Edit targets",
   "HIDE_TARGETS": "Hide targets",
@@ -343,8 +343,9 @@
   "TOP_FOODS": "The most popular foods",
   "TOP_FOODS_INFO": "The number on right is the amount of times the food has been used in a meal plan.",
   "STATS_USERS_LAST_WEEK": "Active users from the last seven days",
-  "RELOAD_PREVIOUS_FOOD": "Reload previously planned foods",
+  "RELOAD_PREVIOUS_FOODS": "Reload previously planned foods",
   "COMPARE_TO": "Compare to..",
   "HOME": "Home",
-  "TOOLS": "Tools"
+  "TOOLS": "Tools",
+  "FORGET_PREVIOUS_FOODS": "Forget previously planned foods"
 }
