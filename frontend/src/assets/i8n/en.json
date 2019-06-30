@@ -1,5 +1,5 @@
 {
-  "MAKRO_TITLE": "Makro - Free calorie counter",
+  "MAKRO_TITLE": "Makro - A free calorie counter",
   "PROFILE": "Profile",
   "MEALS": "Meals",
   "FEEDBACK_NAV": "Feedbacks",
@@ -342,5 +342,9 @@
   "MAKRO_REGISTERED_USERS_AVERAGE_AGE": "The average age",
   "TOP_FOODS": "The most popular foods",
   "TOP_FOODS_INFO": "The number on right is the amount of times the food has been used in a meal plan.",
-  "STATS_USERS_LAST_WEEK": "Active users from the last seven days"
+  "STATS_USERS_LAST_WEEK": "Active users from the last seven days",
+  "RELOAD_PREVIOUS_FOOD": "Reload previously planned foods",
+  "COMPARE_TO": "Compare to..",
+  "HOME": "Home",
+  "TOOLS": "Tools"
 }

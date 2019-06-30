@@ -6,3 +6,26 @@
 span:hover {
   cursor: pointer;
 }
+
+.mobile {
+  display: none;
+}
+
+.toolbar-menu {
+  width: 100%;
+}
+
+.toolbar-menu p {
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
+@media screen and (max-width: 910px) {
+  .mobile-hidden {
+    display: none;
+  }
+
+  .mobile {
+    display: inline;
+  }
+}

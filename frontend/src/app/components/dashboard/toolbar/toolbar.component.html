@@ -1,8 +1,9 @@
-<div class="row" *ngIf="online">
-  <span (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}</span>
-  <span (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</span>
-  <span (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}</span>
-  <span *ngIf="shareLink.length > 0" (click)="openLinkModal(sharedDayModal)" class="ml-4"
+<div class="row mobile-hidden">
+  <span *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</span>
+  <span *ngIf="online" (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}</span>
+  <span *ngIf="online" (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</span>
+  <span *ngIf="online" (click)="generateLink(sharedDayModal)" class="ml-4"><i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}</span>
+  <span *ngIf="shareLink.length > 0 && online" (click)="openLinkModal(sharedDayModal)" class="ml-4"
     ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
@@ -16,13 +17,28 @@
     <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
   </div>
 </div>
-<div class="row" *ngIf="!online">
-  <span>{{ 'NO_CONNECTION' | translate }}</span>
-  <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
-  <span *ngIf="searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</span>
-  <span *ngIf="!searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</span>
-  <div class="ml-auto">
-    <span *ngIf="showTargets && online" (click)="openTargetModal(targetModal)" class="mr-2"
+<div class="row mobile">
+  <div class="d-inline-block" ngbDropdown #toolbarMenu="ngbDropdown">
+    <p class="lead mt-1" id="toolbarmenuDropdown" ngbDropdownAnchor (click)="toolbarMenu.open()">{{ 'TOOLS' | translate }}</p>
+    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="toolbarmenuDropdown">
+      <p ngbDropdownItem *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</p>
+      <p ngbDropdownItem *ngIf="online" (click)="openAddFoodModal(addFood)">
+        <i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}
+      </p>
+      <p ngbDropdownItem *ngIf="online" (click)="openSaveDayModal(dayName)"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</p>
+      <p ngbDropdownItem *ngIf="online" (click)="generateLink(sharedDayModal)">
+        <i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}
+      </p>
+      <p ngbDropdownItem *ngIf="shareLink.length > 0 && online" (click)="openLinkModal(sharedDayModal)">
+        <i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}
+      </p>
+      <p ngbDropdownItem (click)="createPdf()"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</p>
+      <p ngbDropdownItem *ngIf="searchVisible" (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</p>
+      <p ngbDropdownItem *ngIf="!searchVisible" (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</p>
+    </div>
+  </div>
+  <div class="float-right mt-2">
+    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
     >
     <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>
