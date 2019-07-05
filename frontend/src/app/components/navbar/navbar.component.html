@@ -1,18 +1,8 @@
-<nav class="container-fluid mt-1">
-  <div class="row justify-content-center">
-    <a *ngIf="isLoggedIn && lang === 'fi'" class="nav-link" (click)="changeLanguage()"
-      ><img src="../../assets/img/en.svg" alt="english"
-    /></a>
-    <a *ngIf="isLoggedIn && lang === 'en'" class="nav-link" (click)="changeLanguage()"
-      ><img src="../../assets/img/fi.svg" alt="finnish"
-    /></a>
-    <a *ngIf="!isLoggedIn" class="nav-link" routerLink="/login"
-      ><i class="fas fa-sign-in-alt"></i><span class="mobile-hidden"> {{ 'LOGIN' | translate }}</span></a
-    >
+<div class="container-fluid text-center">
+  <nav class="mobile-nav">
     <div class="d-inline-block" ngbDropdown #menu="ngbDropdown">
       <p class="lead mt-1" id="mainmenuDropdown" ngbDropdownAnchor (click)="menu.open()">
-        <span class="mobile-hidden">{{ 'MAKRO_TITLE' | translate }}</span
-        ><span class="mobile">Makro</span>
+        <span class="mobile">Makro</span>
       </p>
       <div class="mainmenu" ngbDropdownMenu aria-labelledby="mainmenuDropdown">
         <p ngbDropdownItem routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</p>
@@ -23,11 +13,35 @@
         <p ngbDropdownItem *ngIf="isAdmin" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</p>
       </div>
     </div>
-    <a *ngIf="isLoggedIn" (click)="logout()" class="nav-link"
-      ><i class="fas fa-sign-out-alt"></i><span class="mobile-hidden"> {{ 'LOGOUT' | translate }}</span></a
-    >
-    <a *ngIf="!isLoggedIn" class="nav-link" routerLink="/register"
-      ><i class="fas fa-user-plus"></i><span class="mobile-hidden"> {{ 'REGISTER' | translate }}</span></a
-    >
+  </nav>
+</div>
+
+<div id="menu-button"><i class="fas fa-bars"></i></div>
+<nav class="desktop-nav">
+  <div onclick="void(0)" class="home-text">
+    <a routerLink="/" class="makro-title">Makro</a>
+    <a *ngIf="isLoggedIn && lang === 'fi'" class="nav-link" (click)="changeLanguage()"
+      ><img src="../../assets/img/en.svg" alt="english"
+    /></a>
+    <a *ngIf="isLoggedIn && lang === 'en'" class="nav-link" (click)="changeLanguage()"
+      ><img src="../../assets/img/fi.svg" alt="finnish"
+    /></a>
   </div>
+  <ul class="menu">
+    <li routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</li>
+    <li *ngIf="isLoggedIn" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}</li>
+    <li *ngIf="isLoggedIn" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</li>
+    <li *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</li>
+    <li routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</li>
+    <li *ngIf="isAdmin" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</li>
+    <li *ngIf="isLoggedIn" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i><span class="mobile-hidden"> {{ 'LOGOUT' | translate }}</span>
+    </li>
+    <li *ngIf="!isLoggedIn" routerLink="/login">
+      <i class="fas fa-sign-in-alt"></i><span class="mobile-hidden"> {{ 'LOGIN' | translate }}</span>
+    </li>
+    <li *ngIf="!isLoggedIn" routerLink="/register">
+      <i class="fas fa-user-plus"></i><span class="mobile-hidden"> {{ 'REGISTER' | translate }}</span>
+    </li>
+  </ul>
 </nav>

@@ -1,7 +1,7 @@
 <div *ngIf="isLoggedIn" class="container mt-1 mb-3" style="min-width:90%">
   <app-toolbar class="ml" (changed)="fetchFoods()" (hideSearch)="showSearch = !showSearch" [user]="user"></app-toolbar>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" [ngClass]="{ 'mt-3': !isLoggedIn }">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5" *ngIf="showSearch">
       <app-loading-spinner *ngIf="loading"></app-loading-spinner>

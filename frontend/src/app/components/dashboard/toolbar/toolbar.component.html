@@ -1,4 +1,4 @@
-<div class="row mobile-hidden">
+<div class="row mobile-hidden mt-3">
   <span *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</span>
   <span *ngIf="online" (click)="openAddFoodModal(addFood)"><i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}</span>
   <span *ngIf="online" (click)="openSaveDayModal(dayName)" class="ml-4"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</span>

@@ -9,6 +9,7 @@ a {
 
 a:hover {
   cursor: pointer;
+  text-decoration: none;
 }
 
 p {
@@ -23,12 +24,9 @@ img {
   width: 1.5em;
 }
 
-.mobile {
-  display: none;
-}
-
 .mainmenu {
   width: 100%;
+  left: -43px !important;
 }
 
 .mainmenu p {
@@ -36,17 +34,109 @@ img {
   padding-left: 5px;
 }
 
-@media screen and (max-width: 570px) {
-  .mobile-hidden {
+.desktop-nav {
+  z-index: 2;
+  width: 240px;
+  height: 100%;
+  position: fixed;
+  background: #f3f3f3;
+  left: -240px;
+  top: 0;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.desktop-nav:hover,
+.desktop-nav:active {
+  left: 0;
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 240px;
+}
+
+.home-text {
+  top: 30%;
+  position: absolute;
+  margin-left: 80px;
+}
+
+.makro-title {
+  font-size: 1.2rem;
+}
+
+#menu-button {
+  position: fixed;
+  height: 100%;
+  text-align: center;
+  padding-left: 10px;
+  width: 40px;
+  z-index: 2;
+}
+
+#menu-button i {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#menu-button:hover ~ .desktop-nav {
+  left: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+li:hover {
+  color: #ff3b3f;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.mobile-nav {
+  display: none;
+}
+
+@media (max-height: 450px) {
+  .desktop-nav,
+  #menu-button {
     display: none;
   }
 
-  .mobile {
-    display: inline;
+  .mobile-nav {
+    display: inline-block;
   }
-  .fa-sign-in-alt,
-  .fa-sign-out-alt,
-  .fa-user-plus {
-    font-size: 1.3rem;
+}
+
+@media (max-width: 560px) {
+  .desktop-nav,
+  #menu-button {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 768px) and (max-height: 1024px) {
+  .desktop-nav,
+  #menu-button {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: inline-block;
   }
 }

@@ -44,6 +44,7 @@ export class AuthService {
     localStorage.removeItem('meals');
     localStorage.removeItem('loadedDay');
     localStorage.setItem('makro_lang', 'fi');
+    localStorage.removeItem('previousMeals');
     this.translator.use('fi');
     this.setDefaultUserInfo();
     this.isLoggedIn.next(false);
