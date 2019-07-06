@@ -29,6 +29,7 @@ import { AdminTrackedPeriodsComponent } from './components/admin/admin-tracked-p
 import { GeneralComponent } from './components/about/general/general.component';
 import { ChangelogComponent } from './components/about/changelog/changelog.component';
 import { StatisticsComponent } from './components/about/statistics/statistics.component';
+import { CompareMealPlansComponent } from './components/compare-meal-plans/compare-meal-plans.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -54,6 +55,7 @@ const routes: Routes = [
     component: SharedMealsComponent,
     canActivate: [AuthGuard]
   },
+  { path: 'compare', component: CompareMealPlansComponent, canActivate: [AuthGuard] },
   {
     path: 'about',
     component: AboutComponent,

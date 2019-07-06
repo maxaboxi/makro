@@ -23,7 +23,7 @@ export class DayService {
     return this.http.get<Day[]>(url, { headers: headers });
   }
 
-  getSavedDay(id) {
+  getSavedDay(id: string) {
     const url = `${this.baseUrl}/single/${id}`;
 
     const headers = new HttpHeaders({
@@ -31,6 +31,16 @@ export class DayService {
     });
 
     return this.http.get<Day>(url, { headers: headers });
+  }
+
+  getMultipleSavedDays(ids: string[]) {
+    const url = `${this.baseUrl}/multiple/`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Day[]>(url, ids, { headers: headers });
   }
 
   saveNewDay(day: Day) {

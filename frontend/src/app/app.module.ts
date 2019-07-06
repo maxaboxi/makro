@@ -51,6 +51,9 @@ import { AdminTrackedPeriodsComponent } from './components/admin/admin-tracked-p
 import { ChangelogComponent } from './components/about/changelog/changelog.component';
 import { GeneralComponent } from './components/about/general/general.component';
 import { StatisticsComponent } from './components/about/statistics/statistics.component';
+import { CompareMealPlansComponent } from './components/compare-meal-plans/compare-meal-plans.component';
+import { CompareMealTableComponent } from './components/compare-meal-plans/compare-meal-table/compare-meal-table.component';
+import { CompareTotalsComponent } from './components/compare-meal-plans/compare-totals/compare-totals.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -94,7 +97,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     AdminTrackedPeriodsComponent,
     ChangelogComponent,
     GeneralComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    CompareMealPlansComponent,
+    CompareMealTableComponent,
+    CompareTotalsComponent
   ],
   imports: [
     BrowserModule,

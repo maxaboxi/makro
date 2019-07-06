@@ -1,0 +1,22 @@
+.fa-caret-up:hover,
+.fa-caret-down:hover {
+  cursor: pointer;
+}
+
+.horizontal {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.horizontal .row {
+  flex-wrap: nowrap;
+}
+
+.horizontal .row .col-12 {
+  display: inline-block;
+  max-width: 750px;
+}
+
+.display-button:hover {
+  cursor: pointer;
+}

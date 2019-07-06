@@ -69,12 +69,12 @@ namespace Makro.Services
                 m.MealFoods.ToList().ForEach(mf => {
                     var foodDto = _mapper.Map<FoodDto>(mf.Food);
                     foodDto.Amount = mf.FoodAmount;
-                    foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
-                    foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
-                    foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
-                    foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
-                    foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
-                    foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
+                    foodDto.Energy *= (foodDto.Amount / 100);
+                    foodDto.Protein *= (foodDto.Amount / 100);
+                    foodDto.Carbs *= (foodDto.Amount / 100);
+                    foodDto.Fat *= (foodDto.Amount / 100);
+                    foodDto.Sugar *= (foodDto.Amount / 100);
+                    foodDto.Fiber *= (foodDto.Amount / 100);
                     foodDtos.Add(foodDto);
                   });
                 mealDto.Foods = foodDtos;
@@ -83,6 +83,55 @@ namespace Makro.Services
 
             dayDto.AllMeals = mealDtos;
             return dayDto;
+        }
+
+        public async Task<ActionResult<List<DayDto>>> GetMultipleDays(string[] dayIds, string userId)
+        {
+            var dayDtos = new List<DayDto>();
+            var days = await _context.Days.Where(d => dayIds.Contains(d.UUID) && d.User.UUID == userId)
+                .Include(d => d.User)
+                .Include(d => d.Meals)
+                    .ThenInclude(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.User)
+                .ToListAsync();
+
+            if (days != null)
+            {
+                days.ForEach(day =>
+                {
+                    var dayDto = _mapper.Map<DayDto>(day);
+
+                    var mealDtos = new List<MealDto>();
+
+                    day.Meals.ToList().ForEach(m =>
+                    {
+                        m.User = day.User;
+                        var mealDto = _mapper.Map<MealDto>(m);
+                        var foodDtos = new List<FoodDto>();
+                        m.MealFoods.ToList().ForEach(mf =>
+                        {
+                            var foodDto = _mapper.Map<FoodDto>(mf.Food);
+                            foodDto.Amount = mf.FoodAmount;
+                            foodDto.Energy *= (foodDto.Amount / 100);
+                            foodDto.Protein *= (foodDto.Amount / 100);
+                            foodDto.Carbs *= (foodDto.Amount / 100);
+                            foodDto.Fat *= (foodDto.Amount / 100);
+                            foodDto.Sugar *= (foodDto.Amount / 100);
+                            foodDto.Fiber *= (foodDto.Amount / 100);
+                            foodDtos.Add(foodDto);
+                        });
+                        mealDto.Foods = foodDtos;
+                        mealDtos.Add(mealDto);
+                    });
+
+                    dayDto.AllMeals = mealDtos;
+
+                    dayDtos.Add(dayDto);
+                });
+            }
+
+            return dayDtos;
         }
 
         public async Task<ActionResult<IEnumerable<MealDto>>> GetSharedDay(string dayId)

@@ -1,0 +1,71 @@
+table {
+  table-layout: fixed !important;
+}
+
+th {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 50px;
+}
+
+td {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 50px;
+}
+
+.t-head {
+  width: 300px;
+}
+
+.name {
+  overflow-y: scroll;
+  max-height: 30px;
+  word-break: break-all;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.bg-lb {
+  background: #edf4ff;
+}
+
+.drag:hover {
+  cursor: pointer;
+  background: #edf4ff;
+}
+
+.food-amount:hover {
+  cursor: pointer;
+}
+
+.fa-eraser:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
+@media screen and (max-width: 720px) {
+  .t-head {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .t-head {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .t-head {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .t-head {
+    width: 100px;
+  }
+}

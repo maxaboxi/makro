@@ -347,5 +347,10 @@
   "COMPARE_TO": "Compare to..",
   "HOME": "Home",
   "TOOLS": "Tools",
-  "FORGET_PREVIOUS_FOODS": "Forget previously planned foods"
+  "FORGET_PREVIOUS_FOODS": "Forget previously planned foods",
+  "COMPARE_MEALPLANS": "Compare mealplans",
+  "CURRENT_MEALPLAN": "Current mealplan",
+  "FETCH_SELECTED_MEALPLANS": "Fetch selected mealplans",
+  "HORIZONTAL_DISPLAY": "Horizontal display",
+  "VERTICAL_DISPLAY": "Vertical display"
 }

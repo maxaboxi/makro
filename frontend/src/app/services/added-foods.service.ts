@@ -3,6 +3,7 @@ import { Meal } from '../models/Meal';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from '../models/Food';
 import { AuthService } from './auth.service';
+import { Totals } from '../models/Totals';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AddedFoodsService {
   _openedSavedMeal = new BehaviorSubject<boolean>(false);
   _previousMealsSavedToLocalStorage = new BehaviorSubject<boolean>(false);
   _meals = new BehaviorSubject<Meal[]>([]);
-  _totals = new BehaviorSubject<any>({
+  _totals = new BehaviorSubject<Totals>({
     energy: 0,
     protein: 0,
     carb: 0,
@@ -124,6 +125,10 @@ export class AddedFoodsService {
   }
 
   getMeals() {
+    if (this._meals.getValue().length === 0) {
+      this.setMeals(JSON.parse(localStorage.getItem('meals')));
+    }
+
     return this._meals.getValue();
   }
 
@@ -226,5 +231,31 @@ export class AddedFoodsService {
         break;
       }
     }
+  }
+
+  calculateTotals(meals: Meal[]) {
+    const totals: Totals = {
+      energy: 0,
+      protein: 0,
+      carb: 0,
+      fat: 0,
+      fiber: 0,
+      sugar: 0,
+      amount: 0
+    };
+
+    meals.forEach(m => {
+      m.foods.forEach(f => {
+        totals.energy += f.energy;
+        totals.protein += f.protein;
+        totals.carb += f.carbs;
+        totals.fat += f.fat;
+        totals.fiber += f.fiber;
+        totals.sugar += f.sugar;
+        totals.amount += f.amount;
+      });
+    });
+
+    return totals;
   }
 }

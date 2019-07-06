@@ -1,0 +1,46 @@
+table {
+  table-layout: fixed !important;
+}
+
+th {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 30px;
+}
+
+td {
+  word-break: break-all;
+  overflow-y: scroll;
+  max-height: 30px;
+}
+
+.t-head {
+  min-width: 200px;
+}
+
+.name {
+  overflow-y: scroll;
+  max-height: 30px;
+  word-break: break-all;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.bg-lb {
+  background: #edf4ff;
+}
+
+.fiber {
+  background: #c09f80;
+}
+
+.fa-trash-alt:hover {
+  color: #ff3b3f;
+  cursor: pointer;
+}
+
+.table {
+  margin-bottom: 0.4rem !important;
+}

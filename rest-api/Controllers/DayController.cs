@@ -34,6 +34,12 @@ namespace Makro.Controllers
             return await _dayService.GetDay(dayId, HttpContext.User.Identity.Name);
         }
 
+        [HttpPost("multiple")]
+        public async Task<ActionResult<List<DayDto>>> GetMultipleDays([FromBody]string[] dayIds)
+        {
+            return await _dayService.GetMultipleDays(dayIds, HttpContext.User.Identity.Name);
+        }
+
         [HttpPost("new")]
         public async Task<IActionResult> AddNewDay([FromBody]DayDto dayDto)
         {

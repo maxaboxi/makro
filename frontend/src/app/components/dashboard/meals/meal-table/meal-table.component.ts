@@ -123,7 +123,7 @@ export class MealTableComponent implements OnInit, DoCheck {
     });
   }
 
-  updateAmount(selectedFood, index) {
+  updateAmount(selectedFood: Food, index: number) {
     if (this.newFoodAmount == null) {
       this.meal.foods[index].editing = false;
       return;

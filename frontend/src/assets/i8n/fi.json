@@ -347,5 +347,10 @@
   "COMPARE_TO": "Vertaa..",
   "HOME": "Koti",
   "TOOLS": "Työkalut",
-  "FORGET_PREVIOUS_FOODS": "Unohda edelliset ruoat"
+  "FORGET_PREVIOUS_FOODS": "Unohda edelliset ruoat",
+  "COMPARE_MEALPLANS": "Vertaile ateriasuunnitelmia",
+  "CURRENT_MEALPLAN": "Nykyinen ateriasuunnitelma",
+  "FETCH_SELECTED_MEALPLANS": "Hae valitut ateriasuunnitelmat",
+  "HORIZONTAL_DISPLAY": "Listaa sivusuunnassa",
+  "VERTICAL_DISPLAY": "Listaa pystysuunnassa"
 }

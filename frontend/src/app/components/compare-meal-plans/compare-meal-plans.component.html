@@ -1,0 +1,64 @@
+<div class="container mt-3">
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+  <div class="row justify-content-center">
+    <div class="col-8 text-center">
+      <h2 class="h2">
+        {{ 'COMPARE_MEALPLANS' | translate }}
+        <i *ngIf="showDayList" (click)="showDayList = !showDayList" class="fas fa-caret-up"></i>
+        <i *ngIf="!showDayList" (click)="showDayList = !showDayList" class="fas fa-caret-down"></i>
+      </h2>
+      <p class="subtitle display-button" (click)="verticalDisplay = !verticalDisplay" *ngIf="fetchedDays.length > 1">
+        <span *ngIf="verticalDisplay">{{ 'HORIZONTAL_DISPLAY' | translate }}</span>
+        <span *ngIf="!verticalDisplay">{{ 'VERTICAL_DISPLAY' | translate }}</span>
+      </p>
+      <h2 class="h2" *ngIf="!loading && savedDays.length === 0">{{ 'NO_SAVED_DAYS' | translate }}</h2>
+    </div>
+  </div>
+  <div *ngIf="!loading && showDayList" class="row mt-2 justify-content-center">
+    <div class="col-5">
+      <form>
+        <div class="form-check" *ngFor="let d of savedDaysFirst">
+          <input type="checkbox" class="form-check-input" (change)="selectDay($event.target, d.uuid)" />
+          <div class="form-check-label">{{ d.name }}</div>
+        </div>
+        <div class="form-check" *ngIf="savedDays.length % 2 === 0 && currentlyPlannedMeals">
+          <input type="checkbox" class="form-check-input" (change)="selectDay($event.target, 'current')" />
+          <div class="form-check-label">{{ 'CURRENT_MEALPLAN' | translate }}</div>
+        </div>
+      </form>
+    </div>
+    <div class="col-5">
+      <form>
+        <div class="form-check" *ngFor="let day of savedDaysSecond">
+          <input type="checkbox" class="form-check-input" (change)="selectDay($event.target, day.uuid)" />
+          <div class="form-check-label">{{ day.name }}</div>
+        </div>
+        <div class="form-check" *ngIf="savedDays.length % 2 !== 0 && currentlyPlannedMeals">
+          <input type="checkbox" class="form-check-input" (change)="selectDay($event.target, 'current')" />
+          <div class="form-check-label">{{ 'CURRENT_MEALPLAN' | translate }}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-2" *ngIf="selectedDayIds.length > 1">
+    <button class="btn btn-outline-primary" (click)="fetchSelectedMealplans()">{{ 'FETCH_SELECTED_MEALPLANS' | translate }}</button>
+  </div>
+</div>
+<div class="container-fluid mt-2" *ngIf="fetchedDays.length > 1 && !loading && verticalDisplay">
+  <div class="row">
+    <div class="col-12" *ngFor="let fetchedDay of fetchedDays">
+      <h2 class="h2 text-center">{{ fetchedDay.name }}</h2>
+      <app-compare-totals [totals]="calculateDayTotals(fetchedDay)"></app-compare-totals>
+      <app-compare-meal-table *ngFor="let meal of fetchedDay.allMeals" [meal]="meal" [foods]="foods" [user]="user"></app-compare-meal-table>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt-2 horizontal" *ngIf="fetchedDays.length > 1 && !loading && !verticalDisplay">
+  <div class="row">
+    <div class="col-12" *ngFor="let fetchedDay of fetchedDays" [ngStyle]="fetchedDays.length === 2 && { 'max-width': '50% !important' }">
+      <h2 class="h2 text-center">{{ fetchedDay.name }}</h2>
+      <app-compare-totals [totals]="calculateDayTotals(fetchedDay)"></app-compare-totals>
+      <app-compare-meal-table *ngFor="let meal of fetchedDay.allMeals" [meal]="meal" [foods]="foods" [user]="user"></app-compare-meal-table>
+    </div>
+  </div>
+</div>

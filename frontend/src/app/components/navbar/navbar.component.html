@@ -7,6 +7,9 @@
       <div class="mainmenu" ngbDropdownMenu aria-labelledby="mainmenuDropdown">
         <p ngbDropdownItem routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</p>
         <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}</p>
+        <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/compare">
+          <i class="fas fa-not-equal"></i> {{ 'COMPARE_MEALPLANS' | translate }}
+        </p>
         <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</p>
         <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</p>
         <p ngbDropdownItem routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</p>
@@ -30,6 +33,7 @@
   <ul class="menu">
     <li routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</li>
     <li *ngIf="isLoggedIn" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}</li>
+    <li *ngIf="isLoggedIn" routerLink="/compare"><i class="fas fa-not-equal"></i> {{ 'COMPARE_MEALPLANS' | translate }}</li>
     <li *ngIf="isLoggedIn" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</li>
     <li *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</li>
     <li routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</li>

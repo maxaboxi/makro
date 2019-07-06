@@ -3,6 +3,7 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/User';
+import { Totals } from 'src/app/models/Totals';
 
 @Component({
   selector: 'app-totals',
@@ -10,7 +11,7 @@ import { User } from 'src/app/models/User';
   styleUrls: ['./totals.component.css']
 })
 export class TotalsComponent implements OnInit {
-  totals;
+  totals: Totals;
   _user = new BehaviorSubject<User>(null);
 
   @Input()
