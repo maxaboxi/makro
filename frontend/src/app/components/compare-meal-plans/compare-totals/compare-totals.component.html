@@ -1,32 +1,30 @@
 <table class="table table-sm table-responsive-xs mt-2">
   <thead>
     <tr class="text-center">
-      <th class="t-head bg-lb" scope="row" title="{{ 'TOTAL' | translate }}">
-        <div class="name lead"><i class="fas fa-equals"></i></div>
+      <th scope="col" class="d-none d-sm-table-cell bg-light t-head" title="{{ 'SUGAR' | translate }}">
+        {{ 'SUGAR_ABBREVIATION_BOTH' | translate }}
+      </th>
+      <th scope="col" class="d-none d-sm-table-cell bg-light t-head" title="{{ 'FIBER' | translate }}">
+        {{ 'FIBER_ABBREVIATION_BOTH' | translate }}
       </th>
       <th scope="col" class="table-success" title="{{ 'PROTEIN' | translate }}">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}</th>
       <th scope="col" class="table-primary" title="{{ 'CARBS' | translate }}">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}</th>
       <th scope="col" class="table-danger" title="{{ 'FAT' | translate }}">{{ 'FAT_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-secondary d-none d-sm-table-cell" title="{{ 'SUGAR' | translate }}">
-        {{ 'SUGAR_ABBREVIATION_BOTH' | translate }}
-      </th>
-      <th scope="col" class="fiber d-none d-sm-table-cell" title="{{ 'FIBER' | translate }}">
-        {{ 'FIBER_ABBREVIATION_BOTH' | translate }}
-      </th>
       <th scope="col" class="table-warning">{{ 'KCAL' | translate }}</th>
       <th scope="col" title="{{ 'AMOUNT' | translate }}"><i class="fas fa-weight"></i></th>
     </tr>
     <tr class="text-center">
-      <th class="t-head bg-light lead" scope="row">
-        <div class="name"></div>
+      <th scope="col" class="align-middle d-none d-sm-table-cell t-head" title="{{ 'SUGAR' | translate }}">
+        {{ totals.sugar.toFixed(0) }} g
       </th>
-      <th scope="col" class="table-success align-middle" title="Proteiini">{{ totals.protein.toFixed(0) }} g</th>
-      <th scope="col" class="table-primary align-middle" title="Hiilihydraatti">{{ totals.carb.toFixed(0) }} g</th>
-      <th scope="col" class="table-danger align-middle" title="Rasva">{{ totals.fat.toFixed(0) }} g</th>
-      <th scope="col" class="table-secondary align-middle d-none d-sm-table-cell" title="Sokeri">{{ totals.sugar.toFixed(0) }} g</th>
-      <th scope="col" class="fiber align-middle d-none d-sm-table-cell" title="Kuitu">{{ totals.fiber.toFixed(0) }} g</th>
-      <th scope="col" class="table-warning align-middle">{{ totals.energy.toFixed(0) }}</th>
-      <th scope="col" class="align-middle">{{ totals.amount.toFixed(0) }} g</th>
+      <th scope="col" class="align-middle d-none d-sm-table-cell t-head" title="{{ 'FIBER' | translate }}">
+        {{ totals.fiber.toFixed(0) }} g
+      </th>
+      <th scope="col" class="table-success align-middle" title="{{ 'PROTEIN' | translate }}">{{ totals.protein.toFixed(0) }} g</th>
+      <th scope="col" class="table-primary align-middle" title="{{ 'CARBS' | translate }}">{{ totals.carb.toFixed(0) }} g</th>
+      <th scope="col" class="table-danger align-middle" title="{{ 'FAT' | translate }}">{{ totals.fat.toFixed(0) }} g</th>
+      <th scope="col" class="table-warning align-middle" title="{{ 'KCAL' | translate }}">{{ totals.energy.toFixed(0) }}</th>
+      <th scope="col" class="align-middle" title="{{ 'AMOUNT' | translate }}">{{ totals.amount.toFixed(0) }} g</th>
     </tr>
   </thead>
 </table>

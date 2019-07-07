@@ -44,3 +44,31 @@ td {
 .table {
   margin-bottom: 0.4rem !important;
 }
+
+.t-head {
+  width: 150px;
+}
+
+@media screen and (max-width: 720px) {
+  .t-head {
+    width: 75px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .t-head {
+    width: 125px;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .t-head {
+    width: 75px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .t-head {
+    width: 50px;
+  }
+}

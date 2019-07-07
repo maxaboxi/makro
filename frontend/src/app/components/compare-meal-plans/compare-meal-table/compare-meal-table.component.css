@@ -41,7 +41,7 @@ td {
   cursor: pointer;
 }
 
-.fa-eraser:hover {
+.fa-times:hover {
   cursor: pointer;
   color: #ff3b3f;
 }

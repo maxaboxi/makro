@@ -1,34 +1,32 @@
 <table *ngIf="meal?.foods.length > 0" class="table table-sm table-responsive-xs" (drop)="drop($event)" (dragover)="allowDrop($event)">
   <thead>
     <tr class="text-center">
-      <th class="t-head bg-lb lead" scope="row">
-        <div class="name">
-          <i
-            *ngIf="user && user.username"
-            (click)="openShareMealModal(shareMealModal)"
-            class="fas fa-share float-left mt-2"
-            title="{{ 'SHARE_MEAL_FOR_OTHERS' | translate }}"
-          ></i>
-          {{ 'MEAL' | translate }}
-        </div>
-      </th>
-      <th scope="col" class="table-success d-none d-sm-table-cell">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-primary d-none d-sm-table-cell">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-danger d-none d-sm-table-cell">{{ 'FAT_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-warning">{{ 'KCAL' | translate }}</th> <th scope="col" title="Määrä"> <i class="fas fa-weight"></i> </th>
-    </tr>
-    <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
         <div class="name">
           <i class="far fa-copy float-left mt-2" title="{{ 'COPY_FOOD_TEXT' | translate }}" (click)="openCopyFoodModal(copyFoodModal)"></i>
-          {{ meal.name }}</div
-        >
+
+          {{ meal.name }}
+          <i
+            *ngIf="user && user.username"
+            (click)="openShareMealModal(shareMealModal)"
+            class="fas fa-share float-right mt-2"
+            title="{{ 'SHARE_MEAL_FOR_OTHERS' | translate }}"
+          ></i>
+        </div>
       </th>
-      <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-primary align-middle d-none d-sm-table-cell">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-danger align-middle d-none d-sm-table-cell">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g </th>
-      <th scope="col" class="table-warning align-middle">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
-      <th scope="col" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" title="{{ 'PROTEIN' | translate }}" class="table-success align-middle d-none d-sm-table-cell">
+        {{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'CARBS' | translate }}" class="table-primary align-middle d-none d-sm-table-cell">
+        {{ carbTotal ? carbTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'FAT' | translate }}" class="table-danger align-middle d-none d-sm-table-cell">
+        {{ fatTotal ? fatTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'KCAL' | translate }}" class="table-warning align-middle">
+        {{ energyTotal ? energyTotal.toFixed(0) : 0 }} {{ 'KCAL' | translate }}
+      </th>
+      <th scope="col" title="{{ 'AMOUNT' | translate }}" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
     </tr>
   </thead>
   <tbody>
@@ -52,7 +50,7 @@
         <span class="food-amount" (click)="food.editing = true" title="{{ 'EDIT_FOOD_AMOUNT_TEXT' | translate }}"
           >{{ food.amount.toFixed(0) }} g</span
         >
-        <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
+        <i class="fas fa-times ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
@@ -74,7 +72,7 @@
 <ng-template #shareMealModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'SHARE_MEAL_FOR_OTHERS' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -91,8 +89,8 @@
             minlength="3"
             required
           />
-          <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback"> {{ 'NAME_REQUIRED' | translate }} </div>
-          <div [hidden]="!nameOfMeal.errors?.minlength" class="invalid-feedback"> {{ 'NAME_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!nameOfMeal.errors?.required" class="invalid-feedback">{{ 'NAME_REQUIRED' | translate }}</div>
+          <div [hidden]="!nameOfMeal.errors?.minlength" class="invalid-feedback">{{ 'NAME_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="form-group">
           <label for="description">{{ 'MORE_INFO_ABOUT_MEAL' | translate }}</label>
@@ -119,7 +117,7 @@
             minlength="3"
             (keyup)="addTagToSharedMealTags($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> {{ 'TAG_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">{{ 'TAG_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="container text-center">
           <div class="row">
@@ -145,7 +143,7 @@
 <ng-template #copyFoodModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'COPY_FOOD_TEXT' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="form-group mt-2">

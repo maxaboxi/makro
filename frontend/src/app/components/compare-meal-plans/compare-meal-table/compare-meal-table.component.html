@@ -1,28 +1,24 @@
 <table *ngIf="meal?.foods.length > 0" class="table table-sm table-responsive-xs">
   <thead>
     <tr class="text-center">
-      <th class="t-head bg-lb lead" scope="row">
-        <div class="name">
-          {{ 'MEAL' | translate }}
-        </div>
-      </th>
-      <th scope="col" class="table-success d-none d-sm-table-cell">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-primary d-none d-sm-table-cell">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-danger d-none d-sm-table-cell">{{ 'FAT_ABBREVIATION_BOTH' | translate }}</th>
-      <th scope="col" class="table-warning">{{ 'KCAL' | translate }}</th>
-      <th scope="col" title="Määrä"><i class="fas fa-weight"></i></th>
-    </tr>
-    <tr class="text-center">
       <th class="t-head bg-light lead" scope="row">
         <div class="name">
           {{ meal.name }}
         </div>
       </th>
-      <th scope="col" class="table-success align-middle d-none d-sm-table-cell">{{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-primary align-middle d-none d-sm-table-cell">{{ carbTotal ? carbTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-danger align-middle d-none d-sm-table-cell">{{ fatTotal ? fatTotal.toFixed(0) : 0 }} g</th>
-      <th scope="col" class="table-warning align-middle">{{ energyTotal ? energyTotal.toFixed(0) : 0 }}</th>
-      <th scope="col" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
+      <th scope="col" title="{{ 'PROTEIN' | translate }}" class="table-success align-middle d-none d-sm-table-cell">
+        {{ proteinTotal ? proteinTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'CARBS' | translate }}" class="table-primary align-middle d-none d-sm-table-cell">
+        {{ carbTotal ? carbTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'FAT' | translate }}" class="table-danger align-middle d-none d-sm-table-cell">
+        {{ fatTotal ? fatTotal.toFixed(0) : 0 }} g
+      </th>
+      <th scope="col" title="{{ 'KCAL' | translate }}" class="table-warning align-middle">
+        {{ energyTotal ? energyTotal.toFixed(0) : 0 }} {{ 'KCAL' | translate }}
+      </th>
+      <th scope="col" title="{{ 'AMOUNT' | translate }}" class="align-middle">{{ amountTotal ? amountTotal.toFixed(0) : 0 }} g</th>
     </tr>
   </thead>
   <tbody>
@@ -38,7 +34,7 @@
         <span class="food-amount" (click)="food.editing = true" title="{{ 'EDIT_FOOD_AMOUNT_TEXT' | translate }}"
           >{{ food.amount.toFixed(0) }} g</span
         >
-        <i class="fas fa-eraser ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
+        <i class="fas fa-times ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
       </td>
       <td class="align-middle" *ngIf="food.editing">
         <div class="form-group">
