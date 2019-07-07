@@ -29,7 +29,7 @@
   "CARBS": "Carbohydrates",
   "FIBER": "Fiber",
   "SUGAR": "Sugar",
-  "PORTION_SIZE": "Portion size",
+  "SERVING_SIZE": "Portion size",
   "PACKAGE_SIZE": "Package size",
   "FOOD_NAME": "Name of the food",
   "FOOD_NAME_REQUIRED": "Name of the food is required information",

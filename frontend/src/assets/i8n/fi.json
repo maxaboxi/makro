@@ -29,7 +29,7 @@
   "CARBS": "Hiilihydraatit",
   "FIBER": "Ravintokuidut",
   "SUGAR": "Sokerit",
-  "PORTION_SIZE": "Annoskoko",
+  "SERVING_SIZE": "Annoskoko",
   "PACKAGE_SIZE": "Pakkauskoko",
   "FOOD_NAME": "Ruoan nimi",
   "FOOD_NAME_REQUIRED": "Ruoan nimi vaaditaan",

@@ -30,9 +30,9 @@
 
   <div class="row justify-content-center" *ngIf="foodsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">{{
-        'SAVE_CHANGES' | translate
-      }}</button>
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteFoodsFromDb()">
+        {{ 'SAVE_CHANGES' | translate }}
+      </button>
       <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
@@ -41,7 +41,7 @@
 <ng-template #foodModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_FOOD' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -60,8 +60,8 @@
               [ngClass]="{ 'is-invalid': foodName.errors && foodName.touched }"
               required
             />
-            <div [hidden]="!foodName.errors?.required" class="invalid-feedback"> {{ 'FOOD_NAME_REQUIRED' | translate }} </div>
-            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback"> {{ 'FOOD_NAME_NOT_LONG_ENOUGH' | translate }} </div>
+            <div [hidden]="!foodName.errors?.required" class="invalid-feedback">{{ 'FOOD_NAME_REQUIRED' | translate }}</div>
+            <div [hidden]="!foodName.errors?.minlength" class="invalid-feedback">{{ 'FOOD_NAME_NOT_LONG_ENOUGH' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -77,7 +77,7 @@
               [ngClass]="{ 'is-invalid': foodEnergy.errors && foodEnergy.touched }"
               required
             />
-            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback"> {{ 'ENERGY_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodEnergy.errors?.required" class="invalid-feedback">{{ 'ENERGY_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -93,7 +93,7 @@
               [ngClass]="{ 'is-invalid': foodFat.errors && foodFat.touched }"
               required
             />
-            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback"> {{ 'FAT_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodFat.errors?.required" class="invalid-feedback">{{ 'FAT_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -109,7 +109,7 @@
               [ngClass]="{ 'is-invalid': foodCarbs.errors && foodCarbs.touched }"
               required
             />
-            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback"> {{ 'CARBS_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodCarbs.errors?.required" class="invalid-feedback">{{ 'CARBS_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -125,7 +125,7 @@
               [ngClass]="{ 'is-invalid': foodProtein.errors && foodProtein.touched }"
               required
             />
-            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback"> {{ 'PROTEIN_REQUIRED' | translate }} </div>
+            <div [hidden]="!foodProtein.errors?.required" class="invalid-feedback">{{ 'PROTEIN_REQUIRED' | translate }}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -155,7 +155,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="lead col-sm-4 col-form-label" for="foodServingSize">{{ 'PORTION_SIZE' | translate }}</label>
+          <label class="lead col-sm-4 col-form-label" for="foodServingSize">{{ 'SERVING_SIZE' | translate }}</label>
           <div class="col-sm-8">
             <input
               type="number"
