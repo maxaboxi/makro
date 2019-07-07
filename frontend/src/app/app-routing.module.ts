@@ -5,8 +5,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { AdminComponent } from './components/admin/admin.component';
@@ -30,11 +28,12 @@ import { GeneralComponent } from './components/about/general/general.component';
 import { ChangelogComponent } from './components/about/changelog/changelog.component';
 import { StatisticsComponent } from './components/about/statistics/statistics.component';
 import { CompareMealPlansComponent } from './components/compare-meal-plans/compare-meal-plans.component';
+import { LoginRegisterComponent } from './components/login-register/login-register.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginRegisterComponent },
+  { path: 'register', component: LoginRegisterComponent },
   { path: 'resetpassword', component: ResetpasswordComponent },
   {
     path: 'profile',

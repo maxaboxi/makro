@@ -46,7 +46,7 @@ namespace Makro.Services
                 return new ResultDto(false, "Username is already taken");
             }
 
-            if (_context.Users.Any(u => u.Email == user.Email))
+            if (user.Email != null && _context.Users.Any(u => u.Email == user.Email))
             {
                 return new ResultDto(false, "Email is already taken");
             }
@@ -57,6 +57,7 @@ namespace Makro.Services
                 user.UUID = Guid.NewGuid().ToString();
                 user.CreatedAt = DateTime.Now;
                 user.UpdatedAt = DateTime.Now;
+                user.Lang = "fi";
                 _context.Add(user);
 
                 await _context.SaveChangesAsync();
@@ -78,6 +79,10 @@ namespace Makro.Services
                 if (ValidatePassword(login.Password, foundUser.Password))
                 {
                     foundUser.LastLogin = DateTime.Now;
+                    if (foundUser.Lang == null)
+                    {
+                        foundUser.Lang = "fi";
+                    }
                     await UpdateLastLogin(foundUser);
                     return foundUser;
                 }

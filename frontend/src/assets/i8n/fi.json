@@ -352,5 +352,9 @@
   "CURRENT_MEALPLAN": "Nykyinen ateriasuunnitelma",
   "FETCH_SELECTED_MEALPLANS": "Hae valitut ateriasuunnitelmat",
   "HORIZONTAL_DISPLAY": "Listaa sivusuunnassa",
-  "VERTICAL_DISPLAY": "Listaa pystysuunnassa"
+  "VERTICAL_DISPLAY": "Listaa pystysuunnassa",
+  "LOGIN_WELCOME_BACK": "Tervetuloa takaisin",
+  "LOGIN_INFO": "Kirjaudu sisään syöttämällä tietosi",
+  "REGISTER_HELLO": "Moi!",
+  "REGISTER_ENTER_DETAILS": "Rekisteröidy niin saat käyttöösi kaikki Makron ominaisuudet"
 }

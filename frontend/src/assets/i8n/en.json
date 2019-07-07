@@ -352,5 +352,9 @@
   "CURRENT_MEALPLAN": "Current mealplan",
   "FETCH_SELECTED_MEALPLANS": "Fetch selected mealplans",
   "HORIZONTAL_DISPLAY": "Horizontal display",
-  "VERTICAL_DISPLAY": "Vertical display"
+  "VERTICAL_DISPLAY": "Vertical display",
+  "LOGIN_WELCOME_BACK": "Welcome back",
+  "LOGIN_INFO": "Login by entering your account information",
+  "REGISTER_HELLO": "Hello!",
+  "REGISTER_ENTER_DETAILS": "You'll unlock all the features by registering"
 }

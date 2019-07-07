@@ -35,7 +35,7 @@ img {
 }
 
 .desktop-nav {
-  z-index: 2;
+  z-index: 10;
   width: 240px;
   height: 100%;
   position: fixed;
@@ -80,7 +80,7 @@ img {
   text-align: center;
   padding-left: 10px;
   width: 40px;
-  z-index: 2;
+  z-index: 10;
 }
 
 #menu-button i {

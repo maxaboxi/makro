@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +15,6 @@ import { AuthInterceptor } from './auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/dashboard/search/search.component';
 import { AdminComponent } from './components/admin/admin.component';
@@ -54,6 +53,7 @@ import { StatisticsComponent } from './components/about/statistics/statistics.co
 import { CompareMealPlansComponent } from './components/compare-meal-plans/compare-meal-plans.component';
 import { CompareMealTableComponent } from './components/compare-meal-plans/compare-meal-table/compare-meal-table.component';
 import { CompareTotalsComponent } from './components/compare-meal-plans/compare-totals/compare-totals.component';
+import { LoginRegisterComponent } from './components/login-register/login-register.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i8n/', '.json');
@@ -63,8 +63,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     DashboardComponent,
-    LoginComponent,
-    RegisterComponent,
     NavbarComponent,
     SearchComponent,
     AdminComponent,
@@ -100,11 +98,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     StatisticsComponent,
     CompareMealPlansComponent,
     CompareMealTableComponent,
-    CompareTotalsComponent
+    CompareTotalsComponent,
+    LoginRegisterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     NgbModule.forRoot(),

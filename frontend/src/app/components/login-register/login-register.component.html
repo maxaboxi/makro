@@ -1,0 +1,241 @@
+<div class="page">
+  <div class="page-container" id="container">
+    <div class="form-container sign-in-container" [@signInAnimation]="currentState">
+      <form #loginForm="ngForm" (ngSubmit)="submitLoginForm(loginForm)">
+        <label class="lead" for="username">{{ 'USERNAME_OR_EMAIL' | translate }}</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="{{ 'USERNAME_OR_EMAIL' | translate }}"
+          minlength="2"
+          [(ngModel)]="loginUser.username"
+          #userUsername="ngModel"
+          [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+          required
+        />
+        <div [hidden]="!userUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
+        <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback">{{ 'USERNAME_NOT_LONG_ENOUGH' | translate }}</div>
+        <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="{{ 'PASSWORD' | translate }}"
+          [(ngModel)]="loginUser.password"
+          #userPassword="ngModel"
+          [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+          required
+        />
+        <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
+        <button type="submit" [disabled]="!loginForm.form.valid">{{ 'SEND' | translate }}</button>
+        <div *ngIf="showPasswordReset">
+          <p class="lead text-muted">{{ 'NEW_PASSWORD_SENT_TEXT' | translate }}</p>
+          <button (click)="forgotPassword()" [disabled]="!loginUser.username || loginUser.username?.length < 2">
+            {{ 'SEND_NEW_PASSWORD' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="form-container sign-up-container" [@signUpAnimation]="currentState">
+      <form #registerForm="ngForm" (ngSubmit)="submitRegisterForm(registerForm)">
+        <label class="lead" for="username">{{ 'USERNAME' | translate }}</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="{{ 'USERNAME' | translate }}"
+          minlength="2"
+          [(ngModel)]="registerUser.username"
+          #userUsername="ngModel"
+          [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+          required
+        />
+        <div [hidden]="!userUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
+        <div [hidden]="!userUsername.errors?.minlength" class="invalid-feedback">{{ 'USERNAME_NOT_LONG_ENOUGH' | translate }}</div>
+        <label class="lead" for="email">{{ 'EMAIL' | translate }}</label>
+        <p class="small">{{ 'EMAIL_NOT_REQUIRED' | translate }}</p>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="{{ 'EMAIL' | translate }}"
+          [(ngModel)]="registerUser.email"
+          #userEmail="ngModel"
+        />
+        <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="{{ 'PASSWORD' | translate }}"
+          minlength="10"
+          [(ngModel)]="registerUser.password"
+          #userPassword="ngModel"
+          [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+          required
+        />
+        <div [hidden]="!userPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
+        <div [hidden]="!userPassword.errors?.minlength" class="invalid-feedback">{{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }}</div>
+        <label class="lead" for="passwordAgain">{{ 'PASSWORD_AGAIN' | translate }}</label>
+        <input
+          type="password"
+          name="passwordAgain"
+          class="form-control"
+          placeholder="{{ 'PASSWORD_AGAIN' | translate }}"
+          [(ngModel)]="passwordAgain"
+          #passAgain="ngModel"
+          [ngClass]="{ 'is-invalid': passAgain.errors && passAgain.touched }"
+          required
+        />
+        <div [hidden]="!passAgain.errors?.required" class="invalid-feedback">{{ 'REQUIRED_FIELD' | translate }}</div>
+        <button type="submit" [disabled]="!registerForm.form.valid">{{ 'REGISTER' | translate }}</button>
+      </form>
+    </div>
+    <div class="overlay-container" [@overlayContainerAnimation]="currentState">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left" [@overlaySignInAnimation]="currentState">
+          <h1>{{ 'LOGIN_WELCOME_BACK' | translate }}</h1>
+          <p>{{ 'LOGIN_INFO' | translate }}</p>
+          <button class="ghost" id="signIn" (click)="changeState()">{{ 'LOGIN' | translate }}</button>
+        </div>
+        <div class="overlay-panel overlay-right" [@overlaySignUpAnimation]="currentState">
+          <h1>{{ 'REGISTER_HELLO' | translate }}</h1>
+          <p>{{ 'REGISTER_ENTER_DETAILS' | translate }}</p>
+          <button class="ghost" id="signUp" (click)="changeState()">{{ 'REGISTER' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="registerActive">
+      <label class="btn-primary" [ngClass]="{ 'btn-success': !registerActive }" ngbButtonLabel>
+        <input type="radio" ngbButton [value]="!registerActive" /> {{ 'LOGIN' | translate }}
+      </label>
+      <label class="btn-primary" [ngClass]="{ 'btn-success': registerActive }" ngbButtonLabel>
+        <input type="radio" ngbButton [value]="!registerActive" /> {{ 'REGISTER' | translate }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-5 mobile-login" *ngIf="!registerActive">
+  <div class="row justify-content-center">
+    <form #mobileLoginForm="ngForm" (ngSubmit)="submitLoginForm(mobileLoginForm)">
+      <label class="lead" for="username">{{ 'USERNAME_OR_EMAIL' | translate }}</label>
+      <input
+        type="text"
+        name="username"
+        class="form-control"
+        placeholder="{{ 'USERNAME_OR_EMAIL' | translate }}"
+        minlength="2"
+        [(ngModel)]="loginUser.username"
+        #loginUserUsername="ngModel"
+        [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+        required
+      />
+      <div [hidden]="!loginUserUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
+      <div [hidden]="!loginUserUsername.errors?.minlength" class="invalid-feedback">{{ 'USERNAME_NOT_LONG_ENOUGH' | translate }}</div>
+      <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="{{ 'PASSWORD' | translate }}"
+        [(ngModel)]="loginUser.password"
+        #loginUserPassword="ngModel"
+        [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+        required
+      />
+      <div [hidden]="!loginUserPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
+      <div class="text-center">
+        <button type="submit" class="mt-2" [disabled]="!mobileLoginForm.form.valid">{{ 'LOGIN' | translate }}</button>
+      </div>
+    </form>
+    <div class="row justify-content-center mt-5" *ngIf="showPasswordReset">
+      <div class="col">
+        <div class="form-group">
+          <p class="lead text-muted">{{ 'NEW_PASSWORD_SENT_TEXT' | translate }}</p>
+          <button
+            (click)="forgotPassword()"
+            [disabled]="!loginUser.username || loginUser.username?.length < 2"
+            class="btn btn-block btn-primary mt-3"
+          >
+            {{ 'SEND_NEW_PASSWORD' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3 mobile-register" *ngIf="registerActive">
+  <div class="row justify-content-center">
+    <form #mobileRegisterForm="ngForm" (ngSubmit)="submitRegisterForm(mobileRegisterForm)">
+      <div class="form-group">
+        <label class="lead" for="username">{{ 'USERNAME' | translate }}</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="{{ 'USERNAME' | translate }}"
+          minlength="2"
+          [(ngModel)]="registerUser.username"
+          #registerUserUsername="ngModel"
+          [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+          required
+        />
+        <div [hidden]="!registerUserUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
+        <div [hidden]="!registerUserUsername.errors?.minlength" class="invalid-feedback">{{ 'USERNAME_NOT_LONG_ENOUGH' | translate }}</div>
+      </div>
+      <div class="form-group">
+        <label class="lead" for="email">{{ 'EMAIL' | translate }}</label>
+        <p class="small">{{ 'EMAIL_NOT_REQUIRED' | translate }}</p>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="{{ 'EMAIL' | translate }}"
+          [(ngModel)]="registerUser.email"
+          #registerUserEmail="ngModel"
+        />
+      </div>
+      <div class="form-group">
+        <label class="lead" for="password">{{ 'PASSWORD' | translate }}</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="{{ 'PASSWORD' | translate }}"
+          minlength="10"
+          [(ngModel)]="registerUser.password"
+          #registerUserPassword="ngModel"
+          [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+          required
+        />
+        <div [hidden]="!registerUserPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
+        <div [hidden]="!registerUserPassword.errors?.minlength" class="invalid-feedback">{{ 'PASSWORD_NOT_LONG_ENOUGH' | translate }}</div>
+      </div>
+      <div class="form-group">
+        <label class="lead" for="passwordAgain">{{ 'PASSWORD_AGAIN' | translate }}</label>
+        <input
+          type="password"
+          name="passwordAgain"
+          class="form-control"
+          placeholder="{{ 'PASSWORD_AGAIN' | translate }}"
+          [(ngModel)]="passwordAgain"
+          #passAgain="ngModel"
+          [ngClass]="{ 'is-invalid': passAgain.errors && passAgain.touched }"
+          required
+        />
+        <div [hidden]="!passAgain.errors?.required" class="invalid-feedback">{{ 'REQUIRED_FIELD' | translate }}</div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="" [disabled]="!mobileRegisterForm.form.valid">{{ 'REGISTER' | translate }}</button>
+      </div>
+    </form>
+  </div>
+</div>
