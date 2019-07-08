@@ -12,33 +12,10 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './login-register.component.html',
   styleUrls: ['./login-register.component.css'],
   animations: [
-    trigger('signInAnimation', [
-      state(
-        'initial',
-        style({
-          transform: 'translateX(0)'
-        })
-      ),
-      state(
-        'final',
-        style({
-          transform: 'translateX(100%)'
-        })
-      ),
-      transition('initial=>final', animate('600ms'))
-    ]),
     trigger('signUpAnimation', [
       state(
-        'initial',
-        style({
-          transform: 'translateX(0)',
-          opacity: '0'
-        })
-      ),
-      state(
         'final',
         style({
-          transform: 'translateX(100%)',
           opacity: '1',
           zIndex: '5'
         })
@@ -130,7 +107,10 @@ export class LoginRegisterComponent implements OnInit {
           cssClass: 'alert-success',
           timeout: 2000
         });
-        console.log(success);
+        this.loginUser = {
+          username: '',
+          password: ''
+        };
         localStorage.removeItem('loadedDay');
         localStorage.setItem('token', success['token']);
         this.auth.setUserInfo(success['user']);

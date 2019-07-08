@@ -55,7 +55,7 @@
 </div>
 <div class="container-fluid mt-2 horizontal" *ngIf="fetchedDays.length > 1 && !loading && !verticalDisplay">
   <div class="row">
-    <div class="col-12" *ngFor="let fetchedDay of fetchedDays" [ngStyle]="{ 'max-width': fetchedDays.length === 2 ? '50%' : '750px' }">
+    <div class="col-12" *ngFor="let fetchedDay of fetchedDays" [ngClass]="{ two: fetchedDays.length === 2 }">
       <h2 class="h2 text-center">{{ fetchedDay.name }}</h2>
       <app-compare-totals [totals]="calculateDayTotals(fetchedDay)"></app-compare-totals>
       <app-compare-meal-table *ngFor="let meal of fetchedDay.allMeals" [meal]="meal" [foods]="foods" [user]="user"></app-compare-meal-table>

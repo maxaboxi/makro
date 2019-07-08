@@ -13,7 +13,10 @@
         <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</p>
         <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</p>
         <p ngbDropdownItem routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</p>
+        <p ngbDropdownItem *ngIf="!isLoggedIn" routerLink="/login"><i class="fas fa-info"></i> {{ 'LOGIN' | translate }}</p>
+        <p ngbDropdownItem *ngIf="!isLoggedIn" routerLink="/register"><i class="fas fa-info"></i> {{ 'REGISTER' | translate }}</p>
         <p ngbDropdownItem *ngIf="isAdmin" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</p>
+        <p ngbDropdownItem *ngIf="isLoggedIn" (click)="logout()"><i class="fas fa-sign-out-alt"></i> {{ 'LOGOUT' | translate }}</p>
         <a *ngIf="isLoggedIn && lang === 'fi'" class="nav-link text-center" (click)="changeLanguage()"
           ><img src="../../assets/img/en.svg" alt="english"
         /></a>
@@ -44,14 +47,8 @@
     <li *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</li>
     <li routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</li>
     <li *ngIf="isAdmin" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</li>
-    <li *ngIf="isLoggedIn" (click)="logout()">
-      <i class="fas fa-sign-out-alt"></i><span class="mobile-hidden"> {{ 'LOGOUT' | translate }}</span>
-    </li>
-    <li *ngIf="!isLoggedIn" routerLink="/login">
-      <i class="fas fa-sign-in-alt"></i><span class="mobile-hidden"> {{ 'LOGIN' | translate }}</span>
-    </li>
-    <li *ngIf="!isLoggedIn" routerLink="/register">
-      <i class="fas fa-user-plus"></i><span class="mobile-hidden"> {{ 'REGISTER' | translate }}</span>
-    </li>
+    <li *ngIf="isLoggedIn" (click)="logout()"><i class="fas fa-sign-out-alt"></i> {{ 'LOGOUT' | translate }}</li>
+    <li *ngIf="!isLoggedIn" routerLink="/login"><i class="fas fa-sign-in-alt"></i> {{ 'LOGIN' | translate }}</li>
+    <li *ngIf="!isLoggedIn" routerLink="/register"><i class="fas fa-user-plus"></i>{{ 'REGISTER' | translate }}</li>
   </ul>
 </nav>

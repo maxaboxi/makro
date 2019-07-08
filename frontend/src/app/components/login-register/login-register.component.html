@@ -1,6 +1,6 @@
 <div class="page">
   <div class="page-container" id="container">
-    <div class="form-container sign-in-container" [@signInAnimation]="currentState">
+    <div class="form-container sign-in-container">
       <form #loginForm="ngForm" (ngSubmit)="submitLoginForm(loginForm)">
         <label class="lead" for="username">{{ 'USERNAME_OR_EMAIL' | translate }}</label>
         <input

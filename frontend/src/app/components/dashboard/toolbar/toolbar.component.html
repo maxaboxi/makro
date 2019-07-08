@@ -37,7 +37,7 @@
       <p ngbDropdownItem *ngIf="!searchVisible" (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</p>
     </div>
   </div>
-  <div class="" [ngClass]="{ 'float-right': !showTargets, 'mt-2': !showTargets }">
+  <div class="d-inline-block" [ngClass]="{ 'float-right': !showTargets, 'mt-2': !showTargets }">
     <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
     >

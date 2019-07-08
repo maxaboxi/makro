@@ -6,17 +6,19 @@ th {
   word-break: break-all;
   overflow-y: scroll;
   max-height: 30px;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 td {
   word-break: break-all;
   overflow-y: scroll;
   max-height: 30px;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.t-head {
+/* .t-head {
   min-width: 200px;
-}
+} */
 
 .name {
   overflow-y: scroll;
