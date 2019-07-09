@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
 import { UserTargets } from 'src/app/models/UserTargets';
 import { StatisticsService } from 'src/app/services/statistics.service';
+import { Meal } from 'src/app/models/Meal';
 
 declare var jsPDF: any;
 
@@ -46,6 +47,7 @@ export class ToolbarComponent implements OnInit {
   online: boolean;
   searchVisible = true;
   date: NgbDateStruct = null;
+  savedDays: Day[] = [];
 
   @Input()
   set user(user) {
@@ -87,6 +89,9 @@ export class ToolbarComponent implements OnInit {
           }
         });
       }
+    });
+    this.dayService.getAllSavedDays().subscribe(days => {
+      this.savedDays = days;
     });
   }
 
@@ -329,5 +334,48 @@ export class ToolbarComponent implements OnInit {
 
   selectToday() {
     this.date = this.calendar.getToday();
+  }
+
+  openSavedDay(uuid: string) {
+    const meals = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded > 0) {
+      localStorage.setItem('previousMeals', JSON.stringify(meals));
+      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
+    }
+
+    this.dayService.getSavedDay(uuid).subscribe(
+      day => {
+        const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
+        userMeals.forEach(m => {
+          let found = false;
+          for (let i = 0; i < day.allMeals.length; i++) {
+            if (day.allMeals[i].name === m.name) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            day.allMeals.push(m);
+          }
+        });
+
+        localStorage.setItem('meals', JSON.stringify(day.allMeals));
+        localStorage.setItem('loadedDay', JSON.stringify(uuid));
+        this.addedFoodsService._mealsEdited.next(false);
+        this.addedFoodsService._openedSavedMeal.next(true);
+        this.addedFoodsService.setMealsFromLocalStorage();
+      },
+      (error: Error) => {
+        this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
   }
 }

@@ -7,6 +7,14 @@
     ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
+  <div *ngIf="online && savedDays.length > 0" class="d-inline-block ml-4" ngbDropdown #dayMenu="ngbDropdown">
+    <span id="daymenuDropdown" ngbDropdownAnchor (click)="dayMenu.open()"
+      ><i class="far fa-calendar-alt"></i> {{ 'OPEN_DAY' | translate }}</span
+    >
+    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="daymenuDropdown">
+      <p class="day-name" ngbDropdownItem *ngFor="let day of savedDays" (click)="openSavedDay(day.uuid)">{{ day.name }}</p>
+    </div>
+  </div>
   <span *ngIf="searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</span>
   <span *ngIf="!searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</span>
   <div class="ml-auto">

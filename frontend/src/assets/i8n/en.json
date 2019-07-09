@@ -356,5 +356,6 @@
   "LOGIN_WELCOME_BACK": "Welcome back",
   "LOGIN_INFO": "Login by entering your account information",
   "REGISTER_HELLO": "Hello!",
-  "REGISTER_ENTER_DETAILS": "You'll unlock all the features by registering"
+  "REGISTER_ENTER_DETAILS": "You'll unlock all the features by registering",
+  "OPEN_DAY": "Open day"
 }

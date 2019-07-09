@@ -356,5 +356,6 @@
   "LOGIN_WELCOME_BACK": "Tervetuloa takaisin",
   "LOGIN_INFO": "Kirjaudu sisään syöttämällä tietosi",
   "REGISTER_HELLO": "Moi!",
-  "REGISTER_ENTER_DETAILS": "Rekisteröidy niin saat käyttöösi kaikki Makron ominaisuudet"
+  "REGISTER_ENTER_DETAILS": "Rekisteröidy niin saat käyttöösi kaikki Makron ominaisuudet",
+  "OPEN_DAY": "Avaa päivä"
 }
