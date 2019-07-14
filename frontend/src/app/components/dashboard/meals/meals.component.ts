@@ -154,6 +154,9 @@ export class MealsComponent implements OnInit {
 
   reloadPreviousFoods() {
     this.addedFoodsService.setPreviousMealsFromLocalStorage();
+    this.addedFoodsService._openedSavedMeal.next(false);
+    this.addedFoodsService._mealsEdited.next(false);
+    localStorage.removeItem('loadedDay');
     this.deletePreviousFoods();
   }
 
