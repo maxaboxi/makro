@@ -366,5 +366,7 @@
   "MEAL_SAVED_SUCCESFULLY": "Ateria tallennettu",
   "ADD_MEAL_TO_DAY": "Lisää ateria..",
   "PORTIONS": "annoksia",
-  "OPEN_MEAL": "Avaa ateria"
+  "OPEN_MEAL": "Avaa ateria",
+  "COMPARE_MEALS": "Vertaile aterioita",
+  "FETCH_SELECTED_MEALS": "Hae valitut ateriat"
 }

@@ -11,6 +11,8 @@ import { Day } from 'src/app/models/Day';
 import { Meal } from 'src/app/models/Meal';
 import { Food } from 'src/app/models/Food';
 import { FoodService } from 'src/app/services/food.service';
+import { SharedMealsService } from 'src/app/services/shared-meals.service';
+import { Totals } from 'src/app/models/Totals';
 
 @Component({
   selector: 'app-compare-meal-plans',
@@ -29,7 +31,14 @@ export class CompareMealPlansComponent implements OnInit {
   fetchedDays: Day[] = [];
   showDayList = true;
   verticalDisplay = true;
+  compareMealPlans = true;
   foods: Food[];
+  savedMeals: Meal[] = [];
+  savedMealsFirst: Meal[] = [];
+  savedMealsSecond: Meal[] = [];
+  selectedMealIds: string[] = [];
+  fetchedMeals: Meal[] = [];
+  showMealList = true;
 
   @Input()
   get user() {
@@ -43,7 +52,8 @@ export class CompareMealPlansComponent implements OnInit {
     private auth: AuthService,
     private translate: TranslateService,
     private connectionService: ConnectionService,
-    private foodService: FoodService
+    private foodService: FoodService,
+    private sharedMealsService: SharedMealsService
   ) {}
 
   ngOnInit() {
@@ -61,6 +71,7 @@ export class CompareMealPlansComponent implements OnInit {
           }
           this.savedDaysSecond = days;
           this.fetchFoods();
+          this.getMeals();
         },
         (error: Error) => {
           this.loading = false;
@@ -73,16 +84,44 @@ export class CompareMealPlansComponent implements OnInit {
     });
   }
 
-  fetchFoods() {
+  private fetchFoods() {
     this.foodService.getAllFoods();
     this.loading = true;
     this.foodService.allFoods.subscribe(foods => {
       this.foods = foods;
-      this.loading = false;
     });
   }
 
-  setCurrentlyPlannedMeals() {
+  private getMeals() {
+    this.sharedMealsService.getMealsByUser().subscribe(
+      allMeals => {
+        const meals = [];
+        allMeals.forEach(m => {
+          if (!m.shared) {
+            meals.push(m);
+          }
+        });
+
+        this.savedMeals = JSON.parse(JSON.stringify(meals));
+        if (meals.length % 2 === 0) {
+          this.savedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
+        } else {
+          this.savedMealsFirst = meals.splice(0, Math.floor(meals.length / 2) + 1);
+        }
+        this.savedMealsSecond = meals;
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  private setCurrentlyPlannedMeals() {
     const meals = this.addedFoodsService.getMeals();
     let foodsFound = false;
     meals.forEach(m => {
@@ -152,5 +191,42 @@ export class CompareMealPlansComponent implements OnInit {
 
   calculateDayTotals(day: Day) {
     return this.addedFoodsService.calculateTotals(day.allMeals);
+  }
+
+  selectMeal(e: any, mealId: string) {
+    if (e.checked) {
+      this.selectedMealIds.push(mealId);
+    } else {
+      this.selectedMealIds.forEach((id, index) => {
+        if (id === mealId) {
+          this.selectedMealIds.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  fetchSelectedMeals() {
+    if (this.selectedMealIds.length === 0) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.sharedMealsService.getMultipleSavedMeals(this.selectedMealIds).subscribe(
+      meals => {
+        this.fetchedMeals = meals;
+        this.loading = false;
+        this.selectedMealIds = [];
+        this.showMealList = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+        this.selectedMealIds = [];
+      }
+    );
   }
 }

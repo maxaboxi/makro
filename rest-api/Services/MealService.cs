@@ -115,6 +115,45 @@ namespace Makro.Services
             return sharedMealDto;
         }
 
+        public async Task<ActionResult<List<SharedMealDto>>> GetMultipleSavedMeals(List<string> ids, string userId)
+        {
+            var sharedMeals = await _context.SharedMeals.Where(sm => sm.User.UUID == userId && ids.Contains(sm.UUID))
+                .Include(m => m.User)
+                .Include(m => m.SharedMealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (sharedMeals == null)
+            {
+                return null;
+            }
+
+            var sharedMealDtos = new List<SharedMealDto>();
+            sharedMeals.ForEach(sharedMeal =>
+            {
+                var foodDtos = new List<FoodDto>();
+                sharedMeal.SharedMealFoods.ToList().ForEach(e =>
+                {
+                    var foodDto = _mapper.Map<FoodDto>(e.Food);
+                    foodDto.Amount = e.FoodAmount;
+                    foodDto.Energy *= (foodDto.Amount / 100);
+                    foodDto.Protein *= (foodDto.Amount / 100);
+                    foodDto.Carbs *= (foodDto.Amount / 100);
+                    foodDto.Fat *= (foodDto.Amount / 100);
+                    foodDto.Sugar *= (foodDto.Amount / 100);
+                    foodDto.Fiber *= (foodDto.Amount / 100);
+                    foodDtos.Add(foodDto);
+                });
+                var sharedMealDto = _mapper.Map<SharedMealDto>(sharedMeal);
+                sharedMealDto.Foods = foodDtos;
+                sharedMealDtos.Add(sharedMealDto);
+            });
+
+            return sharedMealDtos;
+        }
+
         public async Task<ResultDto> AddNewSharedMeal(SharedMealDto sharedMealDto, string userId)
         {
             var user = await _context.Users.Where(u => u.UUID == userId).FirstOrDefaultAsync();

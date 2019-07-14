@@ -366,5 +366,7 @@
   "MEAL_SAVED_SUCCESFULLY": "Meal saved",
   "ADD_MEAL_TO_DAY": "Add meal to..",
   "PORTIONS": "portions",
-  "OPEN_MEAL": "Open meal"
+  "OPEN_MEAL": "Open meal",
+  "COMPARE_MEALS": "Compare saved meals",
+  "FETCH_SELECTED_MEALS": "Fetch selected meals"
 }

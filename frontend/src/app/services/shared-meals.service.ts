@@ -73,4 +73,14 @@ export class SharedMealsService {
 
     return this.http.delete(url, options);
   }
+
+  getMultipleSavedMeals(ids: string[]) {
+    const url = `${this.baseUrl}/multiple/`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Meal[]>(url, ids, { headers: headers });
+  }
 }

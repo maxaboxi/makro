@@ -42,6 +42,12 @@ namespace Makro.Controllers
             return await _mealService.GetSingleSharedMeal(id, HttpContext.User.Identity.Name);
         }
 
+        [HttpPost("multiple")]
+        public async Task<ActionResult<List<SharedMealDto>>> GetMultipleSavedMeals([FromBody]List<string> ids)
+        {
+            return await _mealService.GetMultipleSavedMeals(ids, HttpContext.User.Identity.Name);
+        }
+
         [HttpPost("new")]
         public async Task<IActionResult> AddNewSharedMeal([FromBody]SharedMealDto sharedMealDto)
         {
