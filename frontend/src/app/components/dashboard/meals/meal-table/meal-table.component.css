@@ -64,6 +64,10 @@ td {
   color: #ff3b3f;
 }
 
+.save-for-me {
+  white-space: normal;
+}
+
 @media screen and (max-width: 720px) {
   .t-head {
     width: 150px;

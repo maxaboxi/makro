@@ -14,4 +14,7 @@ export interface Meal {
   createdAt?: Date;
   updatedAt?: Date;
   deleted?: boolean;
+  shared?: boolean;
+  portionSize?: number;
+  portions?: number;
 }

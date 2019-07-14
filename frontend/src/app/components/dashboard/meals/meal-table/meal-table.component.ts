@@ -32,12 +32,16 @@ export class MealTableComponent implements OnInit, DoCheck {
     name: '',
     info: '',
     foods: [],
-    tags: []
+    tags: [],
+    shared: false,
+    portionSize: 0,
+    portions: 0
   };
   sharedMealTag = '';
   meals: Meal[];
   targetMeal: Meal;
   foodToBeCopied: Food;
+  saveOrShare: string = 'save';
 
   @Input()
   set meal(meal) {
@@ -149,7 +153,7 @@ export class MealTableComponent implements OnInit, DoCheck {
     this.newFoodAmount = null;
   }
 
-  returnOriginalFoodValues(id, name) {
+  returnOriginalFoodValues(id: string, name: string) {
     if (id) {
       return this.foods.filter(f => {
         if (f.uuid === id) {
@@ -165,16 +169,16 @@ export class MealTableComponent implements OnInit, DoCheck {
     }
   }
 
-  removeFood(index) {
+  removeFood(index: number) {
     this.meal.foods.splice(index, 1);
     this.addedFoodsService.updateMealsInLocalStorage(this.meal);
   }
 
-  setTarget(index) {
+  setTarget(index: number) {
     this.dropTargetIndex = index;
   }
 
-  drag(ev, food) {
+  drag(ev, food: Food) {
     ev.dataTransfer.setData('food', JSON.stringify(food));
     ev.dataTransfer.setData('index', this.componentIndex);
     ev.dataTransfer.setData('start', ev.target.id);
@@ -205,25 +209,37 @@ export class MealTableComponent implements OnInit, DoCheck {
   openShareMealModal(content) {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
-        if (result === 'save') {
+        if (result === 'submit') {
           const meal: Meal = {
             name: this.sharedMeal.name,
             foods: this.meal.foods,
             info: this.sharedMeal.info,
             recipe: this.sharedMeal.recipe,
             username: this.user.username,
-            tags: this.sharedMeal.tags
+            tags: this.sharedMeal.tags,
+            shared: this.saveOrShare === 'save' ? false : true,
+            portionSize: this.sharedMeal.portionSize,
+            portions: this.sharedMeal.portions
           };
           this.sharedMealsService.shareNewMeal(meal).subscribe(
             success => {
               if (success) {
-                this.flashMessage.show(this.translator.instant('MEAL_SHARED_SUCCESFULLY'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
+                if (this.saveOrShare === 'save') {
+                  this.flashMessage.show(this.translator.instant('MEAL_SAVED_SUCCESFULLY'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                } else {
+                  this.flashMessage.show(this.translator.instant('MEAL_SHARED_SUCCESFULLY'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                }
+
                 this.sharedMeal.name = '';
                 this.sharedMeal.info = '';
                 this.sharedMeal.tags = [];
+                this.saveOrShare = 'save';
               }
             },
             (error: Error) => {
@@ -237,12 +253,16 @@ export class MealTableComponent implements OnInit, DoCheck {
           this.sharedMeal.name = '';
           this.sharedMeal.info = '';
           this.sharedMeal.tags = [];
+          this.sharedMeal.portionSize = 0;
+          this.sharedMeal.portions = 0;
+          this.saveOrShare = 'save';
         }
       },
       dismissed => {
         this.sharedMeal.name = '';
         this.sharedMeal.info = '';
         this.sharedMeal.tags = [];
+        this.saveOrShare = 'save';
       }
     );
   }
@@ -266,14 +286,14 @@ export class MealTableComponent implements OnInit, DoCheck {
     );
   }
 
-  addTagToSharedMealTags(char) {
+  addTagToSharedMealTags(char: string) {
     if (this.sharedMealTag.length >= 3 && char === ',') {
       this.sharedMeal.tags.push(this.sharedMealTag.slice(0, this.sharedMealTag.length - 1));
       this.sharedMealTag = '';
     }
   }
 
-  removeTagFromSharedMealTags(index) {
+  removeTagFromSharedMealTags(index: number) {
     this.sharedMeal.tags.splice(index, 1);
   }
 }

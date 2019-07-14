@@ -16,6 +16,9 @@ namespace Makro.DTO
         public int TotalPoints { get; set; }
         public int UserLike { get; set; }
         public List<FoodDto> Foods { get; set; }
+        public bool Shared { get; set; }
+        public int PortionSize { get; set; }
+        public int Portions { get; set; }
 
     }
 }

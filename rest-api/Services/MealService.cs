@@ -28,7 +28,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllSharedMeals(string userId)
         {
-            List<SharedMeal> sharedMeals = await _context.SharedMeals
+            List<SharedMeal> sharedMeals = await _context.SharedMeals.Where(sm => sm.Shared)
                 .Include(m => m.User)
                 .Include(m => m.SharedMealFoods)
                     .ThenInclude(mf => mf.Food)
@@ -43,12 +43,12 @@ namespace Makro.Services
                 sm.SharedMealFoods.ToList().ForEach(e => {
                     var foodDto = _mapper.Map<FoodDto>(e.Food);
                     foodDto.Amount = e.FoodAmount;
-                    foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
-                    foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
-                    foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
-                    foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
-                    foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
-                    foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
+                    foodDto.Energy *= (foodDto.Amount / 100);
+                    foodDto.Protein *= (foodDto.Amount / 100);
+                    foodDto.Carbs *= (foodDto.Amount / 100);
+                    foodDto.Fat *= (foodDto.Amount / 100);
+                    foodDto.Sugar *= (foodDto.Amount / 100);
+                    foodDto.Fiber *= (foodDto.Amount / 100);
                     foodDtos.Add(foodDto);
                  });
                 var sharedMealDto = _mapper.Map<SharedMealDto>(sm);
@@ -101,12 +101,12 @@ namespace Makro.Services
             sharedMeal.SharedMealFoods.ToList().ForEach(e => {
                 var foodDto = _mapper.Map<FoodDto>(e.Food);
                 foodDto.Amount = e.FoodAmount;
-                foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
-                foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
-                foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
-                foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
-                foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
-                foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
+                foodDto.Energy *= (foodDto.Amount / 100);
+                foodDto.Protein *= (foodDto.Amount / 100);
+                foodDto.Carbs *= (foodDto.Amount / 100);
+                foodDto.Fat *= (foodDto.Amount / 100);
+                foodDto.Sugar *= (foodDto.Amount / 100);
+                foodDto.Fiber *= (foodDto.Amount / 100);
                 foodDtos.Add(foodDto);
             });
             var sharedMealDto = _mapper.Map<SharedMealDto>(sharedMeal);
@@ -161,6 +161,7 @@ namespace Makro.Services
             sharedMeal.Recipe = sharedMealDto.Recipe;
             sharedMeal.Tags = sharedMealDto.Tags;
             sharedMeal.UpdatedAt = DateTime.Now;
+            sharedMeal.Shared = sharedMeal.Shared;
 
             List<Food> foods = _foodService.MapFoodDtoListToFoodList(sharedMealDto.Foods);
             _context.SharedMealFoods.RemoveRange(_context.SharedMealFoods.Where(smf => smf.SharedMealId == sharedMeal.Id));

@@ -21,5 +21,9 @@ namespace Makro.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public ICollection<SharedMealFood> SharedMealFoods { get; set; }
+        [Required]
+        public bool Shared { get; set; }
+        public int PortionSize { get; set; }
+        public int Portions { get; set; }
     }
 }

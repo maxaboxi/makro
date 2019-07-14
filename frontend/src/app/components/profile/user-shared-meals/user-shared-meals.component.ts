@@ -8,6 +8,8 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { AddedFoodsService } from 'src/app/services/added-foods.service';
 
 @Component({
   selector: 'app-user-shared-meals',
@@ -18,13 +20,25 @@ export class UserSharedMealsComponent implements OnInit {
   user: User;
   allFoods: Food[];
   sharedMeals: Meal[] = [];
+  savedMeals: Meal[] = [];
   deletedSharedMeals = [];
+  deletedSavedMeals = [];
   sharedMealsDeleted = false;
+  savedMealsDeleted = false;
   selectedSharedMeal: Meal;
   selectedSharedMealOrigFoods: Food[];
   sharedMealTag = '';
   selectedSharedMealOrigTags = undefined;
   loading = true;
+  selectedMeal: Meal;
+  mealToAddSelectedMeal: Meal;
+  amountTotal = 0;
+  kcalTotal = 0;
+  proteinTotal = 0;
+  carbTotal = 0;
+  fatTotal = 0;
+  meals: Meal[];
+  amountToAddPortions = 0;
 
   constructor(
     private auth: AuthService,
@@ -32,37 +46,56 @@ export class UserSharedMealsComponent implements OnInit {
     private sharedMealsService: SharedMealsService,
     private flashMessage: FlashMessagesService,
     private modalService: NgbModal,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private router: Router,
+    private addedFoodsService: AddedFoodsService
   ) {}
 
   ngOnInit() {
+    this.meals = JSON.parse(localStorage.getItem('meals'));
     this.auth.user.subscribe(user => {
       this.user = user;
       if (user.username) {
-        this.sharedMealsService.getMealsByUser().subscribe(
-          meals => {
-            this.sharedMeals = meals;
-            this.foodService.allFoods.subscribe(foods => {
-              this.allFoods = foods;
-              this.loading = false;
-            });
-          },
-          (error: Error) => {
-            this.loading = false;
-            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-              cssClass: 'alert-danger',
-              timeout: 2000
-            });
-          }
-        );
+        this.getMeals();
+        this.foodService.allFoods.subscribe(foods => {
+          this.allFoods = foods;
+        });
       }
     });
   }
 
-  deleteSharedMeal(index) {
+  private getMeals() {
+    this.sharedMealsService.getMealsByUser().subscribe(
+      meals => {
+        meals.forEach(m => {
+          if (m.shared) {
+            this.sharedMeals.push(m);
+          } else {
+            this.savedMeals.push(m);
+          }
+        });
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  deleteSharedMeal(index: number) {
     this.deletedSharedMeals.push(this.sharedMeals[index].uuid);
     this.sharedMeals.splice(index, 1);
     this.sharedMealsDeleted = true;
+  }
+
+  deleteSavedMeal(index: number) {
+    this.deletedSavedMeals.push(this.savedMeals[index].uuid);
+    this.savedMeals.splice(index, 1);
+    this.savedMealsDeleted = true;
   }
 
   deleteSharedMealsFromDb() {
@@ -73,9 +106,7 @@ export class UserSharedMealsComponent implements OnInit {
             cssClass: 'alert-success',
             timeout: 2000
           });
-          this.sharedMealsService.getMealsByUser().subscribe(meals => {
-            this.sharedMeals = meals;
-          });
+          this.getMeals();
           this.sharedMealsDeleted = false;
         }
       },
@@ -88,7 +119,62 @@ export class UserSharedMealsComponent implements OnInit {
     );
   }
 
-  openEditSharedMealModal(content, meal) {
+  deleteSavedMealsFromDb() {
+    this.sharedMealsService.removeMeals(this.deletedSavedMeals).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.getMeals();
+          this.savedMealsDeleted = false;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  openAddMealModal(content, meal: Meal) {
+    this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
+      res => {
+        this.selectedMeal = res;
+        this.selectedMeal.foods.forEach(f => {
+          this.amountTotal += f.amount;
+          this.kcalTotal += f.energy;
+          this.proteinTotal += f.protein;
+          this.carbTotal += f.carbs;
+          this.fatTotal += f.fat;
+        });
+        this.modalService.open(content, { centered: true }).result.then(
+          result => {
+            if (result === 'open') {
+              this.addMeal();
+            } else {
+              this.resetAddMealVariables();
+            }
+          },
+          dismissed => {
+            this.resetAddMealVariables();
+          }
+        );
+      },
+      (error: Error) => {
+        this.loading = false;
+        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  openEditSharedMealModal(content, meal: Meal) {
     this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
       res => {
         this.selectedSharedMeal = res;
@@ -119,16 +205,14 @@ export class UserSharedMealsComponent implements OnInit {
               });
               this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
                 if (res['success']) {
-                  this.sharedMealsService.getMealsByUser().subscribe(meals => {
-                    this.sharedMeals = meals;
-                    this.selectedSharedMealOrigFoods = undefined;
-                    this.selectedSharedMeal = undefined;
-                    this.sharedMealTag = '';
-                    this.selectedSharedMealOrigTags = undefined;
-                    this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                      cssClass: 'alert-success',
-                      timeout: 2000
-                    });
+                  this.getMeals();
+                  this.selectedSharedMealOrigFoods = undefined;
+                  this.selectedSharedMeal = undefined;
+                  this.sharedMealTag = '';
+                  this.selectedSharedMealOrigTags = undefined;
+                  this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
                   });
                 }
               });
@@ -159,11 +243,11 @@ export class UserSharedMealsComponent implements OnInit {
     );
   }
 
-  removeFoodFromSharedMeal(i) {
+  removeFoodFromSharedMeal(i: number) {
     this.selectedSharedMeal.foods.splice(i, 1);
   }
 
-  returnOriginalFoodValues(id, name) {
+  private returnOriginalFoodValues(id: string, name: string) {
     if (id) {
       return this.allFoods.filter(f => {
         if (f.uuid === id) {
@@ -179,14 +263,53 @@ export class UserSharedMealsComponent implements OnInit {
     }
   }
 
-  addTagToSharedMealTags(char) {
+  addTagToSharedMealTags(char: string) {
     if (this.sharedMealTag.length >= 3 && char === ',') {
       this.selectedSharedMeal.tags.push(this.sharedMealTag.slice(0, this.sharedMealTag.length - 1));
       this.sharedMealTag = '';
     }
   }
 
-  removeTagFromSharedMealTags(index) {
+  removeTagFromSharedMealTags(index: number) {
     this.selectedSharedMeal.tags.splice(index, 1);
+  }
+
+  private addMeal() {
+    if (this.amountToAddPortions && this.selectedMeal.portions) {
+      this.calculateFoodValuesWithPortions();
+    }
+    this.meals.forEach(m => {
+      if (m.uuid === this.mealToAddSelectedMeal.uuid) {
+        m.foods = m.foods.concat(this.selectedMeal.foods);
+      }
+    });
+    localStorage.setItem('meals', JSON.stringify(this.meals));
+    this.addedFoodsService.setMealsFromLocalStorage();
+    this.modalService.dismissAll();
+    this.router.navigate(['/']);
+  }
+
+  private resetAddMealVariables() {
+    this.selectedSharedMeal = null;
+    this.amountTotal = 0;
+    this.kcalTotal = 0;
+    this.proteinTotal = 0;
+    this.carbTotal = 0;
+    this.fatTotal = 0;
+    this.amountToAddPortions = 0;
+  }
+
+  private calculateFoodValuesWithPortions() {
+    if (this.amountToAddPortions > this.selectedMeal.portions || this.amountToAddPortions < this.selectedMeal.portions) {
+      this.selectedMeal.foods.forEach(f => {
+        f.energy = (f.energy / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.protein = (f.protein / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.carbs = (f.carbs / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fat = (f.fat / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fiber = (f.fiber / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.sugar = (f.sugar / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
+      });
+    }
   }
 }

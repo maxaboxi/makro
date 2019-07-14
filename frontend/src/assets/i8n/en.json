@@ -69,7 +69,7 @@
   "DRAG_FOOD_TEXT": "Move to another meal by dragging",
   "EDIT_FOOD_AMOUNT_TEXT": "Edit the amount of the food",
   "REMOVE_FOOD_TEXT": "Remove the food from the meal",
-  "SHARE_MEAL_FOR_OTHERS": "Share meal for other users to use",
+  "SAVE_OR_SHARE_MEAL_FOR_OTHERS": "Save meal or share meal for other users to use",
   "MORE_INFO_ABOUT_MEAL": "Description",
   "RECIPE": "Recipe",
   "TAGS_SEPARATED_BY_COMMA": "Tags (separate by comma)",
@@ -357,5 +357,13 @@
   "LOGIN_INFO": "Login by entering your account information",
   "REGISTER_HELLO": "Hello!",
   "REGISTER_ENTER_DETAILS": "You'll unlock all the features by registering",
-  "OPEN_DAY": "Open day"
+  "OPEN_DAY": "Open day",
+  "SAVE_MEAL_FOR_ME": "Save meal for myself",
+  "AMOUNT_OF_PORTIONS": "Portions",
+  "PORTION_SIZE": "Portion size",
+  "MY_SAVED_MEALS": "My saved meals",
+  "NO_SAVED_MEALS": "No meals have been saved",
+  "MEAL_SAVED_SUCCESFULLY": "Meal saved",
+  "ADD_MEAL_TO_DAY": "Add meal to..",
+  "PORTIONS": "portions"
 }

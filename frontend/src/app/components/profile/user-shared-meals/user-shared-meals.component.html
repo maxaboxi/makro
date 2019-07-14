@@ -2,7 +2,59 @@
 <div *ngIf="!loading" class="container mt-3">
   <div class="row justify-content-center">
     <div class="col-6 text-center">
-      <h2 class="h2">{{ 'MY_SHARED_MEALS' | translate }} </h2>
+      <h2 class="h2">{{ 'MY_SAVED_MEALS' | translate }}</h2>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="savedMeals.length > 0 || savedMealsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <ul>
+        <li class="big-list lead" *ngFor="let savedMeal of savedMeals; let i = index">
+          <div class="row">
+            <div
+              class="col-10 day-list-name"
+              (click)="openAddMealModal(addMealModal, savedMeal)"
+              title="{{ 'ADD_MEAL_TO_DAY' | translate }}"
+            >
+              {{ savedMeal.name }}
+            </div>
+            <div class="col-2">
+              <div class="float-right">
+                <div class="row">
+                  <i
+                    class="fas fa-pencil-alt mr-2"
+                    (click)="openEditSharedMealModal(editShareMealModal, savedMeal)"
+                    title="{{ 'EDIT_MEAL' | translate }}"
+                  ></i>
+                  <i class="far fa-minus-square" (click)="deleteSavedMeal(i)" title="{{ 'DELETE_MEAL' | translate }}"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="savedMeals.length === 0 && !savedMealsDeleted">
+    <div class="col-6 text-center">
+      <h2 class="h2 text-muted">{{ 'NO_SAVED_MEALS' | translate }}</h2>
+    </div>
+  </div>
+
+  <div class="row justify-content-center" *ngIf="savedMealsDeleted">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSavedMealsFromDb()">
+        {{ 'SAVE_CHANGES' | translate }}
+      </button>
+      <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-6 text-center">
+      <h2 class="h2">{{ 'MY_SHARED_MEALS' | translate }}</h2>
     </div>
   </div>
   <div class="row justify-content-center" *ngIf="sharedMeals.length > 0 || sharedMealsDeleted">
@@ -10,15 +62,20 @@
       <ul>
         <li class="big-list lead" *ngFor="let meal of sharedMeals; let i = index">
           <div class="row">
-            <div
-              class="col-10 day-list-name"
-              (click)="openEditSharedMealModal(editShareMealModal, meal)"
-              title="{{ 'EDIT_MEAL' | translate }}"
-            >
+            <div class="col-10 day-list-name" (click)="openAddMealModal(addMealModal, meal)" title="{{ 'ADD_MEAL_TO_DAY' | translate }}">
               {{ meal.name }}
             </div>
             <div class="col-2">
-              <i class="far fa-minus-square float-right" (click)="deleteSharedMeal(i)" title="{{ 'DELETE_MEAL' | translate }}"></i>
+              <div class="float-right">
+                <div class="row">
+                  <i
+                    class="fas fa-pencil-alt mr-2"
+                    (click)="openEditSharedMealModal(editShareMealModal, meal)"
+                    title="{{ 'EDIT_MEAL' | translate }}"
+                  ></i>
+                  <i class="far fa-minus-square" (click)="deleteSharedMeal(i)" title="{{ 'DELETE_MEAL' | translate }}"></i>
+                </div>
+              </div>
             </div>
           </div>
         </li>
@@ -34,18 +91,91 @@
 
   <div class="row justify-content-center" *ngIf="sharedMealsDeleted">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()"
-        >{{ 'SAVE_CHANGES' | translate }}
+      <button type="button" class="btn btn-outline-success btn-block" (click)="deleteSharedMealsFromDb()">
+        {{ 'SAVE_CHANGES' | translate }}
       </button>
       <p class="lead">{{ 'CHANGES_SAVED_WHEN_TEXT' | translate }}</p>
     </div>
   </div>
 </div>
 
+<ng-template #addMealModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'ADD_MEAL_TO_DAY' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-light lead">
+            <div class="row">
+              <div class="col-3">{{ 'MACROS' | translate }}:</div>
+              <div class="col-3">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}: {{ proteinTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}: {{ carbTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ 'FAT_ABBREVIATION_BOTH' | translate }}: {{ fatTotal.toFixed(0) }}g</div>
+            </div>
+          </li>
+          <li class="list-group-item bg-light lead">
+            <div class="row">
+              <div class="col-6"></div>
+              <div class="col-3">{{ 'AMOUNT' | translate }}</div>
+              <div class="col-3">{{ 'ENERGY' | translate }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6">{{ 'FOODS' | translate }}</div>
+              <div class="col-3">{{ amountTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ kcalTotal.toFixed(0) }} {{ 'KCAL' | translate }}</div>
+            </div>
+          </li>
+          <li *ngFor="let food of selectedMeal.foods" class="list-group-item">
+            <div class="row">
+              <div class="col-6">{{ food.name }}</div>
+              <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
+              <div class="col-3">{{ food.energy.toFixed(0) }} {{ 'KCAL' | translate }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col">
+          <span class="mb-1" *ngIf="selectedMeal.portions">{{ 'AMOUNT_OF_PORTIONS' | translate }}: {{ selectedMeal.portions }}</span>
+        </div>
+        <div class="col">
+          <span class="mb-1 float-right" *ngIf="selectedMeal.portionSize"
+            >{{ 'PORTION_SIZE' | translate }}: {{ selectedMeal.portionSize }}g</span
+          >
+        </div>
+      </div>
+      <div class="form-group row mt-2" *ngIf="selectedMeal.portions && selectedMeal.portionSize">
+        <div class="col">
+          <label for="amount">{{ 'AMOUNT' | translate }} ({{ 'PORTIONS' | translate }})</label>
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" [(ngModel)]="amountToAddPortions" />
+        </div>
+      </div>
+      <div class="form-group mt-2">
+        <select class="form-control" [(ngModel)]="mealToAddSelectedMeal">
+          <option *ngFor="let meal of meals" [ngValue]="meal">{{ meal.name }}</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" (click)="modal.close('open')" [disabled]="!mealToAddSelectedMeal" class="btn btn-primary btn-block">
+            {{ 'ADD' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
 <ng-template #editShareMealModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'EDIT_MEAL' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
@@ -103,7 +233,7 @@
             minlength="3"
             (keyup)="addTagToSharedMealTags($event.key)"
           />
-          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback"> {{ 'TAG_NOT_LONG_ENOUGH' | translate }} </div>
+          <div [hidden]="!hashtags.errors?.minlength" class="invalid-feedback">{{ 'TAG_NOT_LONG_ENOUGH' | translate }}</div>
         </div>
         <div class="container text-center">
           <div class="row">
@@ -111,7 +241,7 @@
               <button type="button" class="btn btn-warning btn-block" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block"> {{ 'SAVE' | translate }} </button>
+              <button type="submit" class="btn btn-primary btn-block">{{ 'SAVE' | translate }}</button>
             </div>
           </div>
         </div>

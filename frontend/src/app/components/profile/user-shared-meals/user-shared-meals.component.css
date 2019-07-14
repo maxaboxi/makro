@@ -21,6 +21,11 @@ ul {
   font-size: 30px;
 }
 
+.fa-pencil-alt:hover {
+  cursor: pointer;
+  color: #ff3b3f;
+}
+
 .fa-minus-square:hover {
   cursor: pointer;
   color: #ff3b3f;

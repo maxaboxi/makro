@@ -29,6 +29,7 @@ export class SharedMealComponent implements OnInit {
   votesFetched = false;
   loading = true;
   online;
+  amountToAddPortions = 0;
 
   @Input()
   set meal(meal) {
@@ -69,13 +70,15 @@ export class SharedMealComponent implements OnInit {
     this.loading = false;
   }
 
-  openAddMealModal(content, meal) {
+  openAddMealModal(content, meal: Meal) {
     this.selectedMeal = meal;
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
-
+          if (this.amountToAddPortions && this.selectedMeal.portions) {
+            this.calculateFoodValuesWithPortions();
+          }
           for (let m of mealsFromLocalStorage) {
             if (m.name === this.addToMeal) {
               m.foods = this.selectedMeal.foods;
@@ -100,7 +103,7 @@ export class SharedMealComponent implements OnInit {
     this.showRecipe = !this.showRecipe;
   }
 
-  like(c) {
+  like(c: number) {
     let like: Like = {
       userUUID: this.user.uuid,
       sharedMealUUID: this.meal.uuid,
@@ -120,6 +123,20 @@ export class SharedMealComponent implements OnInit {
           this.meal.totalPoints += like.value;
           this.userLike = c;
         }
+      });
+    }
+  }
+
+  private calculateFoodValuesWithPortions() {
+    if (this.amountToAddPortions > this.selectedMeal.portions || this.amountToAddPortions < this.selectedMeal.portions) {
+      this.selectedMeal.foods.forEach(f => {
+        f.energy = (f.energy / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.protein = (f.protein / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.carbs = (f.carbs / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fat = (f.fat / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fiber = (f.fiber / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.sugar = (f.sugar / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
       });
     }
   }

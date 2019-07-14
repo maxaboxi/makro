@@ -18,7 +18,7 @@
   <ul class="list-group list-group-flush">
     <li class="list-group-item bg-light lead">
       <div class="row">
-        <div class="col-3"> {{ 'MACROS' | translate }}:</div>
+        <div class="col-3">{{ 'MACROS' | translate }}:</div>
         <div class="col-3">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}: {{ proteinTotal.toFixed(0) }}g</div>
         <div class="col-3">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}: {{ carbTotal.toFixed(0) }}g</div>
         <div class="col-3">{{ 'FAT_ABBREVIATION_BOTH' | translate }}: {{ fatTotal.toFixed(0) }}g</div>
@@ -26,22 +26,26 @@
     </li>
     <li class="list-group-item bg-light lead">
       <div class="row">
-        <div class="col-6"></div> <div class="col-3">{{ 'AMOUNT' | translate }}</div> <div class="col-3">{{ 'ENERGY' | translate }}</div>
+        <div class="col-6"></div>
+        <div class="col-3">{{ 'AMOUNT' | translate }}</div>
+        <div class="col-3">{{ 'ENERGY' | translate }}</div>
       </div>
       <div class="row">
-        <div class="col-6"> {{ 'FOODS' | translate }}</div> <div class="col-3">{{ amountTotal.toFixed(0) }}g</div>
+        <div class="col-6">{{ 'FOODS' | translate }}</div>
+        <div class="col-3">{{ amountTotal.toFixed(0) }}g</div>
         <div class="col-3">{{ kcalTotal.toFixed(0) }} {{ 'KCAL' | translate }}</div>
       </div>
     </li>
     <li *ngFor="let food of meal.foods" class="list-group-item">
       <div class="row">
-        <div class="col-6">{{ food.name }}</div> <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
+        <div class="col-6">{{ food.name }}</div>
+        <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
         <div class="col-3">{{ food.energy.toFixed(0) }} {{ 'KCAL' | translate }}</div>
       </div>
     </li>
   </ul>
   <div class="card-footer">
-    <p class="text-muted"> {{ 'MEAL_MADE_BY' | translate }}: {{ meal.addedByName }} @ {{ meal.updatedAt | date: 'dd.MM.yyyy' }} </p>
+    <p class="text-muted">{{ 'MEAL_MADE_BY' | translate }}: {{ meal.addedByName }} @ {{ meal.updatedAt | date: 'dd.MM.yyyy' }}</p>
     <p class="text-muted">
       <ng-container *ngFor="let tag of meal.tags">#{{ tag }} </ng-container>
     </p>
@@ -69,10 +73,28 @@
 <ng-template #addMealModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ 'CHOOSE_MEAL' | translate }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"> <span aria-hidden="true">&times;</span> </button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="modal-body">
     <div class="container">
+      <div class="row">
+        <div class="col">
+          <span class="mb-1" *ngIf="selectedMeal.portions">{{ 'AMOUNT_OF_PORTIONS' | translate }}: {{ selectedMeal.portions }}</span>
+        </div>
+        <div class="col">
+          <span class="mb-1 float-right" *ngIf="selectedMeal.portionSize"
+            >{{ 'PORTION_SIZE' | translate }}: {{ selectedMeal.portionSize }}g</span
+          >
+        </div>
+      </div>
+      <div class="form-group row mt-2" *ngIf="selectedMeal.portions && selectedMeal.portionSize">
+        <div class="col">
+          <label for="amount">{{ 'AMOUNT' | translate }} ({{ 'PORTIONS' | translate }})</label>
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" [(ngModel)]="amountToAddPortions" />
+        </div>
+      </div>
       <div class="form-group mt-2">
         <select class="form-control" [(ngModel)]="addToMeal">
           <option *ngFor="let meal of user.meals" [ngValue]="meal.name">{{ meal.name }}</option>
@@ -87,7 +109,7 @@
           class="
               col text-center"
         >
-          <button type="button" class="btn btn-light" (click)="modal.close('cancel')"> {{ 'CANCEL' | translate }} </button>
+          <button type="button" class="btn btn-light" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
         </div>
         <div class="col text-center">
           <button type="button" class="btn btn-primary" (click)="modal.close('save')" [disabled]="!addToMeal">

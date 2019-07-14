@@ -69,7 +69,7 @@
   "DRAG_FOOD_TEXT": "Siirrä toiseen ateriaan raahaamalla",
   "EDIT_FOOD_AMOUNT_TEXT": "Muokkaa ruoan määrää",
   "REMOVE_FOOD_TEXT": "Poista ruoka ateriasta",
-  "SHARE_MEAL_FOR_OTHERS": "Jaa ateria muille käyttäjille",
+  "SAVE_OR_SHARE_MEAL_FOR_OTHERS": "Tallenna ateria tai jaa ateria muille käyttäjille",
   "MORE_INFO_ABOUT_MEAL": "Lisätietoja",
   "RECIPE": "Valmistusohje",
   "TAGS_SEPARATED_BY_COMMA": "Tagit (erota pilkulla)",
@@ -357,5 +357,13 @@
   "LOGIN_INFO": "Kirjaudu sisään syöttämällä tietosi",
   "REGISTER_HELLO": "Moi!",
   "REGISTER_ENTER_DETAILS": "Rekisteröidy niin saat käyttöösi kaikki Makron ominaisuudet",
-  "OPEN_DAY": "Avaa päivä"
+  "OPEN_DAY": "Avaa päivä",
+  "SAVE_MEAL_FOR_ME": "Tallenna ateria omaan käyttöön",
+  "AMOUNT_OF_PORTIONS": "Annoksia",
+  "PORTION_SIZE": "Annoskoko",
+  "MY_SAVED_MEALS": "Tallentamani ateriat",
+  "NO_SAVED_MEALS": "Ei tallennettuja aterioita",
+  "MEAL_SAVED_SUCCESFULLY": "Ateria tallennettu",
+  "ADD_MEAL_TO_DAY": "Lisää ateria..",
+  "PORTIONS": "annoksia"
 }
