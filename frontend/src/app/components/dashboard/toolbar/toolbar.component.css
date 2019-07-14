@@ -30,6 +30,10 @@ span:hover {
   display: none;
 }
 
+.list-group {
+  width: 100%;
+}
+
 @media screen and (max-width: 910px) {
   .mobile-hidden {
     display: none;

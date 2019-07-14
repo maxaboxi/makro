@@ -53,3 +53,7 @@ ul {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.list-group {
+  width: 100%;
+}
