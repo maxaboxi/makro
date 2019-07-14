@@ -7,16 +7,28 @@
     ><i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}</span
   >
   <span (click)="createPdf()" class="ml-4"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</span>
-  <div *ngIf="online && savedDays.length > 0" class="d-inline-block ml-4" ngbDropdown #dayMenu="ngbDropdown">
-    <span id="daymenuDropdown" ngbDropdownAnchor (click)="dayMenu.open()"
-      ><i class="far fa-calendar-alt"></i> {{ 'OPEN_DAY' | translate }}</span
-    >
-    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="daymenuDropdown">
-      <p class="day-name" ngbDropdownItem *ngFor="let day of savedDays" (click)="openSavedDay(day.uuid)">{{ day.name }}</p>
-    </div>
-  </div>
   <span *ngIf="searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</span>
   <span *ngIf="!searchVisible" (click)="hideSearchBar()" class="ml-4"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</span>
+  <div class="extra-wide">
+    <div *ngIf="online && savedDays.length > 0" class="d-inline-block ml-4" ngbDropdown #dayMenu="ngbDropdown">
+      <span id="daymenuDropdown" ngbDropdownAnchor (click)="dayMenu.open()"
+        ><i class="far fa-calendar-alt"></i> {{ 'OPEN_DAY' | translate }}</span
+      >
+      <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="daymenuDropdown">
+        <p class="day-name" ngbDropdownItem *ngFor="let day of savedDays" (click)="openSavedDay(day.uuid)">{{ day.name }}</p>
+      </div>
+    </div>
+    <div *ngIf="online && savedMeals.length > 0" class="d-inline-block ml-4" ngbDropdown #mealMenu="ngbDropdown">
+      <span id="mealmenuDropdown" ngbDropdownAnchor (click)="mealMenu.open()"
+        ><i class="fas fa-utensils"></i> {{ 'OPEN_MEAL' | translate }}</span
+      >
+      <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="mealmenuDropdown">
+        <p class="day-name" ngbDropdownItem *ngFor="let meal of savedMeals" (click)="openAddMealModal(addMealModal, meal)">
+          {{ meal.name }}
+        </p>
+      </div>
+    </div>
+  </div>
   <div class="ml-auto">
     <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
       ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
@@ -51,6 +63,24 @@
     >
     <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>
     <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
+  </div>
+</div>
+<div class="row mt-3 dropdowns">
+  <div *ngIf="online && savedDays.length > 0" class="d-inline-block" ngbDropdown #dayMenu="ngbDropdown">
+    <span id="daymenuDropdown" ngbDropdownAnchor (click)="dayMenu.open()"
+      ><i class="far fa-calendar-alt"></i> {{ 'OPEN_DAY' | translate }}</span
+    >
+    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="daymenuDropdown">
+      <p class="day-name" ngbDropdownItem *ngFor="let day of savedDays" (click)="openSavedDay(day.uuid)">{{ day.name }}</p>
+    </div>
+  </div>
+  <div *ngIf="online && savedMeals.length > 0" class="d-inline-block ml-4" ngbDropdown #mealMenu="ngbDropdown">
+    <span id="mealmenuDropdown" ngbDropdownAnchor (click)="mealMenu.open()"
+      ><i class="fas fa-utensils"></i> {{ 'OPEN_MEAL' | translate }}</span
+    >
+    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="mealmenuDropdown">
+      <p class="day-name" ngbDropdownItem *ngFor="let meal of savedMeals" (click)="openAddMealModal(addMealModal, meal)">{{ meal.name }}</p>
+    </div>
   </div>
 </div>
 
@@ -322,6 +352,86 @@
     <div class="container text-center mt-3">
       <div class="row">
         <div class="col"><button type="button" class="btn btn-primary btn-block" (click)="modal.close('ok')">OK</button></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addMealModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'CHOOSE_MEAL' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container" *ngIf="selectedMeal && selectedMeal.foods.length > 0">
+      <div class="row">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-light lead">
+            <div class="row">
+              <div class="col-3">{{ 'MACROS' | translate }}:</div>
+              <div class="col-3">{{ 'PROTEIN_ABBREVIATION_BOTH' | translate }}: {{ proteinTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ 'CARBS_ABBREVIATION_BOTH' | translate }}: {{ carbTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ 'FAT_ABBREVIATION_BOTH' | translate }}: {{ fatTotal.toFixed(0) }}g</div>
+            </div>
+          </li>
+          <li class="list-group-item bg-light lead">
+            <div class="row">
+              <div class="col-6"></div>
+              <div class="col-3">{{ 'AMOUNT' | translate }}</div>
+              <div class="col-3">{{ 'ENERGY' | translate }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6">{{ 'FOODS' | translate }}</div>
+              <div class="col-3">{{ amountTotal.toFixed(0) }}g</div>
+              <div class="col-3">{{ kcalTotal.toFixed(0) }} {{ 'KCAL' | translate }}</div>
+            </div>
+          </li>
+          <li *ngFor="let food of selectedMeal.foods" class="list-group-item">
+            <div class="row">
+              <div class="col-6">{{ food.name }}</div>
+              <div class="col-3">{{ food.amount.toFixed(0) }}g</div>
+              <div class="col-3">{{ food.energy.toFixed(0) }} {{ 'KCAL' | translate }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col">
+          <span class="mb-1" *ngIf="selectedMeal.portions">{{ 'AMOUNT_OF_PORTIONS' | translate }}: {{ selectedMeal.portions }}</span>
+        </div>
+        <div class="col">
+          <span class="mb-1 float-right" *ngIf="selectedMeal.portionSize"
+            >{{ 'PORTION_SIZE' | translate }}: {{ selectedMeal.portionSize }}g</span
+          >
+        </div>
+      </div>
+      <div class="form-group row mt-2" *ngIf="selectedMeal.portions && selectedMeal.portionSize">
+        <div class="col">
+          <label for="amount">{{ 'AMOUNT' | translate }} ({{ 'PORTIONS' | translate }})</label>
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" [(ngModel)]="amountToAddPortions" />
+        </div>
+      </div>
+      <div class="form-group mt-2">
+        <select class="form-control" [(ngModel)]="addToMeal">
+          <option *ngFor="let meal of user.meals" [ngValue]="meal.name">{{ meal.name }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-light" (click)="modal.close('cancel')">{{ 'CANCEL' | translate }}</button>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary" (click)="modal.close('save')" [disabled]="!addToMeal">
+            {{ 'ADD' | translate }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

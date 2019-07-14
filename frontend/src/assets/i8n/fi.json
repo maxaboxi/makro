@@ -365,5 +365,6 @@
   "NO_SAVED_MEALS": "Ei tallennettuja aterioita",
   "MEAL_SAVED_SUCCESFULLY": "Ateria tallennettu",
   "ADD_MEAL_TO_DAY": "Lisää ateria..",
-  "PORTIONS": "annoksia"
+  "PORTIONS": "annoksia",
+  "OPEN_MEAL": "Avaa ateria"
 }

@@ -14,6 +14,7 @@ import { ConnectionService } from '../../../services/connection.service';
 import { UserTargets } from 'src/app/models/UserTargets';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { Meal } from 'src/app/models/Meal';
+import { SharedMealsService } from 'src/app/services/shared-meals.service';
 
 declare var jsPDF: any;
 
@@ -48,6 +49,15 @@ export class ToolbarComponent implements OnInit {
   searchVisible = true;
   date: NgbDateStruct = null;
   savedDays: Day[] = [];
+  savedMeals: Meal[] = [];
+  selectedMeal: Meal;
+  amountToAddPortions = 0;
+  addToMeal: string;
+  amountTotal = 0;
+  kcalTotal = 0;
+  proteinTotal = 0;
+  carbTotal = 0;
+  fatTotal = 0;
 
   @Input()
   set user(user) {
@@ -73,7 +83,8 @@ export class ToolbarComponent implements OnInit {
     private translate: TranslateService,
     private connectionService: ConnectionService,
     private statisticsServcice: StatisticsService,
-    private calendar: NgbCalendar
+    private calendar: NgbCalendar,
+    private sharedMealsService: SharedMealsService
   ) {}
 
   ngOnInit() {
@@ -93,6 +104,7 @@ export class ToolbarComponent implements OnInit {
     this.dayService.getAllSavedDays().subscribe(days => {
       this.savedDays = days;
     });
+    this.getMeals();
   }
 
   openAddFoodModal(content) {
@@ -377,5 +389,76 @@ export class ToolbarComponent implements OnInit {
         });
       }
     );
+  }
+
+  openAddMealModal(content, meal: Meal) {
+    this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(res => {
+      this.selectedMeal = res;
+      this.selectedMeal.foods.forEach(f => {
+        this.amountTotal += f.amount;
+        this.kcalTotal += f.energy;
+        this.proteinTotal += f.protein;
+        this.carbTotal += f.carbs;
+        this.fatTotal += f.fat;
+      });
+    });
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
+          if (this.amountToAddPortions && this.selectedMeal.portions) {
+            this.calculateFoodValuesWithPortions();
+          }
+          for (let m of mealsFromLocalStorage) {
+            if (m.name === this.addToMeal) {
+              m.foods = m.foods.concat(this.selectedMeal.foods);
+              break;
+            }
+          }
+          localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
+          this.addedFoodsService.setMealsFromLocalStorage();
+        }
+        this.addToMeal = '';
+        this.selectedMeal = undefined;
+        this.amountToAddPortions = 0;
+      },
+      dismissed => {
+        this.addToMeal = '';
+        this.selectedMeal = undefined;
+        this.amountToAddPortions = 0;
+      }
+    );
+  }
+
+  private getMeals() {
+    this.sharedMealsService.getMealsByUser().subscribe(
+      meals => {
+        meals.forEach(m => {
+          if (!m.shared) {
+            this.savedMeals.push(m);
+          }
+        });
+      },
+      (error: Error) => {
+        this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+      }
+    );
+  }
+
+  private calculateFoodValuesWithPortions() {
+    if (this.amountToAddPortions > this.selectedMeal.portions || this.amountToAddPortions < this.selectedMeal.portions) {
+      this.selectedMeal.foods.forEach(f => {
+        f.energy = (f.energy / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.protein = (f.protein / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.carbs = (f.carbs / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fat = (f.fat / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.fiber = (f.fiber / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.sugar = (f.sugar / this.selectedMeal.portions) * this.amountToAddPortions;
+        f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
+      });
+    }
   }
 }
