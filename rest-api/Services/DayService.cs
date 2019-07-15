@@ -28,7 +28,9 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser(string id)
         {
-            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == id).Include(d => d.User).ToListAsync();
+            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == id).Include(d => d.User)
+                .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
             var dayDtos = new List<DayDto>();
             days.ForEach(d => dayDtos.Add(_mapper.Map<DayDto>(d)));
             return dayDtos;

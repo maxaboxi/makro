@@ -39,6 +39,7 @@ export class UserSharedMealsComponent implements OnInit {
   fatTotal = 0;
   meals: Meal[];
   amountToAddPortions = 0;
+  amountToAddGrams = 0;
 
   constructor(
     private auth: AuthService,
@@ -217,19 +218,11 @@ export class UserSharedMealsComponent implements OnInit {
                 }
               });
             } else {
-              this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
-              this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
-              this.selectedSharedMealOrigFoods = undefined;
-              this.selectedSharedMealOrigTags = undefined;
-              this.sharedMealTag = '';
+              this.resetEditSharedMealVariables();
             }
           },
           dismissed => {
-            this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
-            this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
-            this.selectedSharedMealOrigFoods = undefined;
-            this.selectedSharedMealOrigTags = undefined;
-            this.sharedMealTag = '';
+            this.resetEditSharedMealVariables();
           }
         );
       },
@@ -275,9 +268,12 @@ export class UserSharedMealsComponent implements OnInit {
   }
 
   private addMeal() {
-    if (this.amountToAddPortions && this.selectedMeal.portions) {
+    if (this.amountToAddPortions && this.selectedMeal.portions && !this.amountToAddGrams) {
       this.calculateFoodValuesWithPortions();
+    } else if (!this.amountToAddPortions && this.amountToAddGrams) {
+      this.calculateFoodValuesWithGrams();
     }
+
     this.meals.forEach(m => {
       if (m.uuid === this.mealToAddSelectedMeal.uuid) {
         m.foods = m.foods.concat(this.selectedMeal.foods);
@@ -297,6 +293,15 @@ export class UserSharedMealsComponent implements OnInit {
     this.carbTotal = 0;
     this.fatTotal = 0;
     this.amountToAddPortions = 0;
+    this.amountToAddGrams = 0;
+  }
+
+  private resetEditSharedMealVariables() {
+    this.selectedSharedMeal.foods = this.selectedSharedMealOrigFoods;
+    this.selectedSharedMeal.tags = this.selectedSharedMealOrigTags;
+    this.selectedSharedMealOrigFoods = undefined;
+    this.selectedSharedMealOrigTags = undefined;
+    this.sharedMealTag = '';
   }
 
   private calculateFoodValuesWithPortions() {
@@ -311,5 +316,21 @@ export class UserSharedMealsComponent implements OnInit {
         f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
       });
     }
+  }
+
+  private calculateFoodValuesWithGrams() {
+    // How many percents is amountToAddInGrams from amountTotal
+    const percentsOfTotal = (this.amountToAddGrams * 100) / this.amountTotal / 100;
+    this.selectedMeal.foods.forEach(f => {
+      const amount = f.amount * percentsOfTotal;
+      const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+      f.energy = origFood[0].energy * (amount / 100);
+      f.protein = origFood[0].protein * (amount / 100);
+      f.carbs = origFood[0].carbs * (amount / 100);
+      f.fat = origFood[0].fat * (amount / 100);
+      f.fiber = origFood[0].fiber * (amount / 100);
+      f.sugar = origFood[0].sugar * (amount / 100);
+      f.amount = amount;
+    });
   }
 }

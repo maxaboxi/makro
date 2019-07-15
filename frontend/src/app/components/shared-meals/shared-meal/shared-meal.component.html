@@ -87,12 +87,20 @@
           >
         </div>
       </div>
-      <div class="form-group row mt-2" *ngIf="selectedMeal.portions && selectedMeal.portionSize">
+      <div class="form-group row mt-2" *ngIf="selectedMeal.portions">
         <div class="col">
           <label for="amount">{{ 'AMOUNT' | translate }} ({{ 'PORTIONS' | translate }})</label>
         </div>
         <div class="col">
           <input class="form-control" type="number" [(ngModel)]="amountToAddPortions" />
+        </div>
+      </div>
+      <div class="form-group row mt-2">
+        <div class="col">
+          <label for="amount">{{ 'AMOUNT' | translate }} ({{ 'GRAMS' | translate }})</label>
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" [(ngModel)]="amountToAddGrams" />
         </div>
       </div>
       <div class="form-group mt-2">

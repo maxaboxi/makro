@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { Like } from '../../../models/Like';
 import { LikeService } from '../../../services/like.service';
 import { ConnectionService } from '../../../services/connection.service';
+import { FoodService } from 'src/app/services/food.service';
+import { Food } from 'src/app/models/Food';
 
 @Component({
   selector: 'app-shared-meal',
@@ -30,6 +32,8 @@ export class SharedMealComponent implements OnInit {
   loading = true;
   online;
   amountToAddPortions = 0;
+  amountToAddGrams = 0;
+  allFoods: Food[] = [];
 
   @Input()
   set meal(meal) {
@@ -53,6 +57,7 @@ export class SharedMealComponent implements OnInit {
     private modalService: NgbModal,
     private addedFoodsService: AddedFoodsService,
     private likeService: LikeService,
+    private foodService: FoodService,
     private router: Router,
     private connectionService: ConnectionService
   ) {}
@@ -67,6 +72,9 @@ export class SharedMealComponent implements OnInit {
       this.carbTotal += f.carbs;
       this.fatTotal += f.fat;
     });
+    this.foodService.allFoods.subscribe(foods => {
+      this.allFoods = foods;
+    });
     this.loading = false;
   }
 
@@ -76,9 +84,13 @@ export class SharedMealComponent implements OnInit {
       result => {
         if (result === 'save') {
           const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
-          if (this.amountToAddPortions && this.selectedMeal.portions) {
+
+          if (this.amountToAddPortions && this.selectedMeal.portions && !this.amountToAddGrams) {
             this.calculateFoodValuesWithPortions();
+          } else if (!this.amountToAddPortions && this.amountToAddGrams) {
+            this.calculateFoodValuesWithGrams();
           }
+
           for (let m of mealsFromLocalStorage) {
             if (m.name === this.addToMeal) {
               m.foods = this.selectedMeal.foods;
@@ -87,14 +99,12 @@ export class SharedMealComponent implements OnInit {
           }
           localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
           this.addedFoodsService.setMealsFromLocalStorage();
+          this.resetAddMealVariables();
           this.router.navigate(['/']);
         }
-        this.addToMeal = '';
-        this.selectedMeal = undefined;
       },
       dismissed => {
-        this.addToMeal = '';
-        this.selectedMeal = undefined;
+        this.resetAddMealVariables();
       }
     );
   }
@@ -139,5 +149,48 @@ export class SharedMealComponent implements OnInit {
         f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
       });
     }
+  }
+
+  private calculateFoodValuesWithGrams() {
+    // How many percents is amountToAddInGrams from amountTotal
+    const percentsOfTotal = (this.amountToAddGrams * 100) / this.amountTotal / 100;
+    this.selectedMeal.foods.forEach(f => {
+      const amount = f.amount * percentsOfTotal;
+      const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+      f.energy = origFood[0].energy * (amount / 100);
+      f.protein = origFood[0].protein * (amount / 100);
+      f.carbs = origFood[0].carbs * (amount / 100);
+      f.fat = origFood[0].fat * (amount / 100);
+      f.fiber = origFood[0].fiber * (amount / 100);
+      f.sugar = origFood[0].sugar * (amount / 100);
+      f.amount = amount;
+    });
+  }
+
+  private returnOriginalFoodValues(id: string, name: string) {
+    if (id) {
+      return this.allFoods.filter(f => {
+        if (f.uuid === id) {
+          return f;
+        }
+      });
+    } else {
+      return this.allFoods.filter(f => {
+        if (f.name === name) {
+          return f;
+        }
+      });
+    }
+  }
+
+  private resetAddMealVariables() {
+    this.selectedMeal = undefined;
+    this.amountTotal = 0;
+    this.kcalTotal = 0;
+    this.proteinTotal = 0;
+    this.carbTotal = 0;
+    this.fatTotal = 0;
+    this.amountToAddPortions = 0;
+    this.amountToAddGrams = 0;
   }
 }

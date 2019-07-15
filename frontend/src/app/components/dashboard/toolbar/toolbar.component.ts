@@ -52,12 +52,14 @@ export class ToolbarComponent implements OnInit {
   savedMeals: Meal[] = [];
   selectedMeal: Meal;
   amountToAddPortions = 0;
+  amountToAddGrams = 0;
   addToMeal: string;
   amountTotal = 0;
   kcalTotal = 0;
   proteinTotal = 0;
   carbTotal = 0;
   fatTotal = 0;
+  allFoods: Food[] = [];
 
   @Input()
   set user(user) {
@@ -103,6 +105,9 @@ export class ToolbarComponent implements OnInit {
     });
     this.dayService.getAllSavedDays().subscribe(days => {
       this.savedDays = days;
+    });
+    this.foodService.allFoods.subscribe(foods => {
+      this.allFoods = foods;
     });
     this.getMeals();
   }
@@ -406,9 +411,13 @@ export class ToolbarComponent implements OnInit {
       result => {
         if (result === 'save') {
           const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
-          if (this.amountToAddPortions && this.selectedMeal.portions) {
+
+          if (this.amountToAddPortions && this.selectedMeal.portions && !this.amountToAddGrams) {
             this.calculateFoodValuesWithPortions();
+          } else if (!this.amountToAddPortions && this.amountToAddGrams) {
+            this.calculateFoodValuesWithGrams();
           }
+
           for (let m of mealsFromLocalStorage) {
             if (m.name === this.addToMeal) {
               m.foods = m.foods.concat(this.selectedMeal.foods);
@@ -418,14 +427,10 @@ export class ToolbarComponent implements OnInit {
           localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
           this.addedFoodsService.setMealsFromLocalStorage();
         }
-        this.addToMeal = '';
-        this.selectedMeal = undefined;
-        this.amountToAddPortions = 0;
+        this.resetAddMealVariables();
       },
       dismissed => {
-        this.addToMeal = '';
-        this.selectedMeal = undefined;
-        this.amountToAddPortions = 0;
+        this.resetAddMealVariables();
       }
     );
   }
@@ -460,5 +465,48 @@ export class ToolbarComponent implements OnInit {
         f.amount = (f.amount / this.selectedMeal.portions) * this.amountToAddPortions;
       });
     }
+  }
+
+  private calculateFoodValuesWithGrams() {
+    // How many percents is amountToAddInGrams from amountTotal
+    const percentsOfTotal = (this.amountToAddGrams * 100) / this.amountTotal / 100;
+    this.selectedMeal.foods.forEach(f => {
+      const amount = f.amount * percentsOfTotal;
+      const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+      f.energy = origFood[0].energy * (amount / 100);
+      f.protein = origFood[0].protein * (amount / 100);
+      f.carbs = origFood[0].carbs * (amount / 100);
+      f.fat = origFood[0].fat * (amount / 100);
+      f.fiber = origFood[0].fiber * (amount / 100);
+      f.sugar = origFood[0].sugar * (amount / 100);
+      f.amount = amount;
+    });
+  }
+
+  private returnOriginalFoodValues(id: string, name: string) {
+    if (id) {
+      return this.allFoods.filter(f => {
+        if (f.uuid === id) {
+          return f;
+        }
+      });
+    } else {
+      return this.allFoods.filter(f => {
+        if (f.name === name) {
+          return f;
+        }
+      });
+    }
+  }
+
+  private resetAddMealVariables() {
+    this.selectedMeal = undefined;
+    this.amountTotal = 0;
+    this.kcalTotal = 0;
+    this.proteinTotal = 0;
+    this.carbTotal = 0;
+    this.fatTotal = 0;
+    this.amountToAddPortions = 0;
+    this.amountToAddGrams = 0;
   }
 }
