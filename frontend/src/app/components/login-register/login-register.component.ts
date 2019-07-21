@@ -96,40 +96,18 @@ export class LoginRegisterComponent implements OnInit {
       return;
     }
 
-    const data = {
-      usernameOrEmail: this.loginUser.username,
-      password: this.loginUser.password
-    };
-
-    this.auth.login(data).subscribe(
-      success => {
-        this.flashMessage.show(this.translator.instant('LOGGED_IN'), {
-          cssClass: 'alert-success',
-          timeout: 2000
-        });
-        this.loginUser = {
-          username: '',
-          password: ''
-        };
-        localStorage.removeItem('loadedDay');
-        localStorage.setItem('token', success['token']);
-        this.auth.setUserInfo(success['user']);
-        this.translator.use(success['user'].lang);
-        this.addedFoods.setMealsFromLocalStorage();
-        this.auth.isLoggedIn.next(true);
-        this.router.navigate(['/']);
-      },
-      (error: Error) => {
-        this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-        this.showPasswordReset = true;
-      }
-    );
+    this.login();
   }
 
   forgotPassword() {
+    if (!this.loginUser.username) {
+      this.flashMessage.show(this.translator.instant('FILL_REQUIRED_FIELDS'), {
+        cssClass: 'alert-danger',
+        timeout: 2500
+      });
+      return;
+    }
+
     this.auth.forgotPassword(this.loginUser.username).subscribe(
       res => {
         if (res['success']) {
@@ -158,6 +136,68 @@ export class LoginRegisterComponent implements OnInit {
   }
 
   submitRegisterForm({ value, valid }: { value: User; valid: boolean }) {
+    if (!valid) {
+      this.flashMessage.show(this.translator.instant('FILL_REQUIRED_FIELDS'), {
+        cssClass: 'alert-danger',
+        timeout: 2500
+      });
+      return;
+    }
+
+    this.register();
+  }
+
+  login() {
+    if (!this.loginUser.username || !this.loginUser.password) {
+      this.flashMessage.show(this.translator.instant('FILL_REQUIRED_FIELDS'), {
+        cssClass: 'alert-danger',
+        timeout: 2500
+      });
+      return;
+    }
+
+    const data = {
+      usernameOrEmail: this.loginUser.username,
+      password: this.loginUser.password
+    };
+
+    this.auth.login(data).subscribe(
+      res => {
+        if (res['user']) {
+          this.flashMessage.show(this.translator.instant('LOGGED_IN'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.loginUser = {
+            username: '',
+            password: ''
+          };
+          localStorage.removeItem('loadedDay');
+          localStorage.setItem('token', res['token']);
+          this.auth.setUserInfo(res['user']);
+          this.translator.use(res['user'].lang);
+          this.addedFoods.setMealsFromLocalStorage();
+          this.auth.isLoggedIn.next(true);
+          this.router.navigate(['/']);
+        } else {
+          this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+          this.showPasswordReset = true;
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
+        this.showPasswordReset = true;
+      }
+    );
+  }
+
+  register() {
     if (this.passwordAgain !== this.registerUser.password) {
       this.flashMessage.show(this.translator.instant('PASSWORDS_DONT_MATCH'), {
         cssClass: 'alert-danger',
@@ -166,7 +206,7 @@ export class LoginRegisterComponent implements OnInit {
       return;
     }
 
-    if (!valid) {
+    if (!this.registerUser.username || !this.registerUser.password) {
       this.flashMessage.show(this.translator.instant('FILL_REQUIRED_FIELDS'), {
         cssClass: 'alert-danger',
         timeout: 2500

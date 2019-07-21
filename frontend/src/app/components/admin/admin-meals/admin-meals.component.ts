@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Meal } from '../../../models/Meal';
 import { SharedMealsService } from '../../../services/shared-meals.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
@@ -19,7 +18,6 @@ export class AdminMealsComponent implements OnInit {
   constructor(
     private sharedMealsService: SharedMealsService,
     private flashMessage: FlashMessagesService,
-    private modalService: NgbModal,
     private translator: TranslateService
   ) {}
 
@@ -27,7 +25,7 @@ export class AdminMealsComponent implements OnInit {
     this.sharedMealsService.getAllMeals().subscribe(meals => (this.sharedMeals = meals));
   }
 
-  deleteSharedMeal(index) {
+  deleteSharedMeal(index: number) {
     this.deletedSharedMeals.push(this.sharedMeals[index].uuid);
     this.sharedMeals.splice(index, 1);
 

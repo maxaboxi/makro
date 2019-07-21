@@ -111,12 +111,12 @@
 
 <div class="container">
   <div class="row justify-content-center">
-    <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="registerActive">
+    <div class="btn-group btn-group-toggle mt-3 text-center" name="formChooser" ngbRadioGroup [(ngModel)]="registerActive">
       <label class="btn" [ngClass]="{ 'btn-selected': !registerActive }" ngbButtonLabel>
-        <input type="radio" ngbButton [value]="!registerActive" /> {{ 'LOGIN' | translate }}
+        <input name="radio" type="radio" ngbButton [value]="!registerActive" /> {{ 'LOGIN' | translate }}
       </label>
       <label class="btn" [ngClass]="{ 'btn-selected': registerActive }" ngbButtonLabel>
-        <input type="radio" ngbButton [value]="!registerActive" /> {{ 'REGISTER' | translate }}
+        <input name="radio" type="radio" ngbButton [value]="!registerActive" /> {{ 'REGISTER' | translate }}
       </label>
     </div>
   </div>

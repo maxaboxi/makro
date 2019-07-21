@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GeneralComponent } from './general.component';
+import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
 
 describe('GeneralComponent', () => {
   let component: GeneralComponent;
@@ -8,9 +9,8 @@ describe('GeneralComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GeneralComponent ]
-    })
-    .compileComponents();
+      declarations: [GeneralComponent, MockTranslatePipe]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

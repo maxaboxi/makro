@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Day } from '../../../models/Day';
 import { DayService } from '../../../services/day.service';
 import { User } from '../../../models/User';
-import { BehaviorSubject } from 'rxjs';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';

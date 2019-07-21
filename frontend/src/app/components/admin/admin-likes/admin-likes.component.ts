@@ -11,7 +11,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./admin-likes.component.css']
 })
 export class AdminLikesComponent implements OnInit {
-  likes: Like[];
+  likes: Like[] = [];
   propertiesToShow = [
     { name: 'username', date: false },
     { name: 'createdAt', date: true },
@@ -23,7 +23,7 @@ export class AdminLikesComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private voteService: LikeService,
+    private likeService: LikeService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
   ) {}
@@ -32,14 +32,14 @@ export class AdminLikesComponent implements OnInit {
     this.adminService.getAllLikes().subscribe(likes => (this.likes = likes));
   }
 
-  deleteVote(index) {
+  deleteVote(index: number) {
     this.deletedVotes.push(this.likes[index].uuid);
     this.likes.splice(index, 1);
     this.likesDeleted = true;
   }
 
   deleteVotesFromDb() {
-    this.voteService.removeLikes(this.deletedVotes).subscribe(
+    this.likeService.removeLikes(this.deletedVotes).subscribe(
       res => {
         if (res['success']) {
           this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {

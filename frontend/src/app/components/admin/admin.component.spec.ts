@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
@@ -8,9 +10,9 @@ describe('AdminComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminComponent ]
-    })
-    .compileComponents();
+      declarations: [AdminComponent, MockTranslatePipe],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

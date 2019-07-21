@@ -27,7 +27,7 @@ export class ResetpasswordComponent implements OnInit {
   ngOnInit() {}
 
   submit() {
-    if (!this.user.email && !this.user.password && !this.user.passwordResetToken) {
+    if (!this.user.email || !this.user.password || !this.user.passwordResetToken) {
       this.flashMessage.show(this.translator.instant('FILL_REQUIRED_FIELDS'), {
         cssClass: 'alert-danger',
         timeout: 2500

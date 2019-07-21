@@ -22,7 +22,7 @@ export class SharedDaysComponent implements OnInit {
     private dayService: DayService,
     private flashMessage: FlashMessagesService,
     private translator: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -45,7 +45,7 @@ export class SharedDaysComponent implements OnInit {
     });
   }
 
-  deleteDay(index) {
+  deleteDay(index: number) {
     this.deletedDays.push(this.sharedDays[index].uuid);
     this.sharedDays.splice(index, 1);
     this.daysDeleted = true;

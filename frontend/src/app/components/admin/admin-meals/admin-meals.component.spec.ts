@@ -1,6 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminMealsComponent } from './admin-meals.component';
+import { MockSharedMealsService } from 'src/app/test-helpers/MockSharedMealsService';
+import { SharedMealsService } from 'src/app/services/shared-meals.service';
+import { TranslateService } from '@ngx-translate/core';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { MockFlashMessagesService } from 'src/app/test-helpers/MockFlashMessagesService';
+import { MockTranslateService } from 'src/app/test-helpers/MockTranslateService';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
 
 describe('AdminMealsComponent', () => {
   let component: AdminMealsComponent;
@@ -8,9 +16,14 @@ describe('AdminMealsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminMealsComponent ]
-    })
-    .compileComponents();
+      declarations: [AdminMealsComponent, MockTranslatePipe],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: FlashMessagesService, useClass: MockFlashMessagesService },
+        { provide: TranslateService, useClass: MockTranslateService },
+        { provide: SharedMealsService, useClass: MockSharedMealsService }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

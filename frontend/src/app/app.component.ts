@@ -7,8 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'frontend';
-
   constructor(private renderer: Renderer2, translate: TranslateService) {
     this.renderer.addClass(document.body, 'colors');
     translate.setDefaultLang('fi');

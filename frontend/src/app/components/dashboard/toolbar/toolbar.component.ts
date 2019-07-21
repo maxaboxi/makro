@@ -24,7 +24,7 @@ declare var jsPDF: any;
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  showTargets;
+  showTargets: boolean;
   _user = new BehaviorSubject<User>(null);
   day: Day = {
     userId: '',
@@ -354,7 +354,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   openSavedDay(uuid: string) {
-    const meals = JSON.parse(localStorage.getItem('meals'));
+    const meals: Meal[] = JSON.parse(localStorage.getItem('meals'));
     let foodsAdded = 0;
     meals.forEach(m => {
       foodsAdded += m.foods.length;

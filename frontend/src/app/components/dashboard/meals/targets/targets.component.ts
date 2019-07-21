@@ -9,7 +9,6 @@ import { AddedFoodsService } from '../../../../services/added-foods.service';
 export class TargetsComponent implements OnInit {
   targets;
   totals;
-  caloriesLeft: Number;
   showTargets: boolean;
 
   constructor(private addedFoodsService: AddedFoodsService) {}
