@@ -10,7 +10,7 @@
       ></i>
     </h5>
     <p *ngIf="meal.info" class="card-text text-muted">{{ meal.info }}</p>
-    <p *ngIf="meal.recipe" (click)="toggleShowRecipe()" class="card-text text-muted recipe" title=" {{ 'SHOW_RECIPE' | translate }}">
+    <p *ngIf="meal.recipe" (click)="showRecipe = !showRecipe" class="card-text text-muted recipe" title=" {{ 'SHOW_RECIPE' | translate }}">
       {{ 'RECIPE' | translate }}
     </p>
     <p *ngIf="showRecipe" class="card-text text-muted">{{ meal.recipe }}</p>

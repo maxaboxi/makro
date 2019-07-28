@@ -13,6 +13,8 @@ import { MockTranslateService } from 'src/app/test-helpers/MockTranslateService'
 import { MockFlashMessagesService } from 'src/app/test-helpers/MockFlashMessagesService';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
+import { of } from 'rxjs';
+import { Meal } from 'src/app/models/Meal';
 
 describe('SharedMealsComponent', () => {
   let component: SharedMealsComponent;
@@ -41,4 +43,58 @@ describe('SharedMealsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set user and fetch all sharedmeals', () => {
+    // Arrange
+    const user = { username: 'user', uuid: '123213', lang: 'fi', userAddedExpenditure: 1, dailyExpenditure: 1 };
+    const meals: Meal[] = [{ name: 'abcd', foods: [] }, { name: 'dcba', foods: [] }];
+    const mSpy = spyOn(TestBed.get(SharedMealsService), 'getAllMeals').and.returnValue(of(meals));
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.user).toEqual(user);
+    expect(mSpy).toHaveBeenCalledTimes(1);
+    expect(component.loading).toBeFalsy();
+    expect(component.allMeals).toEqual([{ name: 'abcd', foods: [] }, { name: 'dcba', foods: [] }]);
+    expect(component.sharedMealsFirst).toEqual([{ name: 'abcd', foods: [] }]);
+    expect(component.sharedMealsSecond).toEqual([{ name: 'dcba', foods: [] }]);
+  });
+
+  searchMeals('ffff', []);
+  searchMeals('me', [
+    { name: 'me', foods: [], info: 'xx', addedByName: 'user1', tags: ['tag1'] },
+    { name: 'meal', foods: [], info: 'xx', addedByName: 'user2', tags: ['tag2'] }
+  ]);
+  searchMeals('tag1', [
+    { name: 'me', foods: [], info: 'xx', addedByName: 'user1', tags: ['tag1'] },
+    { name: 'a', foods: [], info: 'zz', addedByName: 'user2', tags: ['tag1'] }
+  ]);
+  searchMeals('user1', [
+    { name: 'me', foods: [], info: 'xx', addedByName: 'user1', tags: ['tag1'] },
+    { name: 'b', foods: [], info: 'zz', addedByName: 'user1', tags: ['tag2'] }
+  ]);
+  searchMeals('zz', [
+    { name: 'a', foods: [], info: 'zz', addedByName: 'user2', tags: ['tag1'] },
+    { name: 'b', foods: [], info: 'zz', addedByName: 'user1', tags: ['tag2'] }
+  ]);
+  function searchMeals(searchTerm: string, expectedResults: Meal[]) {
+    it('should search for meals', () => {
+      // Arrange
+      component.searchTerm = searchTerm;
+      component.allMeals = [
+        { name: 'me', foods: [], info: 'xx', addedByName: 'user1', tags: ['tag1'] },
+        { name: 'a', foods: [], info: 'zz', addedByName: 'user2', tags: ['tag1'] },
+        { name: 'b', foods: [], info: 'zz', addedByName: 'user1', tags: ['tag2'] },
+        { name: 'meal', foods: [], info: 'xx', addedByName: 'user2', tags: ['tag2'] }
+      ];
+
+      // Act
+      component.searchMeals();
+
+      // Assert
+      expect(component.results).toEqual(expectedResults);
+    });
+  }
 });

@@ -42,4 +42,24 @@ describe('NavbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set lang, call auth.getUserInfo and check if logged in and admin', () => {
+    // Arrange
+    const spy = spyOn(TestBed.get(AuthService), 'getUserInfo');
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.lang).toBe('fi');
+    expect(component.isAdmin).toBeFalsy();
+    expect(component.isLoggedIn).toBeFalsy();
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle logout correctly', () => {
+    const aSpy = spyOn(TestBed.get(AuthService), 'logout');
+    const spy1 = spyOn(TestBed.get(AddedFoodsService), 'resetTotals');
+    const spy2 = spyOn(TestBed.get(AddedFoodsService), 'setMealsFromLocalStorage');
+  });
 });

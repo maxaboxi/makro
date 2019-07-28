@@ -13,10 +13,10 @@ import { ConnectionService } from '../../services/connection.service';
 export class NavbarComponent implements OnInit {
   showDialog = false;
   isNavbarCollapsed = true;
-  isLoggedIn: Boolean;
-  isAdmin: Boolean;
+  isLoggedIn: boolean;
+  isAdmin: boolean;
   lang: string;
-  online;
+  online: boolean;
 
   constructor(
     private auth: AuthService,

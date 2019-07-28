@@ -83,34 +83,13 @@ export class SharedMealComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
-
-          if (this.amountToAddPortions && this.selectedMeal.portions && !this.amountToAddGrams) {
-            this.calculateFoodValuesWithPortions();
-          } else if (!this.amountToAddPortions && this.amountToAddGrams) {
-            this.calculateFoodValuesWithGrams();
-          }
-
-          for (let m of mealsFromLocalStorage) {
-            if (m.name === this.addToMeal) {
-              m.foods = this.selectedMeal.foods;
-              break;
-            }
-          }
-          localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
-          this.addedFoodsService.setMealsFromLocalStorage();
-          this.resetAddMealVariables();
-          this.router.navigate(['/']);
+          this.addMeal();
         }
       },
       dismissed => {
         this.resetAddMealVariables();
       }
     );
-  }
-
-  toggleShowRecipe() {
-    this.showRecipe = !this.showRecipe;
   }
 
   like(c: number) {
@@ -135,6 +114,27 @@ export class SharedMealComponent implements OnInit {
         }
       });
     }
+  }
+
+  addMeal() {
+    const mealsFromLocalStorage: Meal[] = JSON.parse(localStorage.getItem('meals'));
+
+    if (this.amountToAddPortions && this.selectedMeal.portions && !this.amountToAddGrams) {
+      this.calculateFoodValuesWithPortions();
+    } else if (!this.amountToAddPortions && this.amountToAddGrams) {
+      this.calculateFoodValuesWithGrams();
+    }
+
+    for (let m of mealsFromLocalStorage) {
+      if (m.name === this.addToMeal) {
+        m.foods = this.selectedMeal.foods;
+        break;
+      }
+    }
+    localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
+    this.addedFoodsService.setMealsFromLocalStorage();
+    this.resetAddMealVariables();
+    this.router.navigate(['/']);
   }
 
   private calculateFoodValuesWithPortions() {

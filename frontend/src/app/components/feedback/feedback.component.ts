@@ -39,7 +39,7 @@ export class FeedbackComponent implements OnInit {
     this.auth.user.subscribe(user => (this.user = user));
   }
 
-  getAllFeedbacks() {
+  private getAllFeedbacks() {
     this.feedbackService.getAllFeedbacks().subscribe(
       feedbacks => {
         this.feedbacks = feedbacks;
@@ -55,7 +55,7 @@ export class FeedbackComponent implements OnInit {
     );
   }
 
-  resetForm() {
+  private resetForm() {
     this.feedback.username = 'Nimetön';
     this.feedback.feedbackBody = '';
     this.feedback.userId = '';
@@ -65,33 +65,40 @@ export class FeedbackComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          if (this.feedback.username !== 'Nimetön') {
-            this.feedback.userId = this.user.uuid;
-          }
-          this.feedbackService.submitFeedback(this.feedback).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('FEEDBACK_SAVED'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.getAllFeedbacks();
-                this.resetForm();
-              }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
-          );
+          this.submitFeedback();
         } else {
           this.resetForm();
         }
       },
       dismissed => {
         this.resetForm();
+      }
+    );
+  }
+
+  submitFeedback() {
+    const feedback: Feedback = {
+      username: this.feedback.username,
+      feedbackBody: this.feedback.feedbackBody,
+      userId: this.feedback.username !== 'Nimetön' ? this.user.uuid : ''
+    };
+
+    this.feedbackService.submitFeedback(feedback).subscribe(
+      res => {
+        if (res['success']) {
+          this.flashMessage.show(this.translator.instant('FEEDBACK_SAVED'), {
+            cssClass: 'alert-success',
+            timeout: 2000
+          });
+          this.getAllFeedbacks();
+          this.resetForm();
+        }
+      },
+      (error: Error) => {
+        this.flashMessage.show(error['error'].msg, {
+          cssClass: 'alert-danger',
+          timeout: 2000
+        });
       }
     );
   }

@@ -22,4 +22,20 @@ describe('ChangelogComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should not show older updates', () => {
+    // Assert
+    expect(component.showOlderUpdates).toBeFalsy();
+  });
+
+  it('should set showOlderUpdates to true', () => {
+    // Arrange
+    component.showOlderUpdates = true;
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.showOlderUpdates).toBeTruthy();
+  });
 });

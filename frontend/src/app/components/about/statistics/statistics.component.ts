@@ -12,7 +12,6 @@ import { StatisticsService } from 'src/app/services/statistics.service';
 export class StatisticsComponent implements OnInit {
   loading = true;
   loadingStats = false;
-  showStats = false;
   statistics: Statistics;
   constructor(
     private statisticsService: StatisticsService,

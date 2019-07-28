@@ -8,4 +8,8 @@ export class MockFeedbackService {
   public getAllFeedbacks() {
     return of([]);
   }
+
+  public submitFeedback() {
+    return of({});
+  }
 }

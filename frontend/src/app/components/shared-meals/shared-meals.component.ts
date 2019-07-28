@@ -29,6 +29,10 @@ export class SharedMealsComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
+    this.getAllMeals();
+  }
+
+  private getAllMeals() {
     this.sharedMealService.getAllMeals().subscribe(
       meals => {
         this.allMeals = JSON.parse(JSON.stringify(meals));
@@ -55,50 +59,67 @@ export class SharedMealsComponent implements OnInit {
     const secondaryResults = [];
     const tertiaryResults = [];
     const quaternaryResults = [];
-    const st = this.searchTerm.toLowerCase();
+    const searchTerm = this.searchTerm.toLowerCase();
     this.allMeals.forEach(m => {
-      const mLc = m.name.toLowerCase();
-      const mdLc = m.info.toLowerCase();
+      const mealNameLowercase = m.name.toLowerCase();
+      const mealInfoLowercase = m.info.toLowerCase();
       const userLc = m.addedByName.toLowerCase();
-      if (mLc === st) {
+      if (mealNameLowercase === searchTerm) {
         this.results.push(m);
-      } else if (st === mLc.slice(0, st.length)) {
+      } else if (searchTerm === mealNameLowercase.slice(0, searchTerm.length)) {
         this.results.push(m);
       } else {
-        const containsWhitespaces = mLc.indexOf(' ') > 1;
-        const containsBrackets = mLc.indexOf('(') > 1;
+        const containsWhitespaces = mealNameLowercase.indexOf(' ') > 1;
+        const containsBrackets = mealNameLowercase.indexOf('(') > 1;
         let added = false;
         if (containsWhitespaces && !containsBrackets) {
-          for (let i = 0; i < mLc.length; i++) {
-            if (st.length > 1 && mLc[i] === ' ' && mLc.slice(i + 1, i + 1 + st.length) === st) {
+          for (let i = 0; i < mealNameLowercase.length; i++) {
+            if (
+              searchTerm.length > 1 &&
+              mealNameLowercase[i] === ' ' &&
+              mealNameLowercase.slice(i + 1, i + 1 + searchTerm.length) === searchTerm
+            ) {
               secondaryResults.push(m);
               added = true;
             }
 
-            if (st.length > 1 && mdLc[i] === ' ' && mdLc.slice(i + 1, i + 1 + st.length) === st) {
+            if (
+              searchTerm.length > 1 &&
+              mealInfoLowercase[i] === ' ' &&
+              mealInfoLowercase.slice(i + 1, i + 1 + searchTerm.length) === searchTerm
+            ) {
               secondaryResults.push(m);
               added = true;
             }
           }
         }
+
         if (containsWhitespaces && containsBrackets) {
-          for (let i = 0; i < mLc.length; i++) {
-            if (st.length > 1 && mLc[i] === '(' && mLc.slice(i + 1, i + 1 + st.length) === st) {
+          for (let i = 0; i < mealNameLowercase.length; i++) {
+            if (
+              searchTerm.length > 1 &&
+              mealNameLowercase[i] === '(' &&
+              mealNameLowercase.slice(i + 1, i + 1 + searchTerm.length) === searchTerm
+            ) {
               secondaryResults.push(m);
               added = true;
             }
 
-            if (st.length > 1 && mdLc[i] === '(' && mdLc.slice(i + 1, i + 1 + st.length) === st) {
+            if (
+              searchTerm.length > 1 &&
+              mealInfoLowercase[i] === '(' &&
+              mealInfoLowercase.slice(i + 1, i + 1 + searchTerm.length) === searchTerm
+            ) {
               secondaryResults.push(m);
               added = true;
             }
           }
         }
 
-        if (!added && st.length > 1) {
+        if (!added && searchTerm.length > 1) {
           for (let tag of m.tags) {
             const tagLc = tag.toLowerCase();
-            if (tagLc === st) {
+            if (tagLc === searchTerm) {
               tertiaryResults.push(m);
               added = true;
               break;
@@ -106,12 +127,12 @@ export class SharedMealsComponent implements OnInit {
           }
         }
 
-        if ((!added && mLc.indexOf(st) !== -1) || (!added && mdLc.indexOf(st) !== -1)) {
+        if ((!added && mealNameLowercase.indexOf(searchTerm) !== -1) || (!added && mealInfoLowercase.indexOf(searchTerm) !== -1)) {
           quaternaryResults.push(m);
           added = true;
         }
 
-        if (!added && userLc.indexOf(st) !== -1) {
+        if (!added && userLc.indexOf(searchTerm) !== -1) {
           quaternaryResults.push(m);
           added = true;
         }
