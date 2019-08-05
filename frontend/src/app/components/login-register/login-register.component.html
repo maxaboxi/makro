@@ -134,7 +134,7 @@
         minlength="2"
         [(ngModel)]="loginUser.username"
         #loginUserUsername="ngModel"
-        [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+        [ngClass]="{ 'is-invalid': loginUserPassword.errors && loginUserPassword.touched }"
         required
       />
       <div [hidden]="!loginUserUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
@@ -147,7 +147,7 @@
         placeholder="{{ 'PASSWORD' | translate }}"
         [(ngModel)]="loginUser.password"
         #loginUserPassword="ngModel"
-        [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+        [ngClass]="{ 'is-invalid': loginUserPassword.errors && loginUserPassword.touched }"
         required
       />
       <div [hidden]="!loginUserPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
@@ -185,7 +185,7 @@
           minlength="2"
           [(ngModel)]="registerUser.username"
           #registerUserUsername="ngModel"
-          [ngClass]="{ 'is-invalid': userUsername.errors && userUsername.touched }"
+          [ngClass]="{ 'is-invalid': registerUserUsername.errors && registerUserUsername.touched }"
           required
         />
         <div [hidden]="!registerUserUsername.errors?.required" class="invalid-feedback">{{ 'USERNAME_REQUIRED' | translate }}</div>
@@ -213,7 +213,7 @@
           minlength="10"
           [(ngModel)]="registerUser.password"
           #registerUserPassword="ngModel"
-          [ngClass]="{ 'is-invalid': userPassword.errors && userPassword.touched }"
+          [ngClass]="{ 'is-invalid': registerUserPassword.errors && registerUserPassword.touched }"
           required
         />
         <div [hidden]="!registerUserPassword.errors?.required" class="invalid-feedback">{{ 'PASSWORD_REQUIRED' | translate }}</div>
