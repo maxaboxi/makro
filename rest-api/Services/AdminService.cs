@@ -381,5 +381,18 @@ namespace Makro.Services
             return new ResultDto(true, "Tracked period deleted succesfully");
         }
 
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllCreatedMeals()
+        {
+            List<SharedMeal> sharedMeals = await _context.SharedMeals
+                .Include(sm => sm.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var sharedMealDtos = new List<SharedMealDto>();
+            sharedMeals.ForEach(sm => sharedMealDtos.Add(_mapper.Map<SharedMealDto>(sm)));
+
+            return sharedMealDtos;
+        }
+
     }
 }

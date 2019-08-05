@@ -156,5 +156,11 @@ namespace Makro.Controllers
         {
             return _adminService.DeleteMultipleTrackedPeriod(trackedPeriodIds);
         }
+
+        [HttpGet("meal/all")]
+        public async Task<ActionResult<IEnumerable<SharedMealDto>>> GetAllCreatedMeals()
+        {
+            return await _adminService.GetAllCreatedMeals();
+        }
     }
 }

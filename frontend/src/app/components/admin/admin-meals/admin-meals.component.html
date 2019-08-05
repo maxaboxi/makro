@@ -3,10 +3,10 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
       <h2 class="h2 text-muted">{{ 'SHARED_MEALS' | translate }} ({{ sharedMeals?.length }})</h2>
       <app-data-list
-        [data]="sharedMeals"
+        [data]="createdMeals"
         [propertiesToShow]="propertiesToShow"
-        (delete)="deleteSharedMeal($event)"
-        (save)="deleteSharedMealsFromDb()"
+        (delete)="deleteCreatedMeal($event)"
+        (save)="deleteCreatedMealsFromDb()"
       ></app-data-list>
     </div>
   </div>

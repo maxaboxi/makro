@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { Like } from '../models/Like';
 import { Food } from '../models/Food';
 import { TrackedPeriod } from '../models/TrackedPeriod';
+import { Meal } from '../models/Meal';
 
 @Injectable({
   providedIn: 'root'
@@ -237,5 +238,14 @@ export class AdminService {
     };
 
     return this.http.delete(url, options);
+  }
+
+  getAllCreatedMeals() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.baseUrl}/meal/all`;
+
+    return this.http.get<Meal[]>(url, { headers: headers });
   }
 }
