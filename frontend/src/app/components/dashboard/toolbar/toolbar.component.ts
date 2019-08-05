@@ -150,9 +150,7 @@ export class ToolbarComponent implements OnInit {
           this.resetForm();
         }
       },
-      dismissed => {
-        this.resetForm();
-      }
+      dismissed => {}
     );
   }
 
