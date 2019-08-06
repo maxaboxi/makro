@@ -10,6 +10,7 @@ namespace Makro.Models
         public int Id { get; set; }
         [Required]
         public string UUID { get; set; }
+        public int Index { get; set; }
         [Required]
         public string Name { get; set; }
         public User User { get; set; }

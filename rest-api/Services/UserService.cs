@@ -168,11 +168,10 @@ namespace Makro.Services
             if (user != null)
             {
                 user.Password = null;
-                user.MealNames.Reverse(0, user.MealNames.Count);
                 List<MealNameDto> mealNameDtos = new List<MealNameDto>();
                 user.MealNames.ForEach(m => mealNameDtos.Add(_mapper.Map<MealNameDto>(m)));
                 var userDto = _mapper.Map<UserDto>(user);
-                userDto.Meals = mealNameDtos;
+                userDto.Meals = mealNameDtos.OrderBy(mn => mn.Index).ToList();
                 return userDto;
             }
 

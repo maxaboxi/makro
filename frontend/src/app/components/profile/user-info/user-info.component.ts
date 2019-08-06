@@ -77,7 +77,7 @@ export class UserInfoComponent implements OnInit {
     this.changed = true;
   }
 
-  deleteMeal(index) {
+  deleteMeal(index: number) {
     this.user.meals[index].deleted = true;
     this.changed = true;
   }
@@ -120,6 +120,7 @@ export class UserInfoComponent implements OnInit {
       if (m.name.length === 0) {
         m.name = this.translator.instant('MEAL') + ' ' + (i + 1);
       }
+      m.index = i;
     });
 
     this.auth.updateMealNames(this.user.meals).subscribe(

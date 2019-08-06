@@ -296,7 +296,7 @@ namespace Makro.Services
                     else
                     {
                         var user = _context.Users.Where(u => u.UUID == userId).FirstOrDefault();
-                        var meal = new MealName(mn.Name, user);
+                        var meal = new MealName(mn.Name, mn.Index, user);
                         _context.Add(meal);
                         _context.SaveChanges();
                     }
@@ -322,7 +322,12 @@ namespace Makro.Services
         {
             return new List<MealName>
             {
-                new MealName("Aamupala"), new MealName("Lounas"), new MealName("Välipala 1"), new MealName("Sali"), new MealName("Välipala 2"), new MealName("Iltapala")
+                new MealName("Aamupala", 0),
+                new MealName("Lounas", 1),
+                new MealName("Välipala 1", 2),
+                new MealName("Sali", 3),
+                new MealName("Välipala 2", 4),
+                new MealName("Iltapala", 5)
             };
         }
 

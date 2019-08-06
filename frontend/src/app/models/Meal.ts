@@ -4,6 +4,7 @@ export interface Meal {
   uuid?: string;
   username?: string;
   addedByName?: string;
+  index?: number;
   name: string;
   info?: string;
   recipe?: string;
