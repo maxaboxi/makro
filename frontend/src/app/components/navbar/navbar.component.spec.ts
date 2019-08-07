@@ -58,8 +58,26 @@ describe('NavbarComponent', () => {
   });
 
   it('should handle logout correctly', () => {
+    // Arrange
+    const afs = TestBed.get(AddedFoodsService);
     const aSpy = spyOn(TestBed.get(AuthService), 'logout');
-    const spy1 = spyOn(TestBed.get(AddedFoodsService), 'resetTotals');
-    const spy2 = spyOn(TestBed.get(AddedFoodsService), 'setMealsFromLocalStorage');
+    const spy1 = spyOn(afs, 'resetTotals');
+    const spy2 = spyOn(afs, 'setMealsFromLocalStorage');
+    const spy3 = spyOn(afs._openedSavedMeal, 'next');
+    const spy4 = spyOn(afs._previousMealsSavedToLocalStorage, 'next');
+    const spy5 = spyOn(afs._mealsEdited, 'next');
+    const rSpy = spyOn(TestBed.get(Router), 'navigate').and.callFake(() => {});
+
+    // Act
+    component.logout();
+
+    // Assert
+    expect(aSpy).toHaveBeenCalled();
+    expect(spy1).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+    expect(spy3).toHaveBeenCalledWith(false);
+    expect(spy4).toHaveBeenCalledWith(false);
+    expect(spy5).toHaveBeenCalledWith(false);
+    expect(rSpy).toHaveBeenCalled();
   });
 });

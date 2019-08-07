@@ -43,6 +43,7 @@ export class NavbarComponent implements OnInit {
     this.addedFoodsService.setMealsFromLocalStorage();
     this.addedFoodsService._openedSavedMeal.next(false);
     this.addedFoodsService._previousMealsSavedToLocalStorage.next(false);
+    this.addedFoodsService._mealsEdited.next(false);
   }
 
   changeLanguage() {
