@@ -352,16 +352,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   openSavedDay(uuid: string) {
-    const meals: Meal[] = JSON.parse(localStorage.getItem('meals'));
-    let foodsAdded = 0;
-    meals.forEach(m => {
-      foodsAdded += m.foods.length;
-    });
-    if (foodsAdded > 0) {
-      localStorage.setItem('previousMeals', JSON.stringify(meals));
-      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
-    }
-
+    this.setPreviousMeals();
     this.dayService.getSavedDay(uuid).subscribe(
       day => {
         const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
@@ -393,6 +384,30 @@ export class ToolbarComponent implements OnInit {
         });
       }
     );
+  }
+
+  private setPreviousMeals() {
+    const loadedDay = JSON.parse(localStorage.getItem('loadedDay'));
+    const meals: Meal[] = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded > 0) {
+      let day = {
+        id: '',
+        name: '',
+        meals: meals
+      };
+
+      if (loadedDay !== null) {
+        day.id = loadedDay.id;
+        day.name = loadedDay.name;
+      }
+
+      localStorage.setItem('previousMeals', JSON.stringify(day));
+      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
+    }
   }
 
   openAddMealModal(content, meal: Meal) {

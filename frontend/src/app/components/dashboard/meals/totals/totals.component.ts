@@ -50,6 +50,7 @@ export class TotalsComponent implements OnInit {
           this.addedFoodsService._openedSavedMeal.next(false);
           this.addedFoodsService._mealsEdited.next(false);
           localStorage.removeItem('loadedDay');
+          localStorage.removeItem('previousMeals');
           this.dayService.loadedDayName.next(null);
         }
       },

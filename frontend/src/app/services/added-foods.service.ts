@@ -42,7 +42,7 @@ export class AddedFoodsService {
   }
 
   setPreviousMealsFromLocalStorage() {
-    this._meals.next(JSON.parse(localStorage.getItem('previousMeals')));
+    this._meals.next(JSON.parse(localStorage.getItem('previousMeals')).meals);
     this.setTargets();
     this.setTotals();
   }

@@ -155,10 +155,19 @@ export class MealsComponent implements OnInit {
   }
 
   reloadPreviousFoods() {
+    const day = JSON.parse(localStorage.getItem('previousMeals'));
     this.addedFoodsService.setPreviousMealsFromLocalStorage();
-    this.addedFoodsService._openedSavedMeal.next(false);
+    this.dayService.loadedDayName.next(day['name']);
     this.addedFoodsService._mealsEdited.next(false);
-    localStorage.removeItem('loadedDay');
+
+    if (day['id'] && day['id'].length > 0) {
+      this.addedFoodsService._openedSavedMeal.next(true);
+      localStorage.setItem('loadedDay', JSON.stringify({ id: day['id'], name: day['name'] }));
+    } else {
+      localStorage.removeItem('loadedDay');
+      this.addedFoodsService._openedSavedMeal.next(false);
+    }
+
     this.deletePreviousFoods();
   }
 

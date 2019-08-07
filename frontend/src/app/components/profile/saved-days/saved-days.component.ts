@@ -55,16 +55,7 @@ export class SavedDaysComponent implements OnInit {
   }
 
   loadDay(index: number) {
-    const meals = JSON.parse(localStorage.getItem('meals'));
-    let foodsAdded = 0;
-    meals.forEach(m => {
-      foodsAdded += m.foods.length;
-    });
-    if (foodsAdded > 0) {
-      localStorage.setItem('previousMeals', JSON.stringify(meals));
-      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
-    }
-
+    this.setPreviousMeals();
     this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
       day => {
         const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
@@ -97,6 +88,30 @@ export class SavedDaysComponent implements OnInit {
         });
       }
     );
+  }
+
+  private setPreviousMeals() {
+    const loadedDay = JSON.parse(localStorage.getItem('loadedDay'));
+    const meals: Meal[] = JSON.parse(localStorage.getItem('meals'));
+    let foodsAdded = 0;
+    meals.forEach(m => {
+      foodsAdded += m.foods.length;
+    });
+    if (foodsAdded > 0) {
+      let day = {
+        id: '',
+        name: '',
+        meals: meals
+      };
+
+      if (loadedDay !== null) {
+        day.id = loadedDay.id;
+        day.name = loadedDay.name;
+      }
+
+      localStorage.setItem('previousMeals', JSON.stringify(day));
+      this.addedFoodsService._previousMealsSavedToLocalStorage.next(true);
+    }
   }
 
   deleteDay(index: number) {
