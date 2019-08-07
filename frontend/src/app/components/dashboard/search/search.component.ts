@@ -20,10 +20,12 @@ export class SearchComponent implements OnInit {
   selectedFood: Food;
   selectedMeal = '';
   selectedAmount: number;
+  calorieAmount: number;
   meals = [];
   isLoggedIn = false;
   defaultValues = [10, 30, 50, 100];
   amountClicked = 0;
+  showGramInput = true;
   private _user = new BehaviorSubject<User>(null);
 
   @ViewChild('searchbar') search: ElementRef;
@@ -141,17 +143,24 @@ export class SearchComponent implements OnInit {
     this.selectedAmount += this.amountClicked;
   }
 
-  selectFood(food) {
+  private selectFood(food: Food) {
+    let amount = 0;
+    if (!this.showGramInput) {
+      amount = (this.calorieAmount / food.energy) * 100;
+    } else {
+      amount = this.selectedAmount !== undefined ? this.selectedAmount : 100;
+    }
+
     const selection = {
       food: food,
-      amount: this.selectedAmount !== undefined ? this.selectedAmount : 100,
+      amount: amount,
       meal: this.selectedMeal
     };
 
     this.addedFoodsService.addFoodToMeals(selection);
   }
 
-  openModal(content, food) {
+  openModal(content, food: Food) {
     this.selectedFood = food;
     this.modalService.open(content, { centered: true }).result.then(
       result => {

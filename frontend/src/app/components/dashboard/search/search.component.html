@@ -89,7 +89,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-center">
+    <div *ngIf="showGramInput" class="row justify-content-center">
       <div class="btn-group btn-group-toggle mt-3 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
         <label [ngClass]="{ 'btn-primary': selectedAmount !== 10, success: selectedAmount === 10 }" ngbButtonLabel>
           <input type="radio" ngbButton [value]="10" [(ngModel)]="amountClicked" /> 10g
@@ -105,7 +105,7 @@
         </label>
       </div>
     </div>
-    <div *ngIf="selectedFood.servingSize || selectedFood.packageSize" class="row justify-content-center">
+    <div *ngIf="showGramInput && (selectedFood.servingSize || selectedFood.packageSize)" class="row justify-content-center">
       <div class="btn-group btn-group-toggle mt-1 text-center" ngbRadioGroup [(ngModel)]="selectedAmount">
         <label
           *ngIf="selectedFood.servingSize"
@@ -128,8 +128,19 @@
     <div *ngIf="selectedAmount > 0" class="row justify-content-center mt-2">
       <button class="btn btn-primary" (click)="setAmount()">+ {{ amountClicked }}g</button>
     </div>
-    <div class="form-group mt-2">
-      <label for="amount">{{ 'AMOUNT' | translate }}</label>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="btn-group btn-group-toggle mt-3 text-center" name="formChooser" ngbRadioGroup [(ngModel)]="showGramInput">
+          <label class="btn btn-primary" [ngClass]="{ 'btn-success': showGramInput }" ngbButtonLabel>
+            <input name="radio" type="radio" ngbButton [value]="!showGramInput" /> {{ 'GRAMS' | translate }}
+          </label>
+          <label class="btn btn-primary" [ngClass]="{ 'btn-success': !showGramInput }" ngbButtonLabel>
+            <input name="radio" type="radio" ngbButton [value]="!showGramInput" /> {{ 'CALORIES' | translate }}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showGramInput" class="form-group mt-2">
       <input
         type="number"
         (keydown.enter)="modal.close('save')"
@@ -137,6 +148,17 @@
         placeholder="100g"
         [(ngModel)]="selectedAmount"
         #amountInput
+        ngbAutoFocus
+      />
+    </div>
+    <div *ngIf="!showGramInput" class="form-group mt-2">
+      <input
+        type="number"
+        (keydown.enter)="modal.close('save')"
+        class="form-control"
+        [(ngModel)]="calorieAmount"
+        placeholder="100 {{ 'KCAL' | translate }}"
+        #calorieInput
         ngbAutoFocus
       />
     </div>

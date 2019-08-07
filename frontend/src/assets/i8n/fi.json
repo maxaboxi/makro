@@ -367,5 +367,6 @@
   "PORTIONS": "annoksia",
   "OPEN_MEAL": "Avaa ateria",
   "COMPARE_MEALS": "Vertaile aterioita",
-  "FETCH_SELECTED_MEALS": "Hae valitut ateriat"
+  "FETCH_SELECTED_MEALS": "Hae valitut ateriat",
+  "CALORIES": "kilokaloria"
 }

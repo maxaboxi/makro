@@ -28,4 +28,8 @@ export class MockAdminService {
   public getMostRecentUsers() {
     return of([]);
   }
+
+  public getAllCreatedMeals() {
+    return of([]);
+  }
 }

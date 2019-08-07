@@ -21,9 +21,14 @@ export class MockAddedFoodsService {
     fatTarget: 1
   });
   public _totals = new BehaviorSubject<Totals>({ energy: 0, protein: 0, carb: 0, fat: 0, fiber: 0, sugar: 0, amount: 0 });
+
   constructor() {}
+
   public setMealsFromLocalStorage(): void {}
+
   public getMeals() {
     return [];
   }
+
+  public resetTotals(): void {}
 }

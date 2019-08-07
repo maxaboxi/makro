@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class MockDayService {
+  public loadedDayName = new BehaviorSubject<string>(null);
+
   constructor() {}
 
   public getAllSavedDays() {

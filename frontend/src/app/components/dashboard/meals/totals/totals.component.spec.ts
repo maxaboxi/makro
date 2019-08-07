@@ -5,6 +5,8 @@ import { MockAddedFoodsService } from 'src/app/test-helpers/MockAddedFoodsServic
 import { AddedFoodsService } from 'src/app/services/added-foods.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
+import { DayService } from 'src/app/services/day.service';
+import { MockDayService } from 'src/app/test-helpers/MockDayService';
 
 describe('TotalsComponent', () => {
   let component: TotalsComponent;
@@ -13,7 +15,7 @@ describe('TotalsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TotalsComponent, MockTranslatePipe],
-      providers: [{ provide: AddedFoodsService, useClass: MockAddedFoodsService }],
+      providers: [{ provide: AddedFoodsService, useClass: MockAddedFoodsService }, { provide: DayService, useClass: MockDayService }],
       imports: [NgbModule]
     }).compileComponents();
   }));

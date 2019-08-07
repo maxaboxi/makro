@@ -32,4 +32,6 @@ export class MockAuthService {
   }
 
   public getUserInfo(): void {}
+
+  public logout(): void {}
 }

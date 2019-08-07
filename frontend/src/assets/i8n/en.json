@@ -367,5 +367,6 @@
   "PORTIONS": "portions",
   "OPEN_MEAL": "Open meal",
   "COMPARE_MEALS": "Compare saved meals",
-  "FETCH_SELECTED_MEALS": "Fetch selected meals"
+  "FETCH_SELECTED_MEALS": "Fetch selected meals",
+  "CALORIES": "calories"
 }

@@ -9,6 +9,8 @@ import { MockFlashMessagesService } from 'src/app/test-helpers/MockFlashMessages
 import { MockTranslateService } from 'src/app/test-helpers/MockTranslateService';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
+import { AdminService } from 'src/app/services/admin.service';
+import { MockAdminService } from 'src/app/test-helpers/MockAdminService';
 
 describe('AdminMealsComponent', () => {
   let component: AdminMealsComponent;
@@ -21,7 +23,8 @@ describe('AdminMealsComponent', () => {
       providers: [
         { provide: FlashMessagesService, useClass: MockFlashMessagesService },
         { provide: TranslateService, useClass: MockTranslateService },
-        { provide: SharedMealsService, useClass: MockSharedMealsService }
+        { provide: SharedMealsService, useClass: MockSharedMealsService },
+        { provide: AdminService, useClass: MockAdminService }
       ]
     }).compileComponents();
   }));

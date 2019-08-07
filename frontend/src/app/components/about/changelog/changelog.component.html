@@ -9,6 +9,18 @@
       <div class="card">
         <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.1.0.5)</div>
         <ul class="list-group list-group-flush">
+          <li class="list-group list-group-item">Ruokia voi lisätä ateriaan nyt myös teityn kalorimäärän verran.</li>
+          <li class="list-group list-group-item">Avatun päivän nimi näkyy yhteenlaskettujen makroarvojen yläpuolella.</li>
+          <li class="list-group list-group-item">Bugikorjauksia</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mb-3">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <div class="card">
+        <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.1.0.5)</div>
+        <ul class="list-group list-group-flush">
           <li class="list-group list-group-item">Aterioita voi tallentaa nyt myös omaan käyttöön</li>
           <li class="list-group list-group-item">Tallennettuja aterioita voi vertailla keskenään.</li>
           <li class="list-group list-group-item">Bugikorjauksia</li>
@@ -42,33 +54,7 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-center mb-3">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <div class="card">
-        <div class="card-header lead">{{ 'CHANGES' | translate }} (2.1.0.2)</div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group list-group-item">
-            Profiilisivulta voi seurata luomiensa PDF-tiedostojen määrää.
-          </li>
-          <li class="list-group list-group-item">Ruoalle voi laittaa painoksi 0 grammaa ateriasuunnitelmaan lisätessä.</li>
-          <li class="list-group list-group-item">Bugikorjauksia</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-center mb-3">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-      <div class="card">
-        <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.1.0.1)</div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group list-group-item">
-            Lisätty mahdollisuus koostaa tallennetuista päivistä yhtenäinen jakso, josta näkee muun muassa paljonko on syönyt keskimäärin
-            per päivä.
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+
   <div class="row justify-content-center mt-2 mb-3">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
       <button class="btn btn-block btn-outline-primary" (click)="toggleShowOlderUpdates()">
@@ -77,6 +63,33 @@
     </div>
   </div>
   <ng-container *ngIf="showOlderUpdates">
+    <div class="row justify-content-center mb-3">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header lead">{{ 'CHANGES' | translate }} (2.1.0.2)</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group list-group-item">
+              Profiilisivulta voi seurata luomiensa PDF-tiedostojen määrää.
+            </li>
+            <li class="list-group list-group-item">Ruoalle voi laittaa painoksi 0 grammaa ateriasuunnitelmaan lisätessä.</li>
+            <li class="list-group list-group-item">Bugikorjauksia</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header lead">{{ 'NEW_FEATURES' | translate }} (2.1.0.1)</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group list-group-item">
+              Lisätty mahdollisuus koostaa tallennetuista päivistä yhtenäinen jakso, josta näkee muun muassa paljonko on syönyt keskimäärin
+              per päivä.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="row justify-content-center mb-3">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
