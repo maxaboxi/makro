@@ -83,7 +83,8 @@ export class SavedDaysComponent implements OnInit {
         });
 
         localStorage.setItem('meals', JSON.stringify(day.allMeals));
-        localStorage.setItem('loadedDay', JSON.stringify(this.savedDays[index].uuid));
+        localStorage.setItem('loadedDay', JSON.stringify({ id: this.savedDays[index].uuid, name: day.name }));
+        this.dayService.loadedDayName.next(day.name);
         this.addedFoodsService._mealsEdited.next(false);
         this.addedFoodsService._openedSavedMeal.next(true);
         this.addedFoodsService.setMealsFromLocalStorage();

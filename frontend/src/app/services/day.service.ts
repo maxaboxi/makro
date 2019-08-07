@@ -4,12 +4,14 @@ import { Day } from '../models/Day';
 import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
 import { DayName } from '../models/DayName';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayService {
   private baseUrl = `${environment.baseUrl}/day`;
+  public loadedDayName = new BehaviorSubject<string>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -63,7 +65,7 @@ export class DayService {
     return this.http.put(url, day, { headers: headers });
   }
 
-  removeDays(days) {
+  removeDays(days: string[]) {
     const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({

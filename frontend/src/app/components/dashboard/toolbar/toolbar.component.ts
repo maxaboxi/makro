@@ -299,7 +299,7 @@ export class ToolbarComponent implements OnInit {
 
   createPdf() {
     const loaded = JSON.parse(localStorage.getItem('loadedDay'));
-    this.statisticsServcice.CreatePDF({ user: this.user.uuid, day: loaded }).subscribe(() => {
+    this.statisticsServcice.CreatePDF({ user: this.user.uuid, day: loaded.id }).subscribe(() => {
       const doc = new jsPDF('p', 'pt');
       const totalsTable = document.getElementById('totals');
       const mealElement = document.getElementById('meals');
@@ -380,7 +380,8 @@ export class ToolbarComponent implements OnInit {
         });
 
         localStorage.setItem('meals', JSON.stringify(day.allMeals));
-        localStorage.setItem('loadedDay', JSON.stringify(uuid));
+        localStorage.setItem('loadedDay', JSON.stringify({ id: uuid, name: day.name }));
+        this.dayService.loadedDayName.next(day.name);
         this.addedFoodsService._mealsEdited.next(false);
         this.addedFoodsService._openedSavedMeal.next(true);
         this.addedFoodsService.setMealsFromLocalStorage();

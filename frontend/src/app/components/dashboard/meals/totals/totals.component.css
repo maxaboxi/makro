@@ -42,15 +42,28 @@ td {
   width: 150px;
 }
 
+.day-name {
+  display: block;
+  min-width: 640px;
+}
+
 @media screen and (max-width: 720px) {
   .t-head {
     width: 75px;
+  }
+
+  .day-name {
+    min-width: 400px;
   }
 }
 
 @media screen and (max-width: 575px) {
   .t-head {
     width: 125px;
+  }
+
+  .day-name {
+    min-width: 260px;
   }
 }
 

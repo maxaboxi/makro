@@ -71,7 +71,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("updatenames")]
-        public ResultDto UpdateDayNames(string id, [FromBody]List<DayDto> dayDtos)
+        public ResultDto UpdateDayNames([FromBody]List<DayDto> dayDtos)
         {
             return _dayService.UpdateDayNames(dayDtos, HttpContext.User.Identity.Name);
         }

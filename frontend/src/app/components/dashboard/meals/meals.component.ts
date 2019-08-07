@@ -66,8 +66,9 @@ export class MealsComponent implements OnInit {
   saveEditedDay() {
     const meals = JSON.parse(localStorage.getItem('meals'));
     let foodsAdded = 0;
-    meals.forEach(m => {
+    meals.forEach((m: Meal, i: number) => {
       foodsAdded += m.foods.length;
+      m.index = m.index === 99 ? i : m.index;
     });
     if (foodsAdded === 0) {
       this.flashMessage.show(this.translator.instant('NO_FOODS_IN_MEALS_ERROR'), {
@@ -77,7 +78,7 @@ export class MealsComponent implements OnInit {
       return;
     }
 
-    const d = JSON.parse(localStorage.getItem('loadedDay'));
+    const d = JSON.parse(localStorage.getItem('loadedDay')).id;
     const editedDay: Day = {
       uuid: d,
       allMeals: meals,
@@ -105,8 +106,9 @@ export class MealsComponent implements OnInit {
   openSaveDayModal(content) {
     const meals = JSON.parse(localStorage.getItem('meals'));
     let foodsAdded = 0;
-    meals.forEach(m => {
+    meals.forEach((m: Meal, i: number) => {
       foodsAdded += m.foods.length;
+      m.index = m.index === 99 ? i : m.index;
     });
     if (foodsAdded === 0) {
       this.flashMessage.show(this.translator.instant('NO_FOODS_IN_MEALS_ERROR'), {
