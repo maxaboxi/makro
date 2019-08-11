@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { AddedFoodsService } from '../../services/added-foods.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../services/connection.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   showDialog = false;
   isNavbarCollapsed = true;
   isLoggedIn: boolean;
   isAdmin: boolean;
   lang: string;
   online: boolean;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private auth: AuthService,
@@ -27,13 +30,19 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.monitor().subscribe(res => (this.online = res));
+    this.subscriptions.add(this.connectionService.monitor().subscribe(res => (this.online = res)));
     this.lang = localStorage.getItem('makro_lang');
     this.auth.getUserInfo();
-    this.auth.isLoggedIn.subscribe(res => {
-      this.isLoggedIn = res;
-      this.auth.isAdmin.subscribe(res => (this.isAdmin = res));
-    });
+    this.subscriptions.add(
+      this.auth.isLoggedIn.subscribe(res => {
+        this.isLoggedIn = res;
+        this.subscriptions.add(this.auth.isAdmin.subscribe(res => (this.isAdmin = res)));
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   logout() {

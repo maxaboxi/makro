@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { MockTranslatePipe } from 'src/app/test-helpers/MockTranslatePipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 describe('UserInfoComponent', () => {
   let component: UserInfoComponent;
@@ -47,5 +48,24 @@ describe('UserInfoComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call auth.fetchUserInfo, calculateBaseExpenditure and statisticsService.getAmountOfPdfCreatedByUser on ngOnInit', () => {
+    // Arrange
+    const aSpy = spyOn(TestBed.get(AuthService), 'fetchUserInfo').and.returnValue(
+      of({ username: '', lang: 'fi', userAddedExpenditure: 1, dailyExpenditure: 1 })
+    );
+    const cSpy = spyOn(component, 'calculateBaseExpenditure');
+    const sSpy = spyOn(TestBed.get(StatisticsService), 'getAmountOfPdfCreatedByUser').and.returnValue(of({ amount: 30 }));
+
+    // Act
+    component.ngOnInit();
+
+    expect(component.loading).toBeFalsy();
+    expect(component.user.dailyExpenditure).toBe(1);
+    expect(component.pdfsCreated).toBe(30);
+    expect(aSpy).toHaveBeenCalledTimes(1);
+    expect(cSpy).toHaveBeenCalledTimes(1);
+    expect(sSpy).toHaveBeenCalledTimes(1);
   });
 });

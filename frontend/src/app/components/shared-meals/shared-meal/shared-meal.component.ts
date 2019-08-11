@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Meal } from '../../../models/Meal';
 import { User } from '../../../models/User';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ import { Food } from 'src/app/models/Food';
   templateUrl: './shared-meal.component.html',
   styleUrls: ['./shared-meal.component.css']
 })
-export class SharedMealComponent implements OnInit {
+export class SharedMealComponent implements OnInit, OnDestroy {
   private _meal = new BehaviorSubject<Meal>(null);
   private _user = new BehaviorSubject<User>(null);
   amountTotal = 0;
@@ -34,6 +34,8 @@ export class SharedMealComponent implements OnInit {
   amountToAddPortions = 0;
   amountToAddGrams = 0;
   allFoods: Food[] = [];
+
+  private subscriptions = new Subscription();
 
   @Input()
   set meal(meal) {
@@ -63,7 +65,7 @@ export class SharedMealComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.monitor().subscribe(res => (this.online = res));
+    this.subscriptions.add(this.connectionService.monitor().subscribe(res => (this.online = res)));
     this.userLike = this.meal.userLike;
     this.meal.foods.forEach(f => {
       this.amountTotal += f.amount;
@@ -72,10 +74,16 @@ export class SharedMealComponent implements OnInit {
       this.carbTotal += f.carbs;
       this.fatTotal += f.fat;
     });
-    this.foodService.allFoods.subscribe(foods => {
-      this.allFoods = foods;
-    });
+    this.subscriptions.add(
+      this.foodService.allFoods.subscribe(foods => {
+        this.allFoods = foods;
+      })
+    );
     this.loading = false;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   openAddMealModal(content, meal: Meal) {
@@ -99,20 +107,24 @@ export class SharedMealComponent implements OnInit {
       value: c
     };
     if (this.userLike === 0) {
-      this.likeService.likePost(like).subscribe(res => {
-        if (res['success']) {
-          this.meal.totalPoints += like.value;
-          this.userLike = c;
-        }
-      });
+      this.subscriptions.add(
+        this.likeService.likePost(like).subscribe(res => {
+          if (res['success']) {
+            this.meal.totalPoints += like.value;
+            this.userLike = c;
+          }
+        })
+      );
     } else {
-      this.likeService.replacePreviousLike(like, like.sharedMealUUID).subscribe(res => {
-        if (res['success']) {
-          this.meal.totalPoints += like.value;
-          this.meal.totalPoints += like.value;
-          this.userLike = c;
-        }
-      });
+      this.subscriptions.add(
+        this.likeService.replacePreviousLike(like, like.sharedMealUUID).subscribe(res => {
+          if (res['success']) {
+            this.meal.totalPoints += like.value;
+            this.meal.totalPoints += like.value;
+            this.userLike = c;
+          }
+        })
+      );
     }
   }
 

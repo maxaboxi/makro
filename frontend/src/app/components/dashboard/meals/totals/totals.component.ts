@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AddedFoodsService } from '../../../../services/added-foods.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { Totals } from 'src/app/models/Totals';
 import { DayService } from 'src/app/services/day.service';
@@ -11,10 +11,12 @@ import { DayService } from 'src/app/services/day.service';
   templateUrl: './totals.component.html',
   styleUrls: ['./totals.component.css']
 })
-export class TotalsComponent implements OnInit {
+export class TotalsComponent implements OnInit, OnDestroy {
   totals: Totals;
   _user = new BehaviorSubject<User>(null);
   loadedDayName: string;
+
+  private subscriptions = new Subscription();
 
   @Input()
   set user(user) {
@@ -28,10 +30,16 @@ export class TotalsComponent implements OnInit {
   constructor(private addedFoodsService: AddedFoodsService, private modalService: NgbModal, private dayService: DayService) {}
 
   ngOnInit() {
-    this.addedFoodsService._totals.subscribe(totals => {
-      this.totals = totals;
-    });
-    this.dayService.loadedDayName.subscribe(name => (this.loadedDayName = name));
+    this.subscriptions.add(
+      this.addedFoodsService._totals.subscribe(totals => {
+        this.totals = totals;
+      })
+    );
+    this.subscriptions.add(this.dayService.loadedDayName.subscribe(name => (this.loadedDayName = name)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   clearSelectedFoods() {

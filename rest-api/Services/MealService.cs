@@ -288,6 +288,7 @@ namespace Makro.Services
                         if (meal != null)
                         {
                             meal.Name = mn.Name;
+                            meal.Index = mn.Index;
                             meal.UpdatedAt = DateTime.Now;
                             _context.Entry(meal).State = EntityState.Modified;
                             _context.SaveChanges();

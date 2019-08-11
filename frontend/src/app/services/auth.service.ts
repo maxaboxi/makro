@@ -89,15 +89,15 @@ export class AuthService {
   }
 
   setMeals() {
-    const meals = [
-      { name: 'Aamupala', foods: [] },
-      { name: 'Lounas', foods: [] },
-      { name: 'Välipala 1', foods: [] },
-      { name: 'Sali', foods: [] },
-      { name: 'Välipala 2', foods: [] },
-      { name: 'Iltapala', foods: [] }
-    ];
     if (!localStorage.getItem('meals')) {
+      const meals: Meal[] = [
+        { name: 'Aamupala', foods: [], index: 0 },
+        { name: 'Lounas', foods: [], index: 1 },
+        { name: 'Välipala 1', foods: [], index: 2 },
+        { name: 'Sali', foods: [], index: 3 },
+        { name: 'Välipala 2', foods: [], index: 4 },
+        { name: 'Iltapala', foods: [], index: 5 }
+      ];
       localStorage.setItem('meals', JSON.stringify(meals));
     }
   }

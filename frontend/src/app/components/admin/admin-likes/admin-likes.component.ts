@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Like } from '../../../models/Like';
 import { AdminService } from '../../../services/admin.service';
 import { LikeService } from '../../../services/like.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-likes',
   templateUrl: './admin-likes.component.html',
   styleUrls: ['./admin-likes.component.css']
 })
-export class AdminLikesComponent implements OnInit {
+export class AdminLikesComponent implements OnInit, OnDestroy {
   likes: Like[] = [];
   propertiesToShow = [
     { name: 'username', date: false },
@@ -21,6 +22,8 @@ export class AdminLikesComponent implements OnInit {
   deletedVotes = [];
   likesDeleted = false;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private adminService: AdminService,
     private likeService: LikeService,
@@ -29,7 +32,11 @@ export class AdminLikesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.adminService.getAllLikes().subscribe(likes => (this.likes = likes));
+    this.subscriptions.add(this.adminService.getAllLikes().subscribe(likes => (this.likes = likes)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   deleteVote(index: number) {
@@ -39,23 +46,25 @@ export class AdminLikesComponent implements OnInit {
   }
 
   deleteVotesFromDb() {
-    this.likeService.removeLikes(this.deletedVotes).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.likeService.removeLikes(this.deletedVotes).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.subscriptions.add(this.adminService.getAllLikes().subscribe(likes => (this.likes = likes)));
+            this.likesDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.adminService.getAllLikes().subscribe(likes => (this.likes = likes));
-          this.likesDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 }

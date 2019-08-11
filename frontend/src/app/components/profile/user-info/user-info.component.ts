@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -7,23 +7,26 @@ import { User } from '../../../models/User';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from '../../../services/connection.service';
 import { StatisticsService } from 'src/app/services/statistics.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css']
 })
-export class UserInfoComponent implements OnInit {
+export class UserInfoComponent implements OnInit, OnDestroy {
   user: User;
   showInfo = false;
   changed = false;
   showDeleteAccount = false;
-  newUserPassword;
-  newUserPasswordAgain;
-  currentPassword;
+  newUserPassword: string;
+  newUserPasswordAgain: string;
+  currentPassword: string;
   loading = true;
-  online;
+  online: boolean;
   pdfsCreated = 0;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private auth: AuthService,
@@ -36,21 +39,27 @@ export class UserInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.monitor().subscribe(res => (this.online = res));
-    this.auth.fetchUserInfo().subscribe(
-      user => {
-        this.user = user;
-        this.calculateBaseExpenditure();
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+    this.subscriptions.add(this.connectionService.monitor().subscribe(res => (this.online = res)));
+    this.subscriptions.add(
+      this.auth.fetchUserInfo().subscribe(
+        user => {
+          this.user = user;
+          this.calculateBaseExpenditure();
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
-    this.statisticsService.getAmountOfPdfCreatedByUser().subscribe(res => (this.pdfsCreated = res['amount']));
+    this.subscriptions.add(this.statisticsService.getAmountOfPdfCreatedByUser().subscribe(res => (this.pdfsCreated = res['amount'])));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   calculateBaseExpenditure() {
@@ -93,25 +102,27 @@ export class UserInfoComponent implements OnInit {
       dailyExpenditure: this.user.dailyExpenditure,
       sex: this.user.sex
     };
-    this.auth.updateUserInfo(userInfo).subscribe(
-      res => {
-        if (res) {
-          this.changed = false;
-          this.auth.setUserInfo(res['value']);
-          this.user = this.auth.getUserInfo();
-          this.calculateBaseExpenditure();
-          this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.auth.updateUserInfo(userInfo).subscribe(
+        res => {
+          if (res) {
+            this.changed = false;
+            this.auth.setUserInfo(res['value']);
+            this.user = this.auth.getUserInfo();
+            this.calculateBaseExpenditure();
+            this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
@@ -123,29 +134,31 @@ export class UserInfoComponent implements OnInit {
       m.index = i;
     });
 
-    this.auth.updateMealNames(this.user.meals).subscribe(
-      res => {
-        if (res.length > 0) {
-          this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.user.meals = res;
-          this.auth.setUserInfo(this.user);
-          this.changed = false;
-        } else {
-          this.flashMessage.show(res['message'], {
+    this.subscriptions.add(
+      this.auth.updateMealNames(this.user.meals).subscribe(
+        res => {
+          if (res.length > 0) {
+            this.flashMessage.show(this.translator.instant('INFORMATION_UPDATED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.user.meals = res;
+            this.auth.setUserInfo(this.user);
+            this.changed = false;
+          } else {
+            this.flashMessage.show(res['message'], {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show('Something went wrong', {
             cssClass: 'alert-danger',
             timeout: 2000
           });
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show('Something went wrong', {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
@@ -185,29 +198,31 @@ export class UserInfoComponent implements OnInit {
               password: this.currentPassword,
               newPassword: this.newUserPassword
             };
-            this.auth.changePassword(user).subscribe(
-              res => {
-                if (res['success']) {
-                  this.flashMessage.show(this.translator.instant('PASSWORD_CHANGED'), {
-                    cssClass: 'alert-success',
-                    timeout: 2000
-                  });
-                  this.newUserPassword = null;
-                  this.newUserPasswordAgain = null;
-                  this.currentPassword = null;
-                } else {
-                  this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+            this.subscriptions.add(
+              this.auth.changePassword(user).subscribe(
+                res => {
+                  if (res['success']) {
+                    this.flashMessage.show(this.translator.instant('PASSWORD_CHANGED'), {
+                      cssClass: 'alert-success',
+                      timeout: 2000
+                    });
+                    this.newUserPassword = null;
+                    this.newUserPasswordAgain = null;
+                    this.currentPassword = null;
+                  } else {
+                    this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                      cssClass: 'alert-danger',
+                      timeout: 2000
+                    });
+                  }
+                },
+                (error: Error) => {
+                  this.flashMessage.show(error['error'].msg, {
                     cssClass: 'alert-danger',
                     timeout: 2000
                   });
                 }
-              },
-              (error: Error) => {
-                this.flashMessage.show(error['error'].msg, {
-                  cssClass: 'alert-danger',
-                  timeout: 2000
-                });
-              }
+              )
             );
           }
         }
@@ -239,27 +254,29 @@ export class UserInfoComponent implements OnInit {
             usernameOrEmail: this.user.username,
             password: this.currentPassword
           };
-          this.auth.deleteAccount(user).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
-                  cssClass: 'alert-success',
-                  timeout: 2000
-                });
-                this.logout();
-              } else {
-                this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+          this.subscriptions.add(
+            this.auth.deleteAccount(user).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show(this.translator.instant('ACCOUNT_DELETED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.logout();
+                } else {
+                  this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+                    cssClass: 'alert-danger',
+                    timeout: 2000
+                  });
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
                   cssClass: 'alert-danger',
                   timeout: 2000
                 });
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         }
       },

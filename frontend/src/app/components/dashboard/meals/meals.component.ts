@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Meal } from '../../../models/Meal';
 import { AddedFoodsService } from '../../../services/added-foods.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Food } from '../../../models/Food';
 import { DayService } from '../../../services/day.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -15,7 +15,7 @@ import { NgbModal, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './meals.component.html',
   styleUrls: ['./meals.component.css']
 })
-export class MealsComponent implements OnInit {
+export class MealsComponent implements OnInit, OnDestroy {
   addedMeals: Meal[];
   _foods = new BehaviorSubject<Food[]>([]);
   _user = new BehaviorSubject<User>(null);
@@ -29,6 +29,8 @@ export class MealsComponent implements OnInit {
   dayName = '';
   date: NgbDateStruct = null;
   previousFoodsInLocalStorage = false;
+
+  private subscriptions = new Subscription();
 
   @Input()
   set foods(foods) {
@@ -57,10 +59,14 @@ export class MealsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.addedFoodsService._meals.subscribe(meals => (this.addedMeals = meals));
-    this.addedFoodsService._openedSavedMeal.subscribe(b => (this.openedSavedMeal = b));
-    this.addedFoodsService._mealsEdited.subscribe(b => (this.mealsEdited = b));
-    this.addedFoodsService._previousMealsSavedToLocalStorage.subscribe(b => (this.previousFoodsInLocalStorage = b));
+    this.subscriptions.add(this.addedFoodsService._meals.subscribe(meals => (this.addedMeals = meals)));
+    this.subscriptions.add(this.addedFoodsService._openedSavedMeal.subscribe(b => (this.openedSavedMeal = b)));
+    this.subscriptions.add(this.addedFoodsService._mealsEdited.subscribe(b => (this.mealsEdited = b)));
+    this.subscriptions.add(this.addedFoodsService._previousMealsSavedToLocalStorage.subscribe(b => (this.previousFoodsInLocalStorage = b)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   saveEditedDay() {
@@ -84,22 +90,24 @@ export class MealsComponent implements OnInit {
       allMeals: meals,
       userId: this.user.uuid
     };
-    this.dayService.saveEditedDay(editedDay).subscribe(
-      success => {
-        if (success) {
-          this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.dayService.saveEditedDay(editedDay).subscribe(
+        success => {
+          if (success) {
+            this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+          }
+          this.addedFoodsService._mealsEdited.next(false);
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
         }
-        this.addedFoodsService._mealsEdited.next(false);
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
@@ -126,23 +134,25 @@ export class MealsComponent implements OnInit {
             userId: this.user.uuid,
             date: this.date !== null ? new Date(this.date.year, this.date.month - 1, this.date.day) : null
           };
-          this.dayService.saveNewDay(newDay).subscribe(
-            success => {
-              if (success) {
-                this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
-                  cssClass: 'alert-success',
+          this.subscriptions.add(
+            this.dayService.saveNewDay(newDay).subscribe(
+              success => {
+                if (success) {
+                  this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.day.name = '';
+                  this.addedFoodsService._mealsEdited.next(false);
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
                   timeout: 2000
                 });
-                this.day.name = '';
-                this.addedFoodsService._mealsEdited.next(false);
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         } else {
           this.day.name = '';

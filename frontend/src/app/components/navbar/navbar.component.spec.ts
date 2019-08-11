@@ -36,6 +36,7 @@ describe('NavbarComponent', () => {
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.lang = 'fi';
     router = TestBed.get(Router);
   });
 
@@ -46,6 +47,8 @@ describe('NavbarComponent', () => {
   it('should set lang, call auth.getUserInfo and check if logged in and admin', () => {
     // Arrange
     const spy = spyOn(TestBed.get(AuthService), 'getUserInfo');
+    component.isAdmin = true;
+    component.isLoggedIn = true;
 
     // Act
     component.ngOnInit();
@@ -79,5 +82,35 @@ describe('NavbarComponent', () => {
     expect(spy4).toHaveBeenCalledWith(false);
     expect(spy5).toHaveBeenCalledWith(false);
     expect(rSpy).toHaveBeenCalled();
+  });
+
+  it('should change language to en', () => {
+    // Arrange
+    const spy = spyOn(TestBed.get(TranslateService), 'use');
+    const authSpy = spyOn(TestBed.get(AuthService), 'updateLanguage');
+
+    // Act
+    component.changeLanguage();
+
+    // Assert
+    expect(spy).toHaveBeenCalledWith('en');
+    expect(component.lang).toBe('en');
+    expect(authSpy).not.toHaveBeenCalled();
+  });
+
+  it('should change language to en and call auth.updateLanguage', () => {
+    // Arrange
+    const spy = spyOn(TestBed.get(TranslateService), 'use');
+    const authSpy = spyOn(TestBed.get(AuthService), 'updateLanguage');
+    component.lang = 'fi';
+    component.isLoggedIn = true;
+
+    // Act
+    component.changeLanguage();
+
+    // Assert
+    expect(spy).toHaveBeenCalledWith('en');
+    expect(component.lang).toBe('en');
+    expect(authSpy).toHaveBeenCalledWith('en');
   });
 });

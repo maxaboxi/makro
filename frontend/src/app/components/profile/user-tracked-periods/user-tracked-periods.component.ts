@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TrackedPeriodService } from 'src/app/services/tracked-period.service';
 import { TrackedPeriod } from 'src/app/models/TrackedPeriod';
 import { ConnectionService } from 'src/app/services/connection.service';
@@ -8,13 +8,14 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { NewTrackedPeriod } from 'src/app/models/NewTrackedPeriod';
 import { Day } from 'src/app/models/Day';
 import { DayService } from 'src/app/services/day.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-tracked-periods',
   templateUrl: './user-tracked-periods.component.html',
   styleUrls: ['./user-tracked-periods.component.css']
 })
-export class UserTrackedPeriodsComponent implements OnInit {
+export class UserTrackedPeriodsComponent implements OnInit, OnDestroy {
   trackedPeriods: TrackedPeriod[] = [];
   loading = true;
   loadingTrackedPeriod = false;
@@ -32,6 +33,8 @@ export class UserTrackedPeriodsComponent implements OnInit {
   editing = false;
   includeCreatedAt = false;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private trackedPeriodService: TrackedPeriodService,
     private connectionService: ConnectionService,
@@ -42,39 +45,47 @@ export class UserTrackedPeriodsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.monitor().subscribe(res => (this.online = res));
+    this.subscriptions.add(this.connectionService.monitor().subscribe(res => (this.online = res)));
     this.getAllTrackedPeriods();
-    this.dayService.getAllSavedDays().subscribe(res => (this.days = res));
+    this.subscriptions.add(this.dayService.getAllSavedDays().subscribe(res => (this.days = res)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   getAllTrackedPeriods() {
     this.loading = true;
-    this.trackedPeriodService.getAllTrackedPeriods().subscribe(
-      res => {
-        this.trackedPeriods = res;
-        this.loading = false;
-      },
-      (error: Error) => {
-        console.error(error);
-        this.loading = false;
-      }
+    this.subscriptions.add(
+      this.trackedPeriodService.getAllTrackedPeriods().subscribe(
+        res => {
+          this.trackedPeriods = res;
+          this.loading = false;
+        },
+        (error: Error) => {
+          console.error(error);
+          this.loading = false;
+        }
+      )
     );
   }
 
   getLastSevenDays() {
     this.loadingTrackedPeriod = true;
-    this.trackedPeriodService.getLastSevenDays(this.includeCreatedAt).subscribe(
-      res => {
-        this.selectedTrackedPeriod = res;
-        this.loadingTrackedPeriod = false;
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-        this.loadingTrackedPeriod = false;
-      }
+    this.subscriptions.add(
+      this.trackedPeriodService.getLastSevenDays(this.includeCreatedAt).subscribe(
+        res => {
+          this.selectedTrackedPeriod = res;
+          this.loadingTrackedPeriod = false;
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+          this.loadingTrackedPeriod = false;
+        }
+      )
     );
   }
 
@@ -82,27 +93,29 @@ export class UserTrackedPeriodsComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
-          this.trackedPeriodService.saveNewTrackedPeriod(this.newTrackedPeriod).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('TRACKED_PERIOD_SAVED'), {
-                  cssClass: 'alert-success',
+          this.subscriptions.add(
+            this.trackedPeriodService.saveNewTrackedPeriod(this.newTrackedPeriod).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show(this.translator.instant('TRACKED_PERIOD_SAVED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.newTrackedPeriod = {
+                    name: '',
+                    dayIds: []
+                  };
+                  this.addedDays = [];
+                  this.getAllTrackedPeriods();
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
                   timeout: 2000
                 });
-                this.newTrackedPeriod = {
-                  name: '',
-                  dayIds: []
-                };
-                this.addedDays = [];
-                this.getAllTrackedPeriods();
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         } else {
           this.newTrackedPeriod = {
@@ -140,26 +153,28 @@ export class UserTrackedPeriodsComponent implements OnInit {
             tp.dayIds.push(d.uuid);
           });
 
-          this.trackedPeriodService.saveEditedTrackedPeriod(tp).subscribe(
-            res => {
-              if (res['success']) {
-                this.selectedTrackedPeriod = undefined;
-                this.getAllTrackedPeriods();
+          this.subscriptions.add(
+            this.trackedPeriodService.saveEditedTrackedPeriod(tp).subscribe(
+              res => {
+                if (res['success']) {
+                  this.selectedTrackedPeriod = undefined;
+                  this.getAllTrackedPeriods();
 
-                for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
-                  if (this.fetchedTrackedPeriods[i].uuid === originalTrackedPeriod.uuid) {
-                    this.fetchedTrackedPeriods.splice(i, 1);
-                    break;
+                  for (let i = 0; i < this.fetchedTrackedPeriods.length; i++) {
+                    if (this.fetchedTrackedPeriods[i].uuid === originalTrackedPeriod.uuid) {
+                      this.fetchedTrackedPeriods.splice(i, 1);
+                      break;
+                    }
                   }
                 }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         } else {
           this.addedDays = [];
@@ -188,19 +203,21 @@ export class UserTrackedPeriodsComponent implements OnInit {
     }
 
     if (!found) {
-      this.trackedPeriodService.getTrackedPeriod(trackedPeriod.uuid).subscribe(
-        res => {
-          this.selectedTrackedPeriod = res;
-          this.fetchedTrackedPeriods.push(res);
-          this.loadingTrackedPeriod = false;
-        },
-        (error: Error) => {
-          this.flashMessage.show(error['error'].msg, {
-            cssClass: 'alert-danger',
-            timeout: 2000
-          });
-          this.loadingTrackedPeriod = false;
-        }
+      this.subscriptions.add(
+        this.trackedPeriodService.getTrackedPeriod(trackedPeriod.uuid).subscribe(
+          res => {
+            this.selectedTrackedPeriod = res;
+            this.fetchedTrackedPeriods.push(res);
+            this.loadingTrackedPeriod = false;
+          },
+          (error: Error) => {
+            this.flashMessage.show(error['error'].msg, {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+            this.loadingTrackedPeriod = false;
+          }
+        )
       );
     }
   }
@@ -212,25 +229,29 @@ export class UserTrackedPeriodsComponent implements OnInit {
   }
 
   deleteTrackedPeriodsFromDb() {
-    this.trackedPeriodService.removeTrackedPeriods(this.deletedTrackedPeriods).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.trackedPeriodService.removeTrackedPeriods(this.deletedTrackedPeriods).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.subscriptions.add(
+              this.trackedPeriodService.getAllTrackedPeriods().subscribe(tps => {
+                this.trackedPeriods = tps;
+              })
+            );
+            this.trackedPeriodsDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.trackedPeriodService.getAllTrackedPeriods().subscribe(tps => {
-            this.trackedPeriods = tps;
-          });
-          this.trackedPeriodsDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 

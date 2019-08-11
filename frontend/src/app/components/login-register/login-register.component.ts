@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'src/app/models/User';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AddedFoodsService } from 'src/app/services/added-foods.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login-register',
@@ -56,7 +57,7 @@ import { TranslateService } from '@ngx-translate/core';
     ])
   ]
 })
-export class LoginRegisterComponent implements OnInit {
+export class LoginRegisterComponent implements OnInit, OnDestroy {
   loginUser: User = {
     username: '',
     password: ''
@@ -72,6 +73,8 @@ export class LoginRegisterComponent implements OnInit {
   currentState = 'initial';
   passwordAgain = '';
 
+  private subscriptions = new Subscription();
+
   constructor(
     private flashMessage: FlashMessagesService,
     private auth: AuthService,
@@ -81,6 +84,10 @@ export class LoginRegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 
   changeState() {
     this.currentState = this.currentState === 'initial' ? 'final' : 'initial';
@@ -108,30 +115,32 @@ export class LoginRegisterComponent implements OnInit {
       return;
     }
 
-    this.auth.forgotPassword(this.loginUser.username).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(res['message'], {
-            cssClass: 'alert-success',
-            timeout: 3000
-          });
-          this.showPasswordReset = false;
-          this.router.navigate(['/resetpassword']);
-        } else {
-          this.flashMessage.show(res['message'], {
+    this.subscriptions.add(
+      this.auth.forgotPassword(this.loginUser.username).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(res['message'], {
+              cssClass: 'alert-success',
+              timeout: 3000
+            });
+            this.showPasswordReset = false;
+            this.router.navigate(['/resetpassword']);
+          } else {
+            this.flashMessage.show(res['message'], {
+              cssClass: 'alert-danger',
+              timeout: 3000
+            });
+          }
+          this.username = null;
+        },
+        (error: Error) => {
+          this.flashMessage.show('Something went wrong', {
             cssClass: 'alert-danger',
-            timeout: 3000
+            timeout: 2000
           });
+          this.showPasswordReset = true;
         }
-        this.username = null;
-      },
-      (error: Error) => {
-        this.flashMessage.show('Something went wrong', {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-        this.showPasswordReset = true;
-      }
+      )
     );
   }
 
@@ -161,39 +170,41 @@ export class LoginRegisterComponent implements OnInit {
       password: this.loginUser.password
     };
 
-    this.auth.login(data).subscribe(
-      res => {
-        if (res['user']) {
-          this.flashMessage.show(this.translator.instant('LOGGED_IN'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.loginUser = {
-            username: '',
-            password: ''
-          };
-          localStorage.removeItem('loadedDay');
-          localStorage.setItem('token', res['token']);
-          this.auth.setUserInfo(res['user']);
-          this.translator.use(res['user'].lang);
-          this.addedFoods.setMealsFromLocalStorage();
-          this.auth.isLoggedIn.next(true);
-          this.router.navigate(['/']);
-        } else {
+    this.subscriptions.add(
+      this.auth.login(data).subscribe(
+        res => {
+          if (res['user']) {
+            this.flashMessage.show(this.translator.instant('LOGGED_IN'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.loginUser = {
+              username: '',
+              password: ''
+            };
+            localStorage.removeItem('loadedDay');
+            localStorage.setItem('token', res['token']);
+            this.auth.setUserInfo(res['user']);
+            this.translator.use(res['user'].lang);
+            this.addedFoods.setMealsFromLocalStorage();
+            this.auth.isLoggedIn.next(true);
+            this.router.navigate(['/']);
+          } else {
+            this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+            this.showPasswordReset = true;
+          }
+        },
+        (error: Error) => {
           this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
             cssClass: 'alert-danger',
             timeout: 2000
           });
           this.showPasswordReset = true;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(this.translator.instant('WRONG_CREDENTIALS'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-        this.showPasswordReset = true;
-      }
+      )
     );
   }
 
@@ -220,32 +231,34 @@ export class LoginRegisterComponent implements OnInit {
       email: this.registerUser.email ? this.registerUser.email : null
     };
 
-    this.auth.register(data).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('REGISTER_SUCCESFULL'), {
-            cssClass: 'alert-success',
-            timeout: 2000
-          });
-          this.changeState();
-          this.registerUser = {
-            username: '',
-            password: '',
-            email: ''
-          };
-        } else {
-          this.flashMessage.show(res['message'], {
+    this.subscriptions.add(
+      this.auth.register(data).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('REGISTER_SUCCESFULL'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.changeState();
+            this.registerUser = {
+              username: '',
+              password: '',
+              email: ''
+            };
+          } else {
+            this.flashMessage.show(res['message'], {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
             cssClass: 'alert-danger',
             timeout: 2000
           });
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 }

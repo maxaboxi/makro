@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from '../../../models/User';
 import { FoodService } from '../../../services/food.service';
 import { SharedMealsService } from '../../../services/shared-meals.service';
@@ -10,13 +10,14 @@ import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { AddedFoodsService } from 'src/app/services/added-foods.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-shared-meals',
   templateUrl: './user-shared-meals.component.html',
   styleUrls: ['./user-shared-meals.component.css']
 })
-export class UserSharedMealsComponent implements OnInit {
+export class UserSharedMealsComponent implements OnInit, OnDestroy {
   user: User;
   allFoods: Food[];
   sharedMeals: Meal[] = [];
@@ -41,6 +42,8 @@ export class UserSharedMealsComponent implements OnInit {
   amountToAddPortions = 0;
   amountToAddGrams = 0;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private auth: AuthService,
     private foodService: FoodService,
@@ -54,36 +57,46 @@ export class UserSharedMealsComponent implements OnInit {
 
   ngOnInit() {
     this.meals = JSON.parse(localStorage.getItem('meals'));
-    this.auth.user.subscribe(user => {
-      this.user = user;
-      if (user.username) {
-        this.getMeals();
-        this.foodService.allFoods.subscribe(foods => {
-          this.allFoods = foods;
-        });
-      }
-    });
+    this.subscriptions.add(
+      this.auth.user.subscribe(user => {
+        this.user = user;
+        if (user.username) {
+          this.getMeals();
+          this.subscriptions.add(
+            this.foodService.allFoods.subscribe(foods => {
+              this.allFoods = foods;
+            })
+          );
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   private getMeals() {
-    this.sharedMealsService.getMealsByUser().subscribe(
-      meals => {
-        meals.forEach(m => {
-          if (m.shared) {
-            this.sharedMeals.push(m);
-          } else {
-            this.savedMeals.push(m);
-          }
-        });
-        this.loading = false;
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+    this.subscriptions.add(
+      this.sharedMealsService.getMealsByUser().subscribe(
+        meals => {
+          meals.forEach(m => {
+            if (m.shared) {
+              this.sharedMeals.push(m);
+            } else {
+              this.savedMeals.push(m);
+            }
+          });
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
   }
 
@@ -100,139 +113,149 @@ export class UserSharedMealsComponent implements OnInit {
   }
 
   deleteSharedMealsFromDb() {
-    this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.sharedMealsService.removeMeals(this.deletedSharedMeals).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.getMeals();
+            this.sharedMealsDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.getMeals();
-          this.sharedMealsDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
   deleteSavedMealsFromDb() {
-    this.sharedMealsService.removeMeals(this.deletedSavedMeals).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.sharedMealsService.removeMeals(this.deletedSavedMeals).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.getMeals();
+            this.savedMealsDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.getMeals();
-          this.savedMealsDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
   openAddMealModal(content, meal: Meal) {
-    this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
-      res => {
-        this.selectedMeal = res;
-        this.selectedMeal.foods.forEach(f => {
-          this.amountTotal += f.amount;
-          this.kcalTotal += f.energy;
-          this.proteinTotal += f.protein;
-          this.carbTotal += f.carbs;
-          this.fatTotal += f.fat;
-        });
-        this.modalService.open(content, { centered: true }).result.then(
-          result => {
-            if (result === 'open') {
-              this.addMeal();
-            } else {
+    this.subscriptions.add(
+      this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
+        res => {
+          this.selectedMeal = res;
+          this.selectedMeal.foods.forEach(f => {
+            this.amountTotal += f.amount;
+            this.kcalTotal += f.energy;
+            this.proteinTotal += f.protein;
+            this.carbTotal += f.carbs;
+            this.fatTotal += f.fat;
+          });
+          this.modalService.open(content, { centered: true }).result.then(
+            result => {
+              if (result === 'open') {
+                this.addMeal();
+              } else {
+                this.resetAddMealVariables();
+              }
+            },
+            dismissed => {
               this.resetAddMealVariables();
             }
-          },
-          dismissed => {
-            this.resetAddMealVariables();
-          }
-        );
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+          );
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
   }
 
   openEditSharedMealModal(content, meal: Meal) {
-    this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
-      res => {
-        this.selectedSharedMeal = res;
-        if (!this.selectedSharedMealOrigFoods) {
-          this.selectedSharedMealOrigFoods = { ...this.selectedSharedMeal.foods };
-        }
+    this.subscriptions.add(
+      this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(
+        res => {
+          this.selectedSharedMeal = res;
+          if (!this.selectedSharedMealOrigFoods) {
+            this.selectedSharedMealOrigFoods = { ...this.selectedSharedMeal.foods };
+          }
 
-        if (!this.selectedSharedMealOrigTags) {
-          this.selectedSharedMealOrigTags = { ...this.selectedSharedMeal.tags };
-        }
-        this.modalService.open(content, { centered: true }).result.then(
-          result => {
-            if (result === 'save') {
-              this.selectedSharedMeal.foods.forEach((f, i) => {
-                if (!f.amount || f.amount === 0) {
-                  this.selectedSharedMeal.foods.splice(i, 1);
-                }
-                if (f.amount !== 100) {
-                  const a = f.amount / 100;
-                  const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
-                  f.energy = origFood[0].energy * a;
-                  f.protein = origFood[0].protein * a;
-                  f.carbs = origFood[0].carbs * a;
-                  f.fat = origFood[0].fat * a;
-                  f.fiber = origFood[0].fiber * a;
-                  f.sugar = origFood[0].sugar * a;
-                }
-              });
-              this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
-                if (res['success']) {
-                  this.getMeals();
-                  this.selectedSharedMealOrigFoods = undefined;
-                  this.selectedSharedMeal = undefined;
-                  this.sharedMealTag = '';
-                  this.selectedSharedMealOrigTags = undefined;
-                  this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                    cssClass: 'alert-success',
-                    timeout: 2000
-                  });
-                }
-              });
-            } else {
+          if (!this.selectedSharedMealOrigTags) {
+            this.selectedSharedMealOrigTags = { ...this.selectedSharedMeal.tags };
+          }
+          this.modalService.open(content, { centered: true }).result.then(
+            result => {
+              if (result === 'save') {
+                this.selectedSharedMeal.foods.forEach((f, i) => {
+                  if (!f.amount || f.amount === 0) {
+                    this.selectedSharedMeal.foods.splice(i, 1);
+                  }
+                  if (f.amount !== 100) {
+                    const a = f.amount / 100;
+                    const origFood = this.returnOriginalFoodValues(f.uuid, f.name);
+                    f.energy = origFood[0].energy * a;
+                    f.protein = origFood[0].protein * a;
+                    f.carbs = origFood[0].carbs * a;
+                    f.fat = origFood[0].fat * a;
+                    f.fiber = origFood[0].fiber * a;
+                    f.sugar = origFood[0].sugar * a;
+                  }
+                });
+                this.subscriptions.add(
+                  this.sharedMealsService.saveEditedMeal(this.selectedSharedMeal).subscribe(res => {
+                    if (res['success']) {
+                      this.getMeals();
+                      this.selectedSharedMealOrigFoods = undefined;
+                      this.selectedSharedMeal = undefined;
+                      this.sharedMealTag = '';
+                      this.selectedSharedMealOrigTags = undefined;
+                      this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                        cssClass: 'alert-success',
+                        timeout: 2000
+                      });
+                    }
+                  })
+                );
+              } else {
+                this.resetEditSharedMealVariables();
+              }
+            },
+            dismissed => {
               this.resetEditSharedMealVariables();
             }
-          },
-          dismissed => {
-            this.resetEditSharedMealVariables();
-          }
-        );
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+          );
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
   }
 

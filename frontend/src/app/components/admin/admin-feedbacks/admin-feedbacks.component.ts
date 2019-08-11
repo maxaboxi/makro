@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FeedbackService } from '../../../services/feedback.service';
 import { Feedback } from '../../../models/Feedback';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,19 +7,22 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { AdminService } from '../../../services/admin.service';
 import { User } from '../../../models/User';
 import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-feedbacks',
   templateUrl: './admin-feedbacks.component.html',
   styleUrls: ['./admin-feedbacks.component.css']
 })
-export class AdminFeedbacksComponent implements OnInit {
+export class AdminFeedbacksComponent implements OnInit, OnDestroy {
   user: User;
   feedbacks: Feedback[];
   propertiesToShow = [{ name: 'username', date: false }, { name: 'createdAt', date: true }];
   selectedFeedback: Feedback;
   deletedFeedbacks = [];
   feedbacksDeleted = false;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private feedbackService: FeedbackService,
@@ -32,31 +35,37 @@ export class AdminFeedbacksComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user.subscribe(user => (this.user = user));
-    this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
+    this.subscriptions.add(this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks)));
   }
 
-  openFeedbackModal(content, feedback) {
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  openFeedbackModal(content, feedback: Feedback) {
     this.selectedFeedback = feedback;
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
           this.selectedFeedback.answeredBy = this.user.username;
-          this.adminService.submitAnswer(this.selectedFeedback).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                  cssClass: 'alert-success',
+          this.subscriptions.add(
+            this.adminService.submitAnswer(this.selectedFeedback).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.subscriptions.add(this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks)));
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
                   timeout: 2000
                 });
-                this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         }
         this.selectedFeedback = null;
@@ -74,24 +83,26 @@ export class AdminFeedbacksComponent implements OnInit {
   }
 
   deleteFeedbacksFromDb() {
-    this.adminService.removeFeedbacks(this.deletedFeedbacks).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.adminService.removeFeedbacks(this.deletedFeedbacks).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.deletedFeedbacks = [];
+            this.feedbacksDeleted = false;
+            this.subscriptions.add(this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks)));
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.deletedFeedbacks = [];
-          this.feedbacksDeleted = false;
-          this.feedbackService.getAllFeedbacks().subscribe(feedbacks => (this.feedbacks = feedbacks));
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 }

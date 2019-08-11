@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, DoCheck, IterableDiffers } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input, DoCheck, IterableDiffers, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Food } from '../../../../models/Food';
 import { Meal } from '../../../../models/Meal';
 import { AddedFoodsService } from '../../../../services/added-foods.service';
@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './meal-table.component.html',
   styleUrls: ['./meal-table.component.css']
 })
-export class MealTableComponent implements OnInit, DoCheck {
+export class MealTableComponent implements OnInit, DoCheck, OnDestroy {
   private _componentIndex = new BehaviorSubject(null);
   private _meal = new BehaviorSubject<Meal>(null);
   private _foods = new BehaviorSubject<Food[]>([]);
@@ -42,6 +42,8 @@ export class MealTableComponent implements OnInit, DoCheck {
   targetMeal: Meal;
   foodToBeCopied: Food;
   saveOrShare: string = 'save';
+
+  private subscriptions = new Subscription();
 
   @Input()
   set meal(meal) {
@@ -110,6 +112,10 @@ export class MealTableComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.meals = JSON.parse(localStorage.getItem('meals'));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   calculateTotals() {
@@ -221,33 +227,35 @@ export class MealTableComponent implements OnInit, DoCheck {
             portionSize: this.sharedMeal.portionSize,
             portions: this.sharedMeal.portions
           };
-          this.sharedMealsService.shareNewMeal(meal).subscribe(
-            success => {
-              if (success) {
-                if (this.saveOrShare === 'save') {
-                  this.flashMessage.show(this.translator.instant('MEAL_SAVED_SUCCESFULLY'), {
-                    cssClass: 'alert-success',
-                    timeout: 2000
-                  });
-                } else {
-                  this.flashMessage.show(this.translator.instant('MEAL_SHARED_SUCCESFULLY'), {
-                    cssClass: 'alert-success',
-                    timeout: 2000
-                  });
-                }
+          this.subscriptions.add(
+            this.sharedMealsService.shareNewMeal(meal).subscribe(
+              success => {
+                if (success) {
+                  if (this.saveOrShare === 'save') {
+                    this.flashMessage.show(this.translator.instant('MEAL_SAVED_SUCCESFULLY'), {
+                      cssClass: 'alert-success',
+                      timeout: 2000
+                    });
+                  } else {
+                    this.flashMessage.show(this.translator.instant('MEAL_SHARED_SUCCESFULLY'), {
+                      cssClass: 'alert-success',
+                      timeout: 2000
+                    });
+                  }
 
-                this.sharedMeal.name = '';
-                this.sharedMeal.info = '';
-                this.sharedMeal.tags = [];
-                this.saveOrShare = 'save';
+                  this.sharedMeal.name = '';
+                  this.sharedMeal.info = '';
+                  this.sharedMeal.tags = [];
+                  this.saveOrShare = 'save';
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         } else {
           this.sharedMeal.name = '';

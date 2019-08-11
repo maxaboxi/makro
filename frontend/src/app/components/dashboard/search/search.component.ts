@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Food } from '../../../models/Food';
 import { AuthService } from '../../../services/auth.service';
@@ -11,7 +11,7 @@ import { User } from '../../../models/User';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   includeFoodsAddedByOthers = false;
   searchTerm = '';
   private _foods = new BehaviorSubject([]);
@@ -27,6 +27,7 @@ export class SearchComponent implements OnInit {
   amountClicked = 0;
   showGramInput = true;
   private _user = new BehaviorSubject<User>(null);
+  private subscriptions = new Subscription();
 
   @ViewChild('searchbar') search: ElementRef;
 
@@ -64,15 +65,21 @@ export class SearchComponent implements OnInit {
   constructor(private modalService: NgbModal, private auth: AuthService, private addedFoodsService: AddedFoodsService) {}
 
   ngOnInit() {
-    this.auth.isLoggedIn.subscribe(res => {
-      this.isLoggedIn = res;
-      const meals = JSON.parse(localStorage.getItem('meals'));
-      this.meals = [];
-      meals.forEach(meal => {
-        this.meals.push(meal.name);
-        this.selectedMeal = this.meals[0];
-      });
-    });
+    this.subscriptions.add(
+      this.auth.isLoggedIn.subscribe(res => {
+        this.isLoggedIn = res;
+        const meals = JSON.parse(localStorage.getItem('meals'));
+        this.meals = [];
+        meals.forEach(meal => {
+          this.meals.push(meal.name);
+          this.selectedMeal = this.meals[0];
+        });
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   foodsByOthers() {

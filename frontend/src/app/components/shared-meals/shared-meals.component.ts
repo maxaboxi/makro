@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedMealsService } from '../../services/shared-meals.service';
 import { Meal } from '../../models/Meal';
 import { User } from '../../models/User';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shared-meals',
   templateUrl: './shared-meals.component.html',
   styleUrls: ['./shared-meals.component.css']
 })
-export class SharedMealsComponent implements OnInit {
+export class SharedMealsComponent implements OnInit, OnDestroy {
   allMeals: Meal[];
   sharedMealsFirst: Meal[];
   sharedMealsSecond: Meal[];
@@ -19,6 +20,8 @@ export class SharedMealsComponent implements OnInit {
   searchTerm = '';
   results = [];
   loading = true;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private auth: AuthService,
@@ -28,29 +31,35 @@ export class SharedMealsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user.subscribe(user => (this.user = user));
+    this.subscriptions.add(this.auth.user.subscribe(user => (this.user = user)));
     this.getAllMeals();
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
   private getAllMeals() {
-    this.sharedMealService.getAllMeals().subscribe(
-      meals => {
-        this.allMeals = JSON.parse(JSON.stringify(meals));
-        if (meals.length % 2 === 0) {
-          this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
-        } else {
-          this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2) + 1);
+    this.subscriptions.add(
+      this.sharedMealService.getAllMeals().subscribe(
+        meals => {
+          this.allMeals = JSON.parse(JSON.stringify(meals));
+          if (meals.length % 2 === 0) {
+            this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2));
+          } else {
+            this.sharedMealsFirst = meals.splice(0, Math.floor(meals.length / 2) + 1);
+          }
+          this.sharedMealsSecond = meals;
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
         }
-        this.sharedMealsSecond = meals;
-        this.loading = false;
-      },
-      (error: Error) => {
-        this.loading = false;
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 

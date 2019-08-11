@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Day } from '../../../models/Day';
 import { DayService } from '../../../services/day.service';
 import { User } from '../../../models/User';
@@ -10,18 +10,21 @@ import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DayName } from 'src/app/models/DayName';
 import { Meal } from 'src/app/models/Meal';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-saved-days',
   templateUrl: './saved-days.component.html',
   styleUrls: ['./saved-days.component.css']
 })
-export class SavedDaysComponent implements OnInit {
+export class SavedDaysComponent implements OnInit, OnDestroy {
   user: User;
   savedDays: Day[] = [];
   deletedDays = [];
   daysDeleted = false;
   loading = true;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private auth: AuthService,
@@ -34,59 +37,69 @@ export class SavedDaysComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user.subscribe(user => {
-      this.user = user;
-      if (user.username) {
-        this.dayService.getAllSavedDays().subscribe(
-          days => {
-            this.savedDays = days;
-            this.loading = false;
-          },
-          (error: Error) => {
-            this.loading = false;
-            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-              cssClass: 'alert-danger',
-              timeout: 2000
-            });
-          }
-        );
-      }
-    });
+    this.subscriptions.add(
+      this.auth.user.subscribe(user => {
+        this.user = user;
+        if (user.username) {
+          this.subscriptions.add(
+            this.dayService.getAllSavedDays().subscribe(
+              days => {
+                this.savedDays = days;
+                this.loading = false;
+              },
+              (error: Error) => {
+                this.loading = false;
+                this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+                  cssClass: 'alert-danger',
+                  timeout: 2000
+                });
+              }
+            )
+          );
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   loadDay(index: number) {
     this.setPreviousMeals();
-    this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
-      day => {
-        const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
-        userMeals.forEach(m => {
-          let found = false;
-          for (let i = 0; i < day.allMeals.length; i++) {
-            if (day.allMeals[i].name === m.name) {
-              found = true;
-              break;
+    this.subscriptions.add(
+      this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
+        day => {
+          const userMeals: Meal[] = JSON.parse(JSON.stringify(this.user.meals));
+          userMeals.forEach(m => {
+            let found = false;
+            for (let i = 0; i < day.allMeals.length; i++) {
+              if (day.allMeals[i].name === m.name) {
+                found = true;
+                break;
+              }
             }
-          }
 
-          if (!found) {
-            day.allMeals.push(m);
-          }
-        });
+            if (!found) {
+              day.allMeals.push(m);
+            }
+          });
 
-        localStorage.setItem('meals', JSON.stringify(day.allMeals));
-        localStorage.setItem('loadedDay', JSON.stringify({ id: this.savedDays[index].uuid, name: day.name }));
-        this.dayService.loadedDayName.next(day.name);
-        this.addedFoodsService._mealsEdited.next(false);
-        this.addedFoodsService._openedSavedMeal.next(true);
-        this.addedFoodsService.setMealsFromLocalStorage();
-        this.router.navigate(['/']);
-      },
-      (error: Error) => {
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+          localStorage.setItem('meals', JSON.stringify(day.allMeals));
+          localStorage.setItem('loadedDay', JSON.stringify({ id: this.savedDays[index].uuid, name: day.name }));
+          this.dayService.loadedDayName.next(day.name);
+          this.addedFoodsService._mealsEdited.next(false);
+          this.addedFoodsService._openedSavedMeal.next(true);
+          this.addedFoodsService.setMealsFromLocalStorage();
+          this.router.navigate(['/']);
+        },
+        (error: Error) => {
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
   }
 
@@ -121,25 +134,29 @@ export class SavedDaysComponent implements OnInit {
   }
 
   deleteDaysFromDb() {
-    this.dayService.removeDays(this.deletedDays).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.dayService.removeDays(this.deletedDays).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.subscriptions.add(
+              this.dayService.getAllSavedDays().subscribe(days => {
+                this.savedDays = days;
+              })
+            );
+            this.daysDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.dayService.getAllSavedDays().subscribe(days => {
-            this.savedDays = days;
-          });
-          this.daysDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
@@ -154,24 +171,28 @@ export class SavedDaysComponent implements OnInit {
               changedDays.push({ uuid: d.uuid, name: d.name });
             }
           });
-          this.dayService.updateDayNames(changedDays).subscribe(
-            res => {
-              if (res['success']) {
-                this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-                  cssClass: 'alert-success',
+          this.subscriptions.add(
+            this.dayService.updateDayNames(changedDays).subscribe(
+              res => {
+                if (res['success']) {
+                  this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.subscriptions.add(
+                    this.dayService.getAllSavedDays().subscribe(days => {
+                      this.savedDays = days;
+                    })
+                  );
+                }
+              },
+              (error: Error) => {
+                this.flashMessage.show(error['error'].msg, {
+                  cssClass: 'alert-danger',
                   timeout: 2000
                 });
-                this.dayService.getAllSavedDays().subscribe(days => {
-                  this.savedDays = days;
-                });
               }
-            },
-            (error: Error) => {
-              this.flashMessage.show(error['error'].msg, {
-                cssClass: 'alert-danger',
-                timeout: 2000
-              });
-            }
+            )
           );
         } else {
           this.savedDays = JSON.parse(JSON.stringify(originalDays));

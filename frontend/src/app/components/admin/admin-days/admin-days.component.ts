@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Day } from '../../../models/Day';
 import { AdminService } from '../../../services/admin.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-days',
   templateUrl: './admin-days.component.html',
   styleUrls: ['./admin-days.component.css']
 })
-export class AdminDaysComponent implements OnInit {
+export class AdminDaysComponent implements OnInit, OnDestroy {
   days: Day[];
   sharedDays;
   propertiesToShowDays = [{ name: 'username', date: false }, { name: 'name', date: false }];
@@ -29,6 +30,8 @@ export class AdminDaysComponent implements OnInit {
     sugar: 0
   };
 
+  private subscriptions = new Subscription();
+
   constructor(
     private adminService: AdminService,
     private modalService: NgbModal,
@@ -37,67 +40,77 @@ export class AdminDaysComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.adminService.getMostRecentSharedDays().subscribe(days => {
-      this.sharedDays = JSON.parse(JSON.stringify(days));
-    });
-    this.adminService.getMostRecentDays().subscribe(days => (this.days = days));
+    this.subscriptions.add(
+      this.adminService.getMostRecentSharedDays().subscribe(days => {
+        this.sharedDays = JSON.parse(JSON.stringify(days));
+      })
+    );
+    this.subscriptions.add(this.adminService.getMostRecentDays().subscribe(days => (this.days = days)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   getAllDays() {
-    this.adminService.getAllDays().subscribe(days => (this.days = days));
+    this.subscriptions.add(this.adminService.getAllDays().subscribe(days => (this.days = days)));
   }
 
   getAllSharedDays() {
-    this.adminService.getAllSharedDays().subscribe(days => {
-      this.sharedDays = JSON.parse(JSON.stringify(days));
-    });
+    this.subscriptions.add(
+      this.adminService.getAllSharedDays().subscribe(days => {
+        this.sharedDays = JSON.parse(JSON.stringify(days));
+      })
+    );
   }
 
   openDayModal(content, day) {
-    this.adminService.getDay(day.uuid).subscribe(
-      res => {
-        this.selectedDay = res;
-        this.selectedDay.allMeals.forEach(m => {
-          m.foods.forEach(f => {
-            this.selectedDayTotals.energy += f.energy;
-            (this.selectedDayTotals.protein += f.protein),
-              (this.selectedDayTotals.carbs += f.carbs),
-              (this.selectedDayTotals.fat += f.fat),
-              (this.selectedDayTotals.fiber += f.fiber),
-              (this.selectedDayTotals.sugar += f.sugar);
+    this.subscriptions.add(
+      this.adminService.getDay(day.uuid).subscribe(
+        res => {
+          this.selectedDay = res;
+          this.selectedDay.allMeals.forEach(m => {
+            m.foods.forEach(f => {
+              this.selectedDayTotals.energy += f.energy;
+              (this.selectedDayTotals.protein += f.protein),
+                (this.selectedDayTotals.carbs += f.carbs),
+                (this.selectedDayTotals.fat += f.fat),
+                (this.selectedDayTotals.fiber += f.fiber),
+                (this.selectedDayTotals.sugar += f.sugar);
+            });
           });
-        });
-        this.modalService.open(content, { centered: true }).result.then(
-          result => {
-            this.selectedDay = null;
-            this.selectedDayTotals = {
-              energy: 0,
-              protein: 0,
-              carbs: 0,
-              fat: 0,
-              fiber: 0,
-              sugar: 0
-            };
-          },
-          dismissed => {
-            this.selectedDay = null;
-            this.selectedDayTotals = {
-              energy: 0,
-              protein: 0,
-              carbs: 0,
-              fat: 0,
-              fiber: 0,
-              sugar: 0
-            };
-          }
-        );
-      },
-      (error: Error) => {
-        this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+          this.modalService.open(content, { centered: true }).result.then(
+            result => {
+              this.selectedDay = null;
+              this.selectedDayTotals = {
+                energy: 0,
+                protein: 0,
+                carbs: 0,
+                fat: 0,
+                fiber: 0,
+                sugar: 0
+              };
+            },
+            dismissed => {
+              this.selectedDay = null;
+              this.selectedDayTotals = {
+                energy: 0,
+                protein: 0,
+                carbs: 0,
+                fat: 0,
+                fiber: 0,
+                sugar: 0
+              };
+            }
+          );
+        },
+        (error: Error) => {
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
     );
   }
 
@@ -108,24 +121,26 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteDaysFromDb() {
-    this.adminService.removeDays(this.deletedDays).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.adminService.removeDays(this.deletedDays).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.deletedDays = [];
+            this.daysDeleted = false;
+            this.subscriptions.add(this.adminService.getAllDays().subscribe(days => (this.days = days)));
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.deletedDays = [];
-          this.daysDeleted = false;
-          this.adminService.getAllDays().subscribe(days => (this.days = days));
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 
@@ -136,25 +151,29 @@ export class AdminDaysComponent implements OnInit {
   }
 
   deleteSharedDaysFromDb() {
-    this.adminService.removeSharedDays(this.deletedSharedDays).subscribe(
-      res => {
-        if (res['success']) {
-          this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
-            cssClass: 'alert-success',
+    this.subscriptions.add(
+      this.adminService.removeSharedDays(this.deletedSharedDays).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('CHANGES_SAVED'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.subscriptions.add(
+              this.adminService.getAllSharedDays().subscribe(days => {
+                this.sharedDays = JSON.parse(JSON.stringify(days));
+              })
+            );
+            this.sharedDaysDeleted = false;
+          }
+        },
+        (error: Error) => {
+          this.flashMessage.show(error['error'].msg, {
+            cssClass: 'alert-danger',
             timeout: 2000
           });
-          this.adminService.getAllSharedDays().subscribe(days => {
-            this.sharedDays = JSON.parse(JSON.stringify(days));
-          });
-          this.sharedDaysDeleted = false;
         }
-      },
-      (error: Error) => {
-        this.flashMessage.show(error['error'].msg, {
-          cssClass: 'alert-danger',
-          timeout: 2000
-        });
-      }
+      )
     );
   }
 }
