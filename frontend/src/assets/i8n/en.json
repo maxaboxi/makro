@@ -368,5 +368,16 @@
   "OPEN_MEAL": "Open meal",
   "COMPARE_MEALS": "Compare saved meals",
   "FETCH_SELECTED_MEALS": "Fetch selected meals",
-  "CALORIES": "calories"
+  "CALORIES": "calories",
+  "VERSION_HISTORY": "Version history",
+  "BACK": "Back",
+  "SHOW_FOODS": " Show foods",
+  "RESTORE": "Restore",
+  "DAY_RESTORED_SUCCESFULLY": "Succesfully restored the selected day",
+  "UNABLE_TO_RESTORE_DAY": "Something went wrong while trying to restore the selected day",
+  "DELETE_DAY_AND_VERSIONS": "Delete selected day and all of its versions",
+  "DELETE_DAY_AND_VERSIONS_CONFIRMATION": "Are you sure that you want to delete the selected day and all of its versions?",
+  "DAYS_DELETED_SUCCESFULLY": "Day and all of its versions were deleted succesfully",
+  "DAY_DELETED_SUCCESFULLY": "Day deleted succesfully",
+  "DELETE_VERSION_CONFIRMATION": "Are you sure that you want to delete this version?"
 }

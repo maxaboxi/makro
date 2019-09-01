@@ -13,6 +13,7 @@ export class CompareMealTableComponent implements OnInit {
   private _meal = new BehaviorSubject<Meal>(null);
   private _foods = new BehaviorSubject<Food[]>([]);
   private _user = new BehaviorSubject<User>(null);
+  private _foodsEditable = new BehaviorSubject<boolean>(false);
   private energyTotal = 0;
   private proteinTotal = 0;
   private carbTotal = 0;
@@ -50,6 +51,15 @@ export class CompareMealTableComponent implements OnInit {
 
   constructor(private _iterableDiffers: IterableDiffers) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
+  }
+
+  @Input()
+  set foodsEditable(b: boolean) {
+    this._foodsEditable.next(b);
+  }
+
+  get foodsEditable() {
+    return this._foodsEditable.getValue();
   }
 
   ngDoCheck() {

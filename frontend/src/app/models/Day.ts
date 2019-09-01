@@ -6,4 +6,6 @@ export interface Day {
   allMeals: Meal[];
   userId: string;
   date?: Date;
+  hasVersions?: boolean;
+  versionCreated?: Date;
 }

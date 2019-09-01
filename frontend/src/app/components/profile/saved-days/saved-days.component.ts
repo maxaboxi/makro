@@ -20,9 +20,15 @@ import { Subscription } from 'rxjs';
 export class SavedDaysComponent implements OnInit, OnDestroy {
   user: User;
   savedDays: Day[] = [];
-  deletedDays = [];
+  deletedDays: string[] = [];
   daysDeleted = false;
   loading = true;
+  versionHistoryVisible = false;
+  mealsLoaded = false;
+  dayVersionHistory: Day[] = [];
+  fetchedDays: Day[] = [];
+  selectedDay: Day;
+  latestVersionOfDay: Day = undefined;
 
   private subscriptions = new Subscription();
 
@@ -41,21 +47,7 @@ export class SavedDaysComponent implements OnInit, OnDestroy {
       this.auth.user.subscribe(user => {
         this.user = user;
         if (user.username) {
-          this.subscriptions.add(
-            this.dayService.getAllSavedDays().subscribe(
-              days => {
-                this.savedDays = days;
-                this.loading = false;
-              },
-              (error: Error) => {
-                this.loading = false;
-                this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
-                  cssClass: 'alert-danger',
-                  timeout: 2000
-                });
-              }
-            )
-          );
+          this.getAllSavedDays();
         }
       })
     );
@@ -65,7 +57,26 @@ export class SavedDaysComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  loadDay(index: number) {
+  private getAllSavedDays() {
+    this.loading = true;
+    this.subscriptions.add(
+      this.dayService.getAllSavedDays().subscribe(
+        days => {
+          this.savedDays = days;
+          this.loading = false;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
+    );
+  }
+
+  public loadDay(index: number) {
     this.setPreviousMeals();
     this.subscriptions.add(
       this.dayService.getSavedDay(this.savedDays[index].uuid).subscribe(
@@ -127,13 +138,13 @@ export class SavedDaysComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteDay(index: number) {
+  public deleteDay(index: number) {
     this.deletedDays.push(this.savedDays[index].uuid);
     this.savedDays.splice(index, 1);
     this.daysDeleted = true;
   }
 
-  deleteDaysFromDb() {
+  public deleteDaysFromDb() {
     this.subscriptions.add(
       this.dayService.removeDays(this.deletedDays).subscribe(
         res => {
@@ -160,7 +171,7 @@ export class SavedDaysComponent implements OnInit, OnDestroy {
     );
   }
 
-  openDayModal(content) {
+  public openDayModal(content) {
     const originalDays = JSON.parse(JSON.stringify(this.savedDays));
     const changedDays: DayName[] = [];
     this.modalService.open(content, { centered: true }).result.then(
@@ -201,6 +212,151 @@ export class SavedDaysComponent implements OnInit, OnDestroy {
       dismissed => {
         this.savedDays = JSON.parse(JSON.stringify(originalDays));
       }
+    );
+  }
+
+  public fetchDayVersions(day: Day) {
+    this.latestVersionOfDay = day;
+    this.subscriptions.add(
+      this.dayService.getDayVersionHistory(day.uuid).subscribe(
+        res => {
+          this.dayVersionHistory = res;
+          this.versionHistoryVisible = true;
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
+    );
+  }
+
+  public fetchFoods(id: string) {
+    this.selectedDay = undefined;
+    this.mealsLoaded = false;
+    let found = false;
+    this.fetchedDays.forEach(d => {
+      if (d.uuid == id) {
+        found = true;
+        this.selectedDay = d;
+        this.mealsLoaded = true;
+      }
+    });
+
+    if (!found) {
+      this.subscriptions.add(
+        this.dayService.getSavedDay(id).subscribe(
+          day => {
+            this.fetchedDays.push(day);
+            this.selectedDay = day;
+            this.mealsLoaded = true;
+          },
+          (error: Error) => {
+            this.loading = false;
+            this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        )
+      );
+    }
+  }
+
+  public restoreDay() {
+    this.subscriptions.add(
+      this.dayService.restoreDay(this.selectedDay.uuid).subscribe(
+        res => {
+          if (res['success']) {
+            this.flashMessage.show(this.translator.instant('DAY_RESTORED_SUCCESFULLY'), {
+              cssClass: 'alert-success',
+              timeout: 2000
+            });
+            this.getAllSavedDays();
+            this.selectedDay = undefined;
+            this.mealsLoaded = false;
+            this.versionHistoryVisible = false;
+            this.latestVersionOfDay = undefined;
+          } else {
+            this.flashMessage.show(this.translator.instant('UNABLE_TO_RESTORE_DAY'), {
+              cssClass: 'alert-danger',
+              timeout: 2000
+            });
+          }
+        },
+        (error: Error) => {
+          this.loading = false;
+          this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
+    );
+  }
+
+  public calculateDayTotals() {
+    return this.addedFoodsService.calculateTotals(this.selectedDay.allMeals);
+  }
+
+  public backToSavedDays() {
+    this.dayVersionHistory = [];
+    this.mealsLoaded = false;
+    this.versionHistoryVisible = false;
+    this.selectedDay = undefined;
+    this.latestVersionOfDay = undefined;
+  }
+
+  public openDeleteConfirmationModal(content, deleteAllVersions: boolean) {
+    this.modalService.open(content, { centered: true }).result.then(
+      result => {
+        if (result === 'save') {
+          if (deleteAllVersions) {
+            this.subscriptions.add(
+              this.dayService.removeDayAndVersions(this.latestVersionOfDay.uuid).subscribe(
+                res => {
+                  this.flashMessage.show(this.translator.instant('DAYS_DELETED_SUCCESFULLY'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.getAllSavedDays();
+                  this.backToSavedDays();
+                },
+                (error: Error) => {
+                  this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+                    cssClass: 'alert-danger',
+                    timeout: 2000
+                  });
+                }
+              )
+            );
+          } else {
+            this.subscriptions.add(
+              this.dayService.removeSingleDay(this.selectedDay.uuid).subscribe(
+                res => {
+                  this.flashMessage.show(this.translator.instant('DAY_DELETED_SUCCESFULLY'), {
+                    cssClass: 'alert-success',
+                    timeout: 2000
+                  });
+                  this.getAllSavedDays();
+                  this.backToSavedDays();
+                },
+                (error: Error) => {
+                  this.loading = false;
+                  this.flashMessage.show(this.translator.instant('NETWORK_LOADING_ERROR'), {
+                    cssClass: 'alert-danger',
+                    timeout: 2000
+                  });
+                }
+              )
+            );
+          }
+        }
+      },
+      dismissed => {}
     );
   }
 }

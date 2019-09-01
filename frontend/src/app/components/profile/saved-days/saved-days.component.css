@@ -38,3 +38,7 @@ ul {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.btn {
+  white-space: normal;
+}

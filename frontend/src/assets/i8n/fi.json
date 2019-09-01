@@ -368,5 +368,16 @@
   "OPEN_MEAL": "Avaa ateria",
   "COMPARE_MEALS": "Vertaile aterioita",
   "FETCH_SELECTED_MEALS": "Hae valitut ateriat",
-  "CALORIES": "kilokaloria"
+  "CALORIES": "kilokaloria",
+  "VERSION_HISTORY": "Versiohistoria",
+  "BACK": "Takaisin",
+  "SHOW_FOODS": "Näytä ruoat",
+  "RESTORE": "Palauta",
+  "DAY_RESTORED_SUCCESFULLY": "Päivä palautettu onnistuneesti",
+  "UNABLE_TO_RESTORE_DAY": "Päivän palautus epäonnistui",
+  "DELETE_DAY_AND_VERSIONS": "Poista valittu päivä ja kaikki sen versiot",
+  "DELETE_DAY_AND_VERSIONS_CONFIRMATION": "Haluatko varmasti poistaa valitun päivän ja kaikki sen versiot?",
+  "DAYS_DELETED_SUCCESFULLY": "Päivä ja kaikki sen versiot poistettu onnistuneesti",
+  "DAY_DELETED_SUCCESFULLY": "Päivä poistettu onnistuneesti",
+  "DELETE_VERSION_CONFIRMATION": "Haluatko varmasti poistaa tämän version?"
 }

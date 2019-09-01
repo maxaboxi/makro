@@ -5,6 +5,7 @@ import { Meal } from '../models/Meal';
 import { environment } from '../../environments/environment';
 import { DayName } from '../models/DayName';
 import { BehaviorSubject } from 'rxjs';
+import { GeneralResponse } from '../models/GeneralResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,26 @@ export class DayService {
     return this.http.get<Day>(url, { headers: headers });
   }
 
+  getDayVersionHistory(id: string) {
+    const url = `${this.baseUrl}/history/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Day[]>(url, { headers: headers });
+  }
+
+  restoreDay(id: string) {
+    const url = `${this.baseUrl}/restore/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<GeneralResponse>(url, { headers: headers });
+  }
+
   getMultipleSavedDays(ids: string[]) {
     const url = `${this.baseUrl}/multiple/`;
 
@@ -63,6 +84,26 @@ export class DayService {
     });
 
     return this.http.put(url, day, { headers: headers });
+  }
+
+  removeSingleDay(id: string) {
+    const url = `${this.baseUrl}/delete/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.delete(url, { headers: headers });
+  }
+
+  removeDayAndVersions(id: string) {
+    const url = `${this.baseUrl}/delete/all/${id}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.delete(url, { headers: headers });
   }
 
   removeDays(days: string[]) {

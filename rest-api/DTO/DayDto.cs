@@ -14,5 +14,7 @@ namespace Makro.DTO
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? Date { get; set; }
+        public bool HasVersions { get; set; }
+        public DateTime? VersionCreated { get; set; }
     }
 }

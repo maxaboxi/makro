@@ -20,5 +20,9 @@ namespace Makro.Models
         public DateTime UpdatedAt { get; set; }
         public DateTime? Date { get; set; }
         public ICollection<TrackedPeriodDay> TrackedPeriodDays { get; set; }
+        public bool IsLatest { get; set; }
+        public string LatestVersionId { get; set; }
+        public bool HasVersions { get; set; }
+        public DateTime? VersionCreated { get; set; }
     }
 }

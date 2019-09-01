@@ -84,16 +84,17 @@ export class MealsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const d = JSON.parse(localStorage.getItem('loadedDay')).id;
+    const d = JSON.parse(localStorage.getItem('loadedDay'));
     const editedDay: Day = {
-      uuid: d,
+      uuid: d.id,
       allMeals: meals,
       userId: this.user.uuid
     };
     this.subscriptions.add(
       this.dayService.saveEditedDay(editedDay).subscribe(
-        success => {
-          if (success) {
+        res => {
+          if (res['success']) {
+            localStorage.setItem('loadedDay', JSON.stringify({ id: res['message'], name: d['name'] }));
             this.flashMessage.show(this.translator.instant('DAY_SAVED'), {
               cssClass: 'alert-success',
               timeout: 2000

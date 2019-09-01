@@ -22,10 +22,22 @@ namespace Makro.Controllers
             return await _dayService.GetAllDaysByUser(HttpContext.User.Identity.Name);
         }
 
+        [HttpGet("history/{dayId}")]
+        public async Task<ActionResult<List<DayDto>>> GetDayVersionHistory(string dayId)
+        {
+            return await _dayService.GetDayVersionHistory(dayId, HttpContext.User.Identity.Name);
+        }
+
         [HttpGet("shared/user")]
         public async Task<ActionResult<IEnumerable<SharedDayDto>>> GetAllSharedDaysByUser()
         {
             return await _dayService.GetAllSharedDaysByUser(HttpContext.User.Identity.Name);
+        }
+
+        [HttpPost("restore/{dayId}")]
+        public async Task<ActionResult<ResultDto>> RestoreDayFromVersionHistory(string dayId)
+        {
+            return await _dayService.RestoreDayFromVersionHistory(dayId, HttpContext.User.Identity.Name);
         }
 
         [HttpGet("single/{dayId}")]
@@ -41,13 +53,13 @@ namespace Makro.Controllers
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> AddNewDay([FromBody]DayDto dayDto)
+        public async Task<ActionResult<ResultDto>> AddNewDay([FromBody]DayDto dayDto)
         {
             return Ok(await _dayService.AddNewDay(dayDto, HttpContext.User.Identity.Name));
         }
 
         [HttpPost("share")]
-        public async Task<IActionResult> ShareDay([FromBody]DayDto dayDto)
+        public async Task<ActionResult<ResultDto>> ShareDay([FromBody]DayDto dayDto)
         {
             return Ok(await _dayService.ShareDay(dayDto, HttpContext.User.Identity.Name));
         }
@@ -60,7 +72,7 @@ namespace Makro.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateDay(string id, [FromBody]DayDto dayDto)
+        public async Task<ActionResult<ResultDto>> UpdateDay(string id, [FromBody]DayDto dayDto)
         {
             if (id != dayDto.UUID)
             {
@@ -77,9 +89,15 @@ namespace Makro.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteDay(string id)
+        public async Task<ActionResult<ResultDto>> DeleteDay(string id)
         {
             return Ok(await _dayService.DeleteDay(id, HttpContext.User.Identity.Name));
+        }
+
+        [HttpDelete("delete/all/{id}")]
+        public async Task<ActionResult<ResultDto>> DeleteDayAndVersions(string id)
+        {
+            return Ok(await _dayService.DeleteDayAndVersions(id, HttpContext.User.Identity.Name));
         }
 
         [HttpDelete("delete/multiple")]

@@ -28,7 +28,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<IEnumerable<DayDto>>> GetAllDaysByUser(string id)
         {
-            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == id).Include(d => d.User)
+            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == id && d.IsLatest).Include(d => d.User)
                 .OrderByDescending(d => d.CreatedAt)
                 .ToListAsync();
             var dayDtos = new List<DayDto>();
@@ -85,6 +85,68 @@ namespace Makro.Services
 
             dayDto.AllMeals = mealDtos;
             return dayDto;
+        }
+
+        public async Task<ActionResult<List<DayDto>>> GetDayVersionHistory(string dayId, string userId)
+        {
+            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == userId 
+                    && (d.UUID == dayId || d.LatestVersionId == dayId))
+                .Include(d => d.User)
+                .OrderByDescending(d => d.VersionCreated)
+                .ToListAsync();
+            var dayDtos = new List<DayDto>();
+            days.ForEach(d => dayDtos.Add(_mapper.Map<DayDto>(d)));
+            return dayDtos;
+        }
+
+        public async Task<ActionResult<ResultDto>> RestoreDayFromVersionHistory(string dayId, string userId)
+        {
+            var day = await _context.Days.Where(
+                d => d.UUID == dayId 
+                && d.User.UUID == userId 
+                && d.IsLatest == false)
+            .FirstOrDefaultAsync();
+
+            if (day == null)
+            {
+                _logger.LogError( $"Couldn't find day with given UUID. Not found: {dayId}");
+                return new ResultDto(false, "Day not found");
+            }
+
+            var currentLatestDay = await _context.Days.Where(d => d.UUID == day.LatestVersionId).FirstOrDefaultAsync();
+
+            if (currentLatestDay == null)
+            {
+                _logger.LogError(
+                    $"Couldn't find day that has UUID which was set as LatestVersionId. Not found: {0}, Day that has it set as LatestVersionId: {1}",
+                    day.LatestVersionId, day.Id);
+                return new ResultDto(false, "Something went wrong.");
+            }
+
+            day.IsLatest = true;
+            day.UpdatedAt = DateTime.Now;
+            day.VersionCreated = null;
+            day.HasVersions = true;
+            day.LatestVersionId = null;
+
+            currentLatestDay.IsLatest = false;
+            currentLatestDay.UpdatedAt = DateTime.Now;
+            currentLatestDay.VersionCreated = DateTime.Now;
+            currentLatestDay.HasVersions = true;
+            currentLatestDay.LatestVersionId = day.UUID;
+
+            await _context.SaveChangesAsync();
+
+            var daysToUpdate = await _context.Days.Where(
+                d => d.LatestVersionId == currentLatestDay.UUID && d.IsLatest == false)
+            .ToListAsync();
+
+            daysToUpdate.ForEach(d => d.LatestVersionId = day.UUID);
+
+            await _context.SaveChangesAsync();
+
+            return new ResultDto(true, "Day restored succesfully");
+
         }
 
         public async Task<ActionResult<List<DayDto>>> GetMultipleDays(string[] dayIds, string userId)
@@ -161,12 +223,12 @@ namespace Makro.Services
                 m.MealFoods.ToList().ForEach(mf => {
                     var foodDto = _mapper.Map<FoodDto>(mf.Food);
                     foodDto.Amount = mf.FoodAmount;
-                    foodDto.Energy = foodDto.Energy * (foodDto.Amount / 100);
-                    foodDto.Protein = foodDto.Protein * (foodDto.Amount / 100);
-                    foodDto.Carbs = foodDto.Carbs * (foodDto.Amount / 100);
-                    foodDto.Fat = foodDto.Fat * (foodDto.Amount / 100);
-                    foodDto.Sugar = foodDto.Sugar * (foodDto.Amount / 100);
-                    foodDto.Fiber = foodDto.Fiber * (foodDto.Amount / 100);
+                    foodDto.Energy *= (foodDto.Amount / 100);
+                    foodDto.Protein *= (foodDto.Amount / 100);
+                    foodDto.Carbs *= (foodDto.Amount / 100);
+                    foodDto.Fat *= (foodDto.Amount / 100);
+                    foodDto.Sugar *= (foodDto.Amount / 100);
+                    foodDto.Fiber *= (foodDto.Amount / 100);
                     foodDtos.Add(foodDto);
                 });
                 mealDto.Foods = foodDtos;
@@ -184,6 +246,7 @@ namespace Makro.Services
             day.UUID = Guid.NewGuid().ToString();
             day.CreatedAt = DateTime.Now;
             day.UpdatedAt = DateTime.Now;
+            day.HasVersions = false;
 
             _context.Add(day);
             await _context.SaveChangesAsync();
@@ -206,26 +269,45 @@ namespace Makro.Services
 
         public async Task<ResultDto> UpdateDay(DayDto dayDto, string userId)
         {
-            var day = await _context.Days.Where(d => d.UUID == dayDto.UUID && d.User.UUID == userId)
+            Day currentDay = await _context.Days.Where(d => d.UUID == dayDto.UUID && d.User.UUID == userId)
                 .Include(d => d.User)
                 .Include(d => d.Meals)
                 .FirstOrDefaultAsync();
 
-            if (day == null)
+            if (currentDay == null)
             {
                 _logger.LogDebug("Day not found with UUID: ", dayDto.UUID);
                 return new ResultDto(false, "Day not found");
             }
 
-            day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
-            day.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
-            day.UpdatedAt = DateTime.Now;
-            day.Date = dayDto.Date == null && day.Date == null ? day.CreatedAt : dayDto.Date;
+            Day newDay = _mapper.Map<Day>(dayDto);
+            newDay.Name = currentDay.Name;
+            newDay.User = currentDay.User;
+            newDay.CreatedAt = currentDay.CreatedAt;
+            newDay.Meals = _mealService.AddMeals(dayDto.AllMeals, userId);
+            newDay.UUID = Guid.NewGuid().ToString();
+            newDay.Date = currentDay.Date != null ? currentDay.Date : currentDay.CreatedAt;
+            newDay.UpdatedAt = DateTime.Now;
+            newDay.IsLatest = true;
+            newDay.HasVersions = true;
 
-            _context.Entry(day).State = EntityState.Modified;
+            currentDay.Name = currentDay.Name;
+            currentDay.IsLatest = false;
+            currentDay.VersionCreated = DateTime.Now;
+            currentDay.UpdatedAt = DateTime.Now;
+            currentDay.Date = dayDto.Date == null && currentDay.Date == null ? currentDay.CreatedAt : dayDto.Date;
+            currentDay.LatestVersionId = newDay.UUID;
+            currentDay.HasVersions = true;
+
+            _context.Add(newDay);
+            _context.Entry(currentDay).State = EntityState.Modified;
+
+            var days = await _context.Days.Where(d => d.LatestVersionId == currentDay.UUID).ToListAsync();
+            days.ForEach(d => d.LatestVersionId = newDay.UUID);
+
             await _context.SaveChangesAsync();
 
-            return new ResultDto(true, "Day updated succesfully");
+            return new ResultDto(true, newDay.UUID);
         }
 
         public ResultDto UpdateDayNames(List<DayDto> dayDtos, string userId)
@@ -254,10 +336,40 @@ namespace Makro.Services
                 return new ResultDto(false, "Day not found");
             }
 
+            var pdf = await _context.UserPDFs.Where(p => p.Day.Id == day.Id).FirstOrDefaultAsync();
+            if (pdf != null)
+            {
+                pdf.Day = null;
+                _context.Entry(pdf).State = EntityState.Modified;
+            }
+
             day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
             _context.Days.Remove(day);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Day deleted succesfully");
+        }
+
+        public async Task<ResultDto> DeleteDayAndVersions(string id, string userId)
+        {
+            var days = await _context.Days.Where(d => d.User.UUID == userId && (d.UUID == id || d.LatestVersionId == id))
+                .Include(d => d.Meals)
+                .ToListAsync();
+
+            days.ForEach(d => {
+                d.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+
+                var pdf = _context.UserPDFs.Where(p => p.Day.Id == d.Id).FirstOrDefault();
+                if (pdf != null)
+                {
+                    pdf.Day = null;
+                    _context.Entry(pdf).State = EntityState.Modified;
+                }
+
+                _context.Days.Remove(d);
+                _context.SaveChanges();
+            });
+
+            return new ResultDto(true, "Days deleted succesfully");
         }
 
         public ResultDto DeleteMultipleDays(List<string> dayIds, string userId)
@@ -271,6 +383,14 @@ namespace Makro.Services
                 }
 
                 day.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
+
+                var pdf = _context.UserPDFs.Where(p => p.Day.Id == day.Id).FirstOrDefault();
+                if (pdf != null)
+                {
+                    pdf.Day = null;
+                    _context.Entry(pdf).State = EntityState.Modified;
+                }
+
                 _context.Days.Remove(day);
                 _context.SaveChanges();
             });

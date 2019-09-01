@@ -25,7 +25,7 @@ namespace Makro.Services
                 Users = await _context.Users.CountAsync(),
                 UserLoggedInTheLastSevenDays = await _context.Users.Where(u => u.LastLogin >= DateTime.Now.AddDays(-7)).CountAsync(),
                 Foods = await _context.Foods.CountAsync(),
-                Days = await _context.Days.CountAsync(),
+                Days = await _context.Days.Where(d => d.IsLatest == true).CountAsync(),
                 PDF = await _context.UserPDFs.CountAsync(),
                 MaleCount = await _context.Users.Where(u => u.Sex == "mies").CountAsync(),
                 FemaleCount = await _context.Users.Where(u => u.Sex == "nainen").CountAsync(),
