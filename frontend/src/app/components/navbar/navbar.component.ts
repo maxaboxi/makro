@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isAdmin: boolean;
   lang: string;
   online: boolean;
+  public showMenu = false;
 
   private subscriptions = new Subscription();
 
@@ -45,7 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  logout() {
+  public logout() {
     this.router.navigate(['/login']);
     this.addedFoodsService.resetTotals();
     this.auth.logout();
@@ -53,9 +54,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.addedFoodsService._openedSavedMeal.next(false);
     this.addedFoodsService._previousMealsSavedToLocalStorage.next(false);
     this.addedFoodsService._mealsEdited.next(false);
+    this.toggleMenu();
   }
 
-  changeLanguage() {
+  public changeLanguage() {
     if (this.lang === 'fi') {
       this.translator.use('en');
       if (this.isLoggedIn) {
@@ -69,5 +71,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
       this.lang = 'fi';
     }
+    this.toggleMenu();
+  }
+
+  public toggleMenu() {
+    this.showMenu = !this.showMenu;
   }
 }

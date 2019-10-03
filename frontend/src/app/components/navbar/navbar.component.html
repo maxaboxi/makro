@@ -1,31 +1,75 @@
 <div class="container-fluid text-center">
-  <nav class="mobile-nav">
-    <div class="d-inline-block" ngbDropdown #menu="ngbDropdown">
-      <p class="lead mt-1" id="mainmenuDropdown" ngbDropdownAnchor (click)="menu.open()">
-        <span class="mobile">Makro</span>
-      </p>
-      <div class="mainmenu" ngbDropdownMenu aria-labelledby="mainmenuDropdown">
-        <p ngbDropdownItem routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</p>
-        <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}</p>
-        <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/compare">
-          <i class="fas fa-not-equal"></i> {{ 'COMPARE_MEALPLANS' | translate }}
-        </p>
-        <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/sharedmeals"><i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}</p>
-        <p ngbDropdownItem *ngIf="isLoggedIn" routerLink="/feedback"><i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}</p>
-        <p ngbDropdownItem routerLink="/about"><i class="fas fa-info"></i> {{ 'ABOUT' | translate }}</p>
-        <p ngbDropdownItem *ngIf="!isLoggedIn" routerLink="/login"><i class="fas fa-info"></i> {{ 'LOGIN' | translate }}</p>
-        <p ngbDropdownItem *ngIf="!isLoggedIn" routerLink="/register"><i class="fas fa-info"></i> {{ 'REGISTER' | translate }}</p>
-        <p ngbDropdownItem *ngIf="isAdmin" routerLink="/admin"><i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}</p>
-        <p ngbDropdownItem *ngIf="isLoggedIn" (click)="logout()"><i class="fas fa-sign-out-alt"></i> {{ 'LOGOUT' | translate }}</p>
-        <a *ngIf="isLoggedIn && lang === 'fi'" class="nav-link text-center" (click)="changeLanguage()"
-          ><img src="../../assets/img/en.svg" alt="english"
-        /></a>
-        <a *ngIf="isLoggedIn && lang === 'en'" class="nav-link text-center" (click)="changeLanguage()"
-          ><img src="../../assets/img/fi.svg" alt="finnish"
-        /></a>
-      </div>
+  <div class="mobile-nav">
+    <div class="menu-btn" [ngClass]="{ close: showMenu }" (click)="toggleMenu()">
+      <div class="btn-line"></div>
+      <div class="btn-line"></div>
+      <div class="btn-line"></div>
     </div>
-  </nav>
+    <nav class="menu" [ngClass]="{ show: showMenu }">
+      <ul class="menu-nav" [ngClass]="{ show: showMenu }">
+        <li class="nav-item current" [ngClass]="{ show: showMenu }">
+          <a routerLink="/" class="nav-link" (click)="toggleMenu()" title="{{ 'HOME' | translate }}">
+            <i class="fas fa-home"></i> {{ 'HOME' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/profile" (click)="toggleMenu()" title="{{ 'PROFILE' | translate }}">
+            <i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/compare" (click)="toggleMenu()" title="{{ 'COMPARE_MEALPLANS' | translate }}">
+            <i class="fas fa-not-equal"></i> {{ 'COMPARE_MEALPLANS' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/sharedmeals" (click)="toggleMenu()" title="{{ 'MEALS' | translate }}">
+            <i class="fas fa-utensils"></i> {{ 'MEALS' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/feedback" (click)="toggleMenu()" title="{{ 'FEEDBACK_NAV' | translate }}">
+            <i class="fab fa-readme"></i> {{ 'FEEDBACK_NAV' | translate }}
+          </a>
+        </li>
+        <li class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/about" (click)="toggleMenu()" title="{{ 'ABOUT' | translate }}">
+            <i class="fas fa-info"></i> {{ 'ABOUT' | translate }}
+          </a>
+        </li>
+        <li *ngIf="!isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/login" (click)="toggleMenu()" title="{{ 'LOGIN' | translate }}">
+            <i class="fas fa-sign-in-alt"></i> {{ 'LOGIN' | translate }}
+          </a>
+        </li>
+        <li *ngIf="!isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/register" (click)="toggleMenu()" title="{{ 'REGISTER' | translate }}">
+            <i class="fas fa-user-plus"></i> {{ 'REGISTER' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isAdmin" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/admin" (click)="toggleMenu()" title="{{ 'ADMIN' | translate }}">
+            <i class="fas fa-cogs"></i> {{ 'ADMIN' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/logout" (click)="logout()" title="{{ 'LOGOUT' | translate }}">
+            <i class="fas fa-sign-out-alt"></i> {{ 'LOGOUT' | translate }}
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn && lang === 'fi'" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a (click)="changeLanguage()">
+            <img src="../../assets/img/en.svg" alt="english" />
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn && lang === 'en'" class="nav-item" [ngClass]="{ show: showMenu }">
+          <a (click)="changeLanguage()">
+            <img src="../../assets/img/fi.svg" alt="finnish" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
 
 <div id="menu-button"><i class="fas fa-bars"></i></div>
@@ -39,7 +83,7 @@
       ><img src="../../assets/img/fi.svg" alt="finnish"
     /></a>
   </div>
-  <ul class="menu">
+  <ul class="desktop-menu">
     <li routerLink="/"><i class="fas fa-home"></i> {{ 'HOME' | translate }}</li>
     <li *ngIf="isLoggedIn" routerLink="/profile"><i class="far fa-user-circle"></i> {{ 'PROFILE' | translate }}</li>
     <li *ngIf="isLoggedIn" routerLink="/compare"><i class="fas fa-not-equal"></i> {{ 'COMPARE_MEALPLANS' | translate }}</li>

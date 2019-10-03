@@ -7,6 +7,7 @@ th {
   overflow-y: scroll;
   max-height: 30px;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  border: none !important;
 }
 
 td {
@@ -14,6 +15,7 @@ td {
   overflow-y: scroll;
   max-height: 30px;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  border: none !important;
 }
 
 /* .t-head {

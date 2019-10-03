@@ -22,7 +22,7 @@
     "@angular/pwa": "^0.12.4",
     "@angular/router": "^7.2.6",
     "@angular/service-worker": "^7.2.6",
-    "@ng-bootstrap/ng-bootstrap": "^4.0.4",
+    "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "angular2-flash-messages": "^3.0.1",

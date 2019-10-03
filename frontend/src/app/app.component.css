@@ -1,0 +1,17 @@
+@media (max-height: 450px) {
+  .content {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  .content {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 768px) and (max-height: 1024px) {
+  .content {
+    margin-top: 30px;
+  }
+}

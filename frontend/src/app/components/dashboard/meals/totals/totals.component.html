@@ -1,6 +1,6 @@
+<span class="day-name" *ngIf="loadedDayName">{{ loadedDayName }}</span>
 <table class="table table-sm table-responsive-xs" id="totals" [ngClass]="{ 'mt-2': !loadedDayName }">
   <thead>
-    <span class="day-name" *ngIf="loadedDayName">{{ loadedDayName }}</span>
     <tr class="text-center">
       <th scope="col" class="d-none d-sm-table-cell bg-light t-head" title="{{ 'SUGAR' | translate }}">
         {{ 'SUGAR_ABBREVIATION_BOTH' | translate }}

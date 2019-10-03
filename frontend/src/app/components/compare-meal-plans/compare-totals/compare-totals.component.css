@@ -6,12 +6,14 @@ th {
   word-break: break-all;
   overflow-y: scroll;
   max-height: 30px;
+  border: none !important;
 }
 
 td {
   word-break: break-all;
   overflow-y: scroll;
   max-height: 30px;
+  border: none !important;
 }
 
 .t-head {

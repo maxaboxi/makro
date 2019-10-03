@@ -64,11 +64,13 @@ namespace Makro.Services
 
             var mealDtos = new List<MealDto>();
 
-            day.Meals.ToList().ForEach(m => {
+            day.Meals.ToList().ForEach(m =>
+            {
                 m.User = day.User;
                 var mealDto = _mapper.Map<MealDto>(m);
                 var foodDtos = new List<FoodDto>();
-                m.MealFoods.ToList().ForEach(mf => {
+                m.MealFoods.ToList().ForEach(mf =>
+                {
                     var foodDto = _mapper.Map<FoodDto>(mf.Food);
                     foodDto.Amount = mf.FoodAmount;
                     foodDto.Energy *= (foodDto.Amount / 100);
@@ -78,7 +80,7 @@ namespace Makro.Services
                     foodDto.Sugar *= (foodDto.Amount / 100);
                     foodDto.Fiber *= (foodDto.Amount / 100);
                     foodDtos.Add(foodDto);
-                  });
+                });
                 mealDto.Foods = foodDtos;
                 mealDtos.Add(mealDto);
             });
@@ -89,7 +91,7 @@ namespace Makro.Services
 
         public async Task<ActionResult<List<DayDto>>> GetDayVersionHistory(string dayId, string userId)
         {
-            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == userId 
+            var days = await _context.Days.AsNoTracking().Where(d => d.User.UUID == userId
                     && (d.UUID == dayId || d.LatestVersionId == dayId))
                 .Include(d => d.User)
                 .OrderByDescending(d => d.VersionCreated)
@@ -102,14 +104,14 @@ namespace Makro.Services
         public async Task<ActionResult<ResultDto>> RestoreDayFromVersionHistory(string dayId, string userId)
         {
             var day = await _context.Days.Where(
-                d => d.UUID == dayId 
-                && d.User.UUID == userId 
+                d => d.UUID == dayId
+                && d.User.UUID == userId
                 && d.IsLatest == false)
             .FirstOrDefaultAsync();
 
             if (day == null)
             {
-                _logger.LogError( $"Couldn't find day with given UUID. Not found: {dayId}");
+                _logger.LogError($"Couldn't find day with given UUID. Not found: {dayId}");
                 return new ResultDto(false, "Day not found");
             }
 
@@ -216,11 +218,13 @@ namespace Makro.Services
 
             var mealDtos = new List<MealDto>();
 
-            day.Meals.ToList().ForEach(m => {
+            day.Meals.ToList().ForEach(m =>
+            {
                 m.User = day.User;
                 var mealDto = _mapper.Map<MealDto>(m);
                 var foodDtos = new List<FoodDto>();
-                m.MealFoods.ToList().ForEach(mf => {
+                m.MealFoods.ToList().ForEach(mf =>
+                {
                     var foodDto = _mapper.Map<FoodDto>(mf.Food);
                     foodDto.Amount = mf.FoodAmount;
                     foodDto.Energy *= (foodDto.Amount / 100);
@@ -247,6 +251,7 @@ namespace Makro.Services
             day.CreatedAt = DateTime.Now;
             day.UpdatedAt = DateTime.Now;
             day.HasVersions = false;
+            day.IsLatest = true;
 
             _context.Add(day);
             await _context.SaveChangesAsync();
@@ -355,7 +360,8 @@ namespace Makro.Services
                 .Include(d => d.Meals)
                 .ToListAsync();
 
-            days.ForEach(d => {
+            days.ForEach(d =>
+            {
                 d.Meals.ToList().ForEach(m => _context.Meals.Remove(m));
 
                 var pdf = _context.UserPDFs.Where(p => p.Day.Id == d.Id).FirstOrDefault();
@@ -374,7 +380,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleDays(List<string> dayIds, string userId)
         {
-            dayIds.ForEach(dayId => { 
+            dayIds.ForEach(dayId =>
+            {
                 var day = _context.Days.Where(d => d.UUID == dayId && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefault();
 
                 if (day == null)
@@ -400,7 +407,8 @@ namespace Makro.Services
 
         public ResultDto DeleteMultipleSharedDays(List<string> dayIds, string userId)
         {
-            dayIds.ForEach(dayId => {
+            dayIds.ForEach(dayId =>
+            {
                 var day = _context.SharedDays.Where(d => d.UUID == dayId && d.User.UUID == userId).Include(d => d.Meals).FirstOrDefault();
 
                 if (day == null)
