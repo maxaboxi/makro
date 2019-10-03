@@ -60,6 +60,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   carbTotal = 0;
   fatTotal = 0;
   allFoods: Food[] = [];
+  public showMenu = false;
+  public showDayMenu = false;
+  public showMealMenu = false;
 
   private subscriptions = new Subscription();
 
@@ -375,7 +378,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.date = this.calendar.getToday();
   }
 
-  openSavedDay(uuid: string) {
+  public openSavedDay(uuid: string) {
     this.setPreviousMeals();
     this.subscriptions.add(
       this.dayService.getSavedDay(uuid).subscribe(
@@ -401,6 +404,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           this.addedFoodsService._mealsEdited.next(false);
           this.addedFoodsService._openedSavedMeal.next(true);
           this.addedFoodsService.setMealsFromLocalStorage();
+          this.modalService.dismissAll();
         },
         (error: Error) => {
           this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
@@ -468,6 +472,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           }
           localStorage.setItem('meals', JSON.stringify(mealsFromLocalStorage));
           this.addedFoodsService.setMealsFromLocalStorage();
+          this.modalService.dismissAll();
         }
         this.resetAddMealVariables();
       },
@@ -552,5 +557,21 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.fatTotal = 0;
     this.amountToAddPortions = 0;
     this.amountToAddGrams = 0;
+  }
+
+  public toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  public toggleDayMenu() {
+    this.showDayMenu = !this.showDayMenu;
+  }
+
+  public toggleMealMenu() {
+    this.showMealMenu = !this.showMealMenu;
+  }
+
+  public openGenericModal(content: any) {
+    this.modalService.open(content, { centered: true }).result.then(result => {}, dismissed => {});
   }
 }

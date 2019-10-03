@@ -37,35 +37,57 @@
     <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
   </div>
 </div>
+
 <div class="row mobile">
-  <div class="d-inline-block" ngbDropdown #toolbarMenu="ngbDropdown">
-    <p class="lead mt-1" id="toolbarmenuDropdown" ngbDropdownAnchor (click)="toolbarMenu.open()">{{ 'TOOLS' | translate }}</p>
-    <div class="toolbar-menu" ngbDropdownMenu aria-labelledby="toolbarmenuDropdown">
-      <p ngbDropdownItem *ngIf="!online">{{ 'NO_CONNECTION' | translate }}</p>
-      <p ngbDropdownItem *ngIf="online" (click)="openAddFoodModal(addFood)">
-        <i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }}
-      </p>
-      <p ngbDropdownItem *ngIf="online" (click)="openSaveDayModal(dayName)"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</p>
-      <p ngbDropdownItem *ngIf="online" (click)="generateLink(sharedDayModal)">
-        <i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }}
-      </p>
-      <p ngbDropdownItem *ngIf="shareLink.length > 0 && online" (click)="openLinkModal(sharedDayModal)">
-        <i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }}
-      </p>
-      <p ngbDropdownItem (click)="createPdf()"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</p>
-      <p ngbDropdownItem *ngIf="searchVisible" (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</p>
-      <p ngbDropdownItem *ngIf="!searchVisible" (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</p>
-    </div>
+  <div class="col">
+    <span *ngIf="savedDays.length > 0" (click)="openGenericModal(savedDaysModal)" class="lead">{{ 'OPEN_DAY' | translate }}</span>
   </div>
-  <div class="d-inline-block" [ngClass]="{ 'float-right': !showTargets, 'mt-2': !showTargets }">
-    <span *ngIf="showTargets" (click)="openTargetModal(targetModal)" class="mr-2"
-      ><i class="far fa-edit"></i> {{ 'EDIT_TARGETS' | translate }}</span
-    >
-    <span *ngIf="!showTargets" (click)="toggleTargets()"><i class="fas fa-bars"></i> {{ 'SHOW_TARGETS' | translate }}</span>
-    <span *ngIf="showTargets" (click)="toggleTargets()"><i class="fas fa-minus"></i> {{ 'HIDE_TARGETS' | translate }}</span>
+  <div class="col">
+    <span *ngIf="savedMeals.length > 0" (click)="openGenericModal(savedMealsModal)" class="lead ml-2">{{ 'OPEN_MEAL' | translate }}</span>
+  </div>
+  <div class="col" *ngIf="!showTargets">
+    <span (click)="toggleTargets()" class="ml-2 lead">{{ 'SHOW_TARGETS' | translate }}</span>
+  </div>
+  <div class="col" *ngIf="showTargets">
+    <span (click)="openTargetModal(targetModal)" class="mr-2 ml-2 lead">{{ 'EDIT_TARGETS' | translate }}</span>
+  </div>
+  <div class="col" *ngIf="showTargets">
+    <span (click)="toggleTargets()" class="lead">{{ 'HIDE_TARGETS' | translate }}</span>
+  </div>
+  <div class="menu-btn" [ngClass]="{ close: showMenu, hide: showMealMenu || showDayMenu }" (click)="toggleMenu()">
+    <p class="lead">{{ 'TOOLS' | translate }}</p>
+  </div>
+  <div class="menu" [ngClass]="{ show: showMenu }">
+    <ul class="menu-nav" [ngClass]="{ show: showMenu }">
+      <li *ngIf="!online" class="nav-item current" [ngClass]="{ show: showMenu }">
+        <a>{{ 'NO_CONNECTION' | translate }}</a>
+      </li>
+      <li *ngIf="online" class="nav-item current" [ngClass]="{ show: showMenu }">
+        <a (click)="openAddFoodModal(addFood)"> <i class="fas fa-plus-circle"></i> {{ 'ADD_FOOD' | translate }} </a>
+      </li>
+      <li *ngIf="online" class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="openSaveDayModal(dayName)"><i class="fas fa-save"></i> {{ 'SAVE_DAY' | translate }}</a>
+      </li>
+      <li *ngIf="online" class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="generateLink(sharedDayModal)"> <i class="fas fa-share"></i> {{ 'SHARE_DAY' | translate }} </a>
+      </li>
+      <li *ngIf="shareLink.length > 0" class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="openLinkModal(sharedDayModal)"> <i class="fas fa-share"></i> {{ 'SHOW_LINK' | translate }} </a>
+      </li>
+      <li class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="createPdf()"><i class="far fa-file-pdf"></i> {{ 'CREATE_PDF' | translate }}</a>
+      </li>
+      <li *ngIf="searchVisible" class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'HIDE_SEARCH' | translate }}</a>
+      </li>
+      <li *ngIf="!searchVisible" class="nav-item" [ngClass]="{ show: showMenu }">
+        <a (click)="hideSearchBar()"><i class="fas fa-search"></i> {{ 'SHOW_SEARCH' | translate }}</a>
+      </li>
+    </ul>
   </div>
 </div>
-<div class="row mt-3 dropdowns">
+
+<div class="row mt-3 dropdowns mobile-hidden">
   <div *ngIf="online && savedDays.length > 0" class="d-inline-block" ngbDropdown #dayMenu="ngbDropdown">
     <span id="daymenuDropdown" ngbDropdownAnchor (click)="dayMenu.open()"
       ><i class="far fa-calendar-alt"></i> {{ 'OPEN_DAY' | translate }}</span
@@ -441,6 +463,30 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #savedDaysModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'OPEN_DAY' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <p *ngFor="let day of savedDays" (click)="openSavedDay(day.uuid)">{{ day.name }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #savedMealsModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'OPEN_MEAL' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('x')"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <p *ngFor="let meal of savedMeals" (click)="openAddMealModal(addMealModal, meal)">{{ meal.name }}</p>
     </div>
   </div>
 </ng-template>

@@ -7,8 +7,8 @@
     </div>
     <nav class="menu" [ngClass]="{ show: showMenu }">
       <ul class="menu-nav" [ngClass]="{ show: showMenu }">
-        <li class="nav-item current" [ngClass]="{ show: showMenu }">
-          <a routerLink="/" class="nav-link" (click)="toggleMenu()" title="{{ 'HOME' | translate }}">
+        <li class="nav-item" [ngClass]="{ show: showMenu }">
+          <a routerLink="/" (click)="toggleMenu()" title="{{ 'HOME' | translate }}">
             <i class="fas fa-home"></i> {{ 'HOME' | translate }}
           </a>
         </li>
