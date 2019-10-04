@@ -130,6 +130,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   openAddFoodModal(content) {
+    this.toggleMenu();
     this.modalService.open(content, { centered: true }).result.then(
       result => {
         if (result === 'save') {
@@ -174,6 +175,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   openSaveDayModal(content) {
+    this.toggleMenu();
     const meals = JSON.parse(localStorage.getItem('meals'));
     let foodsAdded = 0;
     meals.forEach(m => {
@@ -204,6 +206,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
                     timeout: 2000
                   });
                   this.day.name = '';
+                  this.toggleMenu();
                 }
               },
               (error: Error) => {
@@ -295,6 +298,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   generateLink(content) {
+    this.toggleMenu();
     const day: Day = {
       userId: this.user.uuid,
       allMeals: this.addedFoodsService.getMeals()
@@ -323,6 +327,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   createPdf() {
+    this.toggleMenu();
     const loaded = JSON.parse(localStorage.getItem('loadedDay'));
     this.subscriptions.add(
       this.statisticsServcice.CreatePDF({ user: this.user.uuid, day: loaded.id }).subscribe(() => {
@@ -370,6 +375,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   hideSearchBar() {
+    this.toggleMenu();
     this.searchVisible = !this.searchVisible;
     this.hideSearch.emit();
   }
@@ -441,6 +447,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   openAddMealModal(content, meal: Meal) {
+    this.toggleMenu();
     this.subscriptions.add(
       this.sharedMealsService.getSingleMeal(meal.uuid).subscribe(res => {
         this.selectedMeal = res;
@@ -561,14 +568,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   public toggleMenu() {
     this.showMenu = !this.showMenu;
-  }
-
-  public toggleDayMenu() {
-    this.showDayMenu = !this.showDayMenu;
-  }
-
-  public toggleMealMenu() {
-    this.showMealMenu = !this.showMealMenu;
   }
 
   public openGenericModal(content: any) {

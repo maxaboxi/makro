@@ -40,19 +40,19 @@
 
 <div class="row mobile">
   <div class="col">
-    <span *ngIf="savedDays.length > 0" (click)="openGenericModal(savedDaysModal)" class="lead">{{ 'OPEN_DAY' | translate }}</span>
+    <span *ngIf="savedDays.length > 0" (click)="openGenericModal(savedDaysModal)">{{ 'OPEN_DAY' | translate }}</span>
   </div>
   <div class="col">
-    <span *ngIf="savedMeals.length > 0" (click)="openGenericModal(savedMealsModal)" class="lead ml-2">{{ 'OPEN_MEAL' | translate }}</span>
+    <span *ngIf="savedMeals.length > 0" (click)="openGenericModal(savedMealsModal)" class="ml-2">{{ 'OPEN_MEAL' | translate }}</span>
   </div>
   <div class="col" *ngIf="!showTargets">
-    <span (click)="toggleTargets()" class="ml-2 lead">{{ 'SHOW_TARGETS' | translate }}</span>
+    <span (click)="toggleTargets()" class="ml-2">{{ 'TARGETS' | translate }}</span>
   </div>
   <div class="col" *ngIf="showTargets">
-    <span (click)="openTargetModal(targetModal)" class="mr-2 ml-2 lead">{{ 'EDIT_TARGETS' | translate }}</span>
+    <span (click)="openTargetModal(targetModal)" class="mr-2 ml-2 ">{{ 'EDIT_TARGETS' | translate }}</span>
   </div>
   <div class="col" *ngIf="showTargets">
-    <span (click)="toggleTargets()" class="lead">{{ 'HIDE_TARGETS' | translate }}</span>
+    <span (click)="toggleTargets()">{{ 'HIDE_TARGETS' | translate }}</span>
   </div>
   <div class="menu-btn" [ngClass]="{ close: showMenu, hide: showMealMenu || showDayMenu }" (click)="toggleMenu()">
     <p class="lead">{{ 'TOOLS' | translate }}</p>
