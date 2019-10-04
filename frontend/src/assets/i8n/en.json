@@ -379,5 +379,6 @@
   "DELETE_DAY_AND_VERSIONS_CONFIRMATION": "Are you sure that you want to delete the selected day and all of its versions?",
   "DAYS_DELETED_SUCCESFULLY": "Day and all of its versions were deleted succesfully",
   "DAY_DELETED_SUCCESFULLY": "Day deleted succesfully",
-  "DELETE_VERSION_CONFIRMATION": "Are you sure that you want to delete this version?"
+  "DELETE_VERSION_CONFIRMATION": "Are you sure that you want to delete this version?",
+  "FOOD_ADDED_SUCCESFULLY": "Food added succesfully"
 }

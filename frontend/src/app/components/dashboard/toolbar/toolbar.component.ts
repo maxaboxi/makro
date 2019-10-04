@@ -113,15 +113,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       })
     );
     this.subscriptions.add(
-      this.dayService.getAllSavedDays().subscribe(days => {
-        this.savedDays = days;
-      })
-    );
-    this.subscriptions.add(
       this.foodService.allFoods.subscribe(foods => {
         this.allFoods = foods;
       })
     );
+    this.getDays();
     this.getMeals();
   }
 
@@ -150,7 +146,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             this.foodService.saveNewFood(addedFood).subscribe(
               success => {
                 if (success) {
-                  this.flashMessage.show('Ruoka lisätty', {
+                  this.flashMessage.show(this.translate.instant('FOOD_ADDED_SUCCESFULLY'), {
                     cssClass: 'alert-success',
                     timeout: 2000
                   });
@@ -206,7 +202,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
                     timeout: 2000
                   });
                   this.day.name = '';
-                  this.toggleMenu();
+                  this.getDays();
                 }
               },
               (error: Error) => {
@@ -498,6 +494,22 @@ export class ToolbarComponent implements OnInit, OnDestroy {
               this.savedMeals.push(m);
             }
           });
+        },
+        (error: Error) => {
+          this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {
+            cssClass: 'alert-danger',
+            timeout: 2000
+          });
+        }
+      )
+    );
+  }
+
+  private getDays() {
+    this.subscriptions.add(
+      this.dayService.getAllSavedDays().subscribe(
+        days => {
+          this.savedDays = days;
         },
         (error: Error) => {
           this.flashMessage.show(this.translate.instant('NETWORK_LOADING_ERROR'), {

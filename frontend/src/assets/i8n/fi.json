@@ -379,5 +379,6 @@
   "DELETE_DAY_AND_VERSIONS_CONFIRMATION": "Haluatko varmasti poistaa valitun päivän ja kaikki sen versiot?",
   "DAYS_DELETED_SUCCESFULLY": "Päivä ja kaikki sen versiot poistettu onnistuneesti",
   "DAY_DELETED_SUCCESFULLY": "Päivä poistettu onnistuneesti",
-  "DELETE_VERSION_CONFIRMATION": "Haluatko varmasti poistaa tämän version?"
+  "DELETE_VERSION_CONFIRMATION": "Haluatko varmasti poistaa tämän version?",
+  "FOOD_ADDED_SUCCESFULLY": "Ruoka lisätty onnistuneesti"
 }

@@ -8,17 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Makro.DTO;
 using System;
+using System.Net.Mail;
+using Microsoft.Extensions.Options;
+using Makro.Helpers;
+using System.Net;
+
 namespace Makro.Services
 {
     public class FeedbackService
     {
         private readonly MakroContext _context;
         private readonly ILogger _logger;
+        private readonly AppSettings _appSettings;
 
-        public FeedbackService(MakroContext context, ILogger<FeedbackService> logger)
+        public FeedbackService(MakroContext context, ILogger<FeedbackService> logger, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _context = context;
+            _appSettings = appSettings.Value;
         }
 
         public async Task<ActionResult<IEnumerable<FeedbackDto>>> GetAllFeedbacks()
@@ -83,6 +90,7 @@ namespace Makro.Services
             };
             _context.Add(feedback);
             await _context.SaveChangesAsync();
+            NotifyAdminOfNewFeedbackViaEmail();
             return new ResultDto(true, "Feedback added succesfully");
         }
 
@@ -128,6 +136,29 @@ namespace Makro.Services
             _context.Feedbacks.Remove(feedback);
             await _context.SaveChangesAsync();
             return new ResultDto(true, "Feedback deleted succesfully");
+        }
+
+        private void NotifyAdminOfNewFeedbackViaEmail()
+        {
+            var message = new MailMessage();
+            message.To.Add(new MailAddress(_appSettings.AdminEmail));
+            message.From = new MailAddress(_appSettings.Email, "Makro Support");
+            message.Subject = "Uusi palaute";
+            message.Body = "<p>Hei,</p><p>Uusi palaute saapunut.</p><p>Ystävällisin terveisin,</p><p>Makro Support</p>";
+            message.IsBodyHtml = true;
+
+            var client = new SmtpClient(_appSettings.Smtp);
+            client.Port = 587;
+            client.Credentials = new NetworkCredential(_appSettings.Email, _appSettings.Password);
+            client.EnableSsl = true;
+            try
+            {
+                client.Send(message);
+            }
+            catch (SmtpException ex)
+            {
+                _logger.LogError("Sending email failed because: ", ex);
+            }
         }
     }
 }
