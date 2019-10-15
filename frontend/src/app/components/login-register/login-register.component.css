@@ -183,17 +183,21 @@ button.ghost {
   transition: transform 0.6s ease-in-out;
 }
 
+.mobile-login,
+.mobile-register,
+.mobile-toggle {
+  display: none;
+}
+
 @media screen and (max-width: 805px) {
   .page {
     display: none;
   }
 
-  .mobile-login {
-    display: inline-block;
-  }
-
-  .mobile-register {
-    display: inline-block;
+  .mobile-login,
+  .mobile-register,
+  .mobile-toggle {
+    display: initial;
   }
 }
 
@@ -202,11 +206,9 @@ button.ghost {
     display: none;
   }
 
-  .mobile-login {
-    display: inline-block;
-  }
-
-  .mobile-register {
-    display: inline-block;
+  .mobile-login,
+  .mobile-register,
+  .mobile-toggle {
+    display: initial;
   }
 }
