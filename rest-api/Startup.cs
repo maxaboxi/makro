@@ -12,8 +12,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
 
 namespace Makro
 {
@@ -29,7 +27,6 @@ namespace Makro
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddEntityFrameworkNpgsql().AddDbContext<MakroContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MakroDB")));
             services.AddScoped<UserService>();
             services.AddScoped<MealService>();
@@ -40,6 +37,7 @@ namespace Makro
             services.AddScoped<LikeService>();
             services.AddScoped<TrackedPeriodService>();
             services.AddScoped<StatisticsService>();
+            services.AddControllers();
             services.AddAutoMapper();
             services.AddCors(options =>
             {
@@ -56,7 +54,7 @@ namespace Makro
                     .AllowAnyMethod()
                     .WithOrigins("https://makro.diet"));
             });
-            services.AddSwaggerGen(g => g.SwaggerDoc("v2", new Info { Title = "Makro", Version = "v2" }));
+            services.AddSwaggerGen(g => g.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Makro", Version = "v2" }));
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -101,9 +99,9 @@ namespace Makro
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
                 app.UseCors("CorsDevelopment");
@@ -120,8 +118,10 @@ namespace Makro
                 app.UseCors("CorsProduction");
             }
 
+            app.UseRouting();
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthorization();
+            app.UseEndpoints(e => e.MapControllers());
             UpdateDatabase(app);
         }
 
