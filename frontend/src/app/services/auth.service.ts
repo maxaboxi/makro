@@ -25,7 +25,6 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
     const url = `${this.baseUrl}/authenticate`;
-    console.log(url);
 
     return this.http.post(url, user, { headers: headers });
   }

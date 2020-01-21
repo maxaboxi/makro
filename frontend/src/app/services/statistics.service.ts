@@ -22,7 +22,6 @@ export class StatisticsService {
   }
 
   CreatePDF(userPdf: UserPdf) {
-    console.log(userPdf);
     const url = `${this.baseUrl}/pdf`;
 
     const headers = new HttpHeaders({
