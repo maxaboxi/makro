@@ -304,4 +304,8 @@ export class MealTableComponent implements OnInit, DoCheck, OnDestroy {
   removeTagFromSharedMealTags(index: number) {
     this.sharedMeal.tags.splice(index, 1);
   }
+
+  public foodAmountWithDecimals(amount: number) {
+    return amount.toFixed(1).replace(/\.0$/, '');
+  }
 }

@@ -48,7 +48,7 @@
       <td class="table-warning align-middle">{{ food.energy.toFixed(1) }} {{ 'KCAL' | translate }}</td>
       <td class="align-middle" (click)="food.editing = true" *ngIf="!food.editing">
         <span class="food-amount" (click)="food.editing = true" title="{{ 'EDIT_FOOD_AMOUNT_TEXT' | translate }}"
-          >{{ food.amount.toFixed(0) }} g</span
+          >{{ foodAmountWithDecimals(food.amount) }} g</span
         >
         <i class="fas fa-times ml-3" (click)="removeFood(i)" title="{{ 'REMOVE_FOOD_TEXT' | translate }}"></i>
       </td>

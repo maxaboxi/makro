@@ -153,7 +153,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private selectFood(food: Food) {
     let amount = 0;
     if (!this.showGramInput) {
-      amount = (this.calorieAmount / food.energy) * 100;
+      amount = this.calorieAmount ? (this.calorieAmount / food.energy) * 100 : (100 / food.energy) * 100;
     } else {
       amount = this.selectedAmount !== undefined ? this.selectedAmount : 100;
     }
