@@ -80,6 +80,8 @@ export class UserSharedMealsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharedMealsService.getMealsByUser().subscribe(
         meals => {
+          this.sharedMeals = [];
+          this.savedMeals = [];
           meals.forEach(m => {
             if (m.shared) {
               this.sharedMeals.push(m);

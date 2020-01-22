@@ -174,7 +174,7 @@ namespace Makro.Services
             foods.ForEach(f => {
                 var smf = new SharedMealFood
                 {
-                    Food = f,
+                    FoodId = f.Id,
                     SharedMeal = sharedMeal,
                     FoodAmount = sharedMealDto.Foods.FindLast(food => food.UUID == f.UUID).Amount
                 };
@@ -207,7 +207,7 @@ namespace Makro.Services
             foods.ForEach(f => {
                 var smf = new SharedMealFood
                 {
-                    Food = f,
+                    FoodId = f.Id,
                     SharedMeal = sharedMeal,
                     FoodAmount = sharedMealDto.Foods.FindLast(food => food.UUID == f.UUID).Amount
                 };
@@ -231,9 +231,9 @@ namespace Makro.Services
                 m.Foods.ForEach(f =>
                 {
                     var food = _mapper.Map<Food>(f);
-                    food.Id = _context.Foods.Where(fd => fd.UUID == f.UUID).FirstOrDefault().Id;
+                    food.Id = _context.Foods.AsNoTracking().Where(fd => fd.UUID == f.UUID).FirstOrDefault().Id;
                     _context.Add(new MealFood { 
-                        Food = food,
+                        FoodId = food.Id,
                         Meal = meal,
                         FoodAmount = f.Amount
                     });

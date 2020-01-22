@@ -128,7 +128,7 @@ namespace Makro.Services
         {
             List<Food> foods = new List<Food>();
             foodDtos.ForEach(f => foods.Add(_mapper.Map<Food>(f)));
-            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).FirstOrDefault().Id);
+            foods.ForEach(f => f.Id = _context.Foods.Where(food => food.UUID == f.UUID).AsNoTracking().FirstOrDefault().Id);
             return foods;
         }
     }
