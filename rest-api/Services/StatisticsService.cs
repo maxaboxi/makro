@@ -61,11 +61,11 @@ namespace Makro.Services
 
         private async Task<List<TopFoodsDto>> GetFoodOccurences()
         {
-            var foods = await _context.MealFoods.Select(mf => mf.FoodId)
+            var foods = _context.MealFoods.Select(mf => mf.FoodId)
+                .AsEnumerable()
                 .GroupBy(mf => mf)
                 .OrderByDescending(f => f.Count())
-                .Take(10)
-                .ToListAsync();
+                .Take(10);
 
             var foodIds = new List<int>();
 

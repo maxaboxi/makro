@@ -98,7 +98,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
       age: this.user.age,
       height: this.user.height,
       weight: this.user.weight,
-      activity: this.user.activity,
+      activity: Number(this.user.activity),
       dailyExpenditure: this.user.dailyExpenditure,
       sex: this.user.sex
     };
