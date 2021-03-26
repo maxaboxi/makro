@@ -28,6 +28,7 @@ namespace Makro
         {
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<MakroContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MakroDB")));
+            services.AddHttpClient();
             services.AddScoped<UserService>();
             services.AddScoped<MealService>();
             services.AddScoped<AdminService>();

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   backend:
@@ -18,6 +18,14 @@ services:
       - VIRTUAL_HOST=api.makro.diet
       - LETSENCRYPT_HOST=api.makro.diet
       - LETSENCRYPT_EMAIL=artotukki@gmail.com
+
+  email:
+    container_name: makro-email
+    build: ./email/
+    networks:
+      - back
+    ports:
+      - '99:99'
 
   database:
     container_name: makro-db

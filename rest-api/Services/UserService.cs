@@ -9,10 +9,10 @@ using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Net.Mail;
-using System.Net;
-using Makro.Helpers;
-using Microsoft.Extensions.Options;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace Makro.Services
 {
@@ -20,16 +20,20 @@ namespace Makro.Services
     {
         private readonly MakroContext _context;
         private readonly MealService _mealService;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        private readonly AppSettings _appSettings;
-        public UserService(MakroContext context, MealService mealService, IMapper mapper, ILogger<UserService> logger, IOptions<AppSettings> appSettings)
+        public UserService(MakroContext context, 
+            MealService mealService, 
+            IHttpClientFactory httpClientFactory, 
+            IMapper mapper, 
+            ILogger<UserService> logger)
         {
             _context = context;
             _mealService = mealService;
+            _httpClientFactory = httpClientFactory;
             _mapper = mapper;
             _logger = logger;
-            _appSettings = appSettings.Value;
         }
 
         public async Task<ResultDto> RegisterUser(UserDto userDto, string password)
@@ -127,7 +131,7 @@ namespace Makro.Services
                 foundUser.PasswordResetToken = Guid.NewGuid().ToString();
                 _context.Entry(foundUser).State = EntityState.Modified;
                  await _context.SaveChangesAsync();
-                var result = SendTokenViaEmail(foundUser.Email, foundUser.PasswordResetToken);
+                var result = await SendTokenViaEmail(foundUser.Email, foundUser.PasswordResetToken);
 
                 if (!result)
                 {
@@ -296,30 +300,33 @@ namespace Makro.Services
             return await _context.SaveChangesAsync();
         }
 
-        private bool SendTokenViaEmail(string email, string resetToken)
+        private async Task<bool> SendTokenViaEmail(string email, string resetToken)
         {
-            var message = new MailMessage();
-            message.To.Add(new MailAddress(email));
-            message.From = new MailAddress(_appSettings.Email, "Makro Support");
-            message.Subject = "Koodi salasanan nollaamiseen";
-            message.Body = "<p>Hei,</p><p>Koodi salasanan nollaamiseen on: " +
-                resetToken +
-                "</p><p>Osoite: <a href='https://makro.diet/resetpassword'>https://makro.diet/resetpassword<a></p>" +
-                "<p>Ystävällisin terveisin,</p><p>Makro Support</p>";
-            message.IsBodyHtml = true;
+            Dictionary<string, string> jsonValues = new Dictionary<string, string>
+            {
+                { "email", email },
+                { "resetToken", resetToken }
+            };
 
-            var client = new SmtpClient(_appSettings.Smtp);
-            client.Port = 587;
-            client.Credentials = new NetworkCredential(_appSettings.Email, _appSettings.Password);
-            client.EnableSsl = true;
-            try
+            var request = new HttpRequestMessage(HttpMethod.Post, "mail")
             {
-                client.Send(message);
-                return true;
-            } catch (SmtpException)
+                Content = new StringContent(JsonConvert.SerializeObject(jsonValues), UnicodeEncoding.UTF8)
+            };
+
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            var httpResponse = await client.SendAsync(request);
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            EmailSendResponse response = JsonConvert.DeserializeObject<EmailSendResponse>(responseContent);
+
+            if (response.Error != null)
             {
-                return false;
+                _logger.LogError(response.Error);
             }
+
+            return response.Success;
+            
         }
     }
 }
