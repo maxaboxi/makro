@@ -1,13 +1,12 @@
 const nodemailer = require("nodemailer");
-const bodyParser = require("body-parser");
 const express = require("express");
 const PORT = 99;
 const pk = "developmentk";
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, (req, res) => {
   console.log("up & running");

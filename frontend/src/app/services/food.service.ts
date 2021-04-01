@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Food } from '../models/Food';
-import { environment } from '../../environments/environment';
-import { EditedFood } from '../models/EditedFood';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Food } from "../models/Food";
+import { environment } from "../../environments/environment";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FoodService {
   private baseUrl = `${environment.baseUrl}/food`;
@@ -20,10 +19,12 @@ export class FoodService {
       const url = `${this.baseUrl}/all`;
 
       const headers = new HttpHeaders({
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       });
 
-      this.http.get<Food[]>(url, { headers: headers }).subscribe(foods => this.allFoods.next(foods));
+      this.http
+        .get<Food[]>(url, { headers: headers })
+        .subscribe((foods) => this.allFoods.next(foods));
     }
   }
 
@@ -32,10 +33,12 @@ export class FoodService {
       const url = `${this.baseUrl}/exclude`;
 
       const headers = new HttpHeaders({
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       });
 
-      this.http.get<Food[]>(url, { headers: headers }).subscribe(foods => this.excludedFoods.next(foods));
+      this.http
+        .get<Food[]>(url, { headers: headers })
+        .subscribe((foods) => this.excludedFoods.next(foods));
     }
   }
 
@@ -44,18 +47,22 @@ export class FoodService {
     const urlExclude = `${this.baseUrl}/exclude`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     });
 
-    this.http.get<Food[]>(urlExclude, { headers: headers }).subscribe(foods => this.excludedFoods.next(foods));
-    this.http.get<Food[]>(url, { headers: headers }).subscribe(foods => this.allFoods.next(foods));
+    this.http
+      .get<Food[]>(urlExclude, { headers: headers })
+      .subscribe((foods) => this.excludedFoods.next(foods));
+    this.http
+      .get<Food[]>(url, { headers: headers })
+      .subscribe((foods) => this.allFoods.next(foods));
   }
 
   getFoodsAddedByUser() {
     const url = `${this.baseUrl}/user`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     });
 
     return this.http.get<Food[]>(url, { headers: headers });
@@ -65,7 +72,7 @@ export class FoodService {
     const url = `${this.baseUrl}/new`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     });
 
     return this.http.post(url, food, { headers: headers });
@@ -75,7 +82,7 @@ export class FoodService {
     const url = `${this.baseUrl}/update/${food.uuid}`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     });
 
     return this.http.put(url, food, { headers: headers });
@@ -85,12 +92,12 @@ export class FoodService {
     const url = `${this.baseUrl}/delete/multiple`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     });
 
     const options = {
       headers: headers,
-      body: foods
+      body: foods,
     };
 
     return this.http.delete(url, options);
