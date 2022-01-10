@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Meal } from '../models/Meal';
-import { BehaviorSubject } from 'rxjs';
-import { Food } from '../models/Food';
-import { AuthService } from './auth.service';
-import { Totals } from '../models/Totals';
+import { Injectable } from "@angular/core";
+import { Meal } from "../models/Meal";
+import { BehaviorSubject } from "rxjs";
+import { Food } from "../models/Food";
+import { AuthService } from "./auth.service";
+import { Totals } from "../models/Totals";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AddedFoodsService {
   _showTargets = new BehaviorSubject<boolean>(true);
@@ -21,7 +21,7 @@ export class AddedFoodsService {
     fat: 0,
     fiber: 0,
     sugar: 0,
-    amount: 0
+    amount: 0,
   });
   _targets = new BehaviorSubject<any>(null);
   private proteinTarget;
@@ -36,24 +36,24 @@ export class AddedFoodsService {
   }
 
   setMealsFromLocalStorage() {
-    this._meals.next(JSON.parse(localStorage.getItem('meals')));
+    this._meals.next(JSON.parse(localStorage.getItem("meals")));
     this.setTargets();
     this.setTotals();
   }
 
   setPreviousMealsFromLocalStorage() {
-    this._meals.next(JSON.parse(localStorage.getItem('previousMeals')).meals);
+    this._meals.next(JSON.parse(localStorage.getItem("previousMeals")).meals);
     this.setTargets();
     this.setTotals();
   }
 
   resetMeals(meals: Meal[]) {
-    meals.forEach(m => {
+    meals.forEach((m) => {
       m.foods = [];
     });
     this._meals.next(meals);
     this.resetTotals();
-    localStorage.setItem('meals', JSON.stringify(meals));
+    localStorage.setItem("meals", JSON.stringify(meals));
   }
 
   resetTotals() {
@@ -64,7 +64,7 @@ export class AddedFoodsService {
       fat: 0,
       fiber: 0,
       sugar: 0,
-      amount: 0
+      amount: 0,
     });
   }
 
@@ -73,8 +73,8 @@ export class AddedFoodsService {
     const t = this._totals.getValue();
     const meals = this.getMeals();
     if (meals) {
-      meals.forEach(m => {
-        m.foods.forEach(f => {
+      meals.forEach((m) => {
+        m.foods.forEach((f) => {
           t.energy += f.energy;
           t.protein += f.protein;
           t.carb += f.carbs;
@@ -94,9 +94,17 @@ export class AddedFoodsService {
       this.proteinTarget = user.weight * 2;
       this.fatTarget = user.weight;
       if (!user.userAddedExpenditure) {
-        this.carbTarget = (user.dailyExpenditure - this.proteinTarget * 4 - this.fatTarget * 9) / 4;
+        this.carbTarget =
+          (user.dailyExpenditure -
+            this.proteinTarget * 4 -
+            this.fatTarget * 9) /
+          4;
       } else {
-        this.carbTarget = (user.userAddedExpenditure - this.proteinTarget * 4 - this.fatTarget * 4) / 4;
+        this.carbTarget =
+          (user.userAddedExpenditure -
+            this.proteinTarget * 4 -
+            this.fatTarget * 9) /
+          4;
       }
     } else if (!user.weight && user.userAddedExpenditure) {
       this.proteinTarget = (user.userAddedExpenditure * 0.3) / 4;
@@ -115,7 +123,7 @@ export class AddedFoodsService {
       userAddedProteinTarget: user.userAddedProteinTarget,
       proteinTarget: this.proteinTarget,
       carbTarget: this.carbTarget,
-      fatTarget: this.fatTarget
+      fatTarget: this.fatTarget,
     };
     this._targets.next(targets);
   }
@@ -126,7 +134,7 @@ export class AddedFoodsService {
 
   getMeals() {
     if (this._meals.getValue().length === 0) {
-      this.setMeals(JSON.parse(localStorage.getItem('meals')));
+      this.setMeals(JSON.parse(localStorage.getItem("meals")));
     }
 
     return this._meals.getValue();
@@ -149,7 +157,7 @@ export class AddedFoodsService {
         fat: e.food.fat * (e.amount / 100),
         fiber: e.food.fiber * (e.amount / 100),
         sugar: e.food.sugar * (e.amount / 100),
-        amount: e.amount
+        amount: e.amount,
       };
       const t = this._totals.getValue();
       t.energy += food.energy;
@@ -160,12 +168,12 @@ export class AddedFoodsService {
       t.sugar += food.sugar;
       t.amount += food.amount;
       this._totals.next(t);
-      this._meals.getValue().forEach(m => {
+      this._meals.getValue().forEach((m) => {
         if (m.name === e.meal) {
           m.foods.push(food);
         }
       });
-      localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
+      localStorage.setItem("meals", JSON.stringify(this._meals.getValue()));
     }
   }
 
@@ -177,7 +185,7 @@ export class AddedFoodsService {
       this.setMealsFromLocalStorage();
     }
     if (food) {
-      this._meals.getValue().forEach(m => {
+      this._meals.getValue().forEach((m) => {
         if (m.name === mealName) {
           m.foods.push(food);
         }
@@ -202,19 +210,25 @@ export class AddedFoodsService {
     for (let i = 0; i < meals[componentIndex].foods.length; i++) {
       // Check if food has ID since days saved in previous version don't include food IDs
       if (food.uuid) {
-        if (meals[componentIndex].foods[i].uuid === food.uuid && meals[componentIndex].foods[i].amount === food.amount) {
+        if (
+          meals[componentIndex].foods[i].uuid === food.uuid &&
+          meals[componentIndex].foods[i].amount === food.amount
+        ) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }
       } else {
-        if (meals[componentIndex].foods[i].name === food.name && meals[componentIndex].foods[i].amount === food.amount) {
+        if (
+          meals[componentIndex].foods[i].name === food.name &&
+          meals[componentIndex].foods[i].amount === food.amount
+        ) {
           meals[componentIndex].foods.splice(i, 1);
           break;
         }
       }
     }
     this._meals.next(meals);
-    localStorage.setItem('meals', JSON.stringify(this._meals.getValue()));
+    localStorage.setItem("meals", JSON.stringify(this._meals.getValue()));
   }
 
   updateMealsInLocalStorage(meal) {
@@ -225,7 +239,7 @@ export class AddedFoodsService {
     for (let m of meals) {
       if (m.name === meal.name) {
         m.foods = meal.foods;
-        localStorage.setItem('meals', JSON.stringify(meals));
+        localStorage.setItem("meals", JSON.stringify(meals));
         this._meals.next(meals);
         this.setTotals();
         break;
@@ -241,11 +255,11 @@ export class AddedFoodsService {
       fat: 0,
       fiber: 0,
       sugar: 0,
-      amount: 0
+      amount: 0,
     };
 
-    meals.forEach(m => {
-      m.foods.forEach(f => {
+    meals.forEach((m) => {
+      m.foods.forEach((f) => {
         totals.energy += f.energy;
         totals.protein += f.protein;
         totals.carb += f.carbs;
